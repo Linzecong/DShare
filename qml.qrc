@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainWindow.qml</file>
+        <file>MainPage.qml</file>
+        <file>NewsPage.qml</file>
+        <file>RecordPage.qml</file>
+        <file>SearchPage.qml</file>
+        <file>SendPage.qml</file>
+        <file>UsersPage.qml</file>
+    </qresource>
+</RCC>
