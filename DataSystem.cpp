@@ -121,6 +121,23 @@ QString DataSystem::getsearchUserName(int i){
         return SearchNameList[i];
 }
 
+void DataSystem::checkin(QString userid)
+{
+    QString out="@checkin@"+userid;
+    tcpSocket->write(out.toUtf8());
+}
+
+void DataSystem::getcheckinday(QString userid)
+{
+    QString out="@getcheckinday@"+userid;
+    tcpSocket->write(out.toUtf8());
+}
+
+int DataSystem::getcheckinday()
+{
+    return checkinday;
+}
+
 
 
 
@@ -133,6 +150,20 @@ void DataSystem::tcpReadMessage()
     if(message.indexOf("@getname@Succeed@")>=0){
         Name=message.split("@").at(3);
         m_Statue="getnameSucceed";
+    }
+
+    if(message=="@checkin@DBError@")
+        m_Statue="checkinDBError";
+    if(message=="@checkin@Succeed@")
+        m_Statue="checkinSucceed";
+
+    if(message=="@getcheckinday@DBError@")
+        m_Statue="getcheckindayDBError";
+
+    if(message.indexOf("@getcheckinday@Succeed@")!=-1){
+        QStringList inf=message.split("@");
+        checkinday=inf[3].toInt();
+        m_Statue="getcheckindaySucceed";
     }
 
 

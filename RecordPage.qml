@@ -6,12 +6,28 @@ import QtQuick.Extras 1.4
 import PostsSystem 1.0
 import JavaMethod 1.0
 import RecordSystem 1.0
-
+import DataSystem 1.0
 
 Rectangle {
     color:"white"
     anchors.fill: parent
     id:mainrect
+    function getcheckinday(){
+          dbsystem.getcheckinday(str_userid);
+    }
+
+    DataSystem{
+        id:dbsystem;
+        onStatueChanged: {
+            console.log(Statue)
+            if(Statue=="getcheckindaySucceed")
+                dosportdaysrect.checkinday=dbsystem.getcheckinday();
+
+            if(Statue=="checkinSucceed")
+                dosportdaysrect.checkinday++;
+
+        }
+    }
 
     property string str_userid
     Rectangle{
@@ -22,6 +38,7 @@ Rectangle {
         y:-parent.height/8
         visible: false
         color: "black"
+        z:100
         Image {
             id: bigphoto
             fillMode: Image.PreserveAspectFit
@@ -581,7 +598,16 @@ Rectangle {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
+                        recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
 
+                        var str="\n\n项目类型："+sporttext.text+"\n";
+                        str=str+"开始时间："+begintimerow.begintime+"\n";
+                        str=str+"持续时间："+lasttimerow.lasttime+"分钟\n";
+
+
+                        mainrect.parent.parent.parent.bottom.currentPage="分享"
+                        mainrect.parent.parent.x=-mainrect.width*2
+                        mainrect.parent.parent.children[2].item.settext(str)
                     }
                 }
             }
@@ -600,9 +626,10 @@ Rectangle {
             anchors.left: sportview.left
             anchors.leftMargin: buttonrow.height/2
             color:"white"
+            property int checkinday
             Text{
                 anchors.centerIn: parent
-                text:"坚持打卡\n10天"
+                text:"坚持打卡\n"+dosportdaysrect.checkinday.toString()+"天"
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
@@ -610,6 +637,13 @@ Rectangle {
                     pixelSize: parent.height/10
                 }
             }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    dbsystem.checkin(str_userid)
+                }
+            }
+
         }
 
         Rectangle{
@@ -625,6 +659,7 @@ Rectangle {
             anchors.rightMargin: buttonrow.height/2
             color:"white"
             Text{
+                id:timertext
                 anchors.centerIn: parent
                 text:"运动计时\n1小时08分钟"
                 verticalAlignment: Text.AlignVCenter
@@ -634,6 +669,69 @@ Rectangle {
                     pixelSize: parent.height/10
                 }
             }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    if(!sporttimer.running){
+                    begintimerow.editmode=0
+                    modebuttontext.text="编辑模式"
+                    modebutton.color="grey"
+                    modebutton.enabled=false;
+                    sportsavebutton.enabled=false
+                    sportsavebutton.color="grey"
+                    sportsharebutton.enabled=false
+                    sportsharebutton.color="grey"
+                    sporttimer.mins=0;
+                        timertext.text=sporttimer.mins.toString()+"分钟"
+                       var time= new Date()
+                        sporttimer.beginhour=time.getHours()
+                        sporttimer.beginmin=time.getMinutes()
+
+                    begintimehourtext.text=time.getHours().toString()
+                    begintimemintext.text=time.getMinutes().toString()
+                    sporttimer.start();
+                    delete time;
+                    }
+                    else{
+                        sporttimer.stop()
+                        modebutton.color="#32dc96"
+                        modebutton.enabled=true;
+                        sportsavebutton.enabled=true
+                        sportsavebutton.color="#32dc96"
+                        sportsharebutton.enabled=true
+                        sportsharebutton.color="#32dc96"
+
+                        lasttimehourtext.text=(sporttimer.mins/60).toString()
+                        lasttimemintext.text=(sporttimer.mins%60).toString()
+                    }
+                }
+            }
+        }
+
+        Timer{
+            id:sporttimer
+            interval: 5000
+            repeat: true
+            property int beginhour:0
+            property int beginmin:0
+            property int mins: 0
+            onTriggered: {
+                var time= new Date();
+                if(time.getHours()>sporttimer.beginhour){
+                mins=(time.getHours()-sporttimer.beginhour)*60+(60-sporttimer.beginmin)+time.getMinutes();
+                }
+                if(time.getHours()==sporttimer.beginhour){
+                mins=time.getMinutes()-sporttimer.beginmin;
+                }
+
+                if(time.getHours()<sporttimer.beginhour){
+                mins=(time.getHours()+24-sporttimer.beginhour)*60+(60-sporttimer.beginmin)+time.getMinutes();
+                }
+
+                timertext.text=sporttimer.mins.toString()+"分钟"
+
+            }
+
         }
 
     }
@@ -1049,7 +1147,7 @@ Rectangle {
             id:dietitem
             width:parent.width
             height: title.height+foodlist.height+header.height/2+header.height/5*2+addfoodbutton.height+header.height/3*3
-
+            property string imagePath:Photo
             Rectangle{
                 border.color: "grey"
                 border.width: 2
@@ -1059,7 +1157,6 @@ Rectangle {
                 id:delegaterect
                 property string foodstr;
                 onFoodstrChanged: {
-                    ///myjava.toastMsg(foodstr);
                     foodlist.model.setProperty(foodview.currentfood,"Food",foodstr);
                 }
 
@@ -1089,9 +1186,52 @@ Rectangle {
                     source:Photo
                     MouseArea{
                         anchors.fill: parent
+                        visible: dietimage.source==""?0:1
                         onClicked: {
                             bigphoto.source=dietimage.source
                             bigphotorect.visible=true
+                        }
+                    }
+                }
+
+
+                Label{
+                    id:addphoto
+                    text:dietimage.source==""?"+":"-"
+                    anchors.top:parent.top
+                   // anchors.topMargin: height/10
+                    anchors.right: parent.right
+                    anchors.rightMargin: parent.width/40
+                    color:"grey"
+                    font{
+                        family: "黑体"
+                        bold: true
+                        pixelSize: header.height/1.5
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            if(addphoto.text=="+"){
+                            myjava.getImage();
+                            timer.start();
+                            }
+                            else{
+                               dietimage.source="" ;
+                            }
+                        }
+                    }
+
+                }
+
+                Timer{
+                    id:timer;
+                    interval: 1500
+                    onTriggered: {
+                        var temp=myjava.getImagePath();
+                        if(temp!=="Qt"){
+                            timer.stop();
+                            dietimage.source="file://"+temp;
+                            dietitem.imagePath=temp;
                         }
                     }
                 }
@@ -1308,6 +1448,35 @@ Rectangle {
                             family: "黑体"
                             bold: true
                             pixelSize: title.height/1.5
+                        }
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            var foodstr1234="";
+                            for(var i1=0;i1<foodlist.model.count;i1++){
+                                if(foodlist.model.get(i1).Food!=="点击选择食物")
+                                    foodstr1234=foodstr1234+foodlist.model.get(i1).Food+"、";
+                            }
+                            recordsystem.uploaddiet(str_userid,foodstr1234,index);
+
+
+                            var str=title.text+"\n";
+                            var foodstr123="";
+                            for(var i=0;i<foodlist.model.count;i++){
+                                if(foodlist.model.get(i).Food!=="点击选择食物")
+                                    foodstr123=foodstr123+"食物"+(i+1).toString()+"："+foodlist.model.get(i).Food+"\n";
+                            }
+
+                            str="\n\n"+str+foodstr123;
+                            console.log(str)
+
+                            mainrect.parent.parent.parent.bottom.currentPage="分享"
+                            mainrect.parent.parent.x=-mainrect.width*2
+                            mainrect.parent.parent.children[2].item.settext(str)
+                            if(dietimage.source!=="")
+                            mainrect.parent.parent.children[2].item.setimg(dietitem.imagePath)
                         }
                     }
 

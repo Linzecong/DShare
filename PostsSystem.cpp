@@ -48,6 +48,7 @@ int PostsSystem::getposthasimage(int i){
 }
 
 QString PostsSystem::getposthead(int i){
+#ifdef ANDROID
     if(i<PostList.length()){
         JavaMethod java;
         QDir *tempdir = new QDir;
@@ -80,6 +81,8 @@ QString PostsSystem::getposthead(int i){
             return "file://"+path;
         }
     }
+#endif
+    return "";
 }
 
 QString PostsSystem::getpostname(int i){
@@ -102,6 +105,7 @@ QString PostsSystem::getpostmessage(int i){
 
 QString PostsSystem::getpostphoto(int i)
 {
+    #ifdef ANDROID
     if(i<PostList.length()){
         JavaMethod java;
         QDir *tempdir = new QDir;
@@ -137,6 +141,7 @@ QString PostsSystem::getpostphoto(int i)
 
 
     }
+    #endif
     return "";
 }
 
@@ -163,7 +168,7 @@ void PostsSystem::sendPost(QString username, QString msg, bool hasimage,QString 
 QString PostsSystem::getbigpostphoto(QString a)
 {
 
-
+#ifdef ANDROID
         JavaMethod java;
         QDir *tempdir = new QDir;
         QString nnFileName=a;
@@ -195,7 +200,8 @@ QString PostsSystem::getbigpostphoto(QString a)
 
             return "file://"+path;
         }
-
+#endif
+        return "";
 
 }
 

@@ -51,6 +51,11 @@ public:
      Q_INVOKABLE QString getsearchUserID(int i);
      Q_INVOKABLE QString getsearchUserName(int i);
 
+     Q_INVOKABLE void checkin(QString userid);
+     Q_INVOKABLE void getcheckinday(QString userid);
+     Q_INVOKABLE int getcheckinday();
+     int checkinday;
+
 public:
      void tcpReadMessage();
      void tcpSendMessage();

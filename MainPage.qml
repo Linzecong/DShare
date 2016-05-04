@@ -16,6 +16,17 @@ Rectangle{
         refreshtimer.start();
     }
 
+    function refreshpost(a){
+        postmodel.clear();
+        postsystem.i=0;
+        postsystem.pi=0;
+        postsystem.getposts(a);
+        refreshtimer.refreshtime=0;
+        refreshtimer.start();
+    }
+
+
+
     Rectangle{
         id: bigphotorect
         height: parent.height*1.3

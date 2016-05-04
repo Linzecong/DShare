@@ -21,6 +21,7 @@ Rectangle {
         userid.text="id:"+a;
         sendpage.item.str_userid=a;
         recordpage.item.str_userid=a;
+        recordpage.item.getcheckinday();
     }
 
 
@@ -521,7 +522,6 @@ SendImageSystem{
             height:parent.height
             width:mainwindow.width
             source: "MainPage.qml";
-
         }
         Loader{
             id:newspage
@@ -529,6 +529,7 @@ SendImageSystem{
             height:parent.height
             width:mainwindow.width
             source: "NewsPage.qml";
+
         }
         Loader{
             id:sendpage

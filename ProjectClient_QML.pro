@@ -2,7 +2,7 @@
 
 
 TEMPLATE = app
-QT+=androidextras
+
 QT += qml quick
 CONFIG += c++11
 
@@ -15,7 +15,7 @@ SOURCES += main.cpp \
     SendImageSystem.cpp \
     DataSystem.cpp \
     RecordSystem.cpp
-0
+
 RESOURCES += qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model

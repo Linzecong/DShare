@@ -8,8 +8,17 @@ import PostsSystem 1.0
 Rectangle { 
     id:mainpage
     anchors.fill: parent
-    property string imagePath:"Qt"
+    property string imagePath
     property string str_userid;
+    function settext(b){
+        messageedit.text=b;
+    }
+    function setimg(b){
+        image.source="file://"+b;
+        imagePath=b;
+    }
+
+
     JavaMethod{
         id:myjava
     }
@@ -35,33 +44,31 @@ Rectangle {
         anchors.centerIn: rect
         height: rect.height-rect.height/10
         width: rect.width-rect.width/10
-        contentHeight: messageeidit.contentHeight
+        contentHeight: messageedit.contentHeight
 
         clip: true
         flickableDirection: Flickable.VerticalFlick
         TextEdit{
-            selectByMouse:true
             color: "grey"
-            Label{
-                id:note
-                visible: messageeidit.text==""?true:false
-                text:"请输入文本"
-                color:"grey"
-                font{
-                    pixelSize: messageeidit.height/6
-                    family: "黑体"
-
-                }
-            }
-
-            id:messageeidit
+            id:messageedit
             width: rect.width-rect.width/10
             height: rect.height-rect.height/10
             wrapMode: Text.Wrap
             font{
-                pixelSize: messageeidit.height/6
+                pixelSize: messageedit.height/6
                 family: "黑体"
             }
+            Label{
+                id:note
+                visible: messageedit.text==""?true:false
+                text:"请输入文本"
+                color:"grey"
+                font{
+                    pixelSize: messageedit.height/6
+                    family: "黑体"
+
+                }
+            }  
         }
         z:1
     }
@@ -78,7 +85,7 @@ Rectangle {
         border.color: "grey"
         Label{
             id:text
-            visible: true
+            visible:image.source==""?true:false
             text: "+";
             color:"#32dc96"
             font{
@@ -90,7 +97,7 @@ Rectangle {
         }
         Image{
             id:image
-            visible: false
+            visible: image.source==""?false:true
             anchors.fill: parent
 
 
@@ -114,8 +121,6 @@ Rectangle {
                     timer.stop();
                     image.source="file://"+temp;
                     imagePath=temp;
-                    text.visible=false
-                    image.visible=true
                 }
             }
         }
@@ -256,11 +261,11 @@ Rectangle {
             id:cma
             anchors.fill: parent
             onClicked: {
-                messageeidit.text="";
+                messageedit.text="";
 
                 image.visible=false
                 text.visible=true
-                imagePath="Qt"
+                imagePath=""
             }
         }
         color:cma.pressed?"#32dc96":"white"
@@ -301,7 +306,7 @@ Rectangle {
             property string imgname;
             onStatueChanged:{
                 if(Statue=="Succeed"){
-                    sendmsgsystem.sendPost(str_userid,messageeidit.text,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
+                    sendmsgsystem.sendPost(str_userid,messageedit.text,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
                 }
                 if(Statue=="DBError"){
                     myjava.toastMsg("远程服务器出错，请联系开发者！");
@@ -326,7 +331,7 @@ Rectangle {
                     myjava.toastMsg("发送成功！");
                     mainpage.parent.parent.parent.bottom.currentPage="首页"
                     mainpage.parent.parent.x=0;
-                    mainpage.parent.parent.parent.mainpage.item.getposts(str_userid);
+                    mainpage.parent.parent.children[0].item.refreshpost(str_userid);
 
                 }
             }
@@ -353,12 +358,12 @@ Rectangle {
                 else{
                     refreshtimer.refreshtime=0;
                     refreshtimer.start();
-                    if(imagePath!=="Qt"){
+                    if(imagePath!==""){
                         sendimgsystem.imgname=str_userid+"_"+Qt.formatDateTime(new Date(), "yyyy-MM-dd-hh-mm-ss");
                         sendimgsystem.sendImage(imagePath,sendimgsystem.imgname);
                     }
                     else{
-                        sendmsgsystem.sendPost(str_userid,messageeidit.text,0,"");
+                        sendmsgsystem.sendPost(str_userid,messageedit.text,0,"");
                     }
                 }
 
