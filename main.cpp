@@ -10,9 +10,11 @@
 #include"SendImageSystem.h"
 #include"DataSystem.h"
 #include"RecordSystem.h"
-int main(int argc, char *argv[])
-{
+
+int main(int argc, char *argv[]){
     QGuiApplication app(argc, argv);
+
+    //将C++注册到QML中
     qmlRegisterType<LoginSystem>("LoginSystem",1,0,"LoginSystem");
     qmlRegisterType<RegistSystem>("RegistSystem",1,0,"RegistSystem");
     qmlRegisterType<PostsSystem>("PostsSystem",1,0,"PostsSystem");
@@ -21,11 +23,12 @@ int main(int argc, char *argv[])
     qmlRegisterType<DataSystem>("DataSystem",1,0,"DataSystem");
     qmlRegisterType<RecordSystem>("RecordSystem",1,0,"RecordSystem");
 
+
     QQuickView viewer;
+    QObject::connect(viewer.engine(), SIGNAL(quit()), &app, SLOT(quit()));
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
     viewer.setSource(QUrl("qrc:/main.qml"));
     viewer.show();
-
 
     return app.exec();
 }

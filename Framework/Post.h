@@ -26,6 +26,7 @@ public:
     int ID;
     QString Publisher;
     QString PostTime;
+    QString PublisherID;
 
     QString Message;
     QString ImageURL;

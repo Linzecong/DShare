@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 import JavaMethod 1.0
 import SendImageSystem 1.0
 import PostsSystem 1.0
+
 Rectangle { 
     id:mainpage
     anchors.fill: parent
@@ -56,7 +57,6 @@ Rectangle {
             wrapMode: Text.Wrap
             font{
                 pixelSize: messageedit.height/6
-                family: "黑体"
             }
             Label{
                 id:note
@@ -108,6 +108,7 @@ Rectangle {
         MouseArea{
             anchors.fill: parent
             onClicked: {
+                image.visible=true
                 myjava.getImage();
                 timer.start();
             }
@@ -131,9 +132,9 @@ Rectangle {
     ListModel{
         id:model
         ListElement{value:"默认"}
-        ListElement{value:"仅自己可见"}
-        ListElement{value:"关注人可见"}
-        ListElement{value:"其他"}
+        ListElement{value:"暂无实际功能"}
+        ListElement{value:"暂无实际功能"}
+        ListElement{value:"暂无实际功能"}
     }
 
     Rectangle{
@@ -195,8 +196,9 @@ Rectangle {
         anchors.leftMargin: mainpage.width/30
         height: photobutton.height/3
         anchors.top: photobutton.top
-        anchors.topMargin: photobutton.height/10
+       // anchors.topMargin: photobutton.height/10
         text: "分组:"
+
 
         font{
             family: "黑体"
@@ -262,8 +264,9 @@ Rectangle {
             anchors.fill: parent
             onClicked: {
                 messageedit.text="";
-
+                image.source=""
                 image.visible=false
+
                 text.visible=true
                 imagePath=""
             }
@@ -332,6 +335,11 @@ Rectangle {
                     mainpage.parent.parent.parent.bottom.currentPage="首页"
                     mainpage.parent.parent.x=0;
                     mainpage.parent.parent.children[0].item.refreshpost(str_userid);
+                    messageedit.text="";
+
+                    image.visible=false
+                    text.visible=true
+                    imagePath=""
 
                 }
             }

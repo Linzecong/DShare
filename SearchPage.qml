@@ -4,6 +4,6 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 
 Rectangle {
-color:"yellow"
+color:"white"
 anchors.fill: parent
 }

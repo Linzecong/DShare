@@ -1,13 +1,12 @@
 #include "DataSystem.h"
+#include "JavaMethod.h"
 
 DataSystem::DataSystem(QObject *parent) : QObject(parent){
+    //初始化时直接连接到服务器
     tcpSocket = new QTcpSocket(this);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&DataSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&DataSystem::tcpSendMessage);
-    connect(&ConnectTimer,&QTimer::timeout,this,&DataSystem::tcpTimeOut);
     tcpSocket->connectToHost("119.29.15.43",8889);
-    m_Statue="InitOK";
-    emit statueChanged(m_Statue);
 }
 
 void DataSystem::setStatue(QString s){
@@ -20,7 +19,6 @@ QString DataSystem::Statue(){
 }
 
 void DataSystem::getNameByID(QString userid){
-
     QString out="@getname@|||"+userid;
     tcpSocket->write(out.toUtf8());
 
@@ -31,7 +29,6 @@ QString DataSystem::getName(){
 }
 
 void DataSystem::changeName(QString userid, QString newname){
-
     QString out="@changename@|||"+userid+"|||"+newname;
     tcpSocket->write(out.toUtf8());
 
@@ -39,7 +36,6 @@ void DataSystem::changeName(QString userid, QString newname){
 }
 
 void DataSystem::addFollowing(QString userid, QString friendid){
-
     QString out="@addfollowing@|||"+userid+"|||"+friendid;
     tcpSocket->write(out.toUtf8());
 
@@ -47,14 +43,12 @@ void DataSystem::addFollowing(QString userid, QString friendid){
 }
 
 void DataSystem::deleteFollowing(QString userid, QString friendid){
-
     QString out="@deletefollowing@|||"+userid+"|||"+friendid;
     tcpSocket->write(out.toUtf8());
 
 }
 
 void DataSystem::getFollowings(QString userid){
-
     FollowingIDList.clear();
     FollowingNameList.clear();
     QString out="@getfollowings@|||"+userid;
@@ -74,10 +68,7 @@ QString DataSystem::getFollowingName(int i){
         return FollowingNameList[i];
 }
 
-
-
 void DataSystem::getFollowers(QString userid){
-
     FollowerIDList.clear();
     FollowerNameList.clear();
     QString out="@getfollowers@|||"+userid;
@@ -99,7 +90,6 @@ QString DataSystem::getFollowerName(int i){
         return FollowerNameList[i];
 }
 
-
 void DataSystem::searchUser(QString str){
     SearchIDList.clear();
     SearchNameList.clear();
@@ -107,6 +97,7 @@ void DataSystem::searchUser(QString str){
     tcpSocket->write(out.toUtf8());
 
 }
+
 QString DataSystem::getsearchUserID(int i){
     if(i>=SearchIDList.length()||i<0)
         return "";
@@ -121,30 +112,37 @@ QString DataSystem::getsearchUserName(int i){
         return SearchNameList[i];
 }
 
-void DataSystem::checkin(QString userid)
-{
+void DataSystem::checkin(QString userid){
     QString out="@checkin@"+userid;
     tcpSocket->write(out.toUtf8());
 }
 
-void DataSystem::getcheckinday(QString userid)
-{
+void DataSystem::getcheckinday(QString userid){
     QString out="@getcheckinday@"+userid;
     tcpSocket->write(out.toUtf8());
 }
 
-int DataSystem::getcheckinday()
-{
+int DataSystem::getcheckinday(){
     return checkinday;
 }
 
+QString DataSystem::getdate(){
+    return QDate::currentDate().toString("yyyy-MM-dd");
+}
 
+void DataSystem::delusernamepassword(){
+#ifdef ANDROID
+        JavaMethod java;
+        QString path=java.getSDCardPath();
+        path=path+"/projectapp/db.dbnum";
+        QFile filename;
+        filename.setFileName(path);
+        filename.remove();//删除
+#endif
+}
 
-
-
-void DataSystem::tcpReadMessage()
-{
-    QString message =  QString::fromUtf8(tcpSocket->readAll());
+void DataSystem::tcpReadMessage(){
+    QString message = QString::fromUtf8(tcpSocket->readAll());//获取服务器返回的信息
     if(message=="@getname@DBError@")
         m_Statue="getnameDBError";
     if(message.indexOf("@getname@Succeed@")>=0){
@@ -166,8 +164,6 @@ void DataSystem::tcpReadMessage()
         m_Statue="getcheckindaySucceed";
     }
 
-
-
     if(message=="@changename@DBError@")
         m_Statue="changenameDBError";
     if(message=="@changename@Succeed@")
@@ -182,7 +178,6 @@ void DataSystem::tcpReadMessage()
         m_Statue="deletefollowingDBError";
     if(message=="@deletefollowing@Succeed@")
         m_Statue="deletefollowingSucceed";
-
 
     if(message=="@getfollowings@DBError@")
         m_Statue="getfollowingsDBError";
@@ -206,8 +201,6 @@ void DataSystem::tcpReadMessage()
         m_Statue="getfollowersSucceed";
     }
 
-
-
     if(message=="@searchuser@DBError@")
         m_Statue="searchuserDBError";
     if(message.indexOf("@searchuser@Succeed@")>=0){
@@ -219,14 +212,10 @@ void DataSystem::tcpReadMessage()
         m_Statue="searchuserSucceed";
     }
 
-
-
-    ConnectTimer.stop();
-    emit statueChanged(m_Statue);
+    emit statueChanged(m_Statue);//传递消息
 }
 
-void DataSystem::tcpSendMessage()
-{
+void DataSystem::tcpSendMessage(){
     m_Statue="InitOK";
     emit statueChanged(m_Statue);
 }

@@ -7,32 +7,35 @@
 #include <QEventLoop>
 #include<QDir>
 #include<QPixmap>
-PostsSystem::PostsSystem(QObject *parent) : QObject(parent)
-{
+
+PostsSystem::PostsSystem(QObject *parent) : QObject(parent){
+    //自动连接
     NowCount=0;
     tcpSocket = new QTcpSocket(this);
     tcpSocket->connectToHost("119.29.15.43",8520);
     m_Statue="Connecting";
     emit statueChanged(m_Statue);
-
     connect(tcpSocket,&QTcpSocket::readyRead,this,&PostsSystem::tcpReadMessage);
-
     connect(tcpSocket,&QTcpSocket::connected,this,&PostsSystem::tcpSendMessage);
-    connect(&ConnectTimer,&QTimer::timeout,this,&PostsSystem::tcpTimeOut);
-
 }
 
 PostsSystem::~PostsSystem(){
 
 }
 
-void PostsSystem::getposts(QString user)
-{
+void PostsSystem::getposts(QString user){
     PostList.clear();
     Username=user;
     QString out="@getfriendsposts@"+Username;
     tcpSocket->write(out.toUtf8());
 
+}
+
+void PostsSystem::getuserposts(QString user){
+    PostList.clear();
+    Username=user;
+    QString out="@getuserposts@"+Username;
+    tcpSocket->write(out.toUtf8());
 }
 
 void PostsSystem::getmoreposts(int i){
@@ -48,46 +51,21 @@ int PostsSystem::getposthasimage(int i){
 }
 
 QString PostsSystem::getposthead(int i){
-#ifdef ANDROID
-    if(i<PostList.length()){
-        JavaMethod java;
-        QDir *tempdir = new QDir;
-        QString nnFileName=PostList[i].HeadURL;
-
-        Photoname=nnFileName.right(nnFileName.size()-nnFileName.lastIndexOf('/')-1);
-        QString path=java.getSDCardPath();
-        path=path+"/projectapp/"+Photoname;
-
-        if(tempdir->exists(path)){
-            return "file://"+path;
-        }
-        else{
-
-
-            QNetworkAccessManager *manager=new QNetworkAccessManager(this);
-            QEventLoop eventloop;
-            connect(manager, SIGNAL(finished(QNetworkReply*)),&eventloop, SLOT(quit()));
-            QNetworkReply *reply=manager->get(QNetworkRequest(QUrl(nnFileName)));
-            eventloop.exec();
-
-            if(reply->error() == QNetworkReply::NoError)
-            {
-                QPixmap currentPicture;
-                currentPicture.loadFromData(reply->readAll());
-                currentPicture.save(path);//保存图片
-            }
-
-
-            return "file://"+path;
-        }
-    }
-#endif
+    if(i<PostList.length())
+        return PostList[i].HeadURL;
+      else
     return "";
 }
 
 QString PostsSystem::getpostname(int i){
     if(i<PostList.length())
         return PostList[i].Publisher;
+    return "";
+}
+
+QString PostsSystem::getpostpublisher(int i){
+    if(i<PostList.length())
+        return PostList[i].PublisherID;
     return "";
 }
 
@@ -103,8 +81,7 @@ QString PostsSystem::getpostmessage(int i){
     return "";
 }
 
-QString PostsSystem::getpostphoto(int i)
-{
+QString PostsSystem::getpostphoto(int i){
     #ifdef ANDROID
     if(i<PostList.length()){
         JavaMethod java;
@@ -114,14 +91,12 @@ QString PostsSystem::getpostphoto(int i)
 
         Photoname=nnFileName.right(nnFileName.size()-nnFileName.lastIndexOf('/')-1);
         QString path=java.getSDCardPath();
-        path=path+"/projectapp/"+Photoname;
+        path=path+"/projectapp/"+Photoname+".dbnum";
 
         if(tempdir->exists(path)){
             return "file://"+path;
         }
         else{
-
-
             QNetworkAccessManager *manager=new QNetworkAccessManager(this);
             QEventLoop eventloop;
             connect(manager, SIGNAL(finished(QNetworkReply*)),&eventloop, SLOT(quit()));
@@ -132,21 +107,17 @@ QString PostsSystem::getpostphoto(int i)
             {
                 QPixmap currentPicture;
                 currentPicture.loadFromData(reply->readAll());
-                currentPicture.save(path);//保存图片
+                currentPicture.save(path,"JPG");//保存图片
             }
-
-
             return "file://"+path;
         }
-
-
     }
     #endif
     return "";
 }
 
-QString PostsSystem::getbigpostphotourl(int i)
-{
+
+QString PostsSystem::getbigpostphotourl(int i){
     if(i<PostList.length()){
         return PostList[i].ImageURL;
     }
@@ -159,15 +130,20 @@ QString PostsSystem::getpostlikers(int i){
         return PostList[i].LikersString;
 }
 
+int PostsSystem::getpostID(int i)
+{
+    if(i<PostList.length())
+        return PostList[i].ID;
+    return 0;
+}
+
 void PostsSystem::sendPost(QString username, QString msg, bool hasimage,QString imgpath=""){
 
     QString out="@sendpost@|||"+username+"|||"+msg+"|||"+QString::number(hasimage)+"|||"+imgpath;
     tcpSocket->write(out.toUtf8());
 }
 
-QString PostsSystem::getbigpostphoto(QString a)
-{
-
+QString PostsSystem::getbigpostphoto(QString a){
 #ifdef ANDROID
         JavaMethod java;
         QDir *tempdir = new QDir;
@@ -176,7 +152,7 @@ QString PostsSystem::getbigpostphoto(QString a)
 
         Photoname=nnFileName.right(nnFileName.size()-nnFileName.lastIndexOf('/')-1);
         QString path=java.getSDCardPath();
-        path=path+"/projectapp/"+Photoname;
+        path=path+"/projectapp/"+Photoname+".dbnum";
 
         if(tempdir->exists(path)){
             return "file://"+path;
@@ -194,10 +170,8 @@ QString PostsSystem::getbigpostphoto(QString a)
             {
                 QPixmap currentPicture;
                 currentPicture.loadFromData(reply->readAll());
-                currentPicture.save(path);//保存图片
+                currentPicture.save(path,"JPG");//保存图片
             }
-
-
             return "file://"+path;
         }
 #endif
@@ -205,21 +179,21 @@ QString PostsSystem::getbigpostphoto(QString a)
 
 }
 
-void PostsSystem::setStatue(QString s)
-{
+void PostsSystem::likepost(int postid, QString likerid){
+    QString out="@likepost@|||"+QString::number(postid)+"|||"+likerid;
+    tcpSocket->write(out.toUtf8());
+}
+
+void PostsSystem::setStatue(QString s){
     m_Statue=s;
     emit statueChanged(m_Statue);
 }
 
-QString PostsSystem::Statue()
-{
+QString PostsSystem::Statue(){
     return m_Statue;
 }
 
-void PostsSystem::tcpReadMessage()
-{
-
-
+void PostsSystem::tcpReadMessage(){
     QString message =QString::fromUtf8(tcpSocket->readAll());
 
     if(message=="@getfriendsposts@DBError@")
@@ -229,6 +203,11 @@ void PostsSystem::tcpReadMessage()
         m_Statue="getfriendspostsSucceed";
 
 
+    if(message=="@getuserposts@DBError@")
+        m_Statue="getuserpostsDBError";
+
+    if(message=="@getuserposts@Succeed@")
+        m_Statue="getuserpostsSucceed";
 
     if(message.indexOf("@getmorefriendsposts@Succeed@")>=0){
         QStringList inf=message.split("|||");
@@ -240,6 +219,9 @@ void PostsSystem::tcpReadMessage()
         temp.LikersString=inf[5];
         temp.ImageURL=inf[6];
         temp.PostTime=inf[7];
+        temp.ID=inf[8].toInt();
+        temp.PublisherID=inf[9];
+
         PostList.append(temp);
         m_Statue="getmorefriendspostsSucceed";
     }
@@ -253,13 +235,20 @@ void PostsSystem::tcpReadMessage()
     if(message=="@sendpost@Succeed@")
         m_Statue="sendpostSucceed";
 
-    ConnectTimer.stop();
+    if(message=="@likepost@DBError@")
+        m_Statue="likepostDBError";
+
+    if(message=="@likepost@Succeed@")
+        m_Statue="likepostSucceed";
+
+    if(message=="@likepost@Liked@")
+        m_Statue="likepostLiked";
+
     emit statueChanged(m_Statue);
 }
 
 void PostsSystem::tcpSendMessage()
 {
     m_Statue="Connected";
-    ConnectTimer.stop();
     emit statueChanged(m_Statue);
 }

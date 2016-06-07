@@ -8,5 +8,22 @@
         <file>SearchPage.qml</file>
         <file>SendPage.qml</file>
         <file>UsersPage.qml</file>
+        <file>image/conpassword.png</file>
+        <file>image/delete.png</file>
+        <file>image/mainpage.png</file>
+        <file>image/nickname.png</file>
+        <file>image/password.png</file>
+        <file>image/recordpage.png</file>
+        <file>image/share.png</file>
+        <file>image/sharepage.png</file>
+        <file>image/user.png</file>
+        <file>image/side.png</file>
+        <file>image/search.png</file>
+        <file>image/photo.png</file>
+        <file>image/jia.png</file>
+        <file>image/save.png</file>
+        <file>image/icon.png</file>
+        <file>PostsPage.qml</file>
+        <file>SettingPage.qml</file>
     </qresource>
 </RCC>

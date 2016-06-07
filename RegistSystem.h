@@ -1,3 +1,5 @@
+/*注册系统*/
+
 #ifndef REGISTSYSTEM_H
 #define REGISTSYSTEM_H
 
@@ -11,10 +13,8 @@ class RegistSystem : public QObject{
 public:
     explicit RegistSystem(QObject *parent = 0);
     ~RegistSystem();
-
 public:
      QTcpSocket *tcpSocket;
-     QTimer ConnectTimer;
      QString Username;
      QString Password;
      QString Name;
@@ -23,26 +23,15 @@ public:
      void setStatue(QString s);
      QString Statue();
 
-     Q_INVOKABLE void regist(QString id,QString pass,QString name);
+     Q_INVOKABLE void regist(QString id,QString pass,QString name);//注册
 
 public:
      void tcpReadMessage();
      void tcpSendMessage();
 
-     void tcpTimeOut(){
-         static int i=0;
-         if(i++==10){
-             tcpSocket->disconnectFromHost();
-             ConnectTimer.stop();
-             m_Statue="ConnectFail";
-             emit statueChanged(m_Statue);
-             i=0;
-         }
-     }
-
 signals:
 void statueChanged(const QString& Statue);
-public slots:
+
 };
 
 #endif // REGISTSYSTEM_H

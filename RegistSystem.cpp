@@ -1,17 +1,12 @@
 #include "RegistSystem.h"
 
-RegistSystem::RegistSystem(QObject *parent) : QObject(parent)
-{
+RegistSystem::RegistSystem(QObject *parent) : QObject(parent){
     tcpSocket = new QTcpSocket(this);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&RegistSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&RegistSystem::tcpSendMessage);
-    connect(&ConnectTimer,&QTimer::timeout,this,&RegistSystem::tcpTimeOut);
-    m_Statue="InitOK";
 }
 
-void RegistSystem::regist(QString id, QString pass,QString name)
-{
-    ConnectTimer.start(1000);
+void RegistSystem::regist(QString id, QString pass,QString name){
     Username=id;
     Password=pass;
     Name=name;
@@ -23,20 +18,17 @@ RegistSystem::~RegistSystem(){
 
 }
 
-void RegistSystem::setStatue(QString s)
-{
+void RegistSystem::setStatue(QString s){
     m_Statue=s;
     emit statueChanged(m_Statue);
 }
 
 
-QString RegistSystem::Statue()
-{
+QString RegistSystem::Statue(){
     return m_Statue;
 }
 
-void RegistSystem::tcpReadMessage()
-{
+void RegistSystem::tcpReadMessage(){
     QString message =  QString::fromUtf8(tcpSocket->readAll());
     if(message=="@zhuce@DBError@")
         m_Statue="DBError";
@@ -48,14 +40,11 @@ void RegistSystem::tcpReadMessage()
     if(message=="@zhuce@Succeed@")
         m_Statue="Succeed";
 
-    ConnectTimer.stop();
     tcpSocket->disconnectFromHost();
     emit statueChanged(m_Statue);
-
 }
 
-void RegistSystem::tcpSendMessage()
-{
+void RegistSystem::tcpSendMessage(){
     m_Statue="Connected";
     QString out="@zhuce@|||"+Username+"|||"+Password+"|||"+Name;
     tcpSocket->write(out.toUtf8());

@@ -12,48 +12,112 @@ import SendImageSystem 1.0
 Rectangle {
     id:mainwindow
     anchors.fill: parent
-    property string imagePath:"Qt"
-    property string str_userid;
+
+    property string nickname;
+
+    //初始化各种数据
     function setusername(a){
-        mainpage.item.setusername(a);
+        mainpage.item.setusername(a);//初始话分享列表
         str_userid=a;
-        dbsystem.getNameByID(a);
-        userid.text="id:"+a;
-        sendpage.item.str_userid=a;
-        recordpage.item.str_userid=a;
+        dbsystem.getNameByID(str_userid);
+        userid.text="id:"+a;//初始化侧边栏
+        sendpage.item.str_userid=a;//初始化发送页面的id
+        recordpage.item.str_userid=a;//初始化记录页面的id
         recordpage.item.getcheckinday();
     }
-
 
     DataSystem{
         id:dbsystem;
         onStatueChanged: {
             console.log(Statue)
-            if(Statue=="getnameSucceed")
-             name.text="昵称:"+dbsystem.getName();
-
-            if(Statue=="changenameSucceed")
+            if(Statue=="getnameSucceed"){
+                name.text="昵称:"+dbsystem.getName();
+                nickname=dbsystem.getName();
+                mainpage.item.nickname=dbsystem.getName();
+            }
+            if(Statue=="changenameSucceed"){
                 dbsystem.getNameByID(str_userid);
+                nickname=dbsystem.getName();
+                mainpage.item.nickname=dbsystem.getName();
+            }
         }
     }
 
-Loader{
-    id:friends;
-    anchors.fill: parent
-    visible: false
-    source:"UsersPage.qml"
-    z:102
-}
+    //用于再点一次退出
+    property int quit: 0
+    Keys.enabled: true
+    Keys.onBackPressed: {
+        quit++;
+        quittime.start();
+        if(quit==2)
+            Qt.quit();
+        else
+            myjava.toastMsg("再点一次退出")
+    }
+    Timer{
+        id:quittime
+        interval: 3000
+        onTriggered: {
+            quit=0;
+        }
+    }
+
+    //用于显示侧边栏的关注或粉丝列表
+    Loader{
+        id:friends;
+        anchors.fill: parent
+        visible: false
+        source:"UsersPage.qml"
+        z:102
+    }
+
+    //用于显示侧边栏的我的分享
+    Loader{
+        id:mypost;
+        anchors.fill: parent
+        visible: false
+        source:"PostsPage.qml"
+        z:102
+    }
+
+    //设置页面
+    Loader{
+        id:settingpage;
+        //用于更新名字后重新设置昵称
+        function setname(){
+            dbsystem.getNameByID(str_userid);
+        }
+        anchors.fill: parent
+        visible: false
+        source:"SettingPage.qml"
+        z:102
+    }
+
+    //侧边栏
     Rectangle{
         id:sidepage;
         height: parent.height
-        width:parent.width/10*7
+        width:parent.width/10*8
         color:"#32dc96"
         border.color: "grey"
         border.width: 1
         x:-width;
         z:1
         visible: false
+
+        //用于响应返回按钮
+        Keys.enabled: true
+        Keys.onBackPressed: {
+            sidepage.x=-sidepage.width
+            backarea.visible=false
+            mainwindow.forceActiveFocus();
+
+        }
+
+        MouseArea{
+            anchors.fill: parent
+        }
+
         Behavior on x{
             NumberAnimation{
                 easing.type: Easing.InCubic
@@ -65,6 +129,7 @@ Loader{
             id:myjava
         }
 
+        //侧边栏头像
         Image{
             id:headimage
             anchors.top: parent.top
@@ -74,18 +139,24 @@ Loader{
             fillMode: Image.PreserveAspectFit
             height:parent.width/4
             width:height
-            source: "http://119.29.15.43/userhead/"+str_userid+".png"
-
+            source: "http://119.29.15.43/userhead/"+str_userid+".jpg"
+            Label{
+                anchors.centerIn: parent
+                visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                text:(parent.status==Image.Loading)?"加载中":"无"
+                color:"white"
+            }
+            //点击打开设置
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    myjava.getImage();
-                    timer.start();
+                    settingpage.visible=true
+                    settingpage.item.setdata(str_userid,nickname)
                 }
             }
-
         }
 
+        //侧边栏昵称
         Text{
             id:name;
             anchors.left: headimage.right
@@ -95,7 +166,7 @@ Loader{
             color: "white"
             text:"昵称:未获取"
             wrapMode: Text.WordWrap
-            width: parent.width-headimage.width
+            width: parent.width-headimage.width- parent.width/15- parent.width/10
             font{
                 family: "黑体"
                 pixelSize: headimage.height/4
@@ -103,12 +174,13 @@ Loader{
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    searchbar.visible=searchbar.visible?false:true
+                    settingpage.visible=true
+                    settingpage.item.setdata(str_userid,nickname)
                 }
             }
-
         }
 
+        //侧边栏ID
         Text{
             id:userid;
             anchors.left: headimage.right
@@ -117,51 +189,18 @@ Loader{
             anchors.topMargin: parent.width/18
             color: "white"
             wrapMode: Text.WordWrap
-            width: parent.width-headimage.width
+            width: parent.width-headimage.width- parent.width/15- parent.width/10
             font{
                 family: "黑体"
                 pixelSize: headimage.height/4
             }
-
-
-            Rectangle{
-                id:searchbar
+            MouseArea{
                 anchors.fill: parent
-                TextField{
-                    height:parent.height-6
-                    width: parent.width-6
-                    x:3
-                    anchors.verticalCenter: parent.verticalCenter
-                    id:searchtext
-                    placeholderText:"请输入要更改的名字"
-                    style: TextFieldStyle{
-                        background: Rectangle{
-                            radius: control.height/4
-                            border.width: 1;
-                            border.color: "grey"
-                            id:searchrect
-                            Image{
-                                id:searchicon
-                                anchors.right: searchrect.right
-                                anchors.rightMargin: 3
-                                anchors.verticalCenter: searchrect.verticalCenter
-                                source: "http://www.icosky.com/icon/png/System/QuickPix%202007/Shamrock.png"
-                                height: searchbar.height-10
-                                width:height
-                                MouseArea{
-                                    anchors.fill: parent
-                                    onClicked: {
-                                      dbsystem.changeName(str_userid,searchtext.text);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+                onClicked: {
+                    settingpage.visible=true
+                    settingpage.item.setdata(str_userid,nickname)
                 }
-                visible: false
             }
-
         }
 
         //直线
@@ -199,7 +238,6 @@ Loader{
                     friends.x=0
                 }
             }
-
         }
 
         Rectangle{
@@ -249,26 +287,97 @@ Loader{
             anchors.right: parent.right
         }
 
+        Label{
+            id:text3
+            anchors.top: line3.bottom
+            anchors.topMargin: parent.width/18
+            anchors.right: parent.right
+            text:"我的分享      >  "
+            height: headimage.height/2
+            width:parent.width-headimage.width+headimage.width/2;
+            font{
+                family: "黑体"
+                pixelSize: height/1.5
+            }
+            color: "white"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignRight
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    mypost.item.getpost(str_userid,nickname);
+                    mypost.visible=true
+                    mypost.x=0
+                }
+            }
+        }
 
-SendImageSystem{
-    id:sendsystem
-    onStatueChanged: {
-        console.log(Statue);
-    }
-}
+        Rectangle{
+            id:line4
+            width: parent.width-headimage.width+headimage.width/3;
+            height:1
+            color:"white"
+            anchors.top: text3.bottom
+            anchors.topMargin: parent.width/18
+            anchors.right: parent.right
+        }
 
+        Rectangle{
+            id:linebt
+            width: parent.width
+            height:1
+            color:"white"
+            anchors.top: setting.top
+            anchors.topMargin: -parent.width/40
+            anchors.right: parent.right
+        }
 
-        Timer{
-            id:timer;
-            interval: 1500
-            onTriggered: {
-                var temp=myjava.getImagePath();
-                if(temp!=="Qt"){
-                    timer.stop();
-                    headimage.source="file://"+temp;
-                    imagePath=temp;
-                    sendsystem.sendHead(imagePath,str_userid);
+        Label{
+            id:setting
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: headimage.height/3
+            anchors.left: parent.left
+            text:"设置"
+            height: headimage.height/2
+            width:parent.width/2
+            font{
+                family: "黑体"
+                pixelSize: height/1.5
+            }
+            color: "white"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    settingpage.visible=true
+                    settingpage.item.setdata(str_userid,nickname)
+                }
+            }
 
+        }
+
+        Label{
+            id:loginout
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: headimage.height/3
+            anchors.right: parent.right
+            text:"注销"
+            height: headimage.height/2
+            width:parent.width/2
+            font{
+                family: "黑体"
+                pixelSize: height/1.5
+            }
+            color: "white"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    dbsystem.delusernamepassword()
+                    mainwindow.parent.x=mainwindow.parent.parent.width;
+                    mainwindow.parent.source="";
                 }
             }
         }
@@ -276,10 +385,7 @@ SendImageSystem{
     }
 
 
-
-
-
-
+    //显示侧边栏时，点击侧边可以返回
     MouseArea{
         id:backarea
         visible: false
@@ -288,36 +394,43 @@ SendImageSystem{
         width:parent.width
         onClicked: {
             sidepage.x=-sidepage.width
-            visible=false
+            backarea.visible=false
         }
-        z:3
         Rectangle{
+            id:backarearect
             anchors.fill: parent
             color:"black";
             opacity: 0.6
+
+
         }
+        z:3
     }
 
+    //主页面的顶部栏
     Rectangle{
         id:head;
         width:parent.width;
         height: parent.height/16*1.5;
         color:"#32dc96";
         anchors.top: parent.top;
+
+        //侧边栏按钮
         Image{
             id:sidebarbutton
-            height: parent.height
+            height: parent.height/2
             width:height
-            //source: "http://www.easyicon.net/api/resizeApi.php?id=1154861&size=96"
+            source: "qrc:/image/side.png"
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: parent.height/4
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
                     sidepage.visible=true
                     sidepage.x=0
                     backarea.visible=true
-
+                    sidepage.forceActiveFocus();
                 }
             }
         }
@@ -328,39 +441,19 @@ SendImageSystem{
             anchors.centerIn: parent
             font{
                 family: "黑体"
-                pixelSize: head.height/3
-                bold:true
+                pixelSize: head.height/2.5
             }
             color: "white";
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-
-                }
-            }
         }
 
-        Image{
-            id:messagebutton
-            source: "http://119.29.15.43/project_image/usericon.png"
-            height: parent.height
-            width:height
-            anchors.right: morebutton.left
-            anchors.verticalCenter: parent.verticalCenter
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-
-                }
-            }
-        }
-
+        //右上角的搜索用户按钮
         Image{
             id:morebutton
-            source: "http://119.29.15.43/project_image/usericon.png"
+            source: "qrc:/image/search.png"
             anchors.right: parent.right
+            anchors.rightMargin: parent.height/4
             anchors.verticalCenter: parent.verticalCenter
-            height: parent.height
+            height: parent.height/2
             width:height
             MouseArea{
                 anchors.fill: parent
@@ -368,6 +461,7 @@ SendImageSystem{
                     friends.item.userid=str_userid
                     friends.item.setTitle("搜索用户")
                     friends.visible=true
+
                     friends.x=0
                 }
             }
@@ -375,9 +469,11 @@ SendImageSystem{
 
     }
 
+    //底部栏
     Rectangle{
         id:bottom
         anchors.bottom: parent.bottom;
+        anchors.bottomMargin: 20
         width:parent.width;
         height: parent.height/16*1.5;
         color:"#32dc96";
@@ -389,19 +485,15 @@ SendImageSystem{
             height:width
             width:parent.width/5
             color:"#32dc96";
-            Text {
-                text:"首页"
-                anchors.centerIn: parent
-                font{
-                    family: "黑体"
-                    pixelSize: head.height/3
-                    bold:true
-                }
-                color: "white";
+            Image {
+                anchors.fill: parent
+                anchors.bottomMargin: 10;
+                source: "qrc:/image/mainpage.png"
+                fillMode: Image.PreserveAspectFit
+
             }
             MouseArea{
                 id:mainpagebutton
-
                 anchors.fill: parent
                 onClicked: {
                     bottom.currentPage="首页"
@@ -416,7 +508,7 @@ SendImageSystem{
             width:parent.width/5
             color:"#32dc96";
             Text {
-                text:"新闻"
+                text:""
                 anchors.centerIn: parent
                 font{
                     family: "黑体"
@@ -425,13 +517,13 @@ SendImageSystem{
                 }
                 color: "white";
             }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    bottom.currentPage="新闻"
-                    mainrect.x=-mainwindow.width
-                }
-            }
+            //            MouseArea{
+            //                anchors.fill: parent
+            //                onClicked: {
+            //                    bottom.currentPage="新闻"
+            //                    mainrect.x=-mainwindow.width
+            //                }
+            //            }
         }
         Rectangle{
             id:sendbutton
@@ -439,15 +531,13 @@ SendImageSystem{
             height:width
             width:parent.width/5
             color:"#32dc96";
-            Text {
-                text:"分享"
-                anchors.centerIn: parent
-                font{
-                    family: "黑体"
-                    pixelSize: head.height/3
-                    bold:true
-                }
-                color: "white";
+            Image {
+
+                anchors.fill: parent
+                anchors.bottomMargin: 10;
+                source: "qrc:/image/sharepage.png"
+                fillMode: Image.PreserveAspectFit
+
             }
             MouseArea{
                 anchors.fill: parent
@@ -457,14 +547,16 @@ SendImageSystem{
                 }
             }
         }
+
+
         Rectangle{
-            id:recordbutton
+            id:searchbutton
             anchors.left: sendbutton.right
             height:width
             width:parent.width/5
             color:"#32dc96";
             Text {
-                text:"记录"
+                text:""
                 anchors.centerIn: parent
                 font{
                     family: "黑体"
@@ -472,6 +564,29 @@ SendImageSystem{
                     bold:true
                 }
                 color: "white";
+            }
+            //            MouseArea{
+            //                anchors.fill: parent
+            //                onClicked: {
+            //                    bottom.currentPage="搜索"
+            //                    mainrect.x=-mainwindow.width*4
+            //                }
+            //            }
+        }
+
+        Rectangle{
+            id:recordbutton
+            anchors.left: searchbutton.right
+            height:width
+            width:parent.width/5
+            color:"#32dc96";
+            Image {
+
+                anchors.fill: parent
+                anchors.bottomMargin: 10;
+                source: "qrc:/image/recordpage.png"
+                fillMode: Image.PreserveAspectFit
+
             }
             MouseArea{
                 anchors.fill: parent
@@ -481,41 +596,16 @@ SendImageSystem{
                 }
             }
         }
-        Rectangle{
-            id:searchbutton
-            anchors.left: recordbutton.right
-            height:width
-            width:parent.width/5
-            color:"#32dc96";
-            Text {
-                text:"搜索"
-                anchors.centerIn: parent
-                font{
-                    family: "黑体"
-                    pixelSize: head.height/3
-                    bold:true
-                }
-                color: "white";
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    bottom.currentPage="搜索"
-                    mainrect.x=-mainwindow.width*4
-                }
-            }
-        }
+
     }
 
 
-
+    //中间的各种页面
     Rectangle{
         id:mainrect
         anchors.top:head.bottom
         height:parent.height-head.height-bottom.height
         width:parent.width*5
-
-
         Loader{
             id:mainpage
             anchors.left: parent.left
@@ -529,6 +619,7 @@ SendImageSystem{
             height:parent.height
             width:mainwindow.width
             source: "NewsPage.qml";
+
 
         }
         Loader{
@@ -558,8 +649,6 @@ SendImageSystem{
                 easing.type: Easing.InCubic
             }
         }
-
-
     }
 
 }

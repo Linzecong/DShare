@@ -1,8 +1,7 @@
 #include "LoginSystem.h"
+#include "JavaMethod.h"
 
-void LoginSystem::login(QString name, QString pass)
-{
-    ConnectTimer.start(1000);
+void LoginSystem::login(QString name, QString pass){
     Username=name;
     Password=pass;
     tcpSocket->connectToHost("119.29.15.43",6666);
@@ -10,12 +9,75 @@ void LoginSystem::login(QString name, QString pass)
     emit statueChanged(m_Statue);
 }
 
-LoginSystem::LoginSystem(QObject *parent) : QObject(parent)
-{
+QString LoginSystem::getusername(){
+#ifdef ANDROID
+    JavaMethod java;
+    QString longstr;
+
+    QString path=java.getSDCardPath();
+
+    path=path+"/projectapp/db.dbnum";
+
+    QFile LogFile;
+
+    LogFile.setFileName(path);
+    LogFile.open(QIODevice::ReadOnly);
+    if(LogFile.isOpen()){
+        QTextStream LogTextStream(&LogFile);
+        LogTextStream>>longstr;
+        return longstr;
+    }
+    else{
+        return "NO";
+    }
+
+#endif
+}
+
+QString LoginSystem::getpassword(){
+#ifdef ANDROID
+    JavaMethod java;
+    QString longstr;
+
+    QString path=java.getSDCardPath();
+
+    path=path+"/projectapp/db.dbnum";
+
+    QFile LogFile;
+
+    LogFile.setFileName(path);
+    LogFile.open(QIODevice::ReadOnly);
+    if(LogFile.isOpen()){
+        QTextStream LogTextStream(&LogFile);
+        LogTextStream>>longstr;
+        LogTextStream>>longstr;
+        return longstr;
+
+    }
+    else{
+        return "NO";
+    }
+#endif
+}
+
+void LoginSystem::saveusernamepassword(QString username,QString pass){
+#ifdef ANDROID
+    JavaMethod java;
+    QString path=java.getSDCardPath();
+    path=path+"/projectapp/db.dbnum";
+    QFile LogFile;
+    QTextStream LogTextStream(&LogFile);
+    LogFile.setFileName(path);
+    LogFile.open(QIODevice::WriteOnly);
+    if(LogFile.isOpen())
+        LogTextStream<<username<<endl<<pass;
+#endif
+}
+
+LoginSystem::LoginSystem(QObject *parent) : QObject(parent){
     tcpSocket = new QTcpSocket(this);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&LoginSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&LoginSystem::tcpSendMessage);
-    connect(&ConnectTimer,&QTimer::timeout,this,&LoginSystem::tcpTimeOut);
     m_Statue="InitOK";
 
 }
@@ -24,43 +86,36 @@ LoginSystem::~LoginSystem(){
 
 }
 
-void LoginSystem::setStatue(QString s)
-{
+void LoginSystem::setStatue(QString s){
     m_Statue=s;
     emit statueChanged(m_Statue);
 }
 
-QString LoginSystem::Statue()
-{
+QString LoginSystem::Statue(){
     return m_Statue;
 }
 
-void LoginSystem::tcpReadMessage()
-{
+void LoginSystem::tcpReadMessage(){
     QString message =  QString::fromUtf8(tcpSocket->readAll());
     if(message=="@denglu@DBError@")
         m_Statue="DBError";
 
-
     if(message=="@denglu@WrongPassword@")
-         m_Statue="WrongPassword";
+        m_Statue="WrongPassword";
 
 
     if(message=="@denglu@NoUsers@")
         m_Statue="NoUsers";
 
-
     if(message=="@denglu@Succeed@")
         m_Statue="Succeed";
 
-    ConnectTimer.stop();
     tcpSocket->disconnectFromHost();
     emit statueChanged(m_Statue);
 
 }
 
-void LoginSystem::tcpSendMessage()
-{
+void LoginSystem::tcpSendMessage(){
     m_Statue="Connected";
     QString out="@denglu@|||"+Username+"|||"+Password;
     tcpSocket->write(out.toUtf8());

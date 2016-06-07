@@ -2,14 +2,13 @@
 
 
 TEMPLATE = app
-
+QT+=androidextras
 QT += qml quick
 CONFIG += c++11
 
 SOURCES += main.cpp \
     LoginSystem.cpp \
     RegistSystem.cpp \
-    UserSystem.cpp \
     PostsSystem.cpp \
     JavaMethod.cpp \
     SendImageSystem.cpp \
@@ -33,7 +32,6 @@ HEADERS += \
     Framework/Record.h \
     Framework/System.h \
     Framework/User.h \
-    UserSystem.h \
     PostsSystem.h \
     JavaMethod.h \
     SendImageSystem.h \
@@ -54,7 +52,9 @@ DISTFILES += \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew.bat \
     android/src/an/qt/myjava/MyJava.java \
-    UsersPage.qml
+    UsersPage.qml \
+    PostsPage.qml \
+    SettingPage.qml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

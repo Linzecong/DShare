@@ -11,6 +11,21 @@ Rectangle {
     property int iss: 0//判断是否是搜索状态
     property int modelindex: 0
     property string userid;
+    MouseArea{
+        anchors.fill: parent
+
+    }
+
+    Keys.enabled: true
+    Keys.onBackPressed: {
+        mainrect.parent.visible=false
+        searchtext.text=""
+        mainrect.parent.parent.forceActiveFocus();
+    }
+
+
+
+
 
     DataSystem{
         id:dbsystem;
@@ -28,7 +43,7 @@ Rectangle {
 
 
 
-                  model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getsearchUserID(modelindex)+".png", "username":dbsystem.getsearchUserID(modelindex),"nickname":dbsystem.getsearchUserName(modelindex),"yiguanzhu":isf})
+                  model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getsearchUserID(modelindex)+".jpg", "username":dbsystem.getsearchUserID(modelindex),"nickname":dbsystem.getsearchUserName(modelindex),"yiguanzhu":isf})
                   modelindex++;
               }
               modelindex=0;
@@ -37,7 +52,7 @@ Rectangle {
             if(Statue=="getfollowersSucceed"){
               while(dbsystem.getFollowerName(modelindex)!==""){
 
-                  model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowerID(modelindex)+".png", "username":dbsystem.getFollowerID(modelindex),"nickname":dbsystem.getFollowerName(modelindex)})
+                  model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowerID(modelindex)+".jpg", "username":dbsystem.getFollowerID(modelindex),"nickname":dbsystem.getFollowerName(modelindex)})
 
                   modelindex++;
               }
@@ -48,8 +63,8 @@ Rectangle {
 
               while(dbsystem.getFollowingName(modelindex)!==""){
 
-                  model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowingID(modelindex)+".png", "username":dbsystem.getFollowingID(modelindex),"nickname":dbsystem.getFollowingName(modelindex),"yiguanzhu":1})
-                  searchmodel.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowingID(modelindex)+".png", "username":dbsystem.getFollowingID(modelindex),"nickname":dbsystem.getFollowingName(modelindex),"yiguanzhu":1})
+                  model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowingID(modelindex)+".jpg", "username":dbsystem.getFollowingID(modelindex),"nickname":dbsystem.getFollowingName(modelindex),"yiguanzhu":1})
+                  searchmodel.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowingID(modelindex)+".jpg", "username":dbsystem.getFollowingID(modelindex),"nickname":dbsystem.getFollowingName(modelindex),"yiguanzhu":1})
                   modelindex++;
               }
               modelindex=0;
@@ -68,6 +83,7 @@ Rectangle {
 
     function setTitle(a){
         headname.text=a;
+        forceActiveFocus();
         if(a==="搜索用户"){
             model1.clear()
             searchmodel.clear();
@@ -93,6 +109,16 @@ Rectangle {
 
     }
 
+    Loader{
+        id:mypost;
+        anchors.fill: parent
+
+
+        visible: false
+        source:"PostsPage.qml"
+        z:102
+    }
+
     Rectangle{
         id:head;
         width:parent.width;
@@ -108,7 +134,6 @@ Rectangle {
             font{
                 family: "黑体"
                 pixelSize: back.height/1.5
-                bold:true
             }
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -117,9 +142,12 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     mainrect.parent.visible=false
+                    searchtext.text=""
                 }
             }
         }
+
+
 
         Label{
             id:headname
@@ -128,7 +156,6 @@ Rectangle {
             font{
                 family: "黑体"
                 pixelSize: head.height/3
-                bold:true
             }
             color: "white";
             MouseArea{
@@ -165,13 +192,19 @@ Rectangle {
                     id:searchrect
                 }
             }
+            onTextChanged: {
+                if(searchtext.text.length>3){
+                model1.clear();
+                dbsystem.searchUser(searchtext.text);
+                }
+            }
 
             Image{
                 id:searchicon
                 anchors.right: searchtext.right
                 anchors.rightMargin: 3
                 anchors.verticalCenter: searchtext.verticalCenter
-                source: "http://www.icosky.com/icon/png/System/QuickPix%202007/Shamrock.png"
+                source: "qrc:/image/search.png"
                 height: searchbar.height-10
                 width:height
                 MouseArea{
@@ -239,6 +272,20 @@ Rectangle {
                     anchors.left: parent.left
                     anchors.leftMargin: height/8
                     fillMode: Image.PreserveAspectFit
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            mypost.item.getpost(username);
+                            mypost.visible=true
+                            mypost.x=0
+                        }
+                    }
+                    Label{
+                        anchors.centerIn: parent
+                        visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                        text:(parent.status==Image.Loading)?"加载中":"无"
+                        color:"grey"
+                    }
                 }
                 Text{
                     id:name;
@@ -300,6 +347,7 @@ Rectangle {
                                     button.enabled=false
                                     buttonrect.color="grey";
                                     button.text="已关注"
+                                    searchmodel.append({"headurl":"", "username":model1.get(index).username,"nickname":"","yiguanzhu":1})
                                 }
                                 else{
                                     dbsystem.deleteFollowing(userid,model1.get(index).username);

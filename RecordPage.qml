@@ -11,106 +11,27 @@ import DataSystem 1.0
 Rectangle {
     color:"white"
     anchors.fill: parent
+    property string str_userid
     id:mainrect
+
     function getcheckinday(){
-          dbsystem.getcheckinday(str_userid);
+        dbsystem.getcheckinday(str_userid);
     }
 
     DataSystem{
         id:dbsystem;
         onStatueChanged: {
-            console.log(Statue)
             if(Statue=="getcheckindaySucceed")
                 dosportdaysrect.checkinday=dbsystem.getcheckinday();
 
             if(Statue=="checkinSucceed")
                 dosportdaysrect.checkinday++;
-
         }
-    }
-
-    property string str_userid
-    Rectangle{
-        id: bigphotorect
-        height: parent.height*1.3
-        width: parent.width
-        x:0
-        y:-parent.height/8
-        visible: false
-        color: "black"
-        z:100
-        Image {
-            id: bigphoto
-            fillMode: Image.PreserveAspectFit
-            height: parent.height
-            width: parent.width
-        }
-        MouseArea{
-            anchors.fill: parent
-            onPressed: {
-
-                drag.target=bigphoto
-            }
-            onClicked: {
-                bigphoto.x=0
-                bigphoto.y=0
-                bigphoto.height=bigphoto.parent.height
-                bigphoto.width=bigphoto.parent.width
-                bigphotorect.visible=false
-            }
-
-        }
-        Rectangle{
-            id:zoomin
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: parent.height/12
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width/4
-            height: parent.height/10
-            width: height
-            radius: height/2
-            color: "red"
-            Text{
-                anchors.centerIn: parent
-                text:"放大"
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    bigphoto.height*=1.2
-                    bigphoto.width*=1.2
-                }
-            }
-        }
-
-        Rectangle{
-            id:zoomout
-            anchors.bottom: zoomin.bottom
-            anchors.right: parent.right
-            anchors.rightMargin: parent.width/4
-            height: parent.height/10
-            width: height
-            radius: height/2
-            color: "blue"
-            Text{
-                anchors.centerIn: parent
-                text:"缩小"
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    bigphoto.height*=0.8
-                    bigphoto.width*=0.8
-                }
-            }
-        }
-
     }
 
     JavaMethod{
         id:myjava
     }
-
 
     RecordSystem{
         id:recordsystem
@@ -120,7 +41,7 @@ Rectangle {
             }
 
             if(Statue==="uploadexerciseDBError"){
-                myjava.toastMsg("保存失败")
+                myjava.toastMsg("服务器出错，请联系管理员")
             }
 
             if(Statue==="uploaddietSucceed"){
@@ -128,9 +49,45 @@ Rectangle {
             }
 
             if(Statue==="uploaddietDBError"){
-                myjava.toastMsg("保存失败")
+                myjava.toastMsg("服务器出错，请联系管理员")
             }
 
+            if(Statue==="getlocaldietError"){
+                myjava.toastMsg("获取饮食数据失败")
+            }
+
+            if(Statue===("getlocaldietSucceed")){
+                var maxj=20;
+                    breakfastmodel.clear();
+                    lunchmodel.clear();
+                    dinnermodel.clear();
+                    snackmodel.clear();
+                    dessertmodel.clear();
+                    othersmodel.clear();
+
+                for(var i=0;i<maxj;i++){
+
+                    if(recordsystem.getlocaldietstr(0,i)!=="")
+                    breakfastmodel.append({"Food":recordsystem.getlocaldietstr(0,i) })
+
+                    if(recordsystem.getlocaldietstr(1,i)!=="")
+                    lunchmodel.append({"Food":recordsystem.getlocaldietstr(1,i)});
+
+                    if(recordsystem.getlocaldietstr(2,i)!=="")
+                    dinnermodel.append({"Food":recordsystem.getlocaldietstr(2,i)});
+
+                    if(recordsystem.getlocaldietstr(3,i)!=="")
+                    snackmodel.append({"Food":recordsystem.getlocaldietstr(3,i)});
+
+                    if(recordsystem.getlocaldietstr(4,i)!=="")
+                    dessertmodel.append({"Food":recordsystem.getlocaldietstr(4,i)});
+
+                    if(recordsystem.getlocaldietstr(5,i)!=="")
+                    othersmodel.append({"Food":recordsystem.getlocaldietstr(5,i)});
+
+                }
+
+            }
 
             if(Statue==="getdietsSucceed"){
                 foodtablerect.breakfaststr=recordsystem.getdietstr(0);
@@ -174,6 +131,7 @@ Rectangle {
         }
     }
 
+    //顶部栏分三个项目
     Rectangle {
         id: header
         anchors.top: parent.top
@@ -233,12 +191,412 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     header.currentpage="查看"
+                    recordsystem.getdiet(str_userid,timechoosertext.text);
                 }
             }
         }
     }
 
+    //饮食记录页面
+    ListView{
+        id:foodview
+        visible: header.currentpage=="饮食"?true:false
+        height: parent.height-header.height
+        width:parent.width
+        anchors.top: header.bottom
+        clip:true
+        spacing: 5
+        property var currentdiet;
+        property int currentfood;
 
+        //餐饮model
+        ListModel{
+            id:dietmodel
+            ListElement{Title:"早餐";Photo:""}
+            ListElement{Title:"午餐";Photo:""}
+            ListElement{Title:"晚餐";Photo:""}
+            ListElement{Title:"零食";Photo:""}
+            ListElement{Title:"点心";Photo:""}
+            ListElement{Title:"其他";Photo:""}
+        }
+
+        //各种细分的model
+        ListModel{
+            id:breakfastmodel
+            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物"}
+        }
+        ListModel{
+            id:lunchmodel
+            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物"}
+        }
+        ListModel{
+            id:dinnermodel
+            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物"}
+        }
+        ListModel{
+            id:snackmodel
+            ListElement{Food:"点击选择食物"}
+        }
+        ListModel{
+            id:dessertmodel
+            ListElement{Food:"点击选择食物"}
+        }
+        ListModel{
+            id:othersmodel
+            ListElement{Food:"点击选择食物"}
+        }
+
+        Component.onCompleted: {
+            recordsystem.getlocaldiet();
+        }
+
+
+
+        model:dietmodel
+
+
+        delegate: Item{
+            id:dietitem
+            width:parent.width
+            height: title.height+foodlist.height+header.height/2+header.height/5*2+addfoodbutton.height+header.height/3
+            property string imagePath:Photo
+            Rectangle{
+                border.color: "grey"
+                border.width: 2
+                radius: header.height/3
+                anchors.fill: parent
+                anchors.margins: header.height/5
+                id:delegaterect
+                property string foodstr;
+                onFoodstrChanged: {
+                    foodlist.model.setProperty(foodview.currentfood,"Food",foodstr);
+                }
+
+                Label{
+                    id:title
+                    text:Title
+                    anchors.top:parent.top
+                    anchors.topMargin: height/2
+                    anchors.left: parent.left
+                    anchors.leftMargin: parent.width/10
+                    color:"grey"
+                    font{
+                        family: "黑体"
+                        pixelSize: header.height/2
+                    }
+
+                }
+
+                Component.onCompleted: {
+                    switch(index){
+                    case 0:
+                        foodlist.model=breakfastmodel;
+                        break;
+                    case 1:
+                        foodlist.model=lunchmodel;
+                        break;
+                    case 2:
+                        foodlist.model=dinnermodel;
+                        break;
+                    case 3:
+                        foodlist.model=snackmodel;
+                        break;
+                    case 4:
+                        foodlist.model=dessertmodel;
+                        break;
+                    case 5:
+                        foodlist.model=othersmodel;
+                        break;
+                    }
+                }
+
+                //各种餐饮model中内嵌食物model
+                ListView{
+                    id:foodlist
+                    width: dietitem.width/1.5
+                    height:foodlist.model.count*(title.height*1.5+mainrect.height/36)
+                    anchors.left: title.left
+                    anchors.top: title.bottom
+                    anchors.topMargin: mainrect.height/60
+                    spacing: mainrect.height/36
+                    delegate:Item{
+                        id:food
+                        height:title.height*1.5
+                        width: parent.width
+                        Label{
+                            id:diettitle
+                            anchors.verticalCenter: parent.verticalCenter
+                            text:"食物"+(index+1).toString()
+                            color:"grey"
+                            font{
+                                family: "黑体"
+                                pixelSize: header.height/2
+                            }
+                        }
+                        Rectangle{
+                            id:foodtext
+                            border.color: "grey"
+                            border.width: 2
+                            radius: header.height/7
+                            color:"white"
+                            height: parent.height
+                            width: parent.width-diettitle.width-deletebutton.width/1.5
+                            anchors.left: diettitle.right
+                            anchors.leftMargin: diettitle.width/2
+                            Text {
+                                anchors.centerIn: parent
+                                text:Food
+                                color:"grey"
+                                font{
+                                    family: "黑体"
+                                    pixelSize: parent.height/2.5
+                                }
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+                                    foodview.currentdiet=dietitem
+                                    foodview.currentfood=index
+                                    view.model=foodsmodel
+                                    searpage.visible=true
+                                    searpage.forceActiveFocus();
+                                }
+                            }
+                        }
+                        Rectangle{
+                            id:deletebutton
+                            anchors.left: food.right
+                            anchors.leftMargin: diettitle.width/10
+                            //anchors.top: foodtext.top
+                            anchors.verticalCenter: foodtext.verticalCenter
+                            height: foodtext.height/1.4
+                            width: height*1.6
+                            Image{
+                                id:deletetext
+                                fillMode: Image.PreserveAspectFit
+
+
+                                anchors.fill: parent
+                                source: "qrc:/image/delete.png"
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+
+                                    foodlist.model.remove(index)
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+
+                Rectangle{
+                    id:addfoodbutton
+                    anchors.left: foodlist.left
+                    anchors.leftMargin: 10
+                    anchors.top: foodlist.bottom
+                    height: title.height*1.2
+                    width: height
+                    Image{
+                        id:addtext
+                        fillMode: Image.PreserveAspectFit
+                        anchors.fill: parent
+                        source: "qrc:/image/jia.png"
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            var isfull=1;
+                            for(var i=0;i<foodlist.model.count;i++){
+                                if(foodlist.model.get(i).Food==="点击选择食物")
+                                    isfull=0;
+                            }
+                            if(isfull){
+                                foodlist.model.append({"Food":"点击选择食物" })
+                            }
+                            else
+                                myjava.toastMsg("请先填满之前的食物")
+                        }
+                    }
+
+                }
+
+                Rectangle{
+                    id:savebutton
+                    property string lastsaved:"123"
+                    anchors.right: sharebutton.left
+                    anchors.rightMargin: 10
+                    anchors.top: addfoodbutton.top
+                    anchors.topMargin: header.height/5
+                    height: title.height*1.2
+                    width: height
+                    Image{
+                        id:savetext
+                        fillMode: Image.PreserveAspectFit
+                        anchors.fill: parent
+                        source: "qrc:/image/save.png"
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            var lstr="|||";
+                            for(var i=0;i<breakfastmodel.count;i++){
+                                if(breakfastmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+breakfastmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<lunchmodel.count;i++){
+                                if(lunchmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+lunchmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<dinnermodel.count;i++){
+                                if(dinnermodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+dinnermodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<snackmodel.count;i++){
+                                if(snackmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+snackmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<dessertmodel.count;i++){
+                                if(dessertmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+dessertmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<othersmodel.count;i++){
+                                if(othersmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+othersmodel.get(i).Food+"{|}";
+                            }
+
+                            if(savebutton.lastsaved!=lstr){
+                                savebutton.lastsaved=lstr;
+                            recordsystem.savelocaldiet(lstr);
+
+
+                            var foodstr123="";
+                            for(var i=0;i<foodlist.model.count;i++){
+                                if(foodlist.model.get(i).Food!=="点击选择食物")
+                                    foodstr123=foodstr123+foodlist.model.get(i).Food+"、";
+                            }
+                            recordsystem.uploaddiet(str_userid,foodstr123,index);
+                            }
+                            else
+                                myjava.toastMsg("保存成功");
+                        }
+                    }
+
+                }
+
+                Rectangle{
+                    id:sharebutton
+                    anchors.right: foodlist.right
+                    anchors.rightMargin: -savebutton.width*2
+                    anchors.top: addfoodbutton.top
+                    anchors.topMargin: header.height/5
+                    height: title.height*1.2
+                    width: height
+                    Image{
+                        id:sharetext
+                        fillMode: Image.PreserveAspectFit
+
+
+                        anchors.fill: parent
+                        source: "qrc:/image/share.png"
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+
+                            var lstr="|||";
+                            for(var i=0;i<breakfastmodel.count;i++){
+                                if(breakfastmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+breakfastmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<lunchmodel.count;i++){
+                                if(lunchmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+lunchmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<dinnermodel.count;i++){
+                                if(dinnermodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+dinnermodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<snackmodel.count;i++){
+                                if(snackmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+snackmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<dessertmodel.count;i++){
+                                if(dessertmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+dessertmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<othersmodel.count;i++){
+                                if(othersmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+othersmodel.get(i).Food+"{|}";
+                            }
+
+                            if(savebutton.lastsaved!=lstr){
+                                savebutton.lastsaved=lstr;
+                            recordsystem.savelocaldiet(lstr);
+
+
+
+
+                            var foodstr1234="";
+                            for(var i1=0;i1<foodlist.model.count;i1++){
+                                if(foodlist.model.get(i1).Food!=="点击选择食物")
+                                    foodstr1234=foodstr1234+foodlist.model.get(i1).Food+"、";
+                            }
+                            recordsystem.uploaddiet(str_userid,foodstr1234,index);
+                            }
+                            else
+                                myjava.toastMsg("保存成功")
+
+                            var str=title.text+"\n";
+                            var foodstr123="";
+                            for(var i=0;i<foodlist.model.count;i++){
+                                if(foodlist.model.get(i).Food!=="点击选择食物")
+                                    foodstr123=foodstr123+"食物"+(i+1).toString()+"："+foodlist.model.get(i).Food+"\n";
+                            }
+
+                            if(foodstr123=="")
+                            str="\n\n"+str+"什么都没吃……";
+                            else
+                               str="\n\n"+str+foodstr123;
+
+                            console.log(str)
+
+                            mainrect.parent.parent.parent.bottom.currentPage="分享"
+                            mainrect.parent.parent.x=-mainrect.width*2
+                            mainrect.parent.parent.children[2].item.settext(str)
+                            //if(dietimage.source!=="")
+                            //    mainrect.parent.parent.children[2].item.setimg(dietitem.imagePath)
+                        }
+                    }
+
+                }
+
+
+
+            }
+        }
+    }
+
+    //运动记录页面
     Rectangle{
         id:sportview
         visible: header.currentpage=="运动"?true:false
@@ -273,25 +631,30 @@ Rectangle {
                 radius: height/4
                 color:"white"
                 height: parent.height
-                width: parent.width-typetext.width
+                width: parent.width-typetext.width*2
                 anchors.verticalCenter: parent.verticalCenter
-                Text {
+                TextField{
                     id:sporttext
-                    anchors.centerIn: parent
-                    text:"新建项目"
-                    color:"grey"
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.leftMargin: 50
+
+                    placeholderText: "请输入项目"
+
+
                     font{
                         family: "黑体"
                         pixelSize: parent.height/1.5
                     }
-                }
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        view.model=sportsmodel
-                        searpage.visible=true
+                    z:2
+
+                    style: TextFieldStyle{
+                        background: Rectangle{
+                           opacity: 0
+                        }
                     }
                 }
+
             }
         }
 
@@ -300,15 +663,14 @@ Rectangle {
             id:begintimerow
             anchors.top: typerow.bottom
             anchors.topMargin: parent.height/15
-            anchors.horizontalCenter: parent.horizontalCenter
+            // anchors.horizontalCenter: parent.horizontalCenter
+            anchors.leftMargin: parent.width/10
+            anchors.left: parent.left
             height: typerow.height
             width: parent.width/1.2
-            spacing: begintimetext.width/10
-            property int editmode: 0
-            property string begintime
-            onBegintimeChanged: {
-                myjava.toastMsg(begintime)
-            }
+            spacing: begintimetext.width/5
+            property int editmode: 1
+            property string begintime:"08:00:00"
 
             Text{
                 id:begintimetext
@@ -328,11 +690,11 @@ Rectangle {
                 radius: height/4
                 color:"white"
                 height: parent.height
-                width: begintimerow.width/4
+                width: begintimerow.width/6
                 Text {
                     id:begintimehourtext
                     anchors.centerIn: parent
-                    text:"0"
+                    text:"08"
                     color:"grey"
                     font{
                         family: "黑体"
@@ -370,11 +732,11 @@ Rectangle {
                 radius: height/4
                 color:"white"
                 height: parent.height
-                width:begintimerow.width/4
+                width:begintimerow.width/6
                 Text {
                     id:begintimemintext
                     anchors.centerIn: parent
-                    text:"0"
+                    text:"00"
                     color:"grey"
                     font{
                         family: "黑体"
@@ -408,11 +770,13 @@ Rectangle {
             id:lasttimerow
             anchors.top: begintimerow.bottom
             anchors.topMargin: parent.height/15
-            anchors.horizontalCenter: parent.horizontalCenter
+            //anchors.horizontalCenter: parent.horizontalCenter
+            anchors.leftMargin: parent.width/10
+            anchors.left: parent.left
             height: typerow.height
             width: parent.width/1.2
-            spacing: begintimetext.width/10
-            property int lasttime;
+            spacing: begintimetext.width/5
+            property int lasttime:30
             Text{
                 id:lasttimetext
                 text:"持续时间"
@@ -431,11 +795,11 @@ Rectangle {
                 radius: height/4
                 color:"white"
                 height: parent.height
-                width: lasttimerow.width/4
+                width: lasttimerow.width/6
                 Text {
                     id:lasttimehourtext
                     anchors.centerIn: parent
-                    text:"0"
+                    text:"00"
                     color:"grey"
                     font{
                         family: "黑体"
@@ -472,11 +836,11 @@ Rectangle {
                 radius: height/4
                 color:"white"
                 height: parent.height
-                width:lasttimerow.width/4
+                width:lasttimerow.width/6
                 Text {
                     id:lasttimemintext
                     anchors.centerIn: parent
-                    text:"0"
+                    text:"30"
                     color:"grey"
                     font{
                         family: "黑体"
@@ -513,92 +877,82 @@ Rectangle {
             anchors.topMargin: parent.height/15
             //anchors.left: parent.left
             //anchors.leftMargin: mainrect.height/50
-            anchors.horizontalCenter: sportview.horizontalCenter
+            //anchors.horizontalCenter: sportview.horizontalCenter
+            //anchors.right: parent.right
+            x:parent.width/2+width/4
             height: typerow.height
             width: parent.width/1.2
-            spacing: modebutton.width/6
-            Rectangle{
-                id:modebutton
-                height: parent.height*1.2
-                width: modebuttontext.width*1.2
-                color: "#32dc96"
-                radius: height/4
-                border.width: 1
-                border.color: "grey"
-                Text{
-                    id:modebuttontext
-                    text:"编辑模式"
-                    color:"white"
-                    anchors.centerIn: parent
-                    font{
-                        family: "黑体"
-                        pixelSize: header.height/2
-                    }
-                }
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        if(begintimerow.editmode==0){
-                            begintimerow.editmode=1
-                            modebuttontext.text="计时模式"
-                        }
-                        else{
-                            begintimerow.editmode=0
-                            modebuttontext.text="编辑模式"
-                        }
-                    }
-                }
-            }
+            spacing: sportsavebutton.width/2
+
 
             Rectangle{
                 id:sportsavebutton
-                height: parent.height*1.2
-                width: sportsavebuttontext.width*1.5
-                color: "#32dc96"
-                radius: height/4
-                border.width: 1
-                border.color: "grey"
-                Text{
-                    id:sportsavebuttontext
-                    text:"保存"
-                    color:"white"
-                    anchors.centerIn: parent
-                    font{
-                        family: "黑体"
-                        pixelSize: header.height/2
-                    }
+                property string lastsaved:"123"
+                height: parent.height
+                width: height
+
+                Image{
+                    id:sportsavetext
+                    fillMode: Image.PreserveAspectFit
+
+
+                    anchors.fill: parent
+                    source: "qrc:/image/save.png"
                 }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
+                        if(sporttext.text=="")
+                            myjava.toastMsg("请输入项目");
+                        else{
+                         var tt=sporttext.text+"-"+begintimerow.begintime
+                            if(tt!=sportsavebutton.lastsaved){
+                                sportsavebutton.lastsaved=tt;
                         recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
 
+                                lasttimemintext.text="30"
+                                lasttimehourtext.text="00"
+                                begintimehourtext.text="08"
+                                begintimemintext.text="00"
+                            }
+                            else
+                                myjava.toastMsg("保存成功")
+                        }
                     }
                 }
             }
 
             Rectangle{
                 id:sportsharebutton
-                height: parent.height*1.2
-                width: sportsharebuttontext.width*1.2
-                color: "#32dc96"
-                radius: height/4
-                border.width: 1
-                border.color: "grey"
-                Text{
+                height: parent.height
+                width: height
+
+                Image{
                     id:sportsharebuttontext
-                    text:"保存并分享"
-                    color:"white"
-                    anchors.centerIn: parent
-                    font{
-                        family: "黑体"
-                        pixelSize: header.height/2
-                    }
+                    fillMode: Image.PreserveAspectFit
+
+
+                    anchors.fill: parent
+                    source: "qrc:/image/share.png"
                 }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
+                        if(sporttext.text=="")
+                            myjava.toastMsg("请输入项目");
+                        else{
+                            var tt=sporttext.text+"-"+begintimerow.begintime
+                               if(tt!=sportsavebutton.lastsaved){
+                                   sportsavebutton.lastsaved=tt;
+                                  recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
+
+                                   lasttimemintext.text="30"
+                                   lasttimehourtext.text="00"
+                                   begintimehourtext.text="08"
+                                   begintimemintext.text="00"
+                               }
+                               else
+                                   myjava.toastMsg("保存成功")
 
                         var str="\n\n项目类型："+sporttext.text+"\n";
                         str=str+"开始时间："+begintimerow.begintime+"\n";
@@ -608,6 +962,7 @@ Rectangle {
                         mainrect.parent.parent.parent.bottom.currentPage="分享"
                         mainrect.parent.parent.x=-mainrect.width*2
                         mainrect.parent.parent.children[2].item.settext(str)
+                        }
                     }
                 }
             }
@@ -622,14 +977,14 @@ Rectangle {
             border.color: "grey"
             border.width: 2
             anchors.top: buttonrow.bottom
-            anchors.topMargin: sportview.height/15
+            anchors.topMargin: sportview.height/30
             anchors.left: sportview.left
             anchors.leftMargin: buttonrow.height/2
             color:"white"
             property int checkinday
             Text{
                 anchors.centerIn: parent
-                text:"坚持打卡\n"+dosportdaysrect.checkinday.toString()+"天"
+                text:"坚持打卡\n  "+dosportdaysrect.checkinday.toString()+"天"
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
@@ -654,14 +1009,14 @@ Rectangle {
             border.color: "grey"
             border.width: 2
             anchors.top: buttonrow.bottom
-            anchors.topMargin: sportview.height/15
+            anchors.topMargin: sportview.height/30
             anchors.right: sportview.right
             anchors.rightMargin: buttonrow.height/2
             color:"white"
             Text{
                 id:timertext
                 anchors.centerIn: parent
-                text:"运动计时\n1小时08分钟"
+                text:"运动计时"
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
@@ -673,36 +1028,38 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     if(!sporttimer.running){
-                    begintimerow.editmode=0
-                    modebuttontext.text="编辑模式"
-                    modebutton.color="grey"
-                    modebutton.enabled=false;
-                    sportsavebutton.enabled=false
-                    sportsavebutton.color="grey"
-                    sportsharebutton.enabled=false
-                    sportsharebutton.color="grey"
-                    sporttimer.mins=0;
+                        begintimerow.editmode=0
+                        sportsavebutton.enabled=false
+
+                        sportsharebutton.enabled=false
+
+                        sporttimer.mins=0;
                         timertext.text=sporttimer.mins.toString()+"分钟"
-                       var time= new Date()
+                        var time= new Date()
                         sporttimer.beginhour=time.getHours()
                         sporttimer.beginmin=time.getMinutes()
 
-                    begintimehourtext.text=time.getHours().toString()
-                    begintimemintext.text=time.getMinutes().toString()
-                    sporttimer.start();
-                    delete time;
+                        lasttimemintext.text="00"
+                        lasttimehourtext.text="00"
+
+                        begintimehourtext.text=time.getHours().toString()
+                        begintimemintext.text=time.getMinutes().toString()
+                        sporttimer.start();
+                        delete time;
                     }
                     else{
                         sporttimer.stop()
-                        modebutton.color="#32dc96"
-                        modebutton.enabled=true;
+                        // modebutton.color="#32dc96"
+                        //modebutton.enabled=true;
                         sportsavebutton.enabled=true
-                        sportsavebutton.color="#32dc96"
+                        //sportsavebutton.color="#32dc96"
                         sportsharebutton.enabled=true
-                        sportsharebutton.color="#32dc96"
+                        //sportsharebutton.color="#32dc96"
+                        begintimerow.editmode=1
 
-                        lasttimehourtext.text=(sporttimer.mins/60).toString()
+                        lasttimehourtext.text=parseInt(sporttimer.mins/60).toString()
                         lasttimemintext.text=(sporttimer.mins%60).toString()
+                        timertext.text="运动计时"
                     }
                 }
             }
@@ -718,17 +1075,20 @@ Rectangle {
             onTriggered: {
                 var time= new Date();
                 if(time.getHours()>sporttimer.beginhour){
-                mins=(time.getHours()-sporttimer.beginhour)*60+(60-sporttimer.beginmin)+time.getMinutes();
+                    mins=(time.getHours()-sporttimer.beginhour)*60+(60-sporttimer.beginmin)+time.getMinutes();
                 }
                 if(time.getHours()==sporttimer.beginhour){
-                mins=time.getMinutes()-sporttimer.beginmin;
+                    mins=time.getMinutes()-sporttimer.beginmin;
                 }
 
                 if(time.getHours()<sporttimer.beginhour){
-                mins=(time.getHours()+24-sporttimer.beginhour)*60+(60-sporttimer.beginmin)+time.getMinutes();
+                    mins=(time.getHours()+24-sporttimer.beginhour)*60+(60-sporttimer.beginmin)+time.getMinutes();
                 }
 
                 timertext.text=sporttimer.mins.toString()+"分钟"
+
+                lasttimehourtext.text=parseInt(sporttimer.mins/60).toString()
+                lasttimemintext.text=(sporttimer.mins%60).toString()
 
             }
 
@@ -737,7 +1097,7 @@ Rectangle {
     }
 
 
-
+    //查询页面
     Rectangle{
         id:searchview
         visible: header.currentpage=="查看"?true:false
@@ -761,18 +1121,26 @@ Rectangle {
             Text {
                 id:timechoosertext
                 anchors.centerIn: parent
-                text:"2016-4-29"
                 color:"grey"
                 font{
                     family: "黑体"
                     pixelSize: parent.height/1.5
                 }
+
+                Component.onCompleted: {
+
+
+                    timechoosertext.text=dbsystem.getdate();
+
+                }
             }
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    if(!tumbler.visible)
+                    if(!tumbler.visible){
+                        timechoosertext.text="点此处确认"
                         tumbler.visible=true
+                    }
                     else{
                         if(tumbler.day==="0")
                             myjava.toastMsg("请选择正确的日期")
@@ -806,11 +1174,12 @@ Rectangle {
                 model: ListModel {
                     id:yearmodel
                     Component.onCompleted: {
-                        for (var i = 2000; i < 2100; ++i) {
+                        for (var i = 2016; i < 2100; ++i) {
                             append({value: i.toString()});
                         }
                     }
                 }
+
                 onCurrentIndexChanged: {
                     var yearint=yearmodel.get(currentIndex).value
                     tumbler.year=yearint.toString();
@@ -1089,418 +1458,24 @@ Rectangle {
     }
 
 
-
-    ListView{
-        id:foodview
-        visible: header.currentpage=="饮食"?true:false
-        height: parent.height-header.height
-        width:parent.width
-        anchors.top: header.bottom
-        clip:true
-        spacing: 5
-        property var currentdiet;
-        property int currentfood;
-        ListModel{
-            id:dietmodel
-            ListElement{Title:"早餐";Photo:"http://www.icosky.com/icon/png/System/QuickPix%202007/Shamrock.png"}
-            ListElement{Title:"午餐";Photo:""}
-            ListElement{Title:"晚餐";Photo:""}
-            ListElement{Title:"零食";Photo:""}
-            ListElement{Title:"点心";Photo:""}
-            ListElement{Title:"其他";Photo:""}
-        }
-
-        ListModel{
-            id:breakfastmodel
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
-        }
-        ListModel{
-            id:lunchmodel
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
-        }
-        ListModel{
-            id:dinnermodel
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
-        }
-        ListModel{
-            id:snackmodel
-            ListElement{Food:"点击选择食物"}
-        }
-        ListModel{
-            id:dessertmodel
-            ListElement{Food:"点击选择食物"}
-        }
-        ListModel{
-            id:othersmodel
-            ListElement{Food:"点击选择食物"}
-        }
-
-
-
-        model:dietmodel
-        delegate: Item{
-            id:dietitem
-            width:parent.width
-            height: title.height+foodlist.height+header.height/2+header.height/5*2+addfoodbutton.height+header.height/3*3
-            property string imagePath:Photo
-            Rectangle{
-                border.color: "grey"
-                border.width: 2
-                radius: header.height/3
-                anchors.fill: parent
-                anchors.margins: header.height/5
-                id:delegaterect
-                property string foodstr;
-                onFoodstrChanged: {
-                    foodlist.model.setProperty(foodview.currentfood,"Food",foodstr);
-                }
-
-
-                Label{
-                    id:title
-                    text:Title
-                    anchors.top:parent.top
-                    anchors.topMargin: height/2
-                    anchors.left: parent.left
-                    anchors.leftMargin: parent.width/10
-                    color:"grey"
-                    font{
-                        family: "黑体"
-                        pixelSize: header.height/2
-                    }
-
-                }
-
-                Image{
-                    id:dietimage
-                    anchors.left: title.right
-                    anchors.top: title.top
-                    height: title.height
-                    width:height*1.5
-                    fillMode: Image.PreserveAspectFit
-                    source:Photo
-                    MouseArea{
-                        anchors.fill: parent
-                        visible: dietimage.source==""?0:1
-                        onClicked: {
-                            bigphoto.source=dietimage.source
-                            bigphotorect.visible=true
-                        }
-                    }
-                }
-
-
-                Label{
-                    id:addphoto
-                    text:dietimage.source==""?"+":"-"
-                    anchors.top:parent.top
-                   // anchors.topMargin: height/10
-                    anchors.right: parent.right
-                    anchors.rightMargin: parent.width/40
-                    color:"grey"
-                    font{
-                        family: "黑体"
-                        bold: true
-                        pixelSize: header.height/1.5
-                    }
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            if(addphoto.text=="+"){
-                            myjava.getImage();
-                            timer.start();
-                            }
-                            else{
-                               dietimage.source="" ;
-                            }
-                        }
-                    }
-
-                }
-
-                Timer{
-                    id:timer;
-                    interval: 1500
-                    onTriggered: {
-                        var temp=myjava.getImagePath();
-                        if(temp!=="Qt"){
-                            timer.stop();
-                            dietimage.source="file://"+temp;
-                            dietitem.imagePath=temp;
-                        }
-                    }
-                }
-
-
-                Component.onCompleted: {
-                    switch(index){
-                    case 0:
-                        foodlist.model=breakfastmodel;
-                        break;
-                    case 1:
-                        foodlist.model=lunchmodel;
-                        break;
-                    case 2:
-                        foodlist.model=dinnermodel;
-                        break;
-                    case 3:
-                        foodlist.model=snackmodel;
-                        break;
-                    case 4:
-                        foodlist.model=dessertmodel;
-                        break;
-                    case 5:
-                        foodlist.model=othersmodel;
-                        break;
-                    }
-                }
-
-                ListView{
-                    id:foodlist
-                    width: dietitem.width/1.5
-                    height:foodlist.model.count*(title.height*1.5+mainrect.height/36)
-                    anchors.left: title.left
-                    anchors.top: title.bottom
-                    anchors.topMargin: mainrect.height/60
-                    spacing: mainrect.height/36
-                    delegate:Item{
-                        id:food
-                        height:title.height*1.5
-                        width: parent.width
-                        Label{
-                            id:diettitle
-                            anchors.verticalCenter: parent.verticalCenter
-                            text:"食物"+(index+1).toString()
-                            color:"grey"
-                            font{
-                                family: "黑体"
-                                pixelSize: header.height/2
-                            }
-                        }
-                        Rectangle{
-                            id:foodtext
-                            border.color: "grey"
-                            border.width: 2
-                            radius: header.height/7
-                            color:"white"
-                            height: parent.height
-                            width: parent.width-diettitle.width-deletebutton.width/1.5
-                            anchors.left: diettitle.right
-                            anchors.leftMargin: diettitle.width/2
-                            Text {
-                                anchors.centerIn: parent
-                                text:Food
-                                color:"grey"
-                                font{
-                                    family: "黑体"
-                                    pixelSize: parent.height/2.5
-                                }
-                            }
-                            MouseArea{
-                                anchors.fill: parent
-                                onClicked: {
-                                    foodview.currentdiet=dietitem
-                                    foodview.currentfood=index
-                                    view.model=foodsmodel
-                                    searpage.visible=true
-                                }
-                            }
-                        }
-                        Rectangle{
-                            id:deletebutton
-                            anchors.left: food.right
-                            anchors.leftMargin: diettitle.width/10
-                            anchors.top: foodtext.top
-                            height: foodtext.height
-                            width: deletetext.width*1.5
-                            color: "red"
-                            radius: height/4
-                            border.width: 1
-                            border.color: "grey"
-                            Text{
-                                id:deletetext
-                                text:"删除"
-                                color:"white"
-
-                                anchors.centerIn: parent
-                                font{
-                                    family: "黑体"
-                                    bold: true
-                                    pixelSize: title.height/1.5
-                                }
-                            }
-                            MouseArea{
-                                anchors.fill: parent
-                                onClicked: {
-
-                                    foodlist.model.remove(index)
-                                }
-                            }
-
-                        }
-
-                    }
-                }
-
-
-
-                Rectangle{
-                    id:addfoodbutton
-                    anchors.left: foodlist.left
-                    anchors.top: foodlist.bottom
-                    anchors.topMargin: header.height/3
-                    height: title.height*1.2
-                    width: addtext.width*2
-                    color: "#32dc96"
-                    radius: height/4
-                    border.width: 1
-                    border.color: "grey"
-                    Text{
-                        id:addtext
-                        text:"增加"
-                        color:"white"
-
-                        anchors.centerIn: parent
-                        font{
-                            family: "黑体"
-                            bold: true
-                            pixelSize: title.height/1.5
-                        }
-                    }
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            var isfull=1;
-                            for(var i=0;i<foodlist.model.count;i++){
-                                if(foodlist.model.get(i).Food==="点击选择食物")
-                                    isfull=0;
-                            }
-                            if(isfull){
-                                foodlist.model.append({"Food":"点击选择食物" })
-                            }
-                            else
-                                myjava.toastMsg("请先填满之前的食物")
-                        }
-                    }
-
-                }
-
-                Rectangle{
-                    id:savebutton
-                    anchors.horizontalCenter: foodlist.horizontalCenter
-                    anchors.top: addfoodbutton.top
-                    height: title.height*1.2
-                    width: savetext.width*2
-                    color: "blue"
-                    radius: height/4
-                    border.width: 1
-                    border.color: "grey"
-                    Text{
-                        id:savetext
-                        text:"保存"
-                        color:"white"
-
-                        anchors.centerIn: parent
-                        font{
-                            family: "黑体"
-                            bold: true
-                            pixelSize: title.height/1.5
-                        }
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            var foodstr123="";
-                            for(var i=0;i<foodlist.model.count;i++){
-                                if(foodlist.model.get(i).Food!=="点击选择食物")
-                                    foodstr123=foodstr123+foodlist.model.get(i).Food+"、";
-                            }
-                            recordsystem.uploaddiet(str_userid,foodstr123,index);
-                        }
-                    }
-
-                }
-
-                Rectangle{
-                    id:sharebutton
-                    anchors.right: foodlist.right
-                    anchors.rightMargin: -savebutton.width/1.5
-                    anchors.top: addfoodbutton.top
-                    height: title.height*1.2
-                    width: sharetext.width*1.3
-                    color: "lightblue"
-                    radius: height/4
-                    border.width: 1
-                    border.color: "grey"
-                    Text{
-                        id:sharetext
-                        text:"保存并分享"
-                        color:"white"
-
-                        anchors.centerIn: parent
-                        font{
-                            family: "黑体"
-                            bold: true
-                            pixelSize: title.height/1.5
-                        }
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            var foodstr1234="";
-                            for(var i1=0;i1<foodlist.model.count;i1++){
-                                if(foodlist.model.get(i1).Food!=="点击选择食物")
-                                    foodstr1234=foodstr1234+foodlist.model.get(i1).Food+"、";
-                            }
-                            recordsystem.uploaddiet(str_userid,foodstr1234,index);
-
-
-                            var str=title.text+"\n";
-                            var foodstr123="";
-                            for(var i=0;i<foodlist.model.count;i++){
-                                if(foodlist.model.get(i).Food!=="点击选择食物")
-                                    foodstr123=foodstr123+"食物"+(i+1).toString()+"："+foodlist.model.get(i).Food+"\n";
-                            }
-
-                            str="\n\n"+str+foodstr123;
-                            console.log(str)
-
-                            mainrect.parent.parent.parent.bottom.currentPage="分享"
-                            mainrect.parent.parent.x=-mainrect.width*2
-                            mainrect.parent.parent.children[2].item.settext(str)
-                            if(dietimage.source!=="")
-                            mainrect.parent.parent.children[2].item.setimg(dietitem.imagePath)
-                        }
-                    }
-
-                }
-
-
-
-            }
-        }
-    }
-
-
-
+    //内嵌的选择页面
     Rectangle{
         id:searpage
         anchors.fill: parent
         visible: false
         z:10
+        Keys.enabled: true
+        Keys.onBackPressed: {
+            searpage.visible=false
+            mainrect.parent.parent.parent.forceActiveFocus();
+        }
+
         Rectangle{
             id:searchbar
             height: parent.height/12
             width: parent.width
             anchors.top: parent.top
-            visible: (view.model===foodsmodel||view.model===searchedmodel)?1:0
+            visible: (view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel)?1:0
             TextField{
                 height:parent.height-6
                 width: parent.width-6
@@ -1517,7 +1492,7 @@ Rectangle {
                     }
                 }
                 onTextChanged: {
-                    if(view.model===foodsmodel||view.model===searchedmodel){
+                    if(view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel){
                         if(searchtext.text!==""){
                             searchedmodel.clear()
                             for(var i=0;i<foodsmodel.count;i++){
@@ -1595,8 +1570,10 @@ Rectangle {
                             if(view.model===lasthourmodel){
                                 lasttimehourtext.text=lasthourmodel.get(index).value
                             }
-
                             searpage.visible=false
+                            searchtext.text=""
+
+
                         }
                     }
                 }
@@ -1804,7 +1781,8 @@ Rectangle {
         id:sportsmodel
         ListElement{value:"慢跑"}
         ListElement{value:"长跑"}
-        ListElement{value:"羽毛球"}
+        ListElement{value:"羽毛球"} 
+
 
     }
 
