@@ -1,8 +1,9 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
-
+import QtQuick.Dialogs 1.2
 import DataSystem 1.0
 
 Rectangle {
@@ -184,14 +185,16 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             id:searchtext
             placeholderText:"请输入要搜索的id/昵称"
-            style: TextFieldStyle{
-                background: Rectangle{
-                    radius: control.height/4
-                    border.width: 1;
-                    border.color: "grey"
-                    id:searchrect
-                }
-            }
+//            style: TextFieldStyle{
+//                background: Rectangle{
+//                    radius: control.height/4
+//                    border.width: 1;
+//                    border.color: "grey"
+//                    id:searchrect
+//                }
+//            }
+            Material.theme: Material.Dark
+            Material.accent: Material.Purple
             onTextChanged: {
                 if(searchtext.text.length>3){
                 model1.clear();
@@ -335,7 +338,7 @@ Rectangle {
                     Label{
                         id:button
                         anchors.centerIn:parent
-                        text:iss?(yiguanzhu?"已关注":"关注"):"删除";
+                        text:iss?(yiguanzhu?"已关注":"关注"):"取消";
                         color: "white"
                         enabled: iss?(yiguanzhu?0:1):1
 
@@ -350,8 +353,7 @@ Rectangle {
                                     searchmodel.append({"headurl":"", "username":model1.get(index).username,"nickname":"","yiguanzhu":1})
                                 }
                                 else{
-                                    dbsystem.deleteFollowing(userid,model1.get(index).username);
-                                    model1.remove(index);
+                                    messageDialog.open()
                                 }
                             }
 
@@ -360,6 +362,20 @@ Rectangle {
                             family: "黑体"
                             pixelSize: buttonrect.height/1.6;
                         }
+
+                    }
+                }
+
+                MessageDialog {
+                    id: messageDialog
+                    title: "提示"
+                    text: "确定要取消关注吗？"
+                    standardButtons:  StandardButton.No|StandardButton.Yes
+                    onYes: {
+                        dbsystem.deleteFollowing(userid,model1.get(index).username);
+                        model1.remove(index);
+                    }
+                    onNo: {
 
                     }
                 }

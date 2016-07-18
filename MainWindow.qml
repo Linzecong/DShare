@@ -1,5 +1,6 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
@@ -120,7 +121,7 @@ Rectangle {
 
         Behavior on x{
             NumberAnimation{
-                easing.type: Easing.InCubic
+                easing.type: Easing.InQuart
                 duration: 200
             }
         }
@@ -321,6 +322,23 @@ Rectangle {
             anchors.topMargin: parent.width/18
             anchors.right: parent.right
         }
+
+
+        GestureArea{
+            anchors.bottom: linebt.top
+            width: parent.width
+            height: parent.width/2.5
+            onSwipe: {
+                switch (direction) {
+                case "left":
+                    sidepage.x=-sidepage.width
+                    backarea.visible=false
+                    break
+
+                }
+            }
+        }
+
 
         Rectangle{
             id:linebt
@@ -545,7 +563,7 @@ Rectangle {
                     bottom.currentPage="分享"
                     mainrect.x=-mainwindow.width*2
                     if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-                    messageDialog.open()
+                        messageDialog.open()
 
                     //sendpage.item.setnull()
                 }

@@ -1,5 +1,6 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import JavaMethod 1.0
@@ -7,6 +8,15 @@ import SendImageSystem 1.0
 import PostsSystem 1.0
 import QtQuick.Dialogs 1.2
 Rectangle { 
+    MouseArea{
+        anchors.bottom: parent.bottom
+        height: parent.height/2
+        width: parent.width
+        onClicked: {
+
+        }
+    }
+
     id:mainpage
     anchors.fill: parent
     property string imagePath
@@ -77,7 +87,9 @@ Rectangle {
                 id:note
                 visible: messageedit.text==""?true:false
                 text:"请输入文本"
-                color:"grey"
+                Material.accent: Material.Red
+                Material.theme: Material.Dark
+                //color:"grey"
                 font{
                     pixelSize: messageedit.height/6
                     family: "黑体"

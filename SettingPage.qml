@@ -1,5 +1,6 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 
@@ -54,13 +55,16 @@ StackView{
             anchors.top: parent.top;
 
             Label{
+                id:backbutton
                 text:"  <";
+                height: parent.height
+                width:height
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
                 font{
                     family: "黑体"
-                    pixelSize: headrect.height/1.5
-                    bold:true;
+                    pixelSize: backbutton.height/1.5
                 }
                 color: "white";
                 MouseArea{
@@ -327,13 +331,15 @@ StackView{
                     visible: false
                     id:changenameedit
                     text:nickname
-                    style: TextFieldStyle{
-                        background: Rectangle{
-                            radius: control.height/4
-                            border.width: 1;
-                            border.color: "grey"
-                        }
-                    }
+//                    style: TextFieldStyle{
+//                        background: Rectangle{
+//                            radius: control.height/4
+//                            border.width: 1;
+//                            border.color: "grey"
+//                        }
+//                    }
+                    Material.theme: Material.Dark
+                    Material.accent: Material.Purple
                     z:2
 
                 }

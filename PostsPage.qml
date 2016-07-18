@@ -1,5 +1,6 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 
@@ -46,7 +47,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             font{
                 family: "黑体"
-                pixelSize: head.height/1.5
+                pixelSize: backbutton.height/1.5
 
             }
             color: "white";
@@ -63,7 +64,7 @@ Rectangle {
             anchors.centerIn: parent
             font{
                 family: "黑体"
-                pixelSize: head.height/2.5
+                pixelSize: head.height/3
             }
             color: "white";
         }

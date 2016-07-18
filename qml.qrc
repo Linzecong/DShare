@@ -25,5 +25,6 @@
         <file>image/icon.png</file>
         <file>PostsPage.qml</file>
         <file>SettingPage.qml</file>
+        <file>GestureArea.qml</file>
     </qresource>
 </RCC>

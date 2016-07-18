@@ -1,5 +1,6 @@
 import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Extras 1.4
@@ -37,7 +38,7 @@ Rectangle {
         id:recordsystem
         onStatueChanged: {
             if(Statue==="uploadexerciseSucceed"){
-                myjava.toastMsg("保存成功")
+                //myjava.toastMsg("保存成功")
             }
 
             if(Statue==="uploadexerciseDBError"){
@@ -45,7 +46,7 @@ Rectangle {
             }
 
             if(Statue==="uploaddietSucceed"){
-                myjava.toastMsg("保存成功")
+                //myjava.toastMsg("保存成功")
             }
 
             if(Statue==="uploaddietDBError"){
@@ -58,32 +59,32 @@ Rectangle {
 
             if(Statue===("getlocaldietSucceed")){
                 var maxj=20;
-                    breakfastmodel.clear();
-                    lunchmodel.clear();
-                    dinnermodel.clear();
-                    snackmodel.clear();
-                    dessertmodel.clear();
-                    othersmodel.clear();
+                breakfastmodel.clear();
+                lunchmodel.clear();
+                dinnermodel.clear();
+                snackmodel.clear();
+                dessertmodel.clear();
+                othersmodel.clear();
 
                 for(var i=0;i<maxj;i++){
 
                     if(recordsystem.getlocaldietstr(0,i)!=="")
-                    breakfastmodel.append({"Food":recordsystem.getlocaldietstr(0,i) })
+                        breakfastmodel.append({"Food":recordsystem.getlocaldietstr(0,i) })
 
                     if(recordsystem.getlocaldietstr(1,i)!=="")
-                    lunchmodel.append({"Food":recordsystem.getlocaldietstr(1,i)});
+                        lunchmodel.append({"Food":recordsystem.getlocaldietstr(1,i)});
 
                     if(recordsystem.getlocaldietstr(2,i)!=="")
-                    dinnermodel.append({"Food":recordsystem.getlocaldietstr(2,i)});
+                        dinnermodel.append({"Food":recordsystem.getlocaldietstr(2,i)});
 
                     if(recordsystem.getlocaldietstr(3,i)!=="")
-                    snackmodel.append({"Food":recordsystem.getlocaldietstr(3,i)});
+                        snackmodel.append({"Food":recordsystem.getlocaldietstr(3,i)});
 
                     if(recordsystem.getlocaldietstr(4,i)!=="")
-                    dessertmodel.append({"Food":recordsystem.getlocaldietstr(4,i)});
+                        dessertmodel.append({"Food":recordsystem.getlocaldietstr(4,i)});
 
                     if(recordsystem.getlocaldietstr(5,i)!=="")
-                    othersmodel.append({"Food":recordsystem.getlocaldietstr(5,i)});
+                        othersmodel.append({"Food":recordsystem.getlocaldietstr(5,i)});
 
                 }
 
@@ -166,7 +167,9 @@ Rectangle {
         id: header
         anchors.top: parent.top
         width: parent.width
-        height: parent.height/12
+        height: parent.height/11
+        border.width: 1
+        border.color: "grey"
         property string currentpage: "饮食"
 
         Label{
@@ -290,6 +293,8 @@ Rectangle {
         model:dietmodel
 
 
+
+
         delegate: Item{
             id:dietitem
             width:parent.width
@@ -303,6 +308,7 @@ Rectangle {
                 anchors.margins: header.height/5
                 id:delegaterect
                 property string foodstr;
+
                 onFoodstrChanged: {
                     foodlist.model.setProperty(foodview.currentfood,"Food",foodstr);
                 }
@@ -390,6 +396,7 @@ Rectangle {
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
+                                    savetimer.start()
                                     foodview.currentdiet=dietitem
                                     foodview.currentfood=index
                                     view.model=foodsmodel
@@ -458,15 +465,71 @@ Rectangle {
 
                 }
 
+                Timer{
+                    id:savetimer;
+                    interval: 2000;
+                    repeat: true
+                    property string lastupload
+                    onTriggered: {
+                        var lstr="|||";
+                        for(var i=0;i<breakfastmodel.count;i++){
+                            if(breakfastmodel.get(i).Food!=="点击选择食物")
+                                lstr=lstr+breakfastmodel.get(i).Food+"{|}";
+                        }
+                        lstr=lstr+"|||";
+                        for(var i=0;i<lunchmodel.count;i++){
+                            if(lunchmodel.get(i).Food!=="点击选择食物")
+                                lstr=lstr+lunchmodel.get(i).Food+"{|}";
+                        }
+                        lstr=lstr+"|||";
+                        for(var i=0;i<dinnermodel.count;i++){
+                            if(dinnermodel.get(i).Food!=="点击选择食物")
+                                lstr=lstr+dinnermodel.get(i).Food+"{|}";
+                        }
+                        lstr=lstr+"|||";
+                        for(var i=0;i<snackmodel.count;i++){
+                            if(snackmodel.get(i).Food!=="点击选择食物")
+                                lstr=lstr+snackmodel.get(i).Food+"{|}";
+                        }
+                        lstr=lstr+"|||";
+                        for(var i=0;i<dessertmodel.count;i++){
+                            if(dessertmodel.get(i).Food!=="点击选择食物")
+                                lstr=lstr+dessertmodel.get(i).Food+"{|}";
+                        }
+                        lstr=lstr+"|||";
+                        for(var i=0;i<othersmodel.count;i++){
+                            if(othersmodel.get(i).Food!=="点击选择食物")
+                                lstr=lstr+othersmodel.get(i).Food+"{|}";
+                        }
+
+                        if(savebutton.lastsaved!=lstr){
+                            savebutton.lastsaved=lstr;
+                            recordsystem.savelocaldiet(lstr);
+
+
+                            var foodstr123="";
+                            for(var i=0;i<foodlist.model.count;i++){
+                                if(foodlist.model.get(i).Food!=="点击选择食物")
+                                    foodstr123=foodstr123+foodlist.model.get(i).Food+"、";
+                            }
+                            if(lastupload!==foodstr123){
+                                lastupload=foodstr123
+                                recordsystem.uploaddiet(str_userid,foodstr123,index);
+                            }
+                        }
+                    }
+                }
+
                 Rectangle{
                     id:savebutton
                     property string lastsaved:"123"
                     anchors.right: sharebutton.left
-                    anchors.rightMargin: 10
+                    anchors.rightMargin: sharebutton.width
                     anchors.top: addfoodbutton.top
                     anchors.topMargin: header.height/5
                     height: title.height*1.2
                     width: height
+                    visible: false
                     Image{
                         id:savetext
                         fillMode: Image.PreserveAspectFit
@@ -477,51 +540,7 @@ Rectangle {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            var lstr="|||";
-                            for(var i=0;i<breakfastmodel.count;i++){
-                                if(breakfastmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+breakfastmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<lunchmodel.count;i++){
-                                if(lunchmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+lunchmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<dinnermodel.count;i++){
-                                if(dinnermodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+dinnermodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<snackmodel.count;i++){
-                                if(snackmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+snackmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<dessertmodel.count;i++){
-                                if(dessertmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+dessertmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<othersmodel.count;i++){
-                                if(othersmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+othersmodel.get(i).Food+"{|}";
-                            }
 
-                            if(savebutton.lastsaved!=lstr){
-                                savebutton.lastsaved=lstr;
-                            recordsystem.savelocaldiet(lstr);
-
-
-                            var foodstr123="";
-                            for(var i=0;i<foodlist.model.count;i++){
-                                if(foodlist.model.get(i).Food!=="点击选择食物")
-                                    foodstr123=foodstr123+foodlist.model.get(i).Food+"、";
-                            }
-                            recordsystem.uploaddiet(str_userid,foodstr123,index);
-                            }
-                            else
-                                myjava.toastMsg("保存成功");
                         }
                     }
 
@@ -530,9 +549,9 @@ Rectangle {
                 Rectangle{
                     id:sharebutton
                     anchors.right: foodlist.right
-                    anchors.rightMargin: -savebutton.width*2
+                    anchors.rightMargin: -savebutton.width*1.2
                     anchors.top: addfoodbutton.top
-                    anchors.topMargin: header.height/5
+                    //anchors.topMargin: header.height/5
                     height: title.height*1.2
                     width: height
                     Image{
@@ -548,54 +567,6 @@ Rectangle {
                         anchors.fill: parent
                         onClicked: {
 
-                            var lstr="|||";
-                            for(var i=0;i<breakfastmodel.count;i++){
-                                if(breakfastmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+breakfastmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<lunchmodel.count;i++){
-                                if(lunchmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+lunchmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<dinnermodel.count;i++){
-                                if(dinnermodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+dinnermodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<snackmodel.count;i++){
-                                if(snackmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+snackmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<dessertmodel.count;i++){
-                                if(dessertmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+dessertmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<othersmodel.count;i++){
-                                if(othersmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+othersmodel.get(i).Food+"{|}";
-                            }
-
-                            if(savebutton.lastsaved!=lstr){
-                                savebutton.lastsaved=lstr;
-                            recordsystem.savelocaldiet(lstr);
-
-
-
-
-                            var foodstr1234="";
-                            for(var i1=0;i1<foodlist.model.count;i1++){
-                                if(foodlist.model.get(i1).Food!=="点击选择食物")
-                                    foodstr1234=foodstr1234+foodlist.model.get(i1).Food+"、";
-                            }
-                            recordsystem.uploaddiet(str_userid,foodstr1234,index);
-                            }
-                            else
-                                myjava.toastMsg("保存成功")
-
                             var str=title.text+"<br>";
                             var foodstr123="";
                             for(var i=0;i<foodlist.model.count;i++){
@@ -604,9 +575,9 @@ Rectangle {
                             }
 
                             if(foodstr123=="")
-                            str="<br>"+str+"什么都没吃……";
+                                str="<br>"+str+"什么都没吃……";
                             else
-                               str="<br>"+str+foodstr123;
+                                str="<br>"+str+foodstr123;
 
                             console.log(str)
 
@@ -678,11 +649,13 @@ Rectangle {
                     }
                     z:2
 
-                    style: TextFieldStyle{
-                        background: Rectangle{
-                           opacity: 0
-                        }
-                    }
+//                    style: TextFieldStyle{
+//                        background: Rectangle{
+//                            opacity: 0
+//                        }
+//                    }
+                    Material.theme: Material.Dark
+                    Material.accent: Material.Purple
                 }
 
             }
@@ -901,18 +874,17 @@ Rectangle {
             }
         }
 
-        Row{
+        RowLayout{
             id:buttonrow
             anchors.top: lasttimerow.bottom
             anchors.topMargin: parent.height/15
-            //anchors.left: parent.left
-            //anchors.leftMargin: mainrect.height/50
+
             //anchors.horizontalCenter: sportview.horizontalCenter
-            //anchors.right: parent.right
-            x:parent.width/2+width/4
-            height: typerow.height
-            width: parent.width/1.2
-            spacing: sportsavebutton.width/2
+            anchors.right: parent.right
+            anchors.rightMargin: width/2
+
+            height: typerow.height*1.1
+            width: height*3
 
 
             Rectangle{
@@ -935,10 +907,10 @@ Rectangle {
                         if(sporttext.text=="")
                             myjava.toastMsg("请输入项目");
                         else{
-                         var tt=sporttext.text+"-"+begintimerow.begintime
+                            var tt=sporttext.text+"-"+begintimerow.begintime
                             if(tt!=sportsavebutton.lastsaved){
                                 sportsavebutton.lastsaved=tt;
-                        recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
+                                recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
 
                                 lasttimemintext.text="30"
                                 lasttimehourtext.text="00"
@@ -972,26 +944,26 @@ Rectangle {
                             myjava.toastMsg("请输入项目");
                         else{
                             var tt=sporttext.text+"-"+begintimerow.begintime
-                               if(tt!=sportsavebutton.lastsaved){
-                                   sportsavebutton.lastsaved=tt;
-                                  recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
+                            if(tt!=sportsavebutton.lastsaved){
+                                sportsavebutton.lastsaved=tt;
+                                recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
 
-                                   lasttimemintext.text="30"
-                                   lasttimehourtext.text="00"
-                                   begintimehourtext.text="08"
-                                   begintimemintext.text="00"
-                               }
-                               else
-                                   myjava.toastMsg("保存成功")
+                                lasttimemintext.text="30"
+                                lasttimehourtext.text="00"
+                                begintimehourtext.text="08"
+                                begintimemintext.text="00"
+                            }
+                            else
+                                myjava.toastMsg("保存成功")
 
-                        var str="<br>项目类型："+sporttext.text+"<br>";
-                        str=str+"开始时间："+begintimerow.begintime+"<br>";
-                        str=str+"持续时间："+lasttimerow.lasttime+"分钟<br>";
+                            var str="<br>项目类型："+sporttext.text+"<br>";
+                            str=str+"开始时间："+begintimerow.begintime+"<br>";
+                            str=str+"持续时间："+lasttimerow.lasttime+"分钟<br>";
 
 
-                        mainrect.parent.parent.parent.bottom.currentPage="分享"
-                        mainrect.parent.parent.x=-mainrect.width*2
-                        mainrect.parent.parent.children[2].item.settext("<strong><font color=\"#35dca2\">"+str+"</font></strong>")
+                            mainrect.parent.parent.parent.bottom.currentPage="分享"
+                            mainrect.parent.parent.x=-mainrect.width*2
+                            mainrect.parent.parent.children[2].item.settext("<strong><font color=\"#35dca2\">"+str+"</font></strong>")
                         }
                     }
                 }
@@ -1513,14 +1485,16 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 id:searchtext
                 placeholderText:"请输入要搜索的内容"
-                style: TextFieldStyle{
-                    background: Rectangle{
-                        radius: control.height/4
-                        border.width: 1;
-                        border.color: "grey"
-                        id:searchrect
-                    }
-                }
+//                style: TextFieldStyle{
+//                    background: Rectangle{
+//                        radius: control.height/4
+//                        border.width: 1;
+//                        border.color: "grey"
+//                        id:searchrect
+//                    }
+//                }
+                Material.theme: Material.Dark
+                Material.accent: Material.Purple
                 onTextChanged: {
                     if(view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel){
                         if(searchtext.text!==""){
@@ -1580,7 +1554,7 @@ Rectangle {
                             if(view.model===searchedmodel){
                                 foodview.currentdiet.children[0].foodstr=""
                                 if(searchedmodel.get(index).value!=="无匹配项请点此处")
-                                foodview.currentdiet.children[0].foodstr=searchedmodel.get(index).value
+                                    foodview.currentdiet.children[0].foodstr=searchedmodel.get(index).value
                                 else{
                                     foodview.currentdiet.children[0].foodstr=searchtext.text
                                     dbsystem.uploadFood(searchtext.text)
@@ -1821,7 +1795,7 @@ Rectangle {
         id:sportsmodel
         ListElement{value:"慢跑"}
         ListElement{value:"长跑"}
-        ListElement{value:"羽毛球"} 
+        ListElement{value:"羽毛球"}
 
 
     }
