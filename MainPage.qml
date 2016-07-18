@@ -219,7 +219,7 @@ Rectangle{
                 Image{
                     id:photo
                     anchors.top: message.bottom
-                    anchors.topMargin: headimage.height/3
+                    anchors.topMargin: parent.hasimage?headimage.height/3:0
                     height: parent.hasimage?listview.width/2:0;
                     anchors.horizontalCenter: parent.horizontalCenter
                     width:listview.width-100

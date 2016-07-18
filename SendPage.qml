@@ -5,14 +5,29 @@ import QtQuick.Controls.Styles 1.4
 import JavaMethod 1.0
 import SendImageSystem 1.0
 import PostsSystem 1.0
-
+import QtQuick.Dialogs 1.2
 Rectangle { 
     id:mainpage
     anchors.fill: parent
     property string imagePath
-    property string str_userid;
+    property string str_userid
+    property string hiddentext
+    property string messagetext:messageedit.text
+
+    function setnull(){
+        hiddentext=""
+
+        note.text="请输入文本"
+        messageedit.text=""
+        image.source=""
+        image.visible=false
+        text.visible=true
+        imagePath=""
+    }
+
     function settext(b){
-        messageedit.text=b;
+        note.text="已为您生成文本~请输入你的感想~"
+        hiddentext=b;
     }
     function setimg(b){
         image.source="file://"+b;
@@ -263,12 +278,7 @@ Rectangle {
             id:cma
             anchors.fill: parent
             onClicked: {
-                messageedit.text="";
-                image.source=""
-                image.visible=false
-
-                text.visible=true
-                imagePath=""
+                messageDialog.open()
             }
         }
         color:cma.pressed?"#32dc96":"white"
@@ -280,6 +290,25 @@ Rectangle {
         }
 
     }
+
+    MessageDialog {
+        id: messageDialog
+        title: "提示"
+        text: "确定要清空吗？"
+        standardButtons:  StandardButton.No|StandardButton.Yes
+        onYes: {
+            messageedit.text="";
+            image.source=""
+            image.visible=false
+
+            text.visible=true
+            imagePath=""
+        }
+        onNo: {
+
+        }
+    }
+
 
 
     Rectangle{
@@ -309,7 +338,7 @@ Rectangle {
             property string imgname;
             onStatueChanged:{
                 if(Statue=="Succeed"){
-                    sendmsgsystem.sendPost(str_userid,messageedit.text,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
+                    sendmsgsystem.sendPost(str_userid,messageedit.text+"<br>"+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
                 }
                 if(Statue=="DBError"){
                     myjava.toastMsg("远程服务器出错，请联系开发者！");
@@ -336,8 +365,10 @@ Rectangle {
                     mainpage.parent.parent.x=0;
                     mainpage.parent.parent.children[0].item.refreshpost(str_userid);
                     messageedit.text="";
-
+                    hiddentext=""
+                    note.text="请输入文本"
                     image.visible=false
+                    image.source=""
                     text.visible=true
                     imagePath=""
 
@@ -359,6 +390,11 @@ Rectangle {
             id:sma
             anchors.fill: parent
             onClicked: {
+                if(messagetext===""&&hiddentext===""){
+                    myjava.toastMsg("请填写内容~！");
+                    return
+                }
+
                 if(refreshtimer.refreshtime<=60){
                     var time= 60-refreshtimer.refreshtime;
                     myjava.toastMsg("还有"+time.toString()+"秒");
@@ -371,7 +407,7 @@ Rectangle {
                         sendimgsystem.sendImage(imagePath,sendimgsystem.imgname);
                     }
                     else{
-                        sendmsgsystem.sendPost(str_userid,messageedit.text,0,"");
+                        sendmsgsystem.sendPost(str_userid,messageedit.text+"<br>"+hiddentext,0,"");
                     }
                 }
 

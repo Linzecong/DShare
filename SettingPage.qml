@@ -2,7 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
-import QtGraphicalEffects 1.0
+
 import JavaMethod 1.0
 import SendImageSystem 1.0
 import DataSystem  1.0

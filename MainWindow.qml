@@ -2,7 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
-import QtGraphicalEffects 1.0
+import QtQuick.Dialogs 1.2
 import DataSystem 1.0
 import JavaMethod 1.0
 import SendImageSystem 1.0
@@ -544,6 +544,10 @@ Rectangle {
                 onClicked: {
                     bottom.currentPage="分享"
                     mainrect.x=-mainwindow.width*2
+                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+                    messageDialog.open()
+
+                    //sendpage.item.setnull()
                 }
             }
         }
@@ -597,6 +601,20 @@ Rectangle {
             }
         }
 
+    }
+
+    MessageDialog {
+        id: messageDialog
+        title: "提示"
+        text: "要清空你之前填的内容吗？"
+        detailedText:"之前的内容：<br>"+sendpage.item.messagetext+"<br>"+sendpage.item.hiddentext
+        standardButtons:  StandardButton.No|StandardButton.Yes
+        onYes: {
+            sendpage.item.setnull()
+        }
+        onNo: {
+
+        }
     }
 
 

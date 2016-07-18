@@ -128,6 +128,7 @@ QString PostsSystem::getbigpostphotourl(int i){
 QString PostsSystem::getpostlikers(int i){
     if(i<PostList.length())
         return PostList[i].LikersString;
+    return "";
 }
 
 int PostsSystem::getpostID(int i)

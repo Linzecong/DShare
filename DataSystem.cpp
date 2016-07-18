@@ -130,6 +130,11 @@ QString DataSystem::getdate(){
     return QDate::currentDate().toString("yyyy-MM-dd");
 }
 
+void DataSystem::uploadFood(QString a){
+    QString out="@uploadfood@"+a;
+    tcpSocket->write(out.toUtf8());
+}
+
 void DataSystem::delusernamepassword(){
 #ifdef ANDROID
         JavaMethod java;

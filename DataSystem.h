@@ -55,6 +55,7 @@ public:
     Q_INVOKABLE int getcheckinday();//返回连续打卡的天数
 
     Q_INVOKABLE QString getdate();//返回日期
+    Q_INVOKABLE void uploadFood(QString a);//上传食物
 
     Q_INVOKABLE void delusernamepassword();//注销时删除内存卡中的用户
 

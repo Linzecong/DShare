@@ -87,6 +87,36 @@ Rectangle {
 
                 }
 
+                if(breakfastmodel.count==0){
+                    breakfastmodel.append({"Food":"点击选择食物"})
+                    breakfastmodel.append({"Food":"点击选择食物"})
+                }
+
+                if(lunchmodel.count==0){
+                    lunchmodel.append({"Food":"点击选择食物"})
+                    lunchmodel.append({"Food":"点击选择食物"})
+                    lunchmodel.append({"Food":"点击选择食物"})
+                }
+
+                if(dinnermodel.count==0){
+                    dinnermodel.append({"Food":"点击选择食物"})
+                    dinnermodel.append({"Food":"点击选择食物"})
+                    dinnermodel.append({"Food":"点击选择食物"})
+                }
+
+                if(snackmodel.count==0)
+                    snackmodel.append({"Food":"点击选择食物"})
+
+
+                if(dessertmodel.count==0)
+                    dessertmodel.append({"Food":"点击选择食物"})
+
+
+                if(othersmodel.count==0)
+                    othersmodel.append({"Food":"点击选择食物"})
+
+
+
             }
 
             if(Statue==="getdietsSucceed"){
@@ -252,7 +282,7 @@ Rectangle {
         }
 
         Component.onCompleted: {
-            recordsystem.getlocaldiet();
+            recordsystem.getlocaldiet();//读取本地信息
         }
 
 
@@ -566,23 +596,23 @@ Rectangle {
                             else
                                 myjava.toastMsg("保存成功")
 
-                            var str=title.text+"\n";
+                            var str=title.text+"<br>";
                             var foodstr123="";
                             for(var i=0;i<foodlist.model.count;i++){
                                 if(foodlist.model.get(i).Food!=="点击选择食物")
-                                    foodstr123=foodstr123+"食物"+(i+1).toString()+"："+foodlist.model.get(i).Food+"\n";
+                                    foodstr123=foodstr123+"食物"+(i+1).toString()+"："+foodlist.model.get(i).Food+"<br>";
                             }
 
                             if(foodstr123=="")
-                            str="\n\n"+str+"什么都没吃……";
+                            str="<br>"+str+"什么都没吃……";
                             else
-                               str="\n\n"+str+foodstr123;
+                               str="<br>"+str+foodstr123;
 
                             console.log(str)
 
                             mainrect.parent.parent.parent.bottom.currentPage="分享"
                             mainrect.parent.parent.x=-mainrect.width*2
-                            mainrect.parent.parent.children[2].item.settext(str)
+                            mainrect.parent.parent.children[2].item.settext("<strong><font color=\"#35dca2\">"+str+"</font></strong>")
                             //if(dietimage.source!=="")
                             //    mainrect.parent.parent.children[2].item.setimg(dietitem.imagePath)
                         }
@@ -954,14 +984,14 @@ Rectangle {
                                else
                                    myjava.toastMsg("保存成功")
 
-                        var str="\n\n项目类型："+sporttext.text+"\n";
-                        str=str+"开始时间："+begintimerow.begintime+"\n";
-                        str=str+"持续时间："+lasttimerow.lasttime+"分钟\n";
+                        var str="<br>项目类型："+sporttext.text+"<br>";
+                        str=str+"开始时间："+begintimerow.begintime+"<br>";
+                        str=str+"持续时间："+lasttimerow.lasttime+"分钟<br>";
 
 
                         mainrect.parent.parent.parent.bottom.currentPage="分享"
                         mainrect.parent.parent.x=-mainrect.width*2
-                        mainrect.parent.parent.children[2].item.settext(str)
+                        mainrect.parent.parent.children[2].item.settext("<strong><font color=\"#35dca2\">"+str+"</font></strong>")
                         }
                     }
                 }
@@ -1505,6 +1535,11 @@ Rectangle {
                         else
                             view.model=foodsmodel
                     }
+
+
+                    searchedmodel.append({"value":"无匹配项请点此处"})
+
+
                 }
             }
         }
@@ -1544,7 +1579,12 @@ Rectangle {
                         onClicked: {
                             if(view.model===searchedmodel){
                                 foodview.currentdiet.children[0].foodstr=""
+                                if(searchedmodel.get(index).value!=="无匹配项请点此处")
                                 foodview.currentdiet.children[0].foodstr=searchedmodel.get(index).value
+                                else{
+                                    foodview.currentdiet.children[0].foodstr=searchtext.text
+                                    dbsystem.uploadFood(searchtext.text)
+                                }
                             }
 
                             if(view.model===foodsmodel){
