@@ -5,7 +5,7 @@ TEMPLATE = app
 QT+=androidextras
 QT += qml quick
 CONFIG += c++11
-
+QT += qml quick quickcontrols2
 SOURCES += main.cpp \
     LoginSystem.cpp \
     RegistSystem.cpp \

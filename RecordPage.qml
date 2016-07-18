@@ -1,6 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0
-import QtQuick.Controls.Material 2.0
+//import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Extras 1.4
@@ -649,13 +649,13 @@ Rectangle {
                     }
                     z:2
 
-//                    style: TextFieldStyle{
-//                        background: Rectangle{
-//                            opacity: 0
-//                        }
-//                    }
-                    Material.theme: Material.Dark
-                    Material.accent: Material.Purple
+                    style: TextFieldStyle{
+                        background: Rectangle{
+                            opacity: 0
+                        }
+                    }
+                    //Material.theme: Material.Dark
+                    //Material.accent: Material.Purple
                 }
 
             }
@@ -1485,16 +1485,16 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 id:searchtext
                 placeholderText:"请输入要搜索的内容"
-//                style: TextFieldStyle{
-//                    background: Rectangle{
-//                        radius: control.height/4
-//                        border.width: 1;
-//                        border.color: "grey"
-//                        id:searchrect
-//                    }
-//                }
-                Material.theme: Material.Dark
-                Material.accent: Material.Purple
+                style: TextFieldStyle{
+                    background: Rectangle{
+                        radius: control.height/4
+                        border.width: 1;
+                        border.color: "grey"
+                        id:searchrect
+                    }
+                }
+                //Material.theme: Material.Dark
+                //Material.accent: Material.Purple
                 onTextChanged: {
                     if(view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel){
                         if(searchtext.text!==""){

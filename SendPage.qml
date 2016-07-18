@@ -1,6 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0
-import QtQuick.Controls.Material 2.0
+//import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import JavaMethod 1.0
@@ -87,8 +87,8 @@ Rectangle {
                 id:note
                 visible: messageedit.text==""?true:false
                 text:"请输入文本"
-                Material.accent: Material.Red
-                Material.theme: Material.Dark
+                //Material.accent: Material.Red
+                //Material.theme: Material.Dark
                 //color:"grey"
                 font{
                     pixelSize: messageedit.height/6

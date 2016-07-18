@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQuickView>
+#include <QQuickStyle>
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QObject>
@@ -23,7 +24,7 @@ int main(int argc, char *argv[]){
     qmlRegisterType<DataSystem>("DataSystem",1,0,"DataSystem");
     qmlRegisterType<RecordSystem>("RecordSystem",1,0,"RecordSystem");
 
-
+    QQuickStyle::setStyle("Material");
     QQuickView viewer;
     QObject::connect(viewer.engine(), SIGNAL(quit()), &app, SLOT(quit()));
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);

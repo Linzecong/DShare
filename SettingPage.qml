@@ -1,6 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.0
-import QtQuick.Controls.Material 2.0
+//import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 
@@ -331,15 +331,15 @@ StackView{
                     visible: false
                     id:changenameedit
                     text:nickname
-//                    style: TextFieldStyle{
-//                        background: Rectangle{
-//                            radius: control.height/4
-//                            border.width: 1;
-//                            border.color: "grey"
-//                        }
-//                    }
-                    Material.theme: Material.Dark
-                    Material.accent: Material.Purple
+                    style: TextFieldStyle{
+                        background: Rectangle{
+                            radius: control.height/4
+                            border.width: 1;
+                            border.color: "grey"
+                        }
+                    }
+                    //Material.theme: Material.Dark
+                    //Material.accent: Material.Purple
                     z:2
 
                 }

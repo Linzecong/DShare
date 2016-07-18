@@ -1,6 +1,6 @@
 import QtQuick 2.5
-import QtQuick.Controls 2.0
-import QtQuick.Controls.Material 2.0
+import QtQuick.Controls 1.4
+//import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import LoginSystem 1.0;
@@ -103,15 +103,15 @@ StackView{
                 id:usertext
                 placeholderText:"请输入用户名"
                 validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
-                Material.theme: Material.Dark
-                Material.accent: Material.Purple
-//                style: TextFieldStyle{
-//                    background: Rectangle{
-//                        radius: control.height/4
-//                        border.width: 1;
-//                        border.color: "grey"
-//                    }
-//                }
+                //Material.theme: Material.Dark
+                //Material.accent: Material.Purple
+                style: TextFieldStyle{
+                    background: Rectangle{
+                        radius: control.height/4
+                        border.width: 1;
+                        border.color: "grey"
+                    }
+                }
             }
         }
 
@@ -138,15 +138,15 @@ StackView{
                 placeholderText:"请输入密码"
                 echoMode:TextInput.Password
                 validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
-                Material.theme: Material.Dark
-                Material.accent: Material.Purple
-//                style: TextFieldStyle{
-//                    background: Rectangle{
-//                        radius: control.height/4
-//                        border.width: 1;
-//                        border.color: "grey"
-//                    }
-//                }
+                //Material.theme: Material.Dark
+                //Material.accent: Material.Purple
+                style: TextFieldStyle{
+                    background: Rectangle{
+                        radius: control.height/4
+                        border.width: 1;
+                        border.color: "grey"
+                    }
+                }
 
             }
         }
@@ -341,15 +341,15 @@ StackView{
                     id:registidtext
                     placeholderText:"请输入ID"
                     validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
-//                    style: TextFieldStyle{
-//                        background: Rectangle{
-//                            radius: control.height/4
-//                            border.width: 1;
-//                            border.color: "grey"
-//                        }
-//                    }
-                    Material.theme: Material.Dark
-                    Material.accent: Material.Purple
+                    style: TextFieldStyle{
+                        background: Rectangle{
+                            radius: control.height/4
+                            border.width: 1;
+                            border.color: "grey"
+                        }
+                    }
+                    //Material.theme: Material.Dark
+                    //Material.accent: Material.Purple
                     focus: true
                 }
             }
@@ -381,15 +381,15 @@ StackView{
                     placeholderText:"请输入密码"
                     echoMode:TextInput.Password
                     validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
-//                    style: TextFieldStyle{
-//                        background: Rectangle{
-//                            radius: control.height/4
-//                            border.width: 1;
-//                            border.color: "grey"
-//                        }
-//                    }
-                    Material.theme: Material.Dark
-                    Material.accent: Material.Purple
+                    style: TextFieldStyle{
+                        background: Rectangle{
+                            radius: control.height/4
+                            border.width: 1;
+                            border.color: "grey"
+                        }
+                    }
+                    //Material.theme: Material.Dark
+                    //Material.accent: Material.Purple
                 }
             }
 
@@ -421,15 +421,15 @@ StackView{
                     placeholderText:"请再次输入密码"
                     echoMode:TextInput.Password
                     validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
-//                    style: TextFieldStyle{
-//                        background: Rectangle{
-//                            radius: control.height/4
-//                            border.width: 1;
-//                            border.color: "grey"
-//                        }
-//                    }
-                    Material.theme: Material.Dark
-                    Material.accent: Material.Purple
+                    style: TextFieldStyle{
+                        background: Rectangle{
+                            radius: control.height/4
+                            border.width: 1;
+                            border.color: "grey"
+                        }
+                    }
+                    //Material.theme: Material.Dark
+                    //Material.accent: Material.Purple
                 }
             }
 
@@ -458,15 +458,15 @@ StackView{
                     width: registtoprect.width/3*1.7
                     id:registnametext
                     placeholderText:"请输入昵称"
-//                    style: TextFieldStyle{
-//                        background: Rectangle{
-//                            radius: control.height/4
-//                            border.width: 1;
-//                            border.color: "grey"
-//                        }
-//                    }
-                    Material.theme: Material.Dark
-                    Material.accent: Material.Purple
+                    style: TextFieldStyle{
+                        background: Rectangle{
+                            radius: control.height/4
+                            border.width: 1;
+                            border.color: "grey"
+                        }
+                    }
+                    //Material.theme: Material.Dark
+                    //Material.accent: Material.Purple
                 }
             }
 
