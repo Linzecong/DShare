@@ -1,4 +1,5 @@
 package an.qt.myjava;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,6 +8,7 @@ import android.widget.Toast;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.DisplayMetrics;
 import android.provider.Settings;
 import android.os.Bundle;
 import android.os.Environment;
@@ -82,7 +84,8 @@ public class MyJava extends org.qtproject.qt5.android.bindings.QtActivity
                 return sdDir.toString();
            }
            return "";
-       }
+    }
+
 
 
 }

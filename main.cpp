@@ -24,8 +24,11 @@ int main(int argc, char *argv[]){
     qmlRegisterType<DataSystem>("DataSystem",1,0,"DataSystem");
     qmlRegisterType<RecordSystem>("RecordSystem",1,0,"RecordSystem");
 
-    QQuickStyle::setStyle("Material");
+    //QQuickStyle::setStyle("Material");
     QQuickView viewer;
+
+
+
     QObject::connect(viewer.engine(), SIGNAL(quit()), &app, SLOT(quit()));
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
     viewer.setSource(QUrl("qrc:/main.qml"));

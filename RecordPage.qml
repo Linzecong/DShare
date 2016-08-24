@@ -1,9 +1,10 @@
 import QtQuick 2.5
-import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4
 //import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls.Styles 1.3
 import QtQuick.Extras 1.4
+
 import PostsSystem 1.0
 import JavaMethod 1.0
 import RecordSystem 1.0
@@ -53,9 +54,9 @@ Rectangle {
                 myjava.toastMsg("服务器出错，请联系管理员")
             }
 
-            if(Statue==="getlocaldietError"){
-                myjava.toastMsg("获取饮食数据失败")
-            }
+//            if(Statue==="getlocaldietError"){
+//                myjava.toastMsg("获取饮食数据失败")
+//            }
 
             if(Statue===("getlocaldietSucceed")){
                 var maxj=20;
@@ -697,7 +698,7 @@ Rectangle {
                 Text {
                     id:begintimehourtext
                     anchors.centerIn: parent
-                    text:"08"
+                    text:"00"
                     color:"grey"
                     font{
                         family: "黑体"
@@ -843,7 +844,7 @@ Rectangle {
                 Text {
                     id:lasttimemintext
                     anchors.centerIn: parent
-                    text:"30"
+                    text:"00"
                     color:"grey"
                     font{
                         family: "黑体"
@@ -912,9 +913,9 @@ Rectangle {
                                 sportsavebutton.lastsaved=tt;
                                 recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
 
-                                lasttimemintext.text="30"
+                                lasttimemintext.text="00"
                                 lasttimehourtext.text="00"
-                                begintimehourtext.text="08"
+                                begintimehourtext.text="00"
                                 begintimemintext.text="00"
                             }
                             else
@@ -948,13 +949,10 @@ Rectangle {
                                 sportsavebutton.lastsaved=tt;
                                 recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
 
-                                lasttimemintext.text="30"
-                                lasttimehourtext.text="00"
-                                begintimehourtext.text="08"
-                                begintimemintext.text="00"
                             }
                             else
                                 myjava.toastMsg("保存成功")
+
 
                             var str="<br>项目类型："+sporttext.text+"<br>";
                             str=str+"开始时间："+begintimerow.begintime+"<br>";
@@ -964,6 +962,12 @@ Rectangle {
                             mainrect.parent.parent.parent.bottom.currentPage="分享"
                             mainrect.parent.parent.x=-mainrect.width*2
                             mainrect.parent.parent.children[2].item.settext("<strong><font color=\"#35dca2\">"+str+"</font></strong>")
+
+
+                            lasttimemintext.text="00"
+                            lasttimehourtext.text="00"
+                            begintimehourtext.text="00"
+                            begintimemintext.text="00"
                         }
                     }
                 }

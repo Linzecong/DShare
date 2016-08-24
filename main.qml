@@ -7,7 +7,7 @@ import LoginSystem 1.0;
 import RegistSystem 1.0;
 import JavaMethod 1.0
 import DataSystem 1.0
-
+import QtQuick.Dialogs 1.2
 StackView{
     JavaMethod{
         id:myjava
@@ -24,6 +24,7 @@ StackView{
             loginsystem.login(str,loginsystem.getpassword());
         else{
             openrect.visible=false//取消显示等待页面
+            indicator.visible=false
         }
     }
 
@@ -51,7 +52,32 @@ StackView{
             fillMode: Image.PreserveAspectFit
             source:"qrc:/image/icon.png"
         }
+
     }
+
+
+    //等待界面
+    Rectangle{
+        id: indicator
+        height: parent.height*1.3
+        width: parent.width
+        x:0
+        y:-parent.height/8
+
+        visible: false
+        color:"black"
+        opacity: 0.6
+        z:1001
+        BusyIndicator{
+            width:parent.width/7
+            height:width
+            anchors.centerIn: parent
+            running: true
+        }
+
+    }
+
+
 
     id:stack;
     //初始大小
@@ -195,6 +221,7 @@ StackView{
                         myjava.toastMsg("非法字符")
                         return;
                     }
+                    indicator.visible=true
                     loginsystem.login(usertext.text,passwordtext.text);
                 }
             }
@@ -253,15 +280,27 @@ StackView{
                     else
                     stack.str_userid=loginsystem.getusername();
 
+
+
                     mainpage.source="MainWindow.qml";//加载首页
                     mainpage.x=0;
                     myjava.toastMsg("登录成功")
                 }
+                if(Statue=="SDCardError"){
+                    messageDialog.open()
+                }
+
+
+                indicator.visible=false
             }
         }
+        MessageDialog {
+            id: messageDialog
+            title: "提示"
+            text: "程序无法访问SDCard，部分功能（如图片查看）缺失！"
+            standardButtons: StandardButton.Ok
 
-
-
+        }
     }
 
     //注册页面
@@ -611,7 +650,21 @@ StackView{
                         mainpage.x=0;
                         myjava.toastMsg("注册成功！")
                     }
+                    if(Statue=="SDCardError"){
+                        messageDialog1.open()
+                    }
+
+
+                    indicator.visible=false
                 }
+
+            }
+            MessageDialog {
+                id: messageDialog1
+                title: "提示"
+                text: "程序无法访问SDCard，部分功能（如图片查看）缺失！"
+                standardButtons: StandardButton.Ok
+
             }
 
             //注册页面
@@ -625,6 +678,7 @@ StackView{
                         myjava.toastMsg("用户名已存在")
 
                     if(Statue=="Succeed"){
+                        indicator.visible=true
                         loginsystem.login(registidtext.text,registpasstext.text);
                     }
                 }

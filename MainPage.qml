@@ -1,5 +1,5 @@
 import QtQuick 2.5
-import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4
 //import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
@@ -12,6 +12,13 @@ Rectangle{
     anchors.fill: parent
     property string username
     property string nickname
+
+    function abs(a){
+        if(a<0)
+            return -a
+        else
+            return a
+    }
 
     function setusername(a){
         username=a;
@@ -42,85 +49,104 @@ Rectangle{
     }
 
     //用于显示大图
+
     Rectangle{
+        property int isbig:0
         id: bigphotorect
         height: parent.height*1.3
         width: parent.width
         x:0
         y:-parent.height/8
-        visible: false
         z:22
+        visible: false
+
         color: "black"
-        Image {
-            id: bigphoto
-            fillMode: Image.PreserveAspectFit
-            height: parent.height
+
+        Keys.enabled: true
+        Keys.onBackPressed: {
+
+            mainrect.forceActiveFocus();
+
+            bigphoto.x=0
+            bigphoto.y=0
+            bigphoto.scale=1
+            bigphotorect.isbig=0
+            bigphotorect.visible=false
+        }
+
+        Flickable{
+            id:flick
+            height:parent.height
             width: parent.width
-        }
-        MouseArea{
-            anchors.fill: parent
-            onPressed: {
+            contentHeight: bigphoto.height-1
+            contentWidth: bigphoto.width-1
+            Image {
+                id: bigphoto
+                fillMode: Image.PreserveAspectFit
+                height: bigphotorect.height
+                width: bigphotorect.width
+                Timer{
+                    id:doubletimer
+                    interval: 300
+                    repeat: false
+                    onTriggered: {
+                        mainrect.forceActiveFocus();
 
-                drag.target=bigphoto
+                        bigphoto.x=0
+                        bigphoto.y=0
+                        bigphoto.scale=1
+                        bigphotorect.isbig=0
+                        bigphotorect.visible=false
+                    }
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        if(!doubletimer.running)
+                            doubletimer.running=true
+                        else{
+                            doubletimer.running=false
+                            if(!bigphotorect.isbig){
+                                bigphoto.scale=1.5
+                                bigphotorect.isbig=1
+                            }
+                            else{
+                                bigphoto.scale=1
+                                bigphotorect.isbig=0
+                            }
+                        }
+                    }
+
+
+                }
             }
-            onClicked: {
-                bigphoto.x=0
-                bigphoto.y=0
-                bigphoto.height=bigphoto.parent.height
-                bigphoto.width=bigphoto.parent.width
-                bigphotorect.visible=false
-            }
+
         }
-
-        //        Rectangle{
-        //            id:zoomin
-        //            anchors.bottom: parent.bottom
-        //            anchors.bottomMargin: parent.height/12
-        //            anchors.left: parent.left
-        //            anchors.leftMargin: parent.width/4
-        //            height: parent.height/10
-        //            width: height
-        //            radius: height/2
-        //            color: "red"
-        //            visible: false
-        //            Text{
-        //                anchors.centerIn: parent
-        //                text:"放大"
-        //            }
-        //            MouseArea{
-        //                anchors.fill: parent
-        //                onClicked: {
-        //                    bigphoto.height*=1.2
-        //                    bigphoto.width*=1.2
-        //                }
-        //            }
-        //        }
-
-        //        Rectangle{
-        //            id:zoomout
-        //            anchors.bottom: zoomin.bottom
-        //            anchors.right: parent.right
-        //            anchors.rightMargin: parent.width/4
-        //            height: parent.height/10
-        //            width: height
-        //            radius: height/2
-        //            color: "blue"
-        //            visible: false
-        //            Text{
-        //                anchors.centerIn: parent
-        //                text:"缩小"
-        //            }
-        //            MouseArea{
-        //                anchors.fill: parent
-        //                onClicked: {
-        //                    bigphoto.height*=0.8
-        //                    bigphoto.width*=0.8
-        //                }
-        //            }
-        //        }
-
     }
 
+
+
+    Rectangle{
+        id: indicator
+        height: parent.height*1.3
+        width: parent.width
+        x:0
+        y:-parent.height/8
+
+        visible: false
+        color:"black"
+        opacity: 0.6
+        z:1001
+        BusyIndicator{
+            width:parent.width/7
+            height:width
+            anchors.centerIn: parent
+            running: true
+        }
+
+    }
 
     //显示列表
     ListView{
@@ -166,11 +192,10 @@ Rectangle{
                         }
                     }
                     //用于网速慢，头像加载慢时先显示文字
-                    Label{
+                    BusyIndicator{
                         anchors.centerIn: parent
                         visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                        text:(parent.status==Image.Loading)?"加载中":"无"
-                        color:"grey"
+                        running:(parent.status==Image.Loading)?true:false
                     }
                 }
 
@@ -229,8 +254,16 @@ Rectangle{
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
+                            indicator.visible=true
+                            indicator.visible=true
+                            indicator.visible=true
+                            indicator.visible=true
+                            indicator.visible=true
+
                             bigphoto.source=postsystem.getbigpostphoto(delegaterect.bigimg);
                             bigphotorect.visible=true
+                            bigphotorect.forceActiveFocus()
+                            indicator.visible=false
                         }
                     }
                 }
@@ -311,7 +344,7 @@ Rectangle{
                             anchors.fill: parent
                             onClicked: {
                                 likebutton.visible=likebutton.visible?false:true
-                               // collectbutton.visible=collectbutton.visible?false:true
+                                // collectbutton.visible=collectbutton.visible?false:true
                             }
                         }
                     }

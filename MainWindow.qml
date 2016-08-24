@@ -15,6 +15,7 @@ Rectangle {
     anchors.fill: parent
 
     property string nickname;
+    property string str_userid
 
     //初始化各种数据
     function setusername(a){
@@ -462,6 +463,12 @@ Rectangle {
                 pixelSize: head.height/2.5
             }
             color: "white";
+            MouseArea{
+                anchors.fill: parent
+                onDoubleClicked: {
+                    mainpage.item.refreshpost(str_userid);
+                }
+            }
         }
 
         //右上角的搜索用户按钮
@@ -516,6 +523,8 @@ Rectangle {
                 onClicked: {
                     bottom.currentPage="首页"
                     mainrect.x=0;
+
+
                 }
             }
         }

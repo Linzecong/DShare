@@ -2,6 +2,8 @@
 #ifdef ANDROID
 #include <QtAndroidExtras/QAndroidJniObject>
 #include <unistd.h>
+#include <QGuiApplication>
+#include <QScreen>
 #endif
 
 JavaMethod::JavaMethod(QObject *parent) : QObject(parent){
@@ -33,4 +35,15 @@ QString JavaMethod::getSDCardPath(){
     QAndroidJniObject str=QAndroidJniObject::callStaticObjectMethod("an/qt/myjava/MyJava","getSdcardPath","()Ljava/lang/String;");
     return str.toString();
 #endif
+}
+
+int JavaMethod::getWidth(){
+
+    return QGuiApplication::screens().first()->availableSize().width();
+
+}
+
+int JavaMethod::getHeight(){
+
+return QGuiApplication::screens().first()->availableSize().height();
 }

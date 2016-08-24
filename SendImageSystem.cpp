@@ -53,6 +53,9 @@ void SendImageSystem::tcpReadMessage(){
     if(message=="@sendimage@Succeed@")
         m_Statue="Succeed";
 
+    if(message=="@sendimage@Wait@")
+        m_Statue="Wait";
+
     tcpSocket->disconnectFromHost();
     emit statueChanged(m_Statue);
 }

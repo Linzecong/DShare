@@ -1,5 +1,5 @@
 import QtQuick 2.5
-import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4
 //import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
@@ -259,7 +259,20 @@ StackView{
 
                 SendImageSystem{
                     id:sendimgsystem1
+                    onStatueChanged:{
 
+                        if(Statue=="Succeed"){
+                            myjava.toastMsg("修改成功！重启后生效！");
+                        }
+                        if(Statue=="DBError"){
+                            myjava.toastMsg("远程服务器出错，请联系开发者！");
+                        }
+
+                        if(Statue=="Error"){
+                            myjava.toastMsg("照片有误！！");
+                        }
+
+                    }
                 }
 
                 Timer{
@@ -270,9 +283,15 @@ StackView{
                         if(temp!=="Qt"){
                             timer.stop();
                             headimage.source="file://"+temp;
+
+                            if(headimage.status==Image.Error){
+                                myjava.toastMsg("照片有误！");
+                                return
+                            }
+
                             imagePath=temp;
                             sendimgsystem1.sendHead(imagePath,str_userid);
-                            myjava.toastMsg("修改成功！重启后生效！");
+
 
                         }
                     }

@@ -1,5 +1,5 @@
 import QtQuick 2.5
-import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4
 //import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
@@ -15,6 +15,26 @@ Rectangle {
         onClicked: {
 
         }
+    }
+
+    Rectangle{
+        id: indicator
+        height: parent.height*1.3
+        width: parent.width
+        x:0
+        y:-parent.height/8
+
+        visible: false
+        color:"black"
+        opacity: 0.6
+        z:1001
+        BusyIndicator{
+            width:parent.width/7
+            height:width
+            anchors.centerIn: parent
+            running: true
+        }
+
     }
 
     id:mainpage
@@ -48,6 +68,8 @@ Rectangle {
     JavaMethod{
         id:myjava
     }
+
+
 
     Rectangle{
         id:rect
@@ -87,9 +109,7 @@ Rectangle {
                 id:note
                 visible: messageedit.text==""?true:false
                 text:"请输入文本"
-                //Material.accent: Material.Red
-                //Material.theme: Material.Dark
-                //color:"grey"
+                color:"grey"
                 font{
                     pixelSize: messageedit.height/6
                     family: "黑体"
@@ -309,12 +329,7 @@ Rectangle {
         text: "确定要清空吗？"
         standardButtons:  StandardButton.No|StandardButton.Yes
         onYes: {
-            messageedit.text="";
-            image.source=""
-            image.visible=false
-
-            text.visible=true
-            imagePath=""
+            setnull()
         }
         onNo: {
 
@@ -349,21 +364,29 @@ Rectangle {
             id:sendimgsystem
             property string imgname;
             onStatueChanged:{
+
                 if(Statue=="Succeed"){
                     sendmsgsystem.sendPost(str_userid,messageedit.text+"<br>"+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
                 }
                 if(Statue=="DBError"){
                     myjava.toastMsg("远程服务器出错，请联系开发者！");
                     refreshtimer.refreshtime=62
+                    indicator.visible=false
                 }
                 if(Statue=="Error"){
                     myjava.toastMsg("照片有误！！");
                     refreshtimer.refreshtime=62
+                    indicator.visible=false
+                }
+
+                if(Statue=="Wait"){
+                    myjava.toastMsg("服务器繁忙，请重新发送！");
+                    refreshtimer.refreshtime=62
+                    indicator.visible=false
                 }
 
                 if(Statue=="Sending..."){
                     myjava.toastMsg("正在发送！请稍等！");
-                    sma.visible=true;
                 }
             }
         }
@@ -372,6 +395,7 @@ Rectangle {
             id:sendmsgsystem
             onStatueChanged: {
                 if(Statue=="sendpostSucceed"){
+                    indicator.visible=false
                     myjava.toastMsg("发送成功！");
                     mainpage.parent.parent.parent.bottom.currentPage="首页"
                     mainpage.parent.parent.x=0;
@@ -383,7 +407,7 @@ Rectangle {
                     image.source=""
                     text.visible=true
                     imagePath=""
-
+                    sma.visible=true;
                 }
             }
         }
@@ -402,6 +426,12 @@ Rectangle {
             id:sma
             anchors.fill: parent
             onClicked: {
+
+                if(image.status==Image.Error){
+                    myjava.toastMsg("照片有误！");
+                    return
+                }
+
                 if(messagetext===""&&hiddentext===""){
                     myjava.toastMsg("请填写内容~！");
                     return
@@ -412,6 +442,7 @@ Rectangle {
                     myjava.toastMsg("还有"+time.toString()+"秒");
                 }
                 else{
+                    indicator.visible=true
                     refreshtimer.refreshtime=0;
                     refreshtimer.start();
                     if(imagePath!==""){

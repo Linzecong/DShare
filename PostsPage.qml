@@ -1,5 +1,5 @@
 import QtQuick 2.5
-import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4
 //import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
@@ -28,6 +28,26 @@ Rectangle {
 
     MouseArea{
         anchors.fill: parent
+    }
+
+    Rectangle{
+        id: indicator
+        height: parent.height*1.3
+        width: parent.width
+        x:0
+        y:-parent.height/8
+
+        visible: false
+        color:"black"
+        opacity: 0.6
+        z:1001
+        BusyIndicator{
+            width:parent.width/7
+            height:width
+            anchors.centerIn: parent
+            running: true
+        }
+
     }
 
     //顶部栏
@@ -97,37 +117,79 @@ Rectangle {
 
 
         Rectangle{
+            property int isbig:0
             id: bigphotorect
             height: parent.height*1.3
             width: parent.width
             x:0
             y:-parent.height/8
-            visible: false
             z:22
+            visible: false
+
             color: "black"
-            Image {
-                id: bigphoto
-                fillMode: Image.PreserveAspectFit
-                height: parent.height
+
+            Keys.enabled: true
+            Keys.onBackPressed: {
+
+                mainrect.forceActiveFocus();
+
+                bigphoto.x=0
+                bigphoto.y=0
+                bigphoto.scale=1
+                bigphotorect.isbig=0
+                bigphotorect.visible=false
+            }
+
+            Flickable{
+                id:flick
+                height:parent.height
                 width: parent.width
-            }
-            MouseArea{
-                anchors.fill: parent
-                onPressed: {
+                contentHeight: bigphoto.height-1
+                contentWidth: bigphoto.width-1
+                Image {
+                    id: bigphoto
+                    fillMode: Image.PreserveAspectFit
+                    height: bigphotorect.height
+                    width: bigphotorect.width
+                    Timer{
+                        id:doubletimer
+                        interval: 300
+                        repeat: false
+                        onTriggered: {
+                            mainrect.forceActiveFocus();
 
-                    drag.target=bigphoto
+                            bigphoto.x=0
+                            bigphoto.y=0
+                            bigphoto.scale=1
+                            bigphotorect.isbig=0
+                            bigphotorect.visible=false
+                        }
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+
+                        onClicked: {
+                            if(!doubletimer.running)
+                                doubletimer.running=true
+                            else{
+                                doubletimer.running=false
+                                if(!bigphotorect.isbig){
+                                    bigphoto.scale=1.5
+                                    bigphotorect.isbig=1
+                                }
+                                else{
+                                    bigphoto.scale=1
+                                    bigphotorect.isbig=0
+                                }
+                            }
+                        }
+
+
+                    }
                 }
-                onClicked: {
-                    bigphoto.x=0
-                    bigphoto.y=0
-                    bigphoto.height=bigphoto.parent.height
-                    bigphoto.width=bigphoto.parent.width
-                    bigphotorect.visible=false
-                }
 
             }
-
-
         }
 
         ListView{
@@ -225,8 +287,15 @@ Rectangle {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
+                                indicator.visible=true
+                                indicator.visible=true
+                                indicator.visible=true
+                                indicator.visible=true
+                                indicator.visible=true
                                 bigphoto.source=postsystem.getbigpostphoto(delegaterect.bigimg);
                                 bigphotorect.visible=true
+                                indicator.visible=false
+                                bigphotorect.forceActiveFocus()
                             }
                         }
                     }

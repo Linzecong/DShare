@@ -6,7 +6,7 @@ void LoginSystem::login(QString name, QString pass){
     Password=pass;
     tcpSocket->connectToHost("119.29.15.43",6666);
     m_Statue="Connecting";
-    emit statueChanged(m_Statue);
+
 }
 
 QString LoginSystem::getusername(){
@@ -28,6 +28,13 @@ QString LoginSystem::getusername(){
         return longstr;
     }
     else{
+        //生成文件夹
+        QString SdcardPath=java.getSDCardPath();
+        QString nFileName=SdcardPath+"/projectapp/";
+        QDir *tempdir = new QDir;
+        bool exist = tempdir->exists(nFileName);
+        if(!exist)
+            tempdir->mkdir(nFileName);
         return "NO";
     }
 
@@ -71,6 +78,10 @@ void LoginSystem::saveusernamepassword(QString username,QString pass){
     LogFile.open(QIODevice::WriteOnly);
     if(LogFile.isOpen())
         LogTextStream<<username<<endl<<pass;
+    else{
+        m_Statue="SDCardError";
+        emit statueChanged(m_Statue);
+    }
 #endif
 }
 
@@ -120,6 +131,6 @@ void LoginSystem::tcpSendMessage(){
     QString out="@denglu@|||"+Username+"|||"+Password;
     tcpSocket->write(out.toUtf8());
     m_Statue="Waiting";
-    emit statueChanged(m_Statue);
+
 }
 

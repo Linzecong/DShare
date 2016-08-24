@@ -12,6 +12,9 @@ public:
     Q_INVOKABLE void getImage();//打开图库并选择照片
     Q_INVOKABLE QString getImagePath();//返回选择的照片的地址
     Q_INVOKABLE QString getSDCardPath();//返回SDcard地址
+
+     Q_INVOKABLE int getWidth();//返回SDcard地址
+     Q_INVOKABLE int getHeight();//返回SDcard地址
 signals:
 
 public slots:
