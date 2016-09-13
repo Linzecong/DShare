@@ -184,105 +184,105 @@ Rectangle {
         ListElement{value:"暂无实际功能"}
     }
 
-    Rectangle{
-        id:boxrect
-        anchors.top: teambox.bottom
-        anchors.horizontalCenter: teambox.horizontalCenter
-        width: teambox.width
-        height: photobutton.height*1.5
-        z:2
-        visible: false
-        ListView{
+//    Rectangle{
+//        id:boxrect
+//        anchors.top: teambox.bottom
+//        anchors.horizontalCenter: teambox.horizontalCenter
+//        width: teambox.width
+//        height: photobutton.height*1.5
+//        z:2
+//        visible: false
+//        ListView{
 
-            id:boxview
-            clip:true
-            anchors.fill: parent
-            width: teambox.width
+//            id:boxview
+//            clip:true
+//            anchors.fill: parent
+//            width: teambox.width
 
-            spacing: -1
-            boundsBehavior:Flickable.StopAtBounds
-            delegate: Item{
-                id:postitem
-                width:teambox.width
-                height:photobutton.height/3
-                Rectangle{
-                    border.color: "grey"
-                    border.width: 1
-                    anchors.fill: parent
-                    radius: photobutton.width/10
-                    Label{
-                        id:mytext
-                        anchors.centerIn: parent
-                        text: value
-                        font{
-                            family: "黑体"
-                            pixelSize: photobutton.height/5
-                        }
-                    }
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            boxview.currenttext=mytext.text
-                            boxrect.visible=false;
-                        }
-                    }
-                }
-            }
-            model: model
-            property string currenttext:model.get(0).value
-
-
-
-        }
-    }
+//            spacing: -1
+//            boundsBehavior:Flickable.StopAtBounds
+//            delegate: Item{
+//                id:postitem
+//                width:teambox.width
+//                height:photobutton.height/3
+//                Rectangle{
+//                    border.color: "grey"
+//                    border.width: 1
+//                    anchors.fill: parent
+//                    radius: photobutton.width/10
+//                    Label{
+//                        id:mytext
+//                        anchors.centerIn: parent
+//                        text: value
+//                        font{
+//                            family: "黑体"
+//                            pixelSize: photobutton.height/5
+//                        }
+//                    }
+//                    MouseArea{
+//                        anchors.fill: parent
+//                        onClicked: {
+//                            boxview.currenttext=mytext.text
+//                            boxrect.visible=false;
+//                        }
+//                    }
+//                }
+//            }
+//            model: model
+//            property string currenttext:model.get(0).value
 
 
-    Label{
-        id:label
-        anchors.left: photobutton.right
-        anchors.leftMargin: mainpage.width/30
-        height: photobutton.height/3
-        anchors.top: photobutton.top
-       // anchors.topMargin: photobutton.height/10
-        text: "分组:"
+
+//        }
+//    }
 
 
-        font{
-            family: "黑体"
-            pixelSize: photobutton.height/5
-        }
-    }
+//    Label{
+//        id:label
+//        anchors.left: photobutton.right
+//        anchors.leftMargin: mainpage.width/30
+//        height: photobutton.height/3
+//        anchors.top: photobutton.top
+//       // anchors.topMargin: photobutton.height/10
+//        text: "分组:"
 
 
-    Rectangle{
-        id:teambox
-        border.color: "grey"
-        border.width: 1
-        radius: photobutton.width/10
-        anchors.left: label.right
+//        font{
+//            family: "黑体"
+//            pixelSize: photobutton.height/5
+//        }
+//    }
 
-        anchors.top: photobutton.top
 
-        width: photobutton.width*1.5
-        height: photobutton.height/3
-        Text {
-            x: photobutton.height/8
-            id: boxtext
-            height: parent.height
-            color: "grey"
-            text:boxview.currenttext
-            verticalAlignment: Text.AlignVCenter
-            font.pixelSize: photobutton.height/6
-            font.family: "黑体"
-        }
-        MouseArea{
-            anchors.fill: parent
-            onClicked: {
-                boxrect.visible=true
-            }
-        }
+//    Rectangle{
+//        id:teambox
+//        border.color: "grey"
+//        border.width: 1
+//        radius: photobutton.width/10
+//        anchors.left: label.right
 
-    }
+//        anchors.top: photobutton.top
+
+//        width: photobutton.width*1.5
+//        height: photobutton.height/3
+//        Text {
+//            x: photobutton.height/8
+//            id: boxtext
+//            height: parent.height
+//            color: "grey"
+//            text:boxview.currenttext
+//            verticalAlignment: Text.AlignVCenter
+//            font.pixelSize: photobutton.height/6
+//            font.family: "黑体"
+//        }
+//        MouseArea{
+//            anchors.fill: parent
+//            onClicked: {
+//                boxrect.visible=true
+//            }
+//        }
+
+//    }
 
 
     Rectangle{
@@ -292,8 +292,7 @@ Rectangle {
         radius: photobutton.width/10
         anchors.left: photobutton.right
         anchors.leftMargin: photobutton.height/4
-        anchors.top: teambox.bottom
-        anchors.topMargin: photobutton.height/5.5
+        anchors.verticalCenter: photobutton.verticalCenter
 
         width: photobutton.width/1.2
         height: photobutton.height/3.5
@@ -341,10 +340,9 @@ Rectangle {
     Rectangle{
         id:sendbutton
         radius: photobutton.width/10
-        anchors.right: boxrect.right
+        anchors.left: clear.right
         anchors.leftMargin: photobutton.height/5
-        anchors.top: teambox.bottom
-        anchors.topMargin: photobutton.height/5.5
+        anchors.verticalCenter: photobutton.verticalCenter
 
         width: photobutton.width/1.2
         height: photobutton.height/3.5
@@ -416,7 +414,7 @@ Rectangle {
             id:refreshtimer;
             interval: 1000;
             repeat: true
-            property int refreshtime: 62//防止连续刷新
+            property int refreshtime: 32//防止连续刷新
             onTriggered: {
                 refreshtimer.refreshtime=refreshtimer.refreshtime+1;
             }
@@ -437,7 +435,7 @@ Rectangle {
                     return
                 }
 
-                if(refreshtimer.refreshtime<=60){
+                if(refreshtimer.refreshtime<=30){
                     var time= 60-refreshtimer.refreshtime;
                     myjava.toastMsg("还有"+time.toString()+"秒");
                 }

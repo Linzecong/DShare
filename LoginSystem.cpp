@@ -16,7 +16,7 @@ QString LoginSystem::getusername(){
 
     QString path=java.getSDCardPath();
 
-    path=path+"/projectapp/db.dbnum";
+    path=path+"/DShare/db.dbnum";
 
     QFile LogFile;
 
@@ -30,7 +30,7 @@ QString LoginSystem::getusername(){
     else{
         //生成文件夹
         QString SdcardPath=java.getSDCardPath();
-        QString nFileName=SdcardPath+"/projectapp/";
+        QString nFileName=SdcardPath+"/DShare/";
         QDir *tempdir = new QDir;
         bool exist = tempdir->exists(nFileName);
         if(!exist)
@@ -48,7 +48,7 @@ QString LoginSystem::getpassword(){
 
     QString path=java.getSDCardPath();
 
-    path=path+"/projectapp/db.dbnum";
+    path=path+"/DShare/db.dbnum";
 
     QFile LogFile;
 
@@ -71,7 +71,7 @@ void LoginSystem::saveusernamepassword(QString username,QString pass){
 #ifdef ANDROID
     JavaMethod java;
     QString path=java.getSDCardPath();
-    path=path+"/projectapp/db.dbnum";
+    path=path+"/DShare/db.dbnum";
     QFile LogFile;
     QTextStream LogTextStream(&LogFile);
     LogFile.setFileName(path);

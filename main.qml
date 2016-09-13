@@ -12,7 +12,7 @@ StackView{
     JavaMethod{
         id:myjava
     }
-    property string str_userid;//用户名
+    property string str_userid;//ID
     //防止其他页面点击
     MouseArea{
         anchors.fill: parent
@@ -105,7 +105,7 @@ StackView{
             }
         }
 
-        //用户名行
+        //ID行
         Row{
             id:userrow
             anchors.top:toprect.bottom;
@@ -127,7 +127,7 @@ StackView{
                 height:parent.height
                 width: parent.width-usericon.width
                 id:usertext
-                placeholderText:"请输入用户名"
+                placeholderText:"请输入ID"
                 validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
                 //Material.theme: Material.Dark
                 //Material.accent: Material.Purple
@@ -208,8 +208,8 @@ StackView{
                 id:loginma
                 anchors.fill: parent
                 onClicked: {
-                    if(usertext.text.length<8||usertext.text.length>12){
-                        myjava.toastMsg("用户名由8~12个字符组成");
+                    if(usertext.text.length<6||usertext.text.length>10){
+                        myjava.toastMsg("ID由6~10个字符组成");
                         return;
                     }
 
@@ -217,7 +217,7 @@ StackView{
                         myjava.toastMsg("密码至少有8~16个字符")
                         return;
                     }
-                    if(passwordtext.text.indexOf("|||")>=0||usertext.text.indexOf("|||")>=0||passwordtext.text.indexOf("@")>=0||usertext.text.indexOf("@")>=0){
+                    if(passwordtext.text.indexOf("|")>=0||usertext.text.indexOf("|")>=0||passwordtext.text.indexOf("@")>=0||usertext.text.indexOf("@")>=0){
                         myjava.toastMsg("非法字符")
                         return;
                     }
@@ -271,7 +271,7 @@ StackView{
                 if(Statue=="WrongPassword")
                     myjava.toastMsg("密码错误")
                 if(Statue=="NoUsers")
-                    myjava.toastMsg("用户名不存在")
+                    myjava.toastMsg("ID不存在")
                 if(Statue=="Succeed"){
                     if(usertext.text!=""){
                         stack.str_userid=usertext.text
@@ -509,68 +509,139 @@ StackView{
                 }
             }
 
-            //协议行，自己实现一个checkbox
+            //性别行
             Row{
-                id:checkbox
+                id:sexrow
                 anchors.top:registnamerow.bottom
                 anchors.topMargin: registnamerow.height
-                anchors.horizontalCenter: parent.horizontalCenter
                 height: parent.height/23;
-                width:parent.width/9*4;
-                Rectangle{
-                    property int checked:1
-                    id:check
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: checkbox.left
-                    anchors.leftMargin: checkbox.height/2
-                    height: parent.height/1.5
-                    width: height
-                    border.color: "grey"
-                    border.width: 1
-                    radius: height/4
-                    color:"white"
-                    Rectangle{
-                        anchors.centerIn: parent
-                        height: parent.height/1.5
-                        width: height
-                        color:check.checked?"#32dc96":"white"
-                        radius: height/4
-                    }
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            check.checked=check.checked?0:1;
-                        }
-                    }
-                }
+                width:parent.width/9*6;
                 Label{
-                    text:"已阅读用户协议";
+                    text:"性别：";
+                    anchors.leftMargin: 50
                     width: registtoprect.width/4;
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.leftMargin: check.height/2
-                    anchors.left: check.right
-                    horizontalAlignment: Text.AlignLeft
+                    horizontalAlignment: Text.AlignRight;
                     font{
                         family: "黑体"
                         pixelSize: registidrow.height/1.5
                     }
                     color: "grey";
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            stack.push(xieyipage);
+                }
+
+                ComboBox{
+                    height:parent.height
+                    width: registtoprect.width/3*1.7
+                    id:sextext
+                    model: [ "男", "女"]
+                    style: ComboBoxStyle{
+                        background: Rectangle{
+                            radius: control.height/4
+                            border.width: 1;
+                            border.color: "grey"
                         }
                     }
                 }
             }
 
+
+            //年龄行
+            Row{
+                id:agerow
+                anchors.top:sexrow.bottom
+                anchors.topMargin: sexrow.height
+                height: parent.height/23;
+                width:parent.width/9*6;
+                Label{
+                    text:"年龄：";
+                    anchors.leftMargin: 50
+                    width: registtoprect.width/4;
+                    anchors.verticalCenter: parent.verticalCenter
+                    horizontalAlignment: Text.AlignRight;
+                    font{
+                        family: "黑体"
+                        pixelSize: registidrow.height/1.5
+                    }
+                    color: "grey";
+                }
+
+                ComboBox{
+                    height:parent.height
+                    width: registtoprect.width/3*1.7
+                    id:agetext
+                    model: [ "15", "16", "17", "18", "19", "20", "21", "22"]
+                    style: ComboBoxStyle{
+                        background: Rectangle{
+                            radius: control.height/4
+                            border.width: 1;
+                            border.color: "grey"
+                        }
+                    }
+                }
+            }
+
+            //协议行，自己实现一个checkbox
+//            Row{
+//                id:checkbox
+//                anchors.top:registnamerow.bottom
+//                anchors.topMargin: registnamerow.height
+//                anchors.horizontalCenter: parent.horizontalCenter
+//                height: parent.height/23;
+//                width:parent.width/9*4;
+//                Rectangle{
+//                    property int checked:1
+//                    id:check
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    anchors.left: checkbox.left
+//                    anchors.leftMargin: checkbox.height/2
+//                    height: parent.height/1.5
+//                    width: height
+//                    border.color: "grey"
+//                    border.width: 1
+//                    radius: height/4
+//                    color:"white"
+//                    Rectangle{
+//                        anchors.centerIn: parent
+//                        height: parent.height/1.5
+//                        width: height
+//                        color:check.checked?"#32dc96":"white"
+//                        radius: height/4
+//                    }
+//                    MouseArea{
+//                        anchors.fill: parent
+//                        onClicked: {
+//                            check.checked=check.checked?0:1;
+//                        }
+//                    }
+//                }
+//                Label{
+//                    text:"已阅读用户协议";
+//                    width: registtoprect.width/4;
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    anchors.leftMargin: check.height/2
+//                    anchors.left: check.right
+//                    horizontalAlignment: Text.AlignLeft
+//                    font{
+//                        family: "黑体"
+//                        pixelSize: registidrow.height/1.5
+//                    }
+//                    color: "grey";
+//                    MouseArea{
+//                        anchors.fill: parent
+//                        onClicked: {
+//                            stack.push(xieyipage);
+//                        }
+//                    }
+//                }
+//            }
+
             //注册
             Rectangle{
                 id:registbutton
                 width:parent.width/4
-                height:checkbox.height*1.5
-                anchors.top: checkbox.bottom
-                anchors.topMargin: checkbox.height
+                height:agerow.height*1.5
+                anchors.top: agerow.bottom
+                anchors.topMargin: agerow.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 color:registma.pressed?"1084e5":"#1589e8";
                 radius: height/4
@@ -596,13 +667,13 @@ StackView{
                     id:registma
                     anchors.fill: parent
                     onClicked: {
-                        if(check.checked==0){
-                            myjava.toastMsg("请阅读用户协议")
-                            return;
-                        }
+//                        if(check.checked==0){
+//                            myjava.toastMsg("请阅读用户协议")
+//                            return;
+//                        }
 
-                        if(registidtext.text.length<8||registidtext.text.length>12){
-                            myjava.toastMsg("用户名要由8~12位数字和字母组成")
+                        if(registidtext.text.length<6||registidtext.text.length>10){
+                            myjava.toastMsg("ID要由6~10位数字和字母组成")
                             return;
                         }
 
@@ -624,16 +695,16 @@ StackView{
                         }
 
                         if(registnametext.text==registpasstext.text){
-                            myjava.toastMsg("用户名不能与密码相同")
+                            myjava.toastMsg("ID不能与密码相同")
                             return;
                         }
 
-                        if(registnametext.text.indexOf("|||")>=0||registpasstext.text.indexOf("|||")>=0||registidtext.text.indexOf("|||")>=0||registnametext.text.indexOf("@")>=0||registpasstext.text.indexOf("@")>=0||registidtext.text.indexOf("@")>=0){
+                        if(registnametext.text.indexOf("|")>=0||registpasstext.text.indexOf("|")>=0||registidtext.text.indexOf("|")>=0||registnametext.text.indexOf("@")>=0||registpasstext.text.indexOf("@")>=0||registidtext.text.indexOf("@")>=0){
                             myjava.toastMsg("非法字符")
                             return;
                         }
 
-                        registsystem.regist(registidtext.text,registpasstext.text,registnametext.text);
+                        registsystem.regist(registidtext.text,registpasstext.text,registnametext.text,sextext.currentText,agetext.currentText);
                     }
                 }
             }
@@ -675,7 +746,7 @@ StackView{
                         myjava.toastMsg("服务器出错，请联系管理员")
 
                     if(Statue=="ExistUsers")
-                        myjava.toastMsg("用户名已存在")
+                        myjava.toastMsg("ID已存在")
 
                     if(Statue=="Succeed"){
                         indicator.visible=true

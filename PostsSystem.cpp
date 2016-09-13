@@ -91,7 +91,7 @@ QString PostsSystem::getpostphoto(int i){
 
         Photoname=nnFileName.right(nnFileName.size()-nnFileName.lastIndexOf('/')-1);
         QString path=java.getSDCardPath();
-        path=path+"/projectapp/"+Photoname+".dbnum";
+        path=path+"/DShare/"+Photoname+".dbnum";
 
         if(tempdir->exists(path)){
             return "file://"+path;
@@ -153,7 +153,7 @@ QString PostsSystem::getbigpostphoto(QString a){
 
         Photoname=nnFileName.right(nnFileName.size()-nnFileName.lastIndexOf('/')-1);
         QString path=java.getSDCardPath();
-        path=path+"/projectapp/"+Photoname+".dbnum";
+        path=path+"/DShare/"+Photoname+".dbnum";
 
         if(tempdir->exists(path)){
             return "file://"+path;

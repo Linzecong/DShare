@@ -6,10 +6,12 @@ RegistSystem::RegistSystem(QObject *parent) : QObject(parent){
     connect(tcpSocket,&QTcpSocket::connected,this,&RegistSystem::tcpSendMessage);
 }
 
-void RegistSystem::regist(QString id, QString pass,QString name){
+void RegistSystem::regist(QString id, QString pass,QString name,QString sex,QString age){
     Username=id;
     Password=pass;
     Name=name;
+    Sex=sex;
+    Age=age;
     tcpSocket->connectToHost("119.29.15.43",5555);
     m_Statue="Connecting";
     emit statueChanged(m_Statue);
@@ -46,7 +48,7 @@ void RegistSystem::tcpReadMessage(){
 
 void RegistSystem::tcpSendMessage(){
     m_Statue="Connected";
-    QString out="@zhuce@|||"+Username+"|||"+Password+"|||"+Name;
+    QString out="@zhuce@|||"+Username+"|||"+Password+"|||"+Name+"|||"+Sex+"|||"+Age;
     tcpSocket->write(out.toUtf8());
     m_Statue="Waiting";
     emit statueChanged(m_Statue);

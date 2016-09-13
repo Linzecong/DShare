@@ -77,7 +77,7 @@ void RecordSystem::getlocaldiet(){
     QString longstr;
     QString time="asd";
     QString path=java.getSDCardPath();
-    path=path+"/projectapp/diet.dbnum";
+    path=path+"/DShare/diet.dbnum";
     QFile LogFile;
     LogFile.setFileName(path);
     LogFile.open(QIODevice::ReadOnly);
@@ -132,7 +132,7 @@ void RecordSystem::savelocaldiet(QString longstr){
 
     QString path=java.getSDCardPath();
 
-    path=path+"/projectapp/diet.dbnum";
+    path=path+"/DShare/diet.dbnum";
 
     QFile LogFile;
     QTextStream LogTextStream(&LogFile);

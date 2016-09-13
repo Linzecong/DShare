@@ -18,12 +18,14 @@ public:
      QString Username;
      QString Password;
      QString Name;
+     QString Sex;
+     QString Age;
 
      QString m_Statue;
      void setStatue(QString s);
      QString Statue();
 
-     Q_INVOKABLE void regist(QString id,QString pass,QString name);//注册
+     Q_INVOKABLE void regist(QString id, QString pass, QString name, QString sex, QString age);//注册
 
 public:
      void tcpReadMessage();

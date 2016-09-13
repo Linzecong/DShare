@@ -139,7 +139,7 @@ void DataSystem::delusernamepassword(){
 #ifdef ANDROID
         JavaMethod java;
         QString path=java.getSDCardPath();
-        path=path+"/projectapp/db.dbnum";
+        path=path+"/DShare/db.dbnum";
         QFile filename;
         filename.setFileName(path);
         filename.remove();//删除

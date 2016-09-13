@@ -66,7 +66,7 @@ void SendImageSystem::tcpSendMessage(){
     QString SdcardPath=java.getSDCardPath();
     QImage img;
     img.load(fileName);
-    QString nFileName=SdcardPath+"/projectapp/";
+    QString nFileName=SdcardPath+"/DShare/";
     QDir *tempdir = new QDir;
     bool exist = tempdir->exists(nFileName);
     if(!exist)

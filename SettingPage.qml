@@ -121,35 +121,35 @@ StackView{
             }
         }
 
-        Rectangle{
-            id:help
-            anchors.top: changedata.bottom
-            anchors.topMargin: headrect.height/2
-            height: headrect.height
-            width: parent.width
-            color: "white"
-            border.width: 1;
-            border.color: "grey"
-            Label{
-                text: "使用帮助"
-                anchors.left: parent.left
-                anchors.leftMargin: 20
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
-                font{
-                    family: "黑体"
-                    pixelSize: headrect.height/3
+//        Rectangle{
+//            id:help
+//            anchors.top: changedata.bottom
+//            anchors.topMargin: headrect.height/2
+//            height: headrect.height
+//            width: parent.width
+//            color: "white"
+//            border.width: 1;
+//            border.color: "grey"
+//            Label{
+//                text: "使用帮助"
+//                anchors.left: parent.left
+//                anchors.leftMargin: 20
+//                anchors.verticalCenter: parent.verticalCenter
+//                verticalAlignment: Text.AlignVCenter
+//                font{
+//                    family: "黑体"
+//                    pixelSize: headrect.height/3
 
-                }
-                color:"grey"
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    stack.push(helppage)
-                }
-            }
-        }
+//                }
+//                color:"grey"
+//            }
+//            MouseArea{
+//                anchors.fill: parent
+//                onClicked: {
+//                    stack.push(helppage)
+//                }
+//            }
+//        }
 
 
 
@@ -291,7 +291,8 @@ StackView{
 
                             imagePath=temp;
                             sendimgsystem1.sendHead(imagePath,str_userid);
-
+                            myjava.toastMsg("修改成功！");
+                            myjava.toastMsg("重启后生效！");
 
                         }
                     }
