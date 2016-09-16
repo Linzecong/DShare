@@ -36,6 +36,32 @@ Rectangle{
         refreshtimer.start();
     }
 
+
+
+    function setcommentcount(count){
+
+        postmodel.get(listview.commentindex).CommentCount=count
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //用户显示特定用户的分享列表
     Loader{
         id:mypost;
@@ -45,6 +71,17 @@ Rectangle{
         y:-parent.height/8
         visible: false
         source:"PostsPage.qml"
+        z:102
+    }
+
+    Loader{
+        id:uniquepost;
+        height: parent.height*1.25
+        width: parent.width
+        x:0
+        y:-parent.height/8
+        visible: false
+        source:"UniquePost.qml"
         z:102
     }
 
@@ -155,6 +192,20 @@ Rectangle{
         clip:true
         spacing:20;
         property int likeindex:0
+        property int commentindex:0
+        Rectangle {
+                  id: scrollbar
+                  anchors.right: listview.right
+                  anchors.rightMargin: 3
+                  y: listview.visibleArea.yPosition * listview.height
+                  width: 10
+                  height: listview.visibleArea.heightRatio * listview.height
+                  color: "grey"
+                  radius: 5
+                  z:2
+                  visible: listview.dragging||listview.flicking
+              }
+
         delegate: Item{
             id:postitem
             width:parent.width
@@ -162,6 +213,8 @@ Rectangle{
             property int postID: ID//用于实现点赞功能
             property string publisherid: PublisherID//用于显示头像
             //每一个分享的框框
+
+
             Rectangle{
                 border.color: "grey"
                 border.width: 1
@@ -183,10 +236,16 @@ Rectangle{
                     width: height
                     fillMode: Image.PreserveAspectFit
                     source:posttime.text==""?"":Headurl
+                    Label{
+                        anchors.centerIn: parent
+                        visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                        text:(parent.status==Image.Loading)?"加载中":"无"
+                        color:"grey"
+                    }
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            mypost.item.getpost(publisherid);//点击头像时显示用户分享列表
+                            mypost.item.getpost(publisherid,mainrect.username,nickname);//点击头像时显示用户分享列表
                             mypost.visible=true
                             mypost.x=0
                         }
@@ -211,6 +270,8 @@ Rectangle{
                         family: "黑体"
                         pixelSize: headimage.height/3
                     }
+
+
                 }
 
                 //发表时间
@@ -236,6 +297,7 @@ Rectangle{
                     width:parent.width-headimage.height/3*1.5
                     text: Message
                     wrapMode: Text.Wrap;
+                    textFormat:Text.RichText
                     font{
                         pixelSize: headimage.height/3
                     }
@@ -299,20 +361,21 @@ Rectangle{
                                 listview.likeindex=index;
                                 postsystem.likepost(postitem.postID,mainrect.username);
                                 likebutton.visible=false
-                                collectbutton.visible=false
+                                commentbutton.visible=false
                             }
                         }
                     }
 
                     //收藏按钮，暂时无用
                     Rectangle{
-                        id:collectbutton
+                        id:commentbutton
                         visible: false
-                        color:"#32dc96"
+                        color:"#30d090"
+                        radius: height/4
                         height:headimage.height/1.5
                         width: photo.width/5
                         Label{
-                            text:"收藏";
+                            text:"评论";
                             anchors.centerIn: parent
                             color: "white";
                             font{
@@ -323,9 +386,12 @@ Rectangle{
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
+                                listview.commentindex=index
+                                uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
+                                uniquepost.visible=true
 
                                 likebutton.visible=false
-                                collectbutton.visible=false
+                                commentbutton.visible=false
                             }
                         }
                     }
@@ -344,7 +410,7 @@ Rectangle{
                             anchors.fill: parent
                             onClicked: {
                                 likebutton.visible=likebutton.visible?false:true
-                                // collectbutton.visible=collectbutton.visible?false:true
+                                commentbutton.visible=commentbutton.visible?false:true
                             }
                         }
                     }
@@ -362,6 +428,21 @@ Rectangle{
                     wrapMode: Text.Wrap;
                     color: "#32dc96"
                     font{
+                        pixelSize: headimage.height/3
+                    }
+                }
+                Label{
+                    id:comments
+                    visible: posttime.text==""?false:true
+                    anchors.left: headimage.left
+                    anchors.top: likers.bottom
+                    anchors.topMargin: headimage.height/6
+                    text: "     "+CommentCount+" 条评论"
+                    width:parent.width-headimage.height/3*4
+                    wrapMode: Text.Wrap;
+                    color: "#32dc96"
+                    font{
+                        family: "黑体"
                         pixelSize: headimage.height/3
                     }
                 }
@@ -432,6 +513,11 @@ Rectangle{
                         postmodel.setProperty(listview.likeindex,"Liker",postmodel.get(listview.likeindex).Liker+","+mainrect.nickname)
                 }
 
+                if(Statue=="likepostDBError"){
+                    myjava.toastMsg("该分享已被删除！")
+                    postmodel.remove(listview.likeindex)
+                }
+
                 if(Statue=="getmorefriendspostsSucceed"){
                     var likers=getpostlikers(i)
                     if(likers==="")
@@ -446,7 +532,8 @@ Rectangle{
                                          "BigPhoto":getbigpostphotourl(i),
                                          "Liker":likers,
                                          "ID":getpostID(i),
-                                         "PublisherID":getpostpublisher(i)
+                                         "PublisherID":getpostpublisher(i),
+                                         "CommentCount":getpostcommentcount(i)
                                      }
                                      );
                     i++;
@@ -466,7 +553,8 @@ Rectangle{
                                              "Photo":"",
                                              "Liker":"",
                                              "ID":0,
-                                             "PublisherID":""
+                                             "PublisherID":"",
+                                             "CommentCount":0
                                          }
                                          );
                     }

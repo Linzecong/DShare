@@ -43,6 +43,16 @@ public:
     Q_INVOKABLE QString getFollowerID(int i);
     Q_INVOKABLE QString getFollowerName(int i);
 
+    QStringList NoticeSenderList;
+    QStringList NoticeTypeList;
+    QStringList NoticeTimeList;
+    QStringList NoticePostList;
+    Q_INVOKABLE void getNotices(QString userid);
+    Q_INVOKABLE QString getNoticeSender(int i);
+    Q_INVOKABLE QString getNoticeType(int i);
+    Q_INVOKABLE QString getNoticeTime(int i);
+    Q_INVOKABLE int getNoticePost(int i);
+
     QStringList SearchIDList;
     QStringList SearchNameList;
     Q_INVOKABLE void searchUser(QString str);

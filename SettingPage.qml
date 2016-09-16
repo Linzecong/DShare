@@ -12,6 +12,7 @@ StackView{
     property string imagePath:"Qt"
     property string str_userid;
     property string nickname;
+    property string chooseimage:"Qt"
 
     function setdata(id,name){
         str_userid=id
@@ -25,6 +26,496 @@ StackView{
 
     MouseArea{
         anchors.fill: parent
+    }
+
+    SendImageSystem{
+        id:sendimgsystem1
+        onStatueChanged:{
+
+            if(Statue=="Succeed"){
+                myjava.toastMsg("修改成功！重启后生效！");
+            }
+            if(Statue=="DBError"){
+                myjava.toastMsg("远程服务器出错，请联系开发者！");
+            }
+
+            if(Statue=="Error"){
+                myjava.toastMsg("照片有误！！");
+            }
+
+        }
+    }
+
+    Rectangle {
+        id:pickhead
+        color: "black";
+
+        onWidthChanged: mask.recalc();
+        onHeightChanged: mask.recalc();
+
+        visible: false
+        anchors.fill: parent
+        z:1000
+        Image {
+            id: source;
+            anchors.fill: parent;
+            fillMode: Image.PreserveAspectFit;
+            visible: false;
+            asynchronous: true;
+            onStatusChanged: {
+                if(status == Image.Ready){
+                    console.log("image loaded");
+                    mask.recalc();
+                }
+            }
+        }
+
+        Keys.enabled: true
+        Keys.onBackPressed: {
+            mask.px=0
+            mask.py=0
+            mask.r=1
+            pickhead.visible=false
+            stack.currentItem.forceActiveFocus()
+
+        }
+
+        Canvas {
+            id: forSaveCanvas;
+            width: 256;
+            height: 256;
+            contextType: "2d";
+            visible: false;
+            z: 2;
+            anchors.top: parent.top;
+            anchors.right: parent.right;
+            anchors.margins: 4;
+
+            property var imageData: null;
+            onPaint: {
+                if(imageData != null){
+                    context.drawImage(imageData, 0, 0);
+                }
+            }
+
+            function setImageData(data){
+                imageData = data;
+                requestPaint();
+            }
+
+
+        }
+
+        Canvas {
+            id: mask;
+            anchors.fill: parent;
+            z: 1;
+            property real w: width;
+            property real h: height;
+            property real dx: 0;
+            property real dy: 0;
+            property real dw: 0;
+            property real dh: 0;
+            property real frameX: 130;
+            property real frameY: 130;
+
+            property real px: 0;
+            property real py: 0;
+            property real r: 1;
+
+
+
+            function calc(){
+                var sw = source.sourceSize.width;
+                var sh = source.sourceSize.height;
+                if(sw > 0 && sh > 0){
+                    if(sw <= w && sh <=h){
+                        dw = sw;
+                        dh = sh;
+                    }else{
+                        var sRatio = sw / sh;
+                        dw = sRatio * h;
+                        if(dw > w){
+                            dh = w / sRatio;
+                            dw = w;
+                        }else{
+                            dh = h;
+                        }
+                    }
+                    dx = (w - dw)/2;
+                    dy = (h - dh)/2;
+                }
+            }
+
+            function recalc(){
+                calc();
+                requestPaint();
+            }
+
+            function getImageData(){
+                return context.getImageData(frameX - 128, frameY - 128,
+     256, 256);
+            }
+
+            onPaint: {
+                var ctx = getContext("2d");
+
+                ctx.clearRect(0, 0, width, height);
+                ctx.drawImage(source, dx+px, dy+py, dw*r, dh*r);
+                var xStart = frameX - 130;
+                var yStart = frameY - 130;
+                ctx.save();
+                ctx.fillStyle = "#a0000000";
+                ctx.fillRect(0, 0, w, yStart);
+                var yOffset = yStart + 260;
+                ctx.fillRect(0, yOffset, w, h - yOffset);
+                ctx.fillRect(0, yStart, xStart, 260);
+                var xOffset = xStart + 260;
+                ctx.fillRect(xOffset, yStart, w - xOffset, 260);
+
+                //see through area
+                ctx.strokeStyle = "red";
+                ctx.fillStyle = "#00000000";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.rect(xStart, yStart, 260, 260);
+                ctx.fill();
+                ctx.stroke();
+                ctx.closePath ();
+                ctx.restore();
+            }
+        }
+
+        MultiPointTouchArea {
+            anchors.fill: parent;
+            minimumTouchPoints: 1;
+            maximumTouchPoints: 1;
+            touchPoints:[
+                TouchPoint{
+                    id: point1;
+                }
+            ]
+
+            onUpdated: {
+                mask.frameX = point1.x;
+                mask.frameY = point1.y;
+                mask.requestPaint();
+            }
+            onReleased: {
+                forSaveCanvas.setImageData(mask.getImageData());
+                actionPanel.visible = true;
+            }
+            onPressed: {
+                actionPanel.visible = false;
+            }
+        }
+
+
+
+        Item {
+            anchors.horizontalCenter: parent.horizontalCenter;
+            anchors.bottom: parent.bottom;
+            height: parent.height/5
+            width: parent.width
+            id: actionPanel;
+            z: 5;
+
+            Rectangle{
+                id:upbutton
+                width:parent.width/6
+                height:parent.height/4
+                anchors.horizontalCenter: parent.horizontalCenter;
+                anchors.top: parent.top
+                color:"#1084e5"
+                radius: height/4
+                Label{
+                    text: "上移"
+                    color: "white"
+                    font{
+                        pixelSize: parent.height/2
+                        family: "黑体"
+                    }
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        mask.py-=50
+                        mask.recalc()
+                    }
+                }
+            }
+
+            Rectangle{
+                id:savebutton
+                width:parent.width/6
+                height:parent.height/4
+                anchors.horizontalCenter: parent.horizontalCenter;
+                anchors.top: upbutton.bottom
+                anchors.topMargin: height/4
+                color:"#1084e5"
+                radius: height/4
+                Label{
+                    text: "保存"
+                    color: "white"
+                    font{
+                        pixelSize: parent.height/2
+                        family: "黑体"
+                    }
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+
+                        var path=myjava.getSDCardPath();
+
+                        path=path+"/DShare/headtemp.png";
+
+
+                        forSaveCanvas.save(path);
+
+
+                        headimage.source="file://"+path;
+
+                        if(headimage.status==Image.Error){
+                            myjava.toastMsg("照片有误！");
+                            return
+                        }
+
+                        imagePath=path;
+                        sendimgsystem1.sendHead(imagePath,str_userid);
+                        myjava.toastMsg("修改成功！");
+                        myjava.toastMsg("重启后生效！");
+
+
+
+                        pickhead.visible = false;
+                    }
+                }
+            }
+
+            Rectangle{
+                id:downbutton
+                width:parent.width/6
+                height:parent.height/4
+                anchors.horizontalCenter: parent.horizontalCenter;
+                anchors.top: savebutton.bottom
+                anchors.topMargin: height/4
+                color:"#1084e5"
+                radius: height/4
+                Label{
+                    text: "下移"
+                    color: "white"
+                    font{
+                        pixelSize: parent.height/2
+                        family: "黑体"
+                    }
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        mask.py+=50
+                        mask.recalc()
+                    }
+                }
+            }
+
+            Rectangle{
+                id:leftbutton
+                width:parent.width/6
+                height:parent.height/4
+                anchors.right: savebutton.left
+                anchors.rightMargin: width/4
+                anchors.top: savebutton.top
+                color:"#1084e5"
+                radius: height/4
+                Label{
+                    text: "左移"
+                    color: "white"
+                    font{
+                        pixelSize: parent.height/2
+                        family: "黑体"
+                    }
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        mask.px-=50
+                        mask.recalc()
+                    }
+                }
+            }
+
+            Rectangle{
+                id:rightbutton
+                width:parent.width/6
+                height:parent.height/4
+                anchors.left: savebutton.right
+                anchors.leftMargin: width/4
+                anchors.top: savebutton.top
+                color:"#1084e5"
+                radius: height/4
+                Label{
+                    text: "右移"
+                    color: "white"
+                    font{
+                        pixelSize: parent.height/2
+                        family: "黑体"
+                    }
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        mask.px+=50
+                        mask.recalc()
+                    }
+                }
+            }
+
+            Rectangle{
+                id:smallbutton
+                width:parent.width/6
+                height:parent.height/4
+                anchors.left: rightbutton.right
+                anchors.leftMargin: width/4
+                anchors.top: savebutton.top
+                color:"#1084e5"
+                radius: height/4
+                Label{
+                    text: "缩小"
+                    color: "white"
+                    font{
+                        pixelSize: parent.height/2
+                        family: "黑体"
+                    }
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        mask.r/=1.1
+                        mask.recalc()
+                    }
+                }
+            }
+
+            Rectangle{
+                id:bigbutton
+                width:parent.width/6
+                height:parent.height/4
+                anchors.right: leftbutton.left
+                anchors.rightMargin: width/4
+                anchors.top: savebutton.top
+                color:"#1084e5"
+                radius: height/4
+                Label{
+                    text: "放大"
+                    color: "white"
+                    font{
+                        pixelSize: parent.height/2
+                        family: "黑体"
+                    }
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        mask.r*=1.1
+                        mask.recalc()
+                    }
+                }
+            }
+
+
+
+            Rectangle{
+                id:cancelbutton
+                width:parent.width/6
+                height:parent.height/4
+                anchors.right: smallbutton.right
+
+                anchors.top: smallbutton.bottom
+                anchors.topMargin: height/4
+                color:"#1084e5"
+                radius: height/4
+                Label{
+                    text: "取消"
+                    color: "white"
+                    font{
+                        pixelSize: parent.height/2
+                        family: "黑体"
+                    }
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        mask.px=0
+                        mask.py=0
+                        mask.r=1
+                        pickhead.visible=false
+                        stack.currentItem.forceActiveFocus()
+                    }
+                }
+            }
+
+            Rectangle{
+                id:okbutton
+
+                height:parent.height/4
+                anchors.right: leftbutton.right
+
+                anchors.left: bigbutton.left
+                anchors.topMargin: height/4
+                color:"#1084e5"
+                radius: height/4
+                Label{
+                    text: "直接应用整张图片"
+                    color: "white"
+                    font{
+                        pixelSize: parent.height/2
+                        family: "黑体"
+                    }
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        headimage.source=source.source;
+
+                        if(headimage.status==Image.Error){
+                            myjava.toastMsg("照片有误！");
+                            return
+                        }
+
+                        imagePath=chooseimage;
+                        sendimgsystem1.sendHead(imagePath,str_userid);
+                        myjava.toastMsg("修改成功！");
+                        myjava.toastMsg("重启后生效！");
+
+
+
+                        pickhead.visible = false;
+                    }
+                }
+            }
+
+
+
+        }
     }
 
     Keys.enabled: true
@@ -254,26 +745,11 @@ StackView{
                     onClicked: {
                         myjava.getImage();
                         timer.start();
-                    }
-                }
-
-                SendImageSystem{
-                    id:sendimgsystem1
-                    onStatueChanged:{
-
-                        if(Statue=="Succeed"){
-                            myjava.toastMsg("修改成功！重启后生效！");
-                        }
-                        if(Statue=="DBError"){
-                            myjava.toastMsg("远程服务器出错，请联系开发者！");
-                        }
-
-                        if(Statue=="Error"){
-                            myjava.toastMsg("照片有误！！");
-                        }
 
                     }
                 }
+
+
 
                 Timer{
                     id:timer;
@@ -282,17 +758,17 @@ StackView{
                         var temp=myjava.getImagePath();
                         if(temp!=="Qt"){
                             timer.stop();
-                            headimage.source="file://"+temp;
+chooseimage=temp
+                            var url="file://"+temp;
+                            source.source=url
+                            mask.recalc()
+myjava.toastMsg("移动红框选取头像")
+                            pickhead.visible=true
+pickhead.forceActiveFocus()
 
-                            if(headimage.status==Image.Error){
-                                myjava.toastMsg("照片有误！");
-                                return
-                            }
 
-                            imagePath=temp;
-                            sendimgsystem1.sendHead(imagePath,str_userid);
-                            myjava.toastMsg("修改成功！");
-                            myjava.toastMsg("重启后生效！");
+
+
 
                         }
                     }

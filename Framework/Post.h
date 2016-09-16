@@ -8,15 +8,14 @@
 
 class Comment{
 public:
-    double ID;
+    int ID;
     QString Message;
-    QString Commentator;
-    QString BeCommentator;
 
-    double CommentatorID;
-    double BeCommentatorID;
+    QString CommentatorName;
+    QString BeCommentatorName;
 
-    QString CommentTime;
+    QString CommentatorID;
+
     Comment(){}
     ~Comment(){}
 };
@@ -39,6 +38,7 @@ public:
 
 
     bool HasImage;
+    int CommentCount;
 
 public:
     Post(){}

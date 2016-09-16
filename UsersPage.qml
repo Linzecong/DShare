@@ -31,7 +31,7 @@ Rectangle {
     DataSystem{
         id:dbsystem;
         onStatueChanged: {
-            console.log(Statue)
+console.log(Statue)
             if(Statue=="getnameSucceed")
              name.text="昵称:"+dbsystem.getName();
 
@@ -52,8 +52,12 @@ Rectangle {
 
             if(Statue=="getfollowersSucceed"){
               while(dbsystem.getFollowerName(modelindex)!==""){
+                  var isf1=0;
+                   for(var i1=0;i1<searchmodel.count;i1++)
+                       if(searchmodel.get(i1).username===getFollowerID(modelindex))
+                           isf1=1;
 
-                  model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowerID(modelindex)+".jpg", "username":dbsystem.getFollowerID(modelindex),"nickname":dbsystem.getFollowerName(modelindex)})
+                  model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowerID(modelindex)+".jpg", "username":dbsystem.getFollowerID(modelindex),"nickname":dbsystem.getFollowerName(modelindex),"yiguanzhu":isf1})
 
                   modelindex++;
               }
@@ -64,11 +68,14 @@ Rectangle {
 
               while(dbsystem.getFollowingName(modelindex)!==""){
 
+                  if(headname.text!=="我的粉丝")
                   model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowingID(modelindex)+".jpg", "username":dbsystem.getFollowingID(modelindex),"nickname":dbsystem.getFollowingName(modelindex),"yiguanzhu":1})
                   searchmodel.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowingID(modelindex)+".jpg", "username":dbsystem.getFollowingID(modelindex),"nickname":dbsystem.getFollowingName(modelindex),"yiguanzhu":1})
                   modelindex++;
               }
               modelindex=0;
+              if(headname.text==="我的粉丝")
+              dbsystem.getFollowers(userid)
             }
 
 
@@ -103,9 +110,11 @@ Rectangle {
         if(a==="我的粉丝")
         {
             model1.clear()
+            searchmodel.clear()
+            dbsystem.getFollowings(userid);
             searchbar.visible=false
-            iss=0;
-            dbsystem.getFollowers(userid)
+            iss=1;
+
         }
 
     }
@@ -230,7 +239,7 @@ Rectangle {
     ListModel{
         id:model1
         ListElement{
-            headurl:"http://www.icosky.com/icon/png/System/QuickPix%202007/Shamrock.png"
+            headurl:""
             username:"默认"
             nickname:"默认"
             yiguanzhu:0
@@ -240,11 +249,12 @@ Rectangle {
     ListModel{
         id:searchmodel
         ListElement{
-            headurl:"http://www.icosky.com/icon/png/System/QuickPix%202007/Shamrock.png"
+            headurl:""
             username:"默认"
             nickname:"默认"
             yiguanzhu:0
         }
+
     }
 
     ListView{
@@ -258,7 +268,8 @@ Rectangle {
         delegate: Item{
             id:delegate
             width:mainrect.width
-            height:mainrect.height/7
+            height:(username==userid?0:mainrect.height/7)
+            visible: (username==userid?false:true)//隐藏自己
             Rectangle{
                 anchors.fill: parent
                 color:"white"
@@ -278,7 +289,7 @@ Rectangle {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            mypost.item.getpost(username);
+                            mypost.item.getpost(username,userid);
                             mypost.visible=true
                             mypost.x=0
                         }
@@ -334,7 +345,7 @@ Rectangle {
                     radius: height/4
                     border.width: 1
                     border.color: "grey"
-                    visible: headname.text=="我的粉丝"?false:(username==userid?false:true);
+                    //visible: headname.text=="我的粉丝"?false:(username==userid?false:true);
                     Label{
                         id:button
                         anchors.centerIn:parent
@@ -346,12 +357,8 @@ Rectangle {
                             anchors.fill: parent
                             onClicked: {
                                 if(iss){
-                                    dbsystem.addFollowing(userid,model1.get(index).username);
-                                    button.enabled=false
-                                    buttonrect.color="grey";
-                                    button.text="已关注"
-                                    searchmodel.append({"headurl":"", "username":model1.get(index).username,"nickname":"","yiguanzhu":1})
-                                }
+                                    checkDialog.open()
+                                    }
                                 else{
                                     messageDialog.open()
                                 }
@@ -374,6 +381,24 @@ Rectangle {
                     onYes: {
                         dbsystem.deleteFollowing(userid,model1.get(index).username);
                         model1.remove(index);
+                    }
+                    onNo: {
+
+                    }
+                }
+
+                MessageDialog {
+                    id: checkDialog
+                    title: "提示"
+                    text: "确定要关注吗？"
+                    standardButtons:  StandardButton.No|StandardButton.Yes
+                    onYes: {
+                        dbsystem.addFollowing(userid,model1.get(index).username);
+                        button.enabled=false
+                        buttonrect.color="grey";
+                        button.text="已关注"
+                        searchmodel.append({"headurl":"", "username":model1.get(index).username,"nickname":"","yiguanzhu":1})
+
                     }
                     onNo: {
 

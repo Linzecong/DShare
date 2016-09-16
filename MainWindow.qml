@@ -7,7 +7,8 @@ import QtQuick.Dialogs 1.2
 import DataSystem 1.0
 import JavaMethod 1.0
 import SendImageSystem 1.0
-
+import QtGraphicalEffects 1.0
+import QtQuick.Controls.Material 2.0
 
 
 Rectangle {
@@ -22,18 +23,19 @@ Rectangle {
         mainpage.item.setusername(a);//初始话分享列表
         str_userid=a;
         dbsystem.getNameByID(str_userid);
-        userid.text="id:"+a;//初始化侧边栏
+        userid.text="ID："+a;//初始化侧边栏
         sendpage.item.str_userid=a;//初始化发送页面的id
         recordpage.item.str_userid=a;//初始化记录页面的id
         recordpage.item.getcheckinday();
     }
+
 
     DataSystem{
         id:dbsystem;
         onStatueChanged: {
             console.log(Statue)
             if(Statue=="getnameSucceed"){
-                name.text="昵称:"+dbsystem.getName();
+                name.text="昵称："+dbsystem.getName();
                 nickname=dbsystem.getName();
                 mainpage.item.nickname=dbsystem.getName();
             }
@@ -49,13 +51,23 @@ Rectangle {
     property int quit: 0
     Keys.enabled: true
     Keys.onBackPressed: {
+        if(headname.text!="首页"){
+            bottom.currentPage="首页"
+            mainrect.x=0;
+        }
+        else{
         quit++;
         quittime.start();
         if(quit==2)
             Qt.quit();
         else
             myjava.toastMsg("再点一次退出")
+        }
+
     }
+
+
+
     Timer{
         id:quittime
         interval: 3000
@@ -82,12 +94,22 @@ Rectangle {
         z:102
     }
 
+    //用于显示侧边栏的我的消息
+    Loader{
+        id:noticelist;
+        anchors.fill: parent
+        visible: false
+        source:"NoticeList.qml"
+        z:102
+    }
+
+
     //设置页面
     Loader{
         id:settingpage;
         //用于更新名字后重新设置昵称
         function setname(){
-            dbsystem.getNameByID(str_userid);
+            dbsystem.getNameByID(str_userid,nickname);
         }
         anchors.fill: parent
         visible: false
@@ -100,7 +122,7 @@ Rectangle {
         id:sidepage;
         height: parent.height
         width:parent.width/10*8
-        color:"#32dc96"
+        color:"white"
         border.color: "grey"
         border.width: 1
         x:-width;
@@ -131,106 +153,130 @@ Rectangle {
             id:myjava
         }
 
-        //侧边栏头像
-        Image{
-            id:headimage
-            anchors.top: parent.top
-            anchors.topMargin: parent.width/10
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width/15
-            fillMode: Image.PreserveAspectFit
-            height:parent.width/4
-            width:height
-            source: "http://119.29.15.43/userhead/"+str_userid+".jpg"
-            Label{
-                anchors.centerIn: parent
-                visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                text:(parent.status==Image.Loading)?"加载中":"无"
-                color:"white"
-            }
-            //点击打开设置
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    settingpage.visible=true
-                    settingpage.item.setdata(str_userid,nickname)
-                }
-            }
-        }
-
-        //侧边栏昵称
-        Text{
-            id:name;
-            anchors.left: headimage.right
-            anchors.leftMargin: parent.width/10
-            anchors.top: headimage.top
-            anchors.topMargin: parent.width/20
-            color: "white"
-            text:"昵称:未获取"
-            wrapMode: Text.WordWrap
-            width: parent.width-headimage.width- parent.width/15- parent.width/10
-            font{
-                family: "黑体"
-                pixelSize: headimage.height/4
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    settingpage.visible=true
-                    settingpage.item.setdata(str_userid,nickname)
-                }
-            }
-        }
-
-        //侧边栏ID
-        Text{
-            id:userid;
-            anchors.left: headimage.right
-            anchors.leftMargin: parent.width/10
-            anchors.top: name.bottom
-            anchors.topMargin: parent.width/18
-            color: "white"
-            wrapMode: Text.WordWrap
-            width: parent.width-headimage.width- parent.width/15- parent.width/10
-            font{
-                family: "黑体"
-                pixelSize: headimage.height/4
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    settingpage.visible=true
-                    settingpage.item.setdata(str_userid,nickname)
-                }
-            }
-        }
-
-        //直线
         Rectangle{
-            id:line1
-            width: parent.width-headimage.width+headimage.width/2;
-            height:1
-            color:"white"
-            anchors.top: headimage.bottom
-            anchors.topMargin: parent.width/18
-            anchors.right: parent.right
+            id:sidepagetop
+            color:"#32dc96"
+            width: sidepage.width
+            height: sidepage.height/4
+            anchors.top: sidepage.top
+            anchors.left: sidepage.left
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: -10
+                radius: 20
+                color: "black"
+            }
+
+            //侧边栏头像
+            Image{
+                id:headimage
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: parent.width/15
+                fillMode: Image.PreserveAspectFit
+                height:parent.width/4
+                width:height
+                source: "http://119.29.15.43/userhead/"+str_userid+".jpg"
+                Label{
+                    anchors.centerIn: parent
+                    visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                    text:(parent.status==Image.Loading)?"加载中":"无"
+                    color:"white"
+                }
+                //点击打开设置
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        settingpage.visible=true
+                        settingpage.item.setdata(str_userid,nickname)
+                    }
+                }
+            }
+
+            //侧边栏昵称
+            Text{
+                id:name;
+                anchors.left: headimage.right
+                anchors.leftMargin: parent.width/15
+                anchors.top: headimage.top
+                anchors.topMargin: 5
+                color: "white"
+                text:"昵称:未获取"
+                wrapMode: Text.WordWrap
+                width: parent.width-headimage.width- parent.width/15- parent.width/10
+                font{
+                    family: "黑体"
+                    pixelSize: headimage.height/4
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        settingpage.visible=true
+                        settingpage.item.setdata(str_userid,nickname)
+                    }
+                }
+            }
+
+            //侧边栏ID
+            Text{
+                id:userid;
+                anchors.left: headimage.right
+                anchors.leftMargin: parent.width/15
+                anchors.bottom: headimage.bottom
+                anchors.bottomMargin: 5
+                color: "white"
+                wrapMode: Text.WordWrap
+                width: parent.width-headimage.width- parent.width/15- parent.width/10
+                font{
+                    family: "黑体"
+                    pixelSize: headimage.height/4
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        settingpage.visible=true
+                        settingpage.item.setdata(str_userid,nickname)
+                    }
+                }
+            }
         }
 
-        Label{
-            id:text1
-            anchors.top: line1.bottom
-            anchors.topMargin: parent.width/18
+
+        Rectangle{
+            id:followingbutton
+            anchors.top: sidepagetop.bottom
+            anchors.topMargin: sidepagetop.height/10
             anchors.right: parent.right
-            text:"我的关注      >  "
-            height: headimage.height/2
-            width:parent.width-headimage.width+headimage.width/2;
-            font{
-                family: "黑体"
-                pixelSize: height/1.5
+            height: sidepage.height/10
+            width: sidepage.width
+            color:"white"
+            Image {
+                id:followingicon
+                anchors.left: parent.left
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                source: "image/user.png"
+                width: height
+                height: parent.height/2
+
             }
-            color: "white"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignRight
+
+            Label{
+                anchors.left: followingicon.right
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                text:"我的关注"
+                font{
+                    family: "黑体"
+                    pixelSize: followingbutton.height/3
+                }
+                color: Material.color(Material.BlueGrey)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+            }
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
@@ -242,31 +288,43 @@ Rectangle {
             }
         }
 
-        Rectangle{
-            id:line2
-            width: parent.width-headimage.width+headimage.width/3;
-            height:1
-            color:"white"
-            anchors.top: text1.bottom
-            anchors.topMargin: parent.width/18
-            anchors.right: parent.right
-        }
 
-        Label{
-            id:text2
-            anchors.top: line2.bottom
-            anchors.topMargin: parent.width/18
+
+
+
+        Rectangle{
+            id:followerbutton
+            anchors.top: followingbutton.bottom
             anchors.right: parent.right
-            text:"我的粉丝      >  "
-            height: headimage.height/2
-            width:parent.width-headimage.width+headimage.width/2;
-            font{
-                family: "黑体"
-                pixelSize: height/1.5
+            height: sidepage.height/10
+            width: sidepage.width
+            color:"white"
+            Image {
+                id:followericon
+                anchors.left: parent.left
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                source: "image/nickname.png"
+                width: height
+                height: parent.height/2
             }
-            color: "white"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignRight
+
+
+            Label{
+                anchors.left: followericon.right
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                text:"我的粉丝"
+                font{
+                    family: "黑体"
+                    pixelSize: followingbutton.height/3
+                }
+                color: Material.color(Material.BlueGrey)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+            }
+
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
@@ -279,35 +337,44 @@ Rectangle {
 
         }
 
-        Rectangle{
-            id:line3
-            width: parent.width-headimage.width+headimage.width/3;
-            height:1
-            color:"white"
-            anchors.top: text2.bottom
-            anchors.topMargin: parent.width/18
-            anchors.right: parent.right
-        }
 
-        Label{
-            id:text3
-            anchors.top: line3.bottom
-            anchors.topMargin: parent.width/18
+
+
+        Rectangle{
+            id:sharebutton
+            anchors.top: followerbutton.bottom
             anchors.right: parent.right
-            text:"我的分享      >  "
-            height: headimage.height/2
-            width:parent.width-headimage.width+headimage.width/2;
-            font{
-                family: "黑体"
-                pixelSize: height/1.5
+            height: sidepage.height/10
+            width: sidepage.width
+            color:"white"
+            Image {
+                id:shareicon
+                anchors.left: parent.left
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                source: "image/photo.png"
+                width: height
+                height: parent.height/2
             }
-            color: "white"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignRight
+
+            Label{
+                anchors.left: shareicon.right
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                text:"我的分享"
+                font{
+                    family: "黑体"
+                    pixelSize: followingbutton.height/3
+                }
+                color: Material.color(Material.BlueGrey)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+            }
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    mypost.item.getpost(str_userid,nickname);
+                    mypost.item.getpost(str_userid,str_userid,nickname);
                     mypost.visible=true
                     mypost.x=0
                 }
@@ -315,57 +382,109 @@ Rectangle {
         }
 
         Rectangle{
-            id:line4
-            width: parent.width-headimage.width+headimage.width/3;
-            height:1
-            color:"white"
-            anchors.top: text3.bottom
-            anchors.topMargin: parent.width/18
+            id:messagebutton
+            anchors.top: sharebutton.bottom
             anchors.right: parent.right
-        }
+            height: sidepage.height/10
+            width: sidepage.width
+            color:"white"
+            Image {
+                id:messageicon
+                anchors.left: parent.left
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                source: "image/conpassword.png"
+                width: height
+                height: parent.height/2
+            }
 
+            Label{
+                anchors.left: messageicon.right
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                text:"我的消息"
+                font{
+                    family: "黑体"
+                    pixelSize: followingbutton.height/3
+                }
+                color: Material.color(Material.BlueGrey)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+            }
 
-        GestureArea{
-            anchors.bottom: linebt.top
-            width: parent.width
-            height: parent.width/2.5
-            onSwipe: {
-                switch (direction) {
-                case "left":
-                    sidepage.x=-sidepage.width
-                    backarea.visible=false
-                    break
-
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    noticelist.item.getNotice(str_userid,nickname)
+                    noticelist.visible=true
                 }
             }
         }
 
 
+
+
+
+
+
+                GestureArea{
+                    anchors.fill: parent
+
+
+                    onSwipe: {
+                        switch (direction) {
+                        case "left":
+                            sidepage.x=-sidepage.width
+                            backarea.visible=false
+                            break
+
+                        }
+                    }
+                }
+
+
         Rectangle{
-            id:linebt
+            id:linecenter
             width: parent.width
             height:1
-            color:"white"
-            anchors.top: setting.top
-            anchors.topMargin: -parent.width/40
+            color: Material.color(Material.BlueGrey)
+            anchors.bottom: settingbutton.top
+            anchors.bottomMargin: 3
             anchors.right: parent.right
         }
 
-        Label{
-            id:setting
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: headimage.height/3
-            anchors.left: parent.left
-            text:"设置"
-            height: headimage.height/2
-            width:parent.width/2
-            font{
-                family: "黑体"
-                pixelSize: height/1.5
+
+
+
+        Rectangle{
+            id:settingbutton
+            anchors.bottom: logoutbutton.top
+            anchors.right: parent.right
+            height: sidepage.height/10
+            width: sidepage.width
+            color:"white"
+            Image {
+                id:settingicon
+                anchors.left: parent.left
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                source: "image/save.png"
+                width: height
+                height: parent.height/2
             }
-            color: "white"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+            Label{
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: settingicon.right
+                anchors.leftMargin: sidepagetop.height/10
+                text:"设置"
+                font{
+                    family: "黑体"
+                    pixelSize: followingbutton.height/3
+                }
+                color: Material.color(Material.BlueGrey)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+            }
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
@@ -373,35 +492,74 @@ Rectangle {
                     settingpage.item.setdata(str_userid,nickname)
                 }
             }
-
         }
 
-        Label{
-            id:loginout
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: headimage.height/3
+
+        Rectangle{
+            id:logoutbutton
+            anchors.bottom: sidepage.bottom
             anchors.right: parent.right
-            text:"注销"
-            height: headimage.height/2
-            width:parent.width/2
-            font{
-                family: "黑体"
-                pixelSize: height/1.5
+            height: sidepage.height/10
+            width: sidepage.width
+            color:"white"
+            Image {
+                id:logouticon
+                anchors.left: parent.left
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                source: "image/password.png"
+                width: height
+                height: parent.height/2
             }
-            color: "white"
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+            Label{
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: logouticon.right
+                anchors.leftMargin: sidepagetop.height/10
+                text:"注销"
+                font{
+                    family: "黑体"
+                    pixelSize: followingbutton.height/3
+                }
+                color: Material.color(Material.BlueGrey)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+            }
+
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
+                    checkDialog.open()
+                }
+            }
+
+            MessageDialog {
+                id: checkDialog
+                title: "提示"
+                text: "确定要注销吗？"
+                standardButtons:  StandardButton.No|StandardButton.Yes
+                onYes: {
                     dbsystem.delusernamepassword()
                     mainwindow.parent.x=mainwindow.parent.parent.width;
                     mainwindow.parent.source="";
                 }
+                onNo: {
+
+                }
             }
         }
-
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
     //显示侧边栏时，点击侧边可以返回
@@ -431,8 +589,11 @@ Rectangle {
         id:head;
         width:parent.width;
         height: parent.height/16*1.5;
-        color:"#32dc96";
+        color:"#32dc96"
         anchors.top: parent.top;
+
+
+
 
         //侧边栏按钮
         Image{
@@ -466,6 +627,7 @@ Rectangle {
             MouseArea{
                 anchors.fill: parent
                 onDoubleClicked: {
+                    if(headname.text=="首页")
                     mainpage.item.refreshpost(str_userid);
                 }
             }
@@ -498,11 +660,12 @@ Rectangle {
     Rectangle{
         id:bottom
         anchors.bottom: parent.bottom;
-        anchors.bottomMargin: 20
         width:parent.width;
         height: parent.height/16*1.5;
-        color:"#32dc96";
+        color:"#32dc96"
         property string currentPage:"首页"
+
+
 
         Rectangle{
             id:mainbutton
@@ -511,8 +674,8 @@ Rectangle {
             width:parent.width/5
             color:"#32dc96";
             Image {
-                anchors.fill: parent
-                anchors.bottomMargin: 10;
+                height: parent.height
+                width: height
                 source: "qrc:/image/mainpage.png"
                 fillMode: Image.PreserveAspectFit
 
@@ -528,40 +691,18 @@ Rectangle {
                 }
             }
         }
-        Rectangle{
-            id:newsbutton
-            anchors.left: mainbutton.right
-            height:width
-            width:parent.width/5
-            color:"#32dc96";
-            Text {
-                text:""
-                anchors.centerIn: parent
-                font{
-                    family: "黑体"
-                    pixelSize: head.height/3
-                    bold:true
-                }
-                color: "white";
-            }
-            //            MouseArea{
-            //                anchors.fill: parent
-            //                onClicked: {
-            //                    bottom.currentPage="新闻"
-            //                    mainrect.x=-mainwindow.width
-            //                }
-            //            }
-        }
+
+
         Rectangle{
             id:sendbutton
-            anchors.left: newsbutton.right
+            anchors.horizontalCenter: parent.horizontalCenter
             height:width
             width:parent.width/5
             color:"#32dc96";
             Image {
 
-                anchors.fill: parent
-                anchors.bottomMargin: 10;
+                height: parent.height
+                width: height
                 source: "qrc:/image/sharepage.png"
                 fillMode: Image.PreserveAspectFit
 
@@ -581,40 +722,15 @@ Rectangle {
 
 
         Rectangle{
-            id:searchbutton
-            anchors.left: sendbutton.right
-            height:width
-            width:parent.width/5
-            color:"#32dc96";
-            Text {
-                text:""
-                anchors.centerIn: parent
-                font{
-                    family: "黑体"
-                    pixelSize: head.height/3
-                    bold:true
-                }
-                color: "white";
-            }
-            //            MouseArea{
-            //                anchors.fill: parent
-            //                onClicked: {
-            //                    bottom.currentPage="搜索"
-            //                    mainrect.x=-mainwindow.width*4
-            //                }
-            //            }
-        }
-
-        Rectangle{
             id:recordbutton
-            anchors.left: searchbutton.right
+            anchors.right: parent.right
             height:width
             width:parent.width/5
             color:"#32dc96";
             Image {
 
-                anchors.fill: parent
-                anchors.bottomMargin: 10;
+                height: parent.height
+                width: height
                 source: "qrc:/image/recordpage.png"
                 fillMode: Image.PreserveAspectFit
 
@@ -629,6 +745,8 @@ Rectangle {
         }
 
     }
+
+
 
     MessageDialog {
         id: messageDialog

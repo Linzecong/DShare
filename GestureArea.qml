@@ -8,6 +8,7 @@ MouseArea {
     onPressed: {
         drag.axis = Drag.XAndYAxis
         origin = Qt.point(mouse.x, mouse.y)
+propagateComposedEvents=false
     }
 
     onPositionChanged: {
@@ -27,18 +28,22 @@ MouseArea {
             move(0, mouse.y - origin.y)
             break
         }
+
     }
 
     onReleased: {
         switch (drag.axis) {
         case Drag.XAndYAxis:
+            propagateComposedEvents=true
             canceled(mouse)
             break
         case Drag.XAxis:
             swipe(mouse.x - origin.x < -200 ? "left" : "right")
+            propagateComposedEvents=false
             break
         case Drag.YAxis:
-            swipe(mouse.y - origin.y < 0 ? "up" : "down")
+            swipe(mouse.y - origin.y < 200 ? "up" : "down")
+            propagateComposedEvents=false
             break
         }
     }

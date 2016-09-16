@@ -90,6 +90,46 @@ QString DataSystem::getFollowerName(int i){
         return FollowerNameList[i];
 }
 
+void DataSystem::getNotices(QString userid)
+{
+    NoticeSenderList.clear();
+    NoticeTypeList.clear();
+    QString out="@getnotices@|||"+userid;
+    tcpSocket->write(out.toUtf8());
+}
+
+QString DataSystem::getNoticeSender(int i)
+{
+    if(i>=NoticeSenderList.length()||i<0)
+        return "";
+    else
+        return NoticeSenderList[i];
+}
+
+QString DataSystem::getNoticeType(int i)
+{
+    if(i>=NoticeTypeList.length()||i<0)
+        return "";
+    else
+        return NoticeTypeList[i];
+}
+
+QString DataSystem::getNoticeTime(int i)
+{
+    if(i>=NoticeTimeList.length()||i<0)
+        return "";
+    else
+        return NoticeTimeList[i];
+}
+
+int DataSystem::getNoticePost(int i)
+{
+    if(i>=NoticePostList.length()||i<0)
+        return 0;
+    else
+        return NoticePostList[i].toInt();
+}
+
 void DataSystem::searchUser(QString str){
     SearchIDList.clear();
     SearchNameList.clear();
@@ -205,6 +245,25 @@ void DataSystem::tcpReadMessage(){
         }
         m_Statue="getfollowersSucceed";
     }
+
+
+    if(message=="@getnotices@DBError@")
+        m_Statue="getnoticesDBError";
+    if(message.indexOf("@getnotices@Succeed@")>=0){
+        QStringList inf=message.split("|||");
+        for(int i=1;i<inf.length()-1;i++){
+            QStringList tempstr=inf[i].split("{|}");
+
+            NoticeSenderList.append(tempstr[0]);
+            NoticeTypeList.append(tempstr[1]);
+            NoticeTimeList.append(tempstr[2]);
+            NoticePostList.append(tempstr[3]);
+        }
+        m_Statue="getnoticesSucceed";
+    }
+
+
+
 
     if(message=="@searchuser@DBError@")
         m_Statue="searchuserDBError";

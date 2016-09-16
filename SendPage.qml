@@ -437,7 +437,7 @@ Rectangle {
 
                 if(refreshtimer.refreshtime<=30){
                     var time= 60-refreshtimer.refreshtime;
-                    myjava.toastMsg("还有"+time.toString()+"秒");
+                    myjava.toastMsg("请勿频繁发送分享，还有"+time.toString()+"秒");
                 }
                 else{
                     indicator.visible=true

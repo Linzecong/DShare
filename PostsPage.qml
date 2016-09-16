@@ -3,7 +3,7 @@ import QtQuick.Controls 1.4
 //import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
-
+import QtQuick.Dialogs 1.2
 import DataSystem 1.0
 import JavaMethod 1.0
 import SendImageSystem 1.0
@@ -14,12 +14,22 @@ Rectangle {
     id:mainwindow
     anchors.fill: parent
     property string str_userid;//记录这个页面的人的id
-
-    function getpost(userid){
+    property string myid
+    property string nickname
+    function getpost(userid,mmid,mnickname){
         str_userid=userid
+        myid=mmid
+        nickname=mnickname
         mainrect.setusername(userid)
         forceActiveFocus();//用于响应返回键
     }
+    function setcommentcount(count){
+
+        postmodel.get(listview.commentindex).CommentCount=count
+
+
+    }
+
     Keys.enabled: true
     Keys.onBackPressed: {
         mainwindow.parent.visible=false
@@ -50,6 +60,14 @@ Rectangle {
 
     }
 
+    Loader{
+        id:uniquepost;
+        anchors.fill: parent
+        visible: false
+        source:"UniquePost.qml"
+        z:102
+    }
+
     //顶部栏
     Rectangle{
         id:head;
@@ -75,6 +93,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     mainwindow.parent.visible=false
+                    mainwindow.parent.parent.forceActiveFocus();
                 }
             }
         }
@@ -197,11 +216,29 @@ Rectangle {
             anchors.fill: parent
             clip:true
             property int likeindex:0
+            property int commentindex:0
             spacing:20;
+
+            Rectangle {
+                id: scrollbar
+                anchors.right: listview.right
+                anchors.rightMargin: 3
+                y: listview.visibleArea.yPosition * listview.height
+                width: 10
+                height: listview.visibleArea.heightRatio * listview.height
+                color: "grey"
+                radius: 5
+                z:2
+                visible: listview.dragging||listview.flicking
+            }
+
+
             delegate: Item{
                 id:postitem
                 width:parent.width
                 height:headimage.height/3*5+headimage.height+message.height+photo.height+buttonlayout.height+likers.height+20+headimage.width/2
+                property int postID: ID//用于实现点赞功能
+                property string publisherid: PublisherID//用于显示删除
                 Rectangle{
                     border.color: "grey"
                     border.width: 1
@@ -211,13 +248,7 @@ Rectangle {
                     id:delegaterect
                     property int hasimage: Hasimage
                     property string bigimg: BigPhoto
-                    MouseArea{
-                        anchors.fill: parent;
-                        onClicked: {
-                            //username.text="haahah";
 
-                        }
-                    }
                     Image{
                         id:headimage
                         visible: posttime.text==""?false:true
@@ -234,6 +265,11 @@ Rectangle {
                             visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
                             text:(parent.status==Image.Loading)?"加载中":"无"
                             color:"grey"
+                        }
+                        BusyIndicator{
+                            anchors.centerIn: parent
+                            visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                            running:(parent.status==Image.Loading)?true:false
                         }
                     }
 
@@ -269,6 +305,7 @@ Rectangle {
                         anchors.topMargin: headimage.height/3
                         width:parent.width-headimage.height/3*1.5
                         text: Message
+                        textFormat:Text.RichText
                         wrapMode: Text.Wrap;
                         font{
                             family: "黑体"
@@ -304,10 +341,48 @@ Rectangle {
                     RowLayout{
                         id:buttonlayout
                         anchors.top: photo.bottom
-                        visible: false
                         anchors.right: parent.right
                         anchors.topMargin: parent.hasimage?headimage.height/3:0
                         height: headimage.height/1.5
+                        Rectangle{
+                            id:deletebutton
+                            visible: false
+                            color:"red"
+                            height:headimage.height/1.5
+                            width: photo.width/5
+                            radius: height/4
+                            Label{
+                                text:"删除";
+                                anchors.centerIn: parent
+                                color: "white";
+                                font{
+                                    family: "黑体"
+                                    pixelSize: parent.height/1.5
+                                }
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+                                    messageDialog.open()
+                                }
+                            }
+
+                            MessageDialog {
+                                id: messageDialog
+                                title: "提示"
+                                text: "确定要删除吗？"
+                                standardButtons:  StandardButton.No|StandardButton.Yes
+                                onYes: {
+                                    postmodel.remove(index)
+                                    postsystem.deletepost(postitem.postID)
+                                }
+                                onNo: {
+
+                                }
+                            }
+                        }
+
+                        //点赞按钮
                         Rectangle{
                             id:likebutton
                             visible: false
@@ -320,7 +395,6 @@ Rectangle {
                                 anchors.centerIn: parent
                                 color: "white";
                                 font{
-                                    family: "黑体"
                                     pixelSize: parent.height/1.5
                                 }
                             }
@@ -328,20 +402,25 @@ Rectangle {
                                 anchors.fill: parent
                                 onClicked: {
                                     listview.likeindex=index;
-                                    postsystem.likepost(postitem.postID,mainrect.username);
+                                    postsystem.likepost(postitem.postID,myid);
+
                                     likebutton.visible=false
-                                    collectbutton.visible=false
+                                    commentbutton.visible=false
+                                    deletebutton.visible=false
                                 }
                             }
                         }
+
+                        //收藏按钮，暂时无用
                         Rectangle{
-                            id:collectbutton
+                            id:commentbutton
                             visible: false
-                            color:"#32dc96"
+                            color:"#30d090"
+                            radius: height/4
                             height:headimage.height/1.5
                             width: photo.width/5
                             Label{
-                                text:"收藏";
+                                text:"评论";
                                 anchors.centerIn: parent
                                 color: "white";
                                 font{
@@ -349,13 +428,16 @@ Rectangle {
                                     pixelSize: parent.height/2
                                 }
                             }
-
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
+                                    listview.commentindex=index
+                                    uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,myid,nickname,1)
+                                    uniquepost.visible=true
 
                                     likebutton.visible=false
-                                    collectbutton.visible=false
+                                    commentbutton.visible=false
+                                    deletebutton.visible=false
                                 }
                             }
                         }
@@ -372,8 +454,12 @@ Rectangle {
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
+                                    deletebutton.visible=deletebutton.visible?false:true
+                                    deletebutton.visible=(ID!=0&&myid==PublisherID)?true:false
+
                                     likebutton.visible=likebutton.visible?false:true
-                                    //collectbutton.visible=collectbutton.visible?false:true
+                                    commentbutton.visible=commentbutton.visible?false:true
+
                                 }
                             }
                         }
@@ -386,6 +472,22 @@ Rectangle {
                         anchors.top: buttonlayout.bottom
                         anchors.topMargin: headimage.height/3
                         text: Liker
+                        width:parent.width-headimage.height/3*4
+                        wrapMode: Text.Wrap;
+                        color: "#32dc96"
+                        font{
+                            family: "黑体"
+                            pixelSize: headimage.height/3
+                        }
+                    }
+
+                    Label{
+                        id:comments
+                        visible: posttime.text==""?false:true
+                        anchors.left: headimage.left
+                        anchors.top: likers.bottom
+                        anchors.topMargin: headimage.height/6
+                        text: "     "+CommentCount+" 条评论"
                         width:parent.width-headimage.height/3*4
                         wrapMode: Text.Wrap;
                         color: "#32dc96"
@@ -447,9 +549,9 @@ Rectangle {
 
                     if(Statue=="likepostSucceed"){
                         if(postmodel.get(listview.likeindex).Liker==="暂无人点赞")
-                            postmodel.setProperty(listview.likeindex,"Liker","♡ "+mainrect.nickname);
+                            postmodel.setProperty(listview.likeindex,"Liker","♡ "+nickname);
                         else
-                            postmodel.setProperty(listview.likeindex,"Liker",postmodel.get(listview.likeindex).Liker+","+mainrect.nickname);
+                            postmodel.setProperty(listview.likeindex,"Liker",postmodel.get(listview.likeindex).Liker+","+nickname);
                     }
 
                     if(Statue=="getmorefriendspostsSucceed"){
@@ -466,7 +568,11 @@ Rectangle {
                                              "Photo":getpostphoto(i),
                                              "BigPhoto":getbigpostphotourl(i),
                                              "Liker":likers,
-                                             "ID":getpostID(i)
+                                             "ID":getpostID(i),
+                                             "PublisherID":getpostpublisher(i),
+                                             "CommentCount":getpostcommentcount(i)
+
+
                                          }
                                          );
                         i++;
@@ -485,10 +591,24 @@ Rectangle {
                                                  "Message":"该用户暂无任何分享喔~",
                                                  "Photo":"",
                                                  "Liker":"",
-                                                 "ID":0
+                                                 "ID":0,
+                                                 "PublisherID":"",
+                                                 "CommentCount":0
+
                                              }
                                              );
                         }
+
+
+                    }
+
+                    if(Statue=="deletepostSucceed"){
+                        myjava.toastMsg("删除成功")
+
+
+                    }
+                    if(Statue=="deletepostDBError"){
+                        myjava.toastMsg("删除失败")
 
 
                     }

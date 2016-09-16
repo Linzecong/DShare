@@ -39,7 +39,7 @@ Rectangle {
         id:recordsystem
         onStatueChanged: {
             if(Statue==="uploadexerciseSucceed"){
-                //myjava.toastMsg("保存成功")
+                myjava.toastMsg("保存成功")
             }
 
             if(Statue==="uploadexerciseDBError"){
@@ -789,6 +789,7 @@ Rectangle {
                 font{
                     family: "黑体"
                     pixelSize: header.height/2
+                    bold: true
                 }
             }
 
@@ -912,7 +913,7 @@ Rectangle {
                             if(tt!=sportsavebutton.lastsaved){
                                 sportsavebutton.lastsaved=tt;
                                 recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
-
+sporttext.text=""
                                 lasttimemintext.text="00"
                                 lasttimehourtext.text="00"
                                 begintimehourtext.text="00"
@@ -963,7 +964,7 @@ Rectangle {
                             mainrect.parent.parent.x=-mainrect.width*2
                             mainrect.parent.parent.children[2].item.settext("<strong><font color=\"#35dca2\">"+str+"</font></strong>")
 
-
+sporttext.text=""
                             lasttimemintext.text="00"
                             lasttimehourtext.text="00"
                             begintimehourtext.text="00"
@@ -1472,6 +1473,7 @@ Rectangle {
         z:10
         Keys.enabled: true
         Keys.onBackPressed: {
+            searchtext.text=""
             searpage.visible=false
             mainrect.parent.parent.parent.forceActiveFocus();
         }

@@ -26,5 +26,7 @@
         <file>PostsPage.qml</file>
         <file>SettingPage.qml</file>
         <file>GestureArea.qml</file>
+        <file>UniquePost.qml</file>
+        <file>NoticeList.qml</file>
     </qresource>
 </RCC>
