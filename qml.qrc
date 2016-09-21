@@ -28,5 +28,11 @@
         <file>GestureArea.qml</file>
         <file>UniquePost.qml</file>
         <file>NoticeList.qml</file>
+        <file>image/mainpageblack.png</file>
+        <file>image/recordpageblack.png</file>
+        <file>image/sharepageblack.png</file>
+        <file>image/searchblack.png</file>
+        <file>image/checkin.png</file>
+        <file>image/clock.png</file>
     </qresource>
 </RCC>

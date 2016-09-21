@@ -63,10 +63,38 @@ int PostsSystem::getposthasimage(int i){
 }
 
 QString PostsSystem::getposthead(int i){
-    if(i<PostList.length())
-        return PostList[i].HeadURL;
-      else
-    return "";
+#ifdef ANDROID
+if(i<PostList.length()){
+    JavaMethod java;
+    QDir *tempdir = new QDir;
+    QString nnFileName=PostList[i].HeadURL.left(PostList[i].HeadURL.lastIndexOf('.'));
+    nnFileName=nnFileName+"_temp.jpg";
+
+    Photoname=nnFileName.right(nnFileName.size()-nnFileName.lastIndexOf('/')-1);
+    QString path=java.getSDCardPath();
+    path=path+"/DShare/"+Photoname+".dbnum";
+
+    if(tempdir->exists(path)){
+        return "file://"+path;
+    }
+    else{
+        QNetworkAccessManager *manager=new QNetworkAccessManager(this);
+        QEventLoop eventloop;
+        connect(manager, SIGNAL(finished(QNetworkReply*)),&eventloop, SLOT(quit()));
+        QNetworkReply *reply=manager->get(QNetworkRequest(QUrl(PostList[i].HeadURL)));
+        eventloop.exec();
+
+        if(reply->error() == QNetworkReply::NoError)
+        {
+            QPixmap currentPicture;
+            currentPicture.loadFromData(reply->readAll());
+            currentPicture.save(path,"JPG");//保存图片
+        }
+        return "file://"+path;
+    }
+}
+#endif
+return "";
 }
 
 QString PostsSystem::getpostname(int i){

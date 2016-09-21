@@ -13,10 +13,13 @@ StackView{
     property string str_userid;
     property string nickname;
     property string chooseimage:"Qt"
+    property string headurl:""
 
-    function setdata(id,name){
+    function setdata(id,name,hurl){
         str_userid=id
         nickname=name
+        headurl=hurl
+
         forceActiveFocus();
     }
 
@@ -32,15 +35,21 @@ StackView{
         id:sendimgsystem1
         onStatueChanged:{
 
-            if(Statue=="Succeed"){
-                myjava.toastMsg("修改成功！重启后生效！");
-            }
+
             if(Statue=="DBError"){
                 myjava.toastMsg("远程服务器出错，请联系开发者！");
             }
 
             if(Statue=="Error"){
                 myjava.toastMsg("照片有误！！");
+            }
+
+            if(Statue=="Wait"){
+                myjava.toastMsg("服务器繁忙，请重试...");
+            }
+
+            if(Statue=="Succeed"){
+                myjava.toastMsg("修改成功！");
             }
 
         }
@@ -226,14 +235,17 @@ StackView{
                 height:parent.height/4
                 anchors.horizontalCenter: parent.horizontalCenter;
                 anchors.top: parent.top
-                color:"#1084e5"
+                color:"#bbbbbb"
+                opacity: 0.5
+                border.width: 2
+                border.color: "#bbbbbb"
                 radius: height/4
                 Label{
                     text: "上移"
                     color: "white"
                     font{
                         pixelSize: parent.height/2
-                        family: "黑体"
+                        
                     }
                     anchors.centerIn: parent
                 }
@@ -254,14 +266,17 @@ StackView{
                 anchors.horizontalCenter: parent.horizontalCenter;
                 anchors.top: upbutton.bottom
                 anchors.topMargin: height/4
-                color:"#1084e5"
+                color:"#bbbbbb"
+                opacity: 0.7
+                border.width: 2
+                border.color: "#bbbbbb"
                 radius: height/4
                 Label{
                     text: "保存"
                     color: "white"
                     font{
                         pixelSize: parent.height/2
-                        family: "黑体"
+                        
                     }
                     anchors.centerIn: parent
                 }
@@ -278,17 +293,17 @@ StackView{
                         forSaveCanvas.save(path);
 
 
-                        headimage.source="file://"+path;
+                        //headimage.source="file://"+path;
+                        headurl="file://"+path;
 
-                        if(headimage.status==Image.Error){
-                            myjava.toastMsg("照片有误！");
-                            return
-                        }
+//                        if(headimage.status==Image.Error){
+//                            myjava.toastMsg("照片有误！");
+//                            return
+//                        }
 
                         imagePath=path;
                         sendimgsystem1.sendHead(imagePath,str_userid);
-                        myjava.toastMsg("修改成功！");
-                        myjava.toastMsg("重启后生效！");
+                        myjava.toastMsg("正在上传...");
 
 
 
@@ -304,14 +319,17 @@ StackView{
                 anchors.horizontalCenter: parent.horizontalCenter;
                 anchors.top: savebutton.bottom
                 anchors.topMargin: height/4
-                color:"#1084e5"
+                color:"#bbbbbb"
+                opacity: 0.5
+                border.width: 2
+                border.color: "#bbbbbb"
                 radius: height/4
                 Label{
                     text: "下移"
                     color: "white"
                     font{
                         pixelSize: parent.height/2
-                        family: "黑体"
+                        
                     }
                     anchors.centerIn: parent
                 }
@@ -332,14 +350,17 @@ StackView{
                 anchors.right: savebutton.left
                 anchors.rightMargin: width/4
                 anchors.top: savebutton.top
-                color:"#1084e5"
+                color:"#bbbbbb"
+                opacity: 0.5
+                border.width: 2
+                border.color: "#bbbbbb"
                 radius: height/4
                 Label{
                     text: "左移"
                     color: "white"
                     font{
                         pixelSize: parent.height/2
-                        family: "黑体"
+                        
                     }
                     anchors.centerIn: parent
                 }
@@ -360,14 +381,17 @@ StackView{
                 anchors.left: savebutton.right
                 anchors.leftMargin: width/4
                 anchors.top: savebutton.top
-                color:"#1084e5"
+                color:"#bbbbbb"
+                opacity: 0.5
+                border.width: 2
+                border.color: "#bbbbbb"
                 radius: height/4
                 Label{
                     text: "右移"
                     color: "white"
                     font{
                         pixelSize: parent.height/2
-                        family: "黑体"
+                        
                     }
                     anchors.centerIn: parent
                 }
@@ -388,14 +412,17 @@ StackView{
                 anchors.left: rightbutton.right
                 anchors.leftMargin: width/4
                 anchors.top: savebutton.top
-                color:"#1084e5"
+                color:"#bbbbbb"
+                opacity: 0.7
+                border.width: 2
+                border.color: "#bbbbbb"
                 radius: height/4
                 Label{
                     text: "缩小"
                     color: "white"
                     font{
                         pixelSize: parent.height/2
-                        family: "黑体"
+                        
                     }
                     anchors.centerIn: parent
                 }
@@ -416,14 +443,18 @@ StackView{
                 anchors.right: leftbutton.left
                 anchors.rightMargin: width/4
                 anchors.top: savebutton.top
-                color:"#1084e5"
+                color:"#bbbbbb"
+                opacity: 0.7
+                border.width: 2
+                border.color: "#bbbbbb"
                 radius: height/4
+
                 Label{
                     text: "放大"
                     color: "white"
                     font{
                         pixelSize: parent.height/2
-                        family: "黑体"
+                        
                     }
                     anchors.centerIn: parent
                 }
@@ -447,14 +478,17 @@ StackView{
 
                 anchors.top: smallbutton.bottom
                 anchors.topMargin: height/4
-                color:"#1084e5"
+                color:"#bbbbbb"
+                opacity: 0.7
+                border.width: 2
+                border.color: "#bbbbbb"
                 radius: height/4
                 Label{
                     text: "取消"
                     color: "white"
                     font{
                         pixelSize: parent.height/2
-                        family: "黑体"
+                        
                     }
                     anchors.centerIn: parent
                 }
@@ -479,14 +513,19 @@ StackView{
 
                 anchors.left: bigbutton.left
                 anchors.topMargin: height/4
-                color:"#1084e5"
+
+                color:"#bbbbbb"
+                opacity: 0.7
+                border.width: 2
+                border.color: "#bbbbbb"
+
                 radius: height/4
                 Label{
                     text: "直接应用整张图片"
                     color: "white"
                     font{
                         pixelSize: parent.height/2
-                        family: "黑体"
+                        
                     }
                     anchors.centerIn: parent
                 }
@@ -494,17 +533,18 @@ StackView{
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        headimage.source=source.source;
+                        //headimage.source=source.source;
+                        headurl=source.source
 
-                        if(headimage.status==Image.Error){
-                            myjava.toastMsg("照片有误！");
-                            return
-                        }
+
+//                        if(headimage.status==Image.Error){
+//                            myjava.toastMsg("照片有误！");
+//                            return
+//                        }
 
                         imagePath=chooseimage;
                         sendimgsystem1.sendHead(imagePath,str_userid);
-                        myjava.toastMsg("修改成功！");
-                        myjava.toastMsg("重启后生效！");
+                        myjava.toastMsg("正在上传...");
 
 
 
@@ -542,23 +582,24 @@ StackView{
             id:headrect
             width:parent.width;
             height: parent.height/16*1.5;
-            color:"#32dc96";
+            color:"#32dc96"
             anchors.top: parent.top;
 
             Label{
                 id:backbutton
-                text:"  <";
+                text:" ＜";
                 height: parent.height
                 width:height
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment: Text.AlignVCenter
                 font{
-                    family: "黑体"
-                    pixelSize: backbutton.height/1.5
+                    
+                    pixelSize: headrect.height/1.5
                 }
                 color: "white";
                 MouseArea{
+                    id:headma
                     anchors.fill: parent
                     onClicked: {
                         stack.parent.visible=false
@@ -573,8 +614,8 @@ StackView{
                 text:"设置";
                 anchors.centerIn: parent
                 font{
-                    family: "黑体"
-                    pixelSize: headrect.height/3
+                    family: "微软雅黑"
+                    pixelSize: headrect.height/2.5
 
                 }
                 color: "white";
@@ -598,7 +639,7 @@ StackView{
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment: Text.AlignVCenter
                 font{
-                    family: "黑体"
+                    
                     pixelSize: headrect.height/3
 
                 }
@@ -628,7 +669,7 @@ StackView{
 //                anchors.verticalCenter: parent.verticalCenter
 //                verticalAlignment: Text.AlignVCenter
 //                font{
-//                    family: "黑体"
+//                    
 //                    pixelSize: headrect.height/3
 
 //                }
@@ -666,18 +707,19 @@ StackView{
                 id:changedatahead;
                 width:parent.width;
                 height: parent.height/16*1.5;
-                color:"#32dc96";
+                color:"#32dc96"
                 anchors.top: parent.top;
                 Label{
-                    text:"  <";
+                    text:" ＜";
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     font{
-                        family: "黑体"
+                        
                         pixelSize: headrect.height/1.5
                     }
                     color: "white";
                     MouseArea{
+                        id:headma1
                         anchors.fill: parent
                         onClicked: {
                             stack.pop();
@@ -689,7 +731,7 @@ StackView{
                     text:"修改资料";
                     anchors.centerIn: parent
                     font{
-                        family: "黑体"
+                        family: "微软雅黑"
                         pixelSize: headrect.height/3
 
                     }
@@ -714,7 +756,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     verticalAlignment: Text.AlignVCenter
                     font{
-                        family: "黑体"
+                        
                         pixelSize: headrect.height/3
 
                     }
@@ -728,7 +770,7 @@ StackView{
                     height: parent.height-50
                     width: height
                     anchors.verticalCenter: parent.verticalCenter
-                    source: "http://119.29.15.43/userhead/"+str_userid+".jpg"
+                    source: headurl
                     fillMode: Image.PreserveAspectFit
                     Label{
                         anchors.centerIn: parent
@@ -793,7 +835,7 @@ pickhead.forceActiveFocus()
                     anchors.verticalCenter: parent.verticalCenter
                     verticalAlignment: Text.AlignVCenter
                     font{
-                        family: "黑体"
+                        
                         pixelSize: headrect.height/3
 
                     }
@@ -813,6 +855,7 @@ pickhead.forceActiveFocus()
 
                                 nickname=dbsystem.getName();
                             }
+
                         }
                     }
 
@@ -894,7 +937,7 @@ pickhead.forceActiveFocus()
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     font{
-                        family: "黑体"
+                        
                         pixelSize: xieyitoprect.height/1.5
                         bold:true;
                     }
@@ -911,7 +954,7 @@ pickhead.forceActiveFocus()
                     text:"使用帮助";
                     anchors.centerIn: parent
                     font{
-                        family: "黑体"
+                        
                         pixelSize: xieyitoprect.height/3
                         bold:true
                     }
@@ -926,7 +969,7 @@ pickhead.forceActiveFocus()
                 anchors.topMargin: xieyitoprect.height*1.5
                 anchors.fill: parent
                 font{
-                    family: "黑体"
+                    
                     pixelSize: xieyitoprect.height/3
                 }
                 color: "grey";

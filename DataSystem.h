@@ -26,6 +26,10 @@ public:
     Q_INVOKABLE void getNameByID(QString userid);//获取用户昵称
     Q_INVOKABLE QString getName();//返回用户昵称
 
+    QString HeadURL;
+    Q_INVOKABLE void getHeadByID(QString userid);
+    Q_INVOKABLE QString getHead();
+
     Q_INVOKABLE void changeName(QString userid,QString newname);//修改昵称
     Q_INVOKABLE void addFollowing(QString userid,QString friendid);//添加关注
     Q_INVOKABLE void deleteFollowing(QString userid,QString friendid);//删除关注
@@ -47,11 +51,13 @@ public:
     QStringList NoticeTypeList;
     QStringList NoticeTimeList;
     QStringList NoticePostList;
+    QStringList NoticeIsReadList;
     Q_INVOKABLE void getNotices(QString userid);
     Q_INVOKABLE QString getNoticeSender(int i);
     Q_INVOKABLE QString getNoticeType(int i);
     Q_INVOKABLE QString getNoticeTime(int i);
     Q_INVOKABLE int getNoticePost(int i);
+    Q_INVOKABLE int getNoticeIsRead(int i);
 
     QStringList SearchIDList;
     QStringList SearchNameList;

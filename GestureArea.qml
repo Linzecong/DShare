@@ -8,7 +8,7 @@ MouseArea {
     onPressed: {
         drag.axis = Drag.XAndYAxis
         origin = Qt.point(mouse.x, mouse.y)
-propagateComposedEvents=false
+        propagateComposedEvents=false
     }
 
     onPositionChanged: {
@@ -28,7 +28,6 @@ propagateComposedEvents=false
             move(0, mouse.y - origin.y)
             break
         }
-
     }
 
     onReleased: {

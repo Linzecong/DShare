@@ -1,12 +1,15 @@
 #include "DataSystem.h"
 #include "JavaMethod.h"
+#include<QPixmap>
 
 DataSystem::DataSystem(QObject *parent) : QObject(parent){
+
     //初始化时直接连接到服务器
     tcpSocket = new QTcpSocket(this);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&DataSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&DataSystem::tcpSendMessage);
     tcpSocket->connectToHost("119.29.15.43",8889);
+
 }
 
 void DataSystem::setStatue(QString s){
@@ -27,6 +30,48 @@ void DataSystem::getNameByID(QString userid){
 QString DataSystem::getName(){
     return Name;
 }
+
+void DataSystem::getHeadByID(QString userid)
+{
+    QString out="@gethead@|||"+userid;
+    tcpSocket->write(out.toUtf8());
+}
+
+QString DataSystem::getHead()
+{
+#ifdef ANDROID
+    JavaMethod java;
+    QDir *tempdir = new QDir;
+    QString nnFileName=HeadURL.left(HeadURL.lastIndexOf('.'));
+    nnFileName=nnFileName+"_temp.jpg";
+
+    QString Photoname=nnFileName.right(nnFileName.size()-nnFileName.lastIndexOf('/')-1);
+    QString path=java.getSDCardPath();
+    path=path+"/DShare/"+Photoname+".dbnum";
+
+    if(tempdir->exists(path)){
+        return "file://"+path;
+    }
+    else{
+        QNetworkAccessManager *manager=new QNetworkAccessManager(this);
+        QEventLoop eventloop;
+        connect(manager, SIGNAL(finished(QNetworkReply*)),&eventloop, SLOT(quit()));
+        QNetworkReply *reply=manager->get(QNetworkRequest(QUrl(HeadURL)));
+        eventloop.exec();
+
+        if(reply->error() == QNetworkReply::NoError)
+        {
+            QPixmap currentPicture;
+            currentPicture.loadFromData(reply->readAll());
+            currentPicture.save(path,"JPG");//保存图片
+        }
+        return "file://"+path;
+    }
+
+#endif
+}
+
+
 
 void DataSystem::changeName(QString userid, QString newname){
     QString out="@changename@|||"+userid+"|||"+newname;
@@ -94,6 +139,9 @@ void DataSystem::getNotices(QString userid)
 {
     NoticeSenderList.clear();
     NoticeTypeList.clear();
+    NoticeTimeList.clear();
+    NoticePostList.clear();
+    NoticeIsReadList.clear();
     QString out="@getnotices@|||"+userid;
     tcpSocket->write(out.toUtf8());
 }
@@ -128,6 +176,14 @@ int DataSystem::getNoticePost(int i)
         return 0;
     else
         return NoticePostList[i].toInt();
+}
+
+int DataSystem::getNoticeIsRead(int i)
+{
+    if(i>=NoticeIsReadList.length()||i<0)
+        return 0;
+    else
+        return NoticeIsReadList[i].toInt();
 }
 
 void DataSystem::searchUser(QString str){
@@ -195,6 +251,14 @@ void DataSystem::tcpReadMessage(){
         m_Statue="getnameSucceed";
     }
 
+
+    if(message=="@gethead@DBError@")
+        m_Statue="getheadDBError";
+    if(message.indexOf("@gethead@Succeed@")>=0){
+        HeadURL=message.split("@gethead@Succeed@").at(1);
+        m_Statue="getheadSucceed";
+    }
+
     if(message=="@checkin@DBError@")
         m_Statue="checkinDBError";
     if(message=="@checkin@Succeed@")
@@ -258,6 +322,7 @@ void DataSystem::tcpReadMessage(){
             NoticeTypeList.append(tempstr[1]);
             NoticeTimeList.append(tempstr[2]);
             NoticePostList.append(tempstr[3]);
+            NoticeIsReadList.append(tempstr[4]);
         }
         m_Statue="getnoticesSucceed";
     }

@@ -14,6 +14,7 @@ Rectangle {
     property string userid;
     property string nickname;
     function getNotice(username,nickname1){
+        noticemodel.clear()
         userid=username
         nickname=nickname1
         dbsystem.getNotices(userid)
@@ -48,13 +49,13 @@ Rectangle {
 
 
             if(Statue=="getnoticesSucceed"){
-                noticemodel.clear()
                 var i=0
                 while(dbsystem.getNoticeSender(i)!==""){
                     noticemodel.append({
                                             "Sender":getNoticeSender(i),
                                             "Type":getNoticeType(i),
                                             "SendTime":getNoticeTime(i),
+                                           "IsRead":getNoticeIsRead(i),
                                            "PostID":getNoticePost(i)
                                         }
                                         );
@@ -64,7 +65,6 @@ Rectangle {
             if(Statue=="getnoticesDBError"){
               myjava.toastMsg("暂无消息")
             }
-
 
         }
     }
@@ -92,7 +92,7 @@ Rectangle {
                 uniquepost.visible=true
             }
             if(Statue=="getuniquepostDBError"){
-              myjava.toastMsg("发生错误！")
+              myjava.toastMsg("该分享已删除！")
             }
 
 
@@ -118,7 +118,7 @@ Rectangle {
             text:"  <"
             color: "white"
             font{
-                family: "黑体"
+                
                 pixelSize: back.height/1.5
             }
             anchors.left: parent.left
@@ -128,7 +128,6 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     mainrect.parent.visible=false
-                    searchtext.text=""
                 }
             }
         }
@@ -140,8 +139,8 @@ Rectangle {
             text:"我的消息"
             anchors.centerIn: parent
             font{
-                family: "黑体"
-                pixelSize: head.height/3
+                
+                pixelSize: head.height/2.5
             }
             color: "white";
             MouseArea{
@@ -192,7 +191,8 @@ Rectangle {
 
             Rectangle{
                 anchors.fill: parent
-                color:"white"
+                color:IsRead?"#dddddd":"white"
+
                 border.color: "grey"
                 border.width: 2
 
@@ -209,10 +209,9 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin:head.height/2
-                    color: "grey"
                     wrapMode: Text.WordWrap
                     font{
-                        family: "黑体"
+                        
                         pixelSize: head.height/3
                     }
                     text:"<strong><font color=\"#35dca2\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\"#35dca2\">你</font></strong>"
@@ -227,7 +226,7 @@ Rectangle {
                     color: "grey"
                     wrapMode: Text.WordWrap
                     font{
-                        family: "黑体"
+                        
                         pixelSize: head.height/3
                     }
                     text:SendTime

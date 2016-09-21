@@ -4,7 +4,7 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.3
 import QtQuick.Extras 1.4
-
+import QtGraphicalEffects 1.0
 import PostsSystem 1.0
 import JavaMethod 1.0
 import RecordSystem 1.0
@@ -26,8 +26,17 @@ Rectangle {
             if(Statue=="getcheckindaySucceed")
                 dosportdaysrect.checkinday=dbsystem.getcheckinday();
 
-            if(Statue=="checkinSucceed")
+            if(Statue=="checkinSucceed"){
                 dosportdaysrect.checkinday++;
+                myjava.toastMsg("签到成功！")
+            }
+
+            if(Statue=="checkinDBError"){
+                myjava.toastMsg("今天已经签到啦~！")
+                checkarea.visible=false
+
+            }
+
         }
     }
 
@@ -54,9 +63,9 @@ Rectangle {
                 myjava.toastMsg("服务器出错，请联系管理员")
             }
 
-//            if(Statue==="getlocaldietError"){
-//                myjava.toastMsg("获取饮食数据失败")
-//            }
+            //            if(Statue==="getlocaldietError"){
+            //                myjava.toastMsg("获取饮食数据失败")
+            //            }
 
             if(Statue===("getlocaldietSucceed")){
                 var maxj=20;
@@ -169,16 +178,27 @@ Rectangle {
         anchors.top: parent.top
         width: parent.width
         height: parent.height/11
-        border.width: 1
+        border.width: 2
         border.color: "grey"
         property string currentpage: "饮食"
+
+
+        Rectangle{
+            id:inrect
+            color:"#eeeeee"
+            height: parent.height-4
+            width:parent.width/3
+            anchors.top: parent.top
+            anchors.topMargin: 2
+            x:foodbutton.color=="#32dc96"?0:(sportbutton.color=="#32dc96"?width:width*2)
+        }
 
         Label{
             id:foodbutton
             text: "饮食"
             color:header.currentpage==text?"#32dc96":"grey"
             font{
-                family: "黑体"
+family: "微软雅黑"
                 pixelSize: header.height/2
             }
             anchors.left: parent.left
@@ -197,7 +217,7 @@ Rectangle {
             text: "运动"
             color:header.currentpage==text?"#32dc96":"grey"
             font{
-                family: "黑体"
+family: "微软雅黑"
                 pixelSize: header.height/2
             }
             anchors.horizontalCenter: parent.horizontalCenter
@@ -215,7 +235,7 @@ Rectangle {
             text: "查看"
             color:header.currentpage==text?"#32dc96":"grey"
             font{
-                family: "黑体"
+family: "微软雅黑"
                 pixelSize: header.height/2
             }
             anchors.right: parent.right
@@ -323,7 +343,7 @@ Rectangle {
                     anchors.leftMargin: parent.width/10
                     color:"grey"
                     font{
-                        family: "黑体"
+
                         pixelSize: header.height/2
                     }
 
@@ -371,7 +391,7 @@ Rectangle {
                             text:"食物"+(index+1).toString()
                             color:"grey"
                             font{
-                                family: "黑体"
+
                                 pixelSize: header.height/2
                             }
                         }
@@ -390,7 +410,7 @@ Rectangle {
                                 text:Food
                                 color:"grey"
                                 font{
-                                    family: "黑体"
+
                                     pixelSize: parent.height/2.5
                                 }
                             }
@@ -555,6 +575,29 @@ Rectangle {
                     //anchors.topMargin: header.height/5
                     height: title.height*1.2
                     width: height
+
+                    Timer{
+                        id:animationtimer
+                        interval: 800
+                        repeat:true
+                        onTriggered: {
+                            if(sharebutton.scale==1.2)
+                                sharebutton.scale=1
+                            else
+                                sharebutton.scale=1.2
+                        }
+                        running: true
+                    }
+
+
+                    Behavior on scale{
+                        NumberAnimation{
+                            duration: 800
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+
                     Image{
                         id:sharetext
                         fillMode: Image.PreserveAspectFit
@@ -568,11 +611,14 @@ Rectangle {
                         anchors.fill: parent
                         onClicked: {
 
-                            var str=title.text+"<br>";
+                            var str="<strong>"+title.text+"：</strong>";
                             var foodstr123="";
                             for(var i=0;i<foodlist.model.count;i++){
                                 if(foodlist.model.get(i).Food!=="点击选择食物")
-                                    foodstr123=foodstr123+"食物"+(i+1).toString()+"："+foodlist.model.get(i).Food+"<br>";
+                                    if(i==foodlist.model.count-1)
+                                    foodstr123=foodstr123+foodlist.model.get(i).Food;
+                                    else
+                                        foodstr123=foodstr123+foodlist.model.get(i).Food+"、";
                             }
 
                             if(foodstr123=="")
@@ -582,9 +628,9 @@ Rectangle {
 
                             console.log(str)
 
-                            mainrect.parent.parent.parent.bottom.currentPage="分享"
+                            mainrect.parent.parent.currentPage="分享"
                             mainrect.parent.parent.x=-mainrect.width*2
-                            mainrect.parent.parent.children[2].item.settext("<strong><font color=\"#35dca2\">"+str+"</font></strong>")
+                            mainrect.parent.parent.children[2].item.settext("<font color=\"#45ada8\">"+str+"</font>")
                             //if(dietimage.source!=="")
                             //    mainrect.parent.parent.children[2].item.setimg(dietitem.imagePath)
                         }
@@ -621,7 +667,7 @@ Rectangle {
                 color:"grey"
                 anchors.verticalCenter: parent.verticalCenter
                 font{
-                    family: "黑体"
+
                     pixelSize: header.height/2
                 }
             }
@@ -645,7 +691,7 @@ Rectangle {
 
 
                     font{
-                        family: "黑体"
+
                         pixelSize: parent.height/1.5
                     }
                     z:2
@@ -682,7 +728,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                    family: "黑体"
+
                     pixelSize: header.height/2
                 }
             }
@@ -701,11 +747,11 @@ Rectangle {
                     text:"00"
                     color:"grey"
                     font{
-                        family: "黑体"
+
                         pixelSize: parent.height/1.5
                     }
                     onTextChanged: {
-                        begintimerow.begintime=begintimehourtext.text+":"+begintimemintext.text+":"+"00";
+                        begintimerow.begintime=begintimehourtext.text+":"+begintimemintext.text;
 
                     }
                 }
@@ -724,7 +770,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                    family: "黑体"
+
                     pixelSize: header.height/2
                 }
             }
@@ -743,11 +789,11 @@ Rectangle {
                     text:"00"
                     color:"grey"
                     font{
-                        family: "黑体"
+
                         pixelSize: parent.height/1.5
                     }
                     onTextChanged: {
-                        begintimerow.begintime=begintimehourtext.text+":"+begintimemintext.text+":"+"00";
+                        begintimerow.begintime=begintimehourtext.text+":"+begintimemintext.text;
                     }
                 }
                 MouseArea{
@@ -765,7 +811,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                    family: "黑体"
+
                     pixelSize: header.height/2
                 }
             }
@@ -787,7 +833,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                    family: "黑体"
+
                     pixelSize: header.height/2
                     bold: true
                 }
@@ -807,7 +853,7 @@ Rectangle {
                     text:"00"
                     color:"grey"
                     font{
-                        family: "黑体"
+
                         pixelSize: parent.height/1.5
                     }
                     onTextChanged: {
@@ -829,7 +875,7 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
-                    family: "黑体"
+
                     pixelSize: header.height/2
                 }
             }
@@ -848,7 +894,7 @@ Rectangle {
                     text:"00"
                     color:"grey"
                     font{
-                        family: "黑体"
+
                         pixelSize: parent.height/1.5
                     }
                     onTextChanged: {
@@ -870,7 +916,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                    family: "黑体"
+
                     pixelSize: header.height/2
                 }
             }
@@ -913,7 +959,7 @@ Rectangle {
                             if(tt!=sportsavebutton.lastsaved){
                                 sportsavebutton.lastsaved=tt;
                                 recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
-sporttext.text=""
+                                sporttext.text=""
                                 lasttimemintext.text="00"
                                 lasttimehourtext.text="00"
                                 begintimehourtext.text="00"
@@ -930,6 +976,26 @@ sporttext.text=""
                 id:sportsharebutton
                 height: parent.height
                 width: height
+
+                Timer{
+                    interval: 800
+                    repeat:true
+                    onTriggered: {
+                        if(sportsharebutton.scale==1.2)
+                            sportsharebutton.scale=1
+                        else
+                            sportsharebutton.scale=1.2
+                    }
+                    running: true
+                }
+
+
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 800
+                        easing.type: Easing.OutCubic
+                    }
+                }
 
                 Image{
                     id:sportsharebuttontext
@@ -955,16 +1021,16 @@ sporttext.text=""
                                 myjava.toastMsg("保存成功")
 
 
-                            var str="<br>项目类型："+sporttext.text+"<br>";
-                            str=str+"开始时间："+begintimerow.begintime+"<br>";
-                            str=str+"持续时间："+lasttimerow.lasttime+"分钟<br>";
+                           // var str="<br><strong>运动：</strong>"+begintimerow.begintime+" <strong>"+sporttext.text+"</strong> 持续 "+lasttimerow.lasttime+"分钟";
+
+                            var str="<br><strong>运动：</strong>"+"<strong>"+sporttext.text+"</strong> "+lasttimerow.lasttime+"分钟";
 
 
-                            mainrect.parent.parent.parent.bottom.currentPage="分享"
+                            mainrect.parent.parent.currentPage="分享"
                             mainrect.parent.parent.x=-mainrect.width*2
-                            mainrect.parent.parent.children[2].item.settext("<strong><font color=\"#35dca2\">"+str+"</font></strong>")
+                            mainrect.parent.parent.children[2].item.settext("<font color=\"#45ada8\">"+str+"</font>")
 
-sporttext.text=""
+                            sporttext.text=""
                             lasttimemintext.text="00"
                             lasttimehourtext.text="00"
                             begintimehourtext.text="00"
@@ -989,20 +1055,61 @@ sporttext.text=""
             anchors.leftMargin: buttonrow.height/2
             color:"white"
             property int checkinday
+
+            Image{
+                id:checkimage
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: height*0.1
+
+                fillMode: Image.PreserveAspectFit
+
+                height:parent.width/2.5
+                width:height
+                source: "qrc:/image/checkin.png"
+
+
+                Timer{
+                    id:antimer
+                    interval: 800
+                    repeat:true
+                    onTriggered: {
+                        if(checkimage.scale==1.1)
+                            checkimage.scale=1
+                        else
+                            checkimage.scale=1.1
+                    }
+                    running: true
+                }
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 800
+                        easing.type: Easing.Linear
+                    }
+                }
+
+            }
+
+
             Text{
-                anchors.centerIn: parent
-                text:"坚持打卡\n  "+dosportdaysrect.checkinday.toString()+"天"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: parent.height/5
+                anchors.horizontalCenter: parent.horizontalCenter
+                text:"<strong><font color=\"#35dca2\">"+dosportdaysrect.checkinday.toString()+"天</font></strong>"
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
-                    family: "黑体"
-                    pixelSize: parent.height/10
+
+                    pixelSize: parent.height/7
                 }
             }
             MouseArea{
+                id:checkarea
                 anchors.fill: parent
                 onClicked: {
                     dbsystem.checkin(str_userid)
+                    antimer.running=false
+                    checkimage.scale=1
                 }
             }
 
@@ -1020,15 +1127,36 @@ sporttext.text=""
             anchors.right: sportview.right
             anchors.rightMargin: buttonrow.height/2
             color:"white"
+
+
+            Image{
+                id:clockimage
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: height*0.1
+
+                fillMode: Image.PreserveAspectFit
+
+                height:parent.width/2
+                width:height
+                source: "qrc:/image/clock.png"
+
+            }
+
+
             Text{
                 id:timertext
-                anchors.centerIn: parent
+
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: parent.height/5
+                anchors.horizontalCenter: parent.horizontalCenter
+
                 text:"运动计时"
                 verticalAlignment: Text.AlignVCenter
+
                 color:"grey"
                 font{
-                    family: "黑体"
-                    pixelSize: parent.height/10
+                    pixelSize: parent.height/8
                 }
             }
             MouseArea{
@@ -1130,7 +1258,7 @@ sporttext.text=""
                 anchors.centerIn: parent
                 color:"grey"
                 font{
-                    family: "黑体"
+
                     pixelSize: parent.height/1.5
                 }
 
@@ -1269,7 +1397,7 @@ sporttext.text=""
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     font{
-                        family: "黑体"
+
                         pixelSize: header.height/2.5
                     }
                 }
@@ -1287,7 +1415,7 @@ sporttext.text=""
                     anchors.leftMargin: header.height/3
 
                     font{
-                        family: "黑体"
+
                         pixelSize: header.height/2.5
                     }
                 }
@@ -1302,7 +1430,7 @@ sporttext.text=""
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
-                        family: "黑体"
+
                         pixelSize: header.height/2.5
                     }
                 }
@@ -1317,7 +1445,7 @@ sporttext.text=""
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
-                        family: "黑体"
+
                         pixelSize: header.height/2.5
                     }
                 }
@@ -1332,7 +1460,7 @@ sporttext.text=""
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
-                        family: "黑体"
+
                         pixelSize: header.height/2.5
                     }
                 }
@@ -1347,7 +1475,7 @@ sporttext.text=""
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
-                        family: "黑体"
+
                         pixelSize: header.height/2.5
                     }
                 }
@@ -1362,7 +1490,7 @@ sporttext.text=""
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
-                        family: "黑体"
+
                         pixelSize: header.height/2.5
                     }
                 }
@@ -1399,7 +1527,7 @@ sporttext.text=""
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     font{
-                        family: "黑体"
+
                         pixelSize: header.height/2.5
                     }
                 }
@@ -1426,7 +1554,7 @@ sporttext.text=""
                             anchors.top: sporttabeldelegate.top
                             anchors.left: parent.left
                             font{
-                                family: "黑体"
+
                                 pixelSize: header.height/2.5
                             }
                         }
@@ -1438,7 +1566,7 @@ sporttext.text=""
                             anchors.topMargin: header.height/3
                             anchors.left: parent.left
                             font{
-                                family: "黑体"
+
                                 pixelSize: header.height/2.5
                             }
                         }
@@ -1450,7 +1578,7 @@ sporttext.text=""
                             anchors.topMargin: header.height/3
                             anchors.left: parent.left
                             font{
-                                family: "黑体"
+
                                 pixelSize: header.height/2.5
                             }
                         }
@@ -1499,8 +1627,9 @@ sporttext.text=""
                         id:searchrect
                     }
                 }
-                //Material.theme: Material.Dark
-                //Material.accent: Material.Purple
+
+                maximumLength:8
+
                 onTextChanged: {
                     if(view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel){
                         if(searchtext.text!==""){
@@ -1549,7 +1678,7 @@ sporttext.text=""
                         color: "grey"
                         text:value
                         font{
-                            family: "黑体"
+
                             pixelSize: delegate.height/1.5
                         }
 

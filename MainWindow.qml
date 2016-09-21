@@ -18,11 +18,15 @@ Rectangle {
     property string nickname;
     property string str_userid
 
+    property string headurl: ""
+
     //初始化各种数据
     function setusername(a){
         mainpage.item.setusername(a);//初始话分享列表
         str_userid=a;
         dbsystem.getNameByID(str_userid);
+
+
         userid.text="ID："+a;//初始化侧边栏
         sendpage.item.str_userid=a;//初始化发送页面的id
         recordpage.item.str_userid=a;//初始化记录页面的id
@@ -37,6 +41,7 @@ Rectangle {
             if(Statue=="getnameSucceed"){
                 name.text="昵称："+dbsystem.getName();
                 nickname=dbsystem.getName();
+                dbsystem.getHeadByID(str_userid);
                 mainpage.item.nickname=dbsystem.getName();
             }
             if(Statue=="changenameSucceed"){
@@ -44,6 +49,13 @@ Rectangle {
                 nickname=dbsystem.getName();
                 mainpage.item.nickname=dbsystem.getName();
             }
+            if(Statue=="getheadSucceed"){
+
+                headurl=dbsystem.getHead();
+            }
+
+
+
         }
     }
 
@@ -56,12 +68,12 @@ Rectangle {
             mainrect.x=0;
         }
         else{
-        quit++;
-        quittime.start();
-        if(quit==2)
-            Qt.quit();
-        else
-            myjava.toastMsg("再点一次退出")
+            quit++;
+            quittime.start();
+            if(quit==2)
+                Qt.quit();
+            else
+                myjava.toastMsg("再点一次退出")
         }
 
     }
@@ -121,12 +133,12 @@ Rectangle {
     Rectangle{
         id:sidepage;
         height: parent.height
-        width:parent.width/10*8
+        width:parent.width/10*6.9
         color:"white"
         border.color: "grey"
         border.width: 1
         x:-width;
-        z:1
+        z:10
         visible: false
 
         //用于响应返回按钮
@@ -144,7 +156,7 @@ Rectangle {
 
         Behavior on x{
             NumberAnimation{
-                easing.type: Easing.InQuart
+                easing.type:Easing.OutCubic
                 duration: 200
             }
         }
@@ -165,20 +177,20 @@ Rectangle {
             layer.effect: DropShadow {
                 transparentBorder: true
                 horizontalOffset: -10
-                radius: 20
+                radius: 8
                 color: "black"
             }
 
             //侧边栏头像
             Image{
-                id:headimage
+                id:headimage2
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width/15
                 fillMode: Image.PreserveAspectFit
                 height:parent.width/4
                 width:height
-                source: "http://119.29.15.43/userhead/"+str_userid+".jpg"
+                source: headurl
                 Label{
                     anchors.centerIn: parent
                     visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
@@ -190,7 +202,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         settingpage.visible=true
-                        settingpage.item.setdata(str_userid,nickname)
+                        settingpage.item.setdata(str_userid,nickname,headurl)
                     }
                 }
             }
@@ -198,50 +210,44 @@ Rectangle {
             //侧边栏昵称
             Text{
                 id:name;
-                anchors.left: headimage.right
+                anchors.left: headimage2.right
                 anchors.leftMargin: parent.width/15
-                anchors.top: headimage.top
+                anchors.top: headimage2.top
                 anchors.topMargin: 5
                 color: "white"
                 text:"昵称:未获取"
                 wrapMode: Text.WordWrap
-                width: parent.width-headimage.width- parent.width/15- parent.width/10
+                width: parent.width-headimage2.width- parent.width/15- parent.width/10
                 font{
-                    family: "黑体"
-                    pixelSize: headimage.height/4
-                }
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        settingpage.visible=true
-                        settingpage.item.setdata(str_userid,nickname)
-                    }
+
+                    pixelSize: headimage2.height/4
                 }
             }
 
             //侧边栏ID
             Text{
                 id:userid;
-                anchors.left: headimage.right
+                anchors.left: headimage2.right
                 anchors.leftMargin: parent.width/15
-                anchors.bottom: headimage.bottom
+                anchors.bottom: headimage2.bottom
                 anchors.bottomMargin: 5
                 color: "white"
                 wrapMode: Text.WordWrap
-                width: parent.width-headimage.width- parent.width/15- parent.width/10
+                width: parent.width-headimage2.width- parent.width/15- parent.width/10
                 font{
-                    family: "黑体"
-                    pixelSize: headimage.height/4
+
+                    pixelSize: headimage2.height/4
                 }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
                         settingpage.visible=true
-                        settingpage.item.setdata(str_userid,nickname)
+                        settingpage.item.setdata(str_userid,nickname,headurl)
                     }
                 }
             }
         }
+
 
 
         Rectangle{
@@ -251,7 +257,13 @@ Rectangle {
             anchors.right: parent.right
             height: sidepage.height/10
             width: sidepage.width
-            color:"white"
+            color:ma1.pressed?"#aaaaaa":"white"
+            Behavior on color{
+                ColorAnimation {
+                    easing.type: Easing.Linear
+                    duration: 200
+                }
+            }
             Image {
                 id:followingicon
                 anchors.left: parent.left
@@ -269,8 +281,8 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的关注"
                 font{
-                    family: "黑体"
-                    pixelSize: followingbutton.height/3
+
+                    pixelSize: followingbutton.height/4
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -278,9 +290,11 @@ Rectangle {
             }
 
             MouseArea{
+                id:ma1
                 anchors.fill: parent
                 onClicked: {
                     friends.item.userid=str_userid
+                    friends.item.nickname=nickname
                     friends.item.setTitle("我的关注")
                     friends.visible=true
                     friends.x=0
@@ -289,16 +303,19 @@ Rectangle {
         }
 
 
-
-
-
         Rectangle{
             id:followerbutton
             anchors.top: followingbutton.bottom
             anchors.right: parent.right
             height: sidepage.height/10
             width: sidepage.width
-            color:"white"
+            color:ma2.pressed?"#aaaaaa":"white"
+            Behavior on color{
+                ColorAnimation {
+                    easing.type: Easing.Linear
+                    duration: 200
+                }
+            }
             Image {
                 id:followericon
                 anchors.left: parent.left
@@ -316,8 +333,8 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的粉丝"
                 font{
-                    family: "黑体"
-                    pixelSize: followingbutton.height/3
+
+                    pixelSize: followingbutton.height/4
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -326,9 +343,11 @@ Rectangle {
 
 
             MouseArea{
+                id:ma2
                 anchors.fill: parent
                 onClicked: {
                     friends.item.userid=str_userid
+                    friends.item.nickname=nickname
                     friends.item.setTitle("我的粉丝")
                     friends.visible=true
                     friends.x=0
@@ -338,15 +357,19 @@ Rectangle {
         }
 
 
-
-
         Rectangle{
             id:sharebutton
             anchors.top: followerbutton.bottom
             anchors.right: parent.right
             height: sidepage.height/10
             width: sidepage.width
-            color:"white"
+            color:ma3.pressed?"#aaaaaa":"white"
+            Behavior on color{
+                ColorAnimation {
+                    easing.type: Easing.Linear
+                    duration: 200
+                }
+            }
             Image {
                 id:shareicon
                 anchors.left: parent.left
@@ -363,8 +386,8 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的分享"
                 font{
-                    family: "黑体"
-                    pixelSize: followingbutton.height/3
+
+                    pixelSize: followingbutton.height/4
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -372,6 +395,7 @@ Rectangle {
             }
 
             MouseArea{
+                id:ma3
                 anchors.fill: parent
                 onClicked: {
                     mypost.item.getpost(str_userid,str_userid,nickname);
@@ -387,7 +411,13 @@ Rectangle {
             anchors.right: parent.right
             height: sidepage.height/10
             width: sidepage.width
-            color:"white"
+            color:ma4.pressed?"#aaaaaa":"white"
+            Behavior on color{
+                ColorAnimation {
+                    easing.type: Easing.Linear
+                    duration: 200
+                }
+            }
             Image {
                 id:messageicon
                 anchors.left: parent.left
@@ -404,8 +434,8 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的消息"
                 font{
-                    family: "黑体"
-                    pixelSize: followingbutton.height/3
+
+                    pixelSize: followingbutton.height/4
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -413,6 +443,7 @@ Rectangle {
             }
 
             MouseArea{
+                id:ma4
                 anchors.fill: parent
                 onClicked: {
                     noticelist.item.getNotice(str_userid,nickname)
@@ -422,25 +453,21 @@ Rectangle {
         }
 
 
+        GestureArea{
+            anchors.top: messagebutton.bottom
+            anchors.bottom: linecenter.top
+            width:parent.width
 
+            onSwipe: {
+                switch (direction) {
+                case "left":
+                    sidepage.x=-sidepage.width
+                    backarea.visible=false
+                    break
 
-
-
-
-                GestureArea{
-                    anchors.fill: parent
-
-
-                    onSwipe: {
-                        switch (direction) {
-                        case "left":
-                            sidepage.x=-sidepage.width
-                            backarea.visible=false
-                            break
-
-                        }
-                    }
                 }
+            }
+        }
 
 
         Rectangle{
@@ -462,7 +489,13 @@ Rectangle {
             anchors.right: parent.right
             height: sidepage.height/10
             width: sidepage.width
-            color:"white"
+            color:ma5.pressed?"#aaaaaa":"white"
+            Behavior on color{
+                ColorAnimation {
+                    easing.type: Easing.Linear
+                    duration: 200
+                }
+            }
             Image {
                 id:settingicon
                 anchors.left: parent.left
@@ -478,18 +511,19 @@ Rectangle {
                 anchors.leftMargin: sidepagetop.height/10
                 text:"设置"
                 font{
-                    family: "黑体"
-                    pixelSize: followingbutton.height/3
+
+                    pixelSize: followingbutton.height/3.5
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
             }
             MouseArea{
+                id:ma5
                 anchors.fill: parent
                 onClicked: {
                     settingpage.visible=true
-                    settingpage.item.setdata(str_userid,nickname)
+                    settingpage.item.setdata(str_userid,nickname,headurl)
                 }
             }
         }
@@ -501,7 +535,13 @@ Rectangle {
             anchors.right: parent.right
             height: sidepage.height/10
             width: sidepage.width
-            color:"white"
+            color:ma6.pressed?"red":"white"
+            Behavior on color{
+                ColorAnimation {
+                    easing.type: Easing.Linear
+                    duration: 200
+                }
+            }
             Image {
                 id:logouticon
                 anchors.left: parent.left
@@ -517,8 +557,8 @@ Rectangle {
                 anchors.leftMargin: sidepagetop.height/10
                 text:"注销"
                 font{
-                    family: "黑体"
-                    pixelSize: followingbutton.height/3
+
+                    pixelSize: followingbutton.height/3.5
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -527,6 +567,7 @@ Rectangle {
 
 
             MouseArea{
+                id:ma6
                 anchors.fill: parent
                 onClicked: {
                     checkDialog.open()
@@ -548,7 +589,10 @@ Rectangle {
                 }
             }
         }
+
     }
+
+
 
 
 
@@ -578,10 +622,8 @@ Rectangle {
             anchors.fill: parent
             color:"black";
             opacity: 0.6
-
-
         }
-        z:3
+        z:8
     }
 
     //主页面的顶部栏
@@ -590,9 +632,25 @@ Rectangle {
         width:parent.width;
         height: parent.height/16*1.5;
         color:"#32dc96"
-        anchors.top: parent.top;
+        x:0
+        y:0
 
+        z:5
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            horizontalOffset: -2
+            radius: 8
+            color: "black"
 
+        }
+
+        Behavior on y{
+            NumberAnimation{
+                easing.type:Easing.OutCubic
+                duration: 500
+            }
+        }
 
 
         //侧边栏按钮
@@ -615,12 +673,16 @@ Rectangle {
             }
         }
 
+
+
+
+
         Label{
             id:headname
             text:bottom.currentPage
             anchors.centerIn: parent
             font{
-                family: "黑体"
+family: "微软雅黑"
                 pixelSize: head.height/2.5
             }
             color: "white";
@@ -628,7 +690,7 @@ Rectangle {
                 anchors.fill: parent
                 onDoubleClicked: {
                     if(headname.text=="首页")
-                    mainpage.item.refreshpost(str_userid);
+                        mainpage.item.refreshpost(str_userid);
                 }
             }
         }
@@ -646,9 +708,9 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     friends.item.userid=str_userid
+                    friends.item.nickname=nickname
                     friends.item.setTitle("搜索用户")
                     friends.visible=true
-
                     friends.x=0
                 }
             }
@@ -656,15 +718,43 @@ Rectangle {
 
     }
 
+    Rectangle{
+        id:borderline
+        width: parent.width
+        anchors.top: mainrect.bottom
+        anchors.left: bottom.left
+        height: 2
+        color:"grey"
+        z:6
+    }
+
+
+    function hidebottom(){
+        bottom.height=0
+    }
+
+    function showbottom(){
+        bottom.height=mainwindow.height/16*1.5
+    }
+
+
     //底部栏
     Rectangle{
         id:bottom
-        anchors.bottom: parent.bottom;
-        width:parent.width;
-        height: parent.height/16*1.5;
-        color:"#32dc96"
-        property string currentPage:"首页"
 
+        //anchors.bottom: parent.bottom;
+
+        x:0
+        y:parent.height-height
+
+
+
+
+        width:parent.width+4;
+        height: parent.height/16*1.5;
+        color:"white"
+        property string currentPage:"首页"
+        z:5
 
 
         Rectangle{
@@ -672,12 +762,36 @@ Rectangle {
             anchors.left: parent.left
             height:width
             width:parent.width/5
-            color:"#32dc96";
+            color:"white";
             Image {
                 height: parent.height
                 width: height
-                source: "qrc:/image/mainpage.png"
+                source: bottom.currentPage=="首页"?"qrc:/image/mainpage.png":"qrc:/image/mainpageblack.png"
                 fillMode: Image.PreserveAspectFit
+
+
+                Timer{
+                    interval: 800
+                    repeat:true
+                    triggeredOnStart :true
+                    onTriggered: {
+                        if(parent.scale==1.4)
+                            parent.scale=1.2
+                        else
+                            parent.scale=1.4
+                    }
+                    running: bottom.currentPage=="首页"
+                    onRunningChanged: {
+                        if(running==false)
+                        parent.scale=1
+                    }
+                }
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 800
+                        easing.type: Easing.Linear
+                    }
+                }
 
             }
             MouseArea{
@@ -698,27 +812,52 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             height:width
             width:parent.width/5
-            color:"#32dc96";
+
+            color:"white";
             Image {
 
                 height: parent.height
                 width: height
-                source: "qrc:/image/sharepage.png"
+                source: bottom.currentPage=="分享"?"qrc:/image/sharepage.png":"qrc:/image/sharepageblack.png"
                 fillMode: Image.PreserveAspectFit
-
+                Timer{
+                    interval: 800
+                    repeat:true
+                    triggeredOnStart :true
+                    onTriggered: {
+                        if(parent.scale==1.4)
+                            parent.scale=1.2
+                        else
+                            parent.scale=1.4
+                    }
+                    running: bottom.currentPage=="分享"
+                    onRunningChanged: {
+                        if(running==false)
+                        parent.scale=1
+                    }
+                }
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 800
+                        easing.type: Easing.Linear
+                    }
+                }
             }
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
                     bottom.currentPage="分享"
                     mainrect.x=-mainwindow.width*2
-                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-                        messageDialog.open()
+                    //                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+                    //                        messageDialog.open()
 
                     //sendpage.item.setnull()
                 }
             }
+
         }
+
 
 
         Rectangle{
@@ -726,13 +865,35 @@ Rectangle {
             anchors.right: parent.right
             height:width
             width:parent.width/5
-            color:"#32dc96";
+            color:"white";
             Image {
 
                 height: parent.height
                 width: height
-                source: "qrc:/image/recordpage.png"
+                source: bottom.currentPage=="记录"?"qrc:/image/recordpage.png":"qrc:/image/recordpageblack.png"
                 fillMode: Image.PreserveAspectFit
+                Timer{
+                    interval: 800
+                    repeat:true
+                    triggeredOnStart :true
+                    onTriggered: {
+                        if(parent.scale==1.4)
+                            parent.scale=1.2
+                        else
+                            parent.scale=1.4
+                    }
+                    running: bottom.currentPage=="记录"
+                    onRunningChanged: {
+                        if(running==false)
+                        parent.scale=1
+                    }
+                }
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 800
+                        easing.type: Easing.Linear
+                    }
+                }
 
             }
             MouseArea{
@@ -744,22 +905,25 @@ Rectangle {
             }
         }
 
-    }
 
 
 
-    MessageDialog {
-        id: messageDialog
-        title: "提示"
-        text: "要清空你之前填的内容吗？"
-        detailedText:"之前的内容：<br>"+sendpage.item.messagetext+"<br>"+sendpage.item.hiddentext
-        standardButtons:  StandardButton.No|StandardButton.Yes
-        onYes: {
-            sendpage.item.setnull()
+
+
+        MessageDialog{
+            id: messageDialog
+            title: "提示"
+            text: "要清空你之前填的内容吗？"
+            detailedText:"之前的内容：<br>"+sendpage.item.messagetext+"<br>"+sendpage.item.hiddentext
+            standardButtons:  StandardButton.No|StandardButton.Yes
+            onYes: {
+                sendpage.item.setnull()
+            }
+            onNo: {
+
+            }
         }
-        onNo: {
 
-        }
     }
 
 
@@ -767,8 +931,14 @@ Rectangle {
     Rectangle{
         id:mainrect
         anchors.top:head.bottom
+        anchors.topMargin: 3
         height:parent.height-head.height-bottom.height
+
         width:parent.width*5
+        z:6
+        property alias currentPage:bottom.currentPage
+
+
         Loader{
             id:mainpage
             anchors.left: parent.left
@@ -798,7 +968,9 @@ Rectangle {
             height:parent.height
             width:mainwindow.width
             source: "RecordPage.qml";
+            y:-3
         }
+
         Loader{
             id:searchpage
             anchors.left: recordpage.right
@@ -806,6 +978,7 @@ Rectangle {
             width:mainwindow.width
             source: "SearchPage.qml";
         }
+
         Behavior on x{
             NumberAnimation{
                 duration: 200
@@ -814,7 +987,8 @@ Rectangle {
         }
     }
 
+
+
+
+
 }
-
-
-

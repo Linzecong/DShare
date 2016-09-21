@@ -34,5 +34,10 @@ int main(int argc, char *argv[]){
     viewer.setSource(QUrl("qrc:/main.qml"));
     viewer.show();
 
+
+
+
+
+
     return app.exec();
 }

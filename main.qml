@@ -193,7 +193,7 @@ StackView{
                 color: "white"
                 font{
                     pixelSize: loginbutton.height/2
-                    family: "黑体"
+                    
                     bold: true;
                 }
                 anchors.centerIn: parent
@@ -243,7 +243,7 @@ StackView{
                 color: "white"
                 font{
                     pixelSize: loginbutton.height/2
-                    family: "黑体"
+                    
                     bold: true;
                 }
                 anchors.centerIn: parent
@@ -330,7 +330,7 @@ StackView{
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     font{
-                        family: "黑体"
+                        
                         pixelSize: registtoprect.height/1.5
                         bold:true;
                     }
@@ -346,7 +346,7 @@ StackView{
                     text:"新用户注册";
                     anchors.centerIn: parent
                     font{
-                        family: "黑体"
+                        
                         pixelSize: registtoprect.height/3
                         bold:true
                     }
@@ -367,7 +367,7 @@ StackView{
                     width: registtoprect.width/4;
                     horizontalAlignment: Text.AlignRight;
                     font{
-                        family: "黑体"
+                        
                         pixelSize: registidrow.height/1.5
                     }
                     color: "grey";
@@ -404,7 +404,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
-                        family: "黑体"
+                        
                         pixelSize: registidrow.height/1.5
                     }
                     color: "grey";
@@ -441,7 +441,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
-                        family: "黑体"
+                        
                         pixelSize: registidrow.height/1.5
                     }
                     color: "grey";
@@ -479,7 +479,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
-                        family: "黑体"
+                        
                         pixelSize: registidrow.height/1.5
                     }
                     color: "grey";
@@ -515,7 +515,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
-                        family: "黑体"
+                        
                         pixelSize: registidrow.height/1.5
                     }
                     color: "grey";
@@ -535,7 +535,7 @@ StackView{
                         anchors.verticalCenter: parent.verticalCenter
                         color:"grey"
                         font{
-                            family: "黑体"
+                            
                             pixelSize: registidrow.height/1.5
                         }
                     }
@@ -564,7 +564,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
-                        family: "黑体"
+                        
                         pixelSize: registidrow.height/1.5
                     }
                     color: "grey";
@@ -629,7 +629,7 @@ StackView{
             //                    anchors.left: check.right
             //                    horizontalAlignment: Text.AlignLeft
             //                    font{
-            //                        family: "黑体"
+            //                        
             //                        pixelSize: registidrow.height/1.5
             //                    }
             //                    color: "grey";
@@ -658,7 +658,7 @@ StackView{
                     color: "white"
                     font{
                         pixelSize: registbutton.height/2
-                        family: "黑体"
+                        
                         bold: true;
                     }
                     anchors.centerIn: parent
@@ -706,7 +706,7 @@ StackView{
                             return;
                         }
 
-                        if(registnametext.text.indexOf("|")>=0||registpasstext.text.indexOf("|")>=0||registidtext.text.indexOf("|")>=0||registnametext.text.indexOf("@")>=0||registpasstext.text.indexOf("@")>=0||registidtext.text.indexOf("@")>=0){
+                        if(registnametext.text.indexOf("$$")>=0||registpasstext.text.indexOf("$$")>=0||registidtext.text.indexOf("$$")>=0||registnametext.text.indexOf("|")>=0||registpasstext.text.indexOf("|")>=0||registidtext.text.indexOf("|")>=0||registnametext.text.indexOf("@")>=0||registpasstext.text.indexOf("@")>=0||registidtext.text.indexOf("@")>=0){
                             myjava.toastMsg("非法字符")
                             return;
                         }
@@ -780,7 +780,7 @@ StackView{
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     font{
-                        family: "黑体"
+                        
                         pixelSize: xieyitoprect.height/1.5
                         bold:true;
                     }
@@ -797,7 +797,7 @@ StackView{
                     text:"用户协议";
                     anchors.centerIn: parent
                     font{
-                        family: "黑体"
+                        
                         pixelSize: xieyitoprect.height/3
                         bold:true
                     }
@@ -811,7 +811,7 @@ StackView{
                 anchors.topMargin: xieyitoprect.height*1.5
                 anchors.fill: parent
                 font{
-                    family: "黑体"
+                    
                     pixelSize: xieyitoprect.height/3
                 }
                 color: "grey";

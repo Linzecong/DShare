@@ -81,44 +81,50 @@ Rectangle {
 
 
         border.color: "grey"
-        border.width: 1
+        border.width: 2
         radius: parent.width/40
 
 
-    }
+        TextArea{
 
-    Flickable{
-
-        anchors.centerIn: rect
-        height: rect.height-rect.height/10
-        width: rect.width-rect.width/10
-        contentHeight: messageedit.contentHeight
-
-        clip: true
-        flickableDirection: Flickable.VerticalFlick
-        TextEdit{
-            color: "grey"
             id:messageedit
-            width: rect.width-rect.width/10
-            height: rect.height-rect.height/10
+            anchors.fill: parent
+            anchors.margins: 5
+
+            menu: null
+            textColor: "grey"
+
+            backgroundVisible: false
+
             wrapMode: Text.Wrap
             font{
-                pixelSize: messageedit.height/6
+                pixelSize: rect.height/6
             }
             Label{
                 id:note
                 visible: messageedit.text==""?true:false
+
+                x:rect.height/10
+                y:rect.height/10
+
                 text:"请输入文本"
                 color:"grey"
                 font{
-                    pixelSize: messageedit.height/6
-                    family: "黑体"
+                    pixelSize: rect.height/6
+
 
                 }
-            }  
+            }
         }
-        z:1
+
+
     }
+
+
+
+
+
+
 
     Rectangle{
         id:photobutton;
@@ -128,7 +134,7 @@ Rectangle {
         anchors.topMargin: mainpage.width/20
         anchors.left: rect.left
         anchors.leftMargin: mainpage.width/30
-        border.width: 1
+        border.width: 2
         border.color: "grey"
         Label{
             id:text
@@ -138,7 +144,7 @@ Rectangle {
             font{
                 pixelSize: photobutton.height/3
                 bold: true
-                family: "黑体"
+
             }
             anchors.centerIn: parent;
         }
@@ -215,7 +221,7 @@ Rectangle {
 //                        anchors.centerIn: parent
 //                        text: value
 //                        font{
-//                            family: "黑体"
+//
 //                            pixelSize: photobutton.height/5
 //                        }
 //                    }
@@ -248,7 +254,7 @@ Rectangle {
 
 
 //        font{
-//            family: "黑体"
+//
 //            pixelSize: photobutton.height/5
 //        }
 //    }
@@ -273,7 +279,7 @@ Rectangle {
 //            text:boxview.currenttext
 //            verticalAlignment: Text.AlignVCenter
 //            font.pixelSize: photobutton.height/6
-//            font.family: "黑体"
+//            font.
 //        }
 //        MouseArea{
 //            anchors.fill: parent
@@ -288,14 +294,14 @@ Rectangle {
     Rectangle{
         id:clear
         border.color: "grey"
-        border.width: 1
+        border.width: 2
         radius: photobutton.width/10
         anchors.left: photobutton.right
         anchors.leftMargin: photobutton.height/4
         anchors.verticalCenter: photobutton.verticalCenter
 
         width: photobutton.width/1.2
-        height: photobutton.height/3.5
+        height: photobutton.height/3
         Text {
             anchors.centerIn: parent
             id: cleartext
@@ -303,7 +309,6 @@ Rectangle {
             text:"清除"
             verticalAlignment: Text.AlignVCenter
             font.pixelSize: photobutton.height/5
-            font.family: "黑体"
         }
         MouseArea{
             id:cma
@@ -345,7 +350,7 @@ Rectangle {
         anchors.verticalCenter: photobutton.verticalCenter
 
         width: photobutton.width/1.2
-        height: photobutton.height/3.5
+        height: photobutton.height/3
         Text {
             anchors.centerIn: parent
             id: sendtext
@@ -353,7 +358,33 @@ Rectangle {
             text:"发送"
             verticalAlignment: Text.AlignVCenter
             font.pixelSize: photobutton.height/5
-            font.family: "黑体"
+        }
+
+        MessageDialog {
+            id: checklog
+            title: "提示"
+            text: "确定要发送吗？"
+            standardButtons:  StandardButton.No|StandardButton.Yes
+            detailedText:"内容：<br>"+messagetext+"<br>"+hiddentext
+            onYes: {
+                indicator.visible=true
+                refreshtimer.refreshtime=0;
+                refreshtimer.start();
+                if(imagePath!==""){
+                    sendimgsystem.imgname=str_userid+"_"+Qt.formatDateTime(new Date(), "yyyy-MM-dd-hh-mm-ss");
+                    sendimgsystem.sendImage(imagePath,sendimgsystem.imgname);
+                }
+                else{
+                    if(hiddentext=="")
+                    sendmsgsystem.sendPost(str_userid,messageedit.text+hiddentext,0,"");
+                    else
+                    sendmsgsystem.sendPost(str_userid,messageedit.text+"<br><br>"+hiddentext,0,"");
+
+                }
+            }
+            onNo: {
+
+            }
         }
 
 
@@ -364,7 +395,11 @@ Rectangle {
             onStatueChanged:{
 
                 if(Statue=="Succeed"){
-                    sendmsgsystem.sendPost(str_userid,messageedit.text+"<br>"+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
+                    if(hiddentext=="")
+                        sendmsgsystem.sendPost(str_userid,messageedit.text+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
+                else
+                        sendmsgsystem.sendPost(str_userid,messageedit.text+"<br><br>"+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
+
                 }
                 if(Statue=="DBError"){
                     myjava.toastMsg("远程服务器出错，请联系开发者！");
@@ -395,7 +430,7 @@ Rectangle {
                 if(Statue=="sendpostSucceed"){
                     indicator.visible=false
                     myjava.toastMsg("发送成功！");
-                    mainpage.parent.parent.parent.bottom.currentPage="首页"
+                    mainpage.parent.parent.currentPage="首页"
                     mainpage.parent.parent.x=0;
                     mainpage.parent.parent.children[0].item.refreshpost(str_userid);
                     messageedit.text="";
@@ -430,6 +465,16 @@ Rectangle {
                     return
                 }
 
+                if(messagetext.length>=300){
+                    myjava.toastMsg("内容不能超过300个字符");
+                    return
+                }
+
+                if(messagetext.indexOf("|||")>=0||messagetext.indexOf("{|}")>=0){
+                    myjava.toastMsg("内容包含非法字符！");
+                    return
+                }
+
                 if(messagetext===""&&hiddentext===""){
                     myjava.toastMsg("请填写内容~！");
                     return
@@ -440,16 +485,7 @@ Rectangle {
                     myjava.toastMsg("请勿频繁发送分享，还有"+time.toString()+"秒");
                 }
                 else{
-                    indicator.visible=true
-                    refreshtimer.refreshtime=0;
-                    refreshtimer.start();
-                    if(imagePath!==""){
-                        sendimgsystem.imgname=str_userid+"_"+Qt.formatDateTime(new Date(), "yyyy-MM-dd-hh-mm-ss");
-                        sendimgsystem.sendImage(imagePath,sendimgsystem.imgname);
-                    }
-                    else{
-                        sendmsgsystem.sendPost(str_userid,messageedit.text+"<br>"+hiddentext,0,"");
-                    }
+                    checklog.open()
                 }
 
             }

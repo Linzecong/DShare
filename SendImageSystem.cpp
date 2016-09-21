@@ -3,6 +3,7 @@
 #include <QBuffer>
 #include <QImage>
 #include<QDir>
+#include<QDateTime>
 SendImageSystem::SendImageSystem(QObject *parent) : QObject(parent){
     loadSize=4*1024;
     totalBytes=0;
@@ -27,7 +28,7 @@ void SendImageSystem::sendHead(QString name,QString id){
     bytesWritten=0;
     tcpSocket->connectToHost("119.29.15.43",1235);
     fileName=name;
-    fileID=id+".jpg";
+    fileID=id+"$$"+QDateTime::currentDateTime().toString("yyyyMMddhhmmss")+".jpg";
     m_Statue="Connecting";
     emit statueChanged(m_Statue);
 }

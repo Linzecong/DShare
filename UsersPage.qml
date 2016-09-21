@@ -12,6 +12,8 @@ Rectangle {
     property int iss: 0//判断是否是搜索状态
     property int modelindex: 0
     property string userid;
+property string nickname;
+
     MouseArea{
         anchors.fill: parent
 
@@ -133,22 +135,22 @@ console.log(Statue)
         id:head;
         width:parent.width;
         height: parent.height/16*1.5;
-        color:"#32dc96";
+        color:"#32dc96"
         anchors.top: parent.top;
         Label{
             id:back
             height: parent.height
             width:height
-            text:"  <"
+            text:" ＜"
             color: "white"
             font{
-                family: "黑体"
-                pixelSize: back.height/1.5
+                pixelSize: head.height/1.5
             }
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             verticalAlignment: Text.AlignVCenter
             MouseArea{
+                id:headma
                 anchors.fill: parent
                 onClicked: {
                     mainrect.parent.visible=false
@@ -164,8 +166,8 @@ console.log(Statue)
             text:"我的关注"
             anchors.centerIn: parent
             font{
-                family: "黑体"
-                pixelSize: head.height/3
+                family: "微软雅黑"
+                pixelSize: head.height/2.5
             }
             color: "white";
             MouseArea{
@@ -182,7 +184,7 @@ console.log(Statue)
 
     Rectangle{
         id:searchbar
-        height: head.height/2
+        height: head.height/1.5
         width: parent.width
         anchors.top: head.bottom
 
@@ -193,7 +195,7 @@ console.log(Statue)
             x:3
             anchors.verticalCenter: parent.verticalCenter
             id:searchtext
-            placeholderText:"请输入要搜索的id/昵称"
+            placeholderText:"请输入要搜索的id或昵称"
             style: TextFieldStyle{
                 background: Rectangle{
                     radius: control.height/4
@@ -216,8 +218,8 @@ console.log(Statue)
                 anchors.right: searchtext.right
                 anchors.rightMargin: 3
                 anchors.verticalCenter: searchtext.verticalCenter
-                source: "qrc:/image/search.png"
-                height: searchbar.height-10
+                source: "qrc:/image/searchblack.png"
+                height: searchbar.height/1.5
                 width:height
                 MouseArea{
                     anchors.fill: parent
@@ -263,7 +265,7 @@ console.log(Statue)
         anchors.top: searchbar.visible?searchbar.bottom:head.bottom
         clip: true
         width: parent.width
-        height:parent.height-head.height
+        height:parent.height-head.height-(searchbar.visible?searchbar.height:0)
         model: model1
         delegate: Item{
             id:delegate
@@ -286,19 +288,20 @@ console.log(Statue)
                     anchors.left: parent.left
                     anchors.leftMargin: height/8
                     fillMode: Image.PreserveAspectFit
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            mypost.item.getpost(username,userid);
-                            mypost.visible=true
-                            mypost.x=0
-                        }
-                    }
+
                     Label{
                         anchors.centerIn: parent
                         visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
                         text:(parent.status==Image.Loading)?"加载中":"无"
                         color:"grey"
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            mypost.item.getpost(username,userid,nickname);
+                            mypost.visible=true
+                            mypost.x=0
+                        }
                     }
                 }
                 Text{
@@ -312,7 +315,7 @@ console.log(Statue)
                     wrapMode: Text.WordWrap
                     width: parent.width-headimage.width
                     font{
-                        family: "黑体"
+                        
                         pixelSize: headimage.height/4
                     }
 
@@ -328,7 +331,7 @@ console.log(Statue)
                     wrapMode: Text.WordWrap
                     width: parent.width-headimage.width
                     font{
-                        family: "黑体"
+                        
                         pixelSize: headimage.height/4
                     }
                     text:"id:"+username
@@ -366,7 +369,7 @@ console.log(Statue)
 
                         }
                         font{
-                            family: "黑体"
+                            
                             pixelSize: buttonrect.height/1.6;
                         }
 
