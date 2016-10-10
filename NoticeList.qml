@@ -106,11 +106,11 @@ Rectangle {
 
 
     Rectangle{
-        id:head;
-        width:parent.width;
-        height: parent.height/16*1.5;
-        color:"#32dc96";
-        anchors.top: parent.top;
+        id:head
+        width:parent.width
+        height: parent.height/16*1.5
+        color:"#32dc96"
+        anchors.top: parent.top
         Label{
             id:back
             height: parent.height

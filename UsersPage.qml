@@ -33,7 +33,7 @@ property string nickname;
     DataSystem{
         id:dbsystem;
         onStatueChanged: {
-console.log(Statue)
+            console.log(Statue)
             if(Statue=="getnameSucceed")
              name.text="昵称:"+dbsystem.getName();
 
@@ -132,11 +132,11 @@ console.log(Statue)
     }
 
     Rectangle{
-        id:head;
-        width:parent.width;
-        height: parent.height/16*1.5;
+        id:head
+        width:parent.width
+        height: parent.height/16*1.5
         color:"#32dc96"
-        anchors.top: parent.top;
+        anchors.top: parent.top
         Label{
             id:back
             height: parent.height
@@ -169,7 +169,7 @@ console.log(Statue)
                 family: "微软雅黑"
                 pixelSize: head.height/2.5
             }
-            color: "white";
+            color: "white"
             MouseArea{
                 anchors.fill: parent
                 onClicked: {

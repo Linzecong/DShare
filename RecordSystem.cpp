@@ -145,6 +145,118 @@ void RecordSystem::savelocaldiet(QString longstr){
 
 }
 
+void RecordSystem::getdietlist(){
+#ifdef ANDROID
+    JavaMethod java;
+    QString longstr;
+    QString path=java.getSDCardPath();
+    path=path+"/DShare/dietlist.dbnum";
+    QFile LogFile;
+    LogFile.setFileName(path);
+    LogFile.open(QIODevice::ReadOnly);
+    if(LogFile.isOpen()){
+        QTextStream LogTextStream(&LogFile);
+        while(!LogTextStream.atEnd()){
+            LogTextStream>>longstr;
+            DietList.append(longstr);
+        }
+
+        m_Statue="getdietlistSucceed";
+        emit statueChanged(m_Statue);
+    }
+    else{
+        m_Statue="getdietlistError";
+        emit statueChanged(m_Statue);
+    }
+#endif
+}
+
+QString RecordSystem::getdietliststr(int i){
+if(DietList.length()>i){
+
+    return DietList[i];
+}
+else
+    return "";
+
+}
+
+void RecordSystem::savedietlist(QString longstr)
+{
+#ifdef ANDROID
+    JavaMethod java;
+
+    QString path=java.getSDCardPath();
+
+    path=path+"/DShare/dietlist.dbnum";
+
+    QFile LogFile;
+    QTextStream LogTextStream(&LogFile);
+
+    LogFile.setFileName(path);
+    LogFile.open(QIODevice::WriteOnly);
+    if(LogFile.isOpen())
+        LogTextStream<<longstr;
+#endif
+}
+
+void RecordSystem::getsportlist()
+{
+#ifdef ANDROID
+    JavaMethod java;
+    QString longstr;
+    QString path=java.getSDCardPath();
+    path=path+"/DShare/sportlist.dbnum";
+    QFile LogFile;
+    LogFile.setFileName(path);
+    LogFile.open(QIODevice::ReadOnly);
+    if(LogFile.isOpen()){
+        QTextStream LogTextStream(&LogFile);
+        while(!LogTextStream.atEnd()){
+            LogTextStream>>longstr;
+            SportList.append(longstr);
+        }
+
+        m_Statue="getsportlistSucceed";
+        emit statueChanged(m_Statue);
+    }
+    else{
+        m_Statue="getsportlistError";
+        emit statueChanged(m_Statue);
+    }
+
+#endif
+}
+
+QString RecordSystem::getsportliststr(int i)
+{
+    if(SportList.length()>i){
+
+        return SportList[i];
+    }
+    else
+        return "";
+}
+
+void RecordSystem::savesportlist(QString longstr)
+{
+#ifdef ANDROID
+    JavaMethod java;
+
+    QString path=java.getSDCardPath();
+
+    path=path+"/DShare/sportlist.dbnum";
+
+    QFile LogFile;
+    QTextStream LogTextStream(&LogFile);
+
+    LogFile.setFileName(path);
+    LogFile.open(QIODevice::WriteOnly);
+    if(LogFile.isOpen())
+        LogTextStream<<longstr;
+#endif
+}
+
 void RecordSystem::tcpReadMessage(){
     QString message =QString::fromUtf8(tcpSocket->readAll());
 

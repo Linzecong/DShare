@@ -18,6 +18,8 @@ Rectangle {
 
     function getcheckinday(){
         dbsystem.getcheckinday(str_userid);
+        recordsystem.getdietlist()
+        recordsystem.getsportlist()
     }
 
     DataSystem{
@@ -47,6 +49,36 @@ Rectangle {
     RecordSystem{
         id:recordsystem
         onStatueChanged: {
+            if(Statue==="getdietlistError"){
+                var longstr="";
+                for(var i=0;i<foodsmodel.count;i++)
+                    longstr=longstr+foodsmodel.get(i).value+" ";
+                recordsystem.savedietlist(longstr)
+            }
+
+            if(Statue==="getsportlistError"){
+                var longstr="";
+                for(var i=0;i<sportsmodel.count;i++)
+                    longstr=longstr+sportsmodel.get(i).value+" ";
+                recordsystem.savesportlist(longstr)
+            }
+
+            if(Statue==="getdietlistSucceed"){
+                foodsmodel.clear()
+                var i=0;
+                while(recordsystem.getdietliststr(i)!=="")
+                foodsmodel.append({"value":recordsystem.getdietliststr(i++)})
+            }
+
+            if(Statue==="getsportlistSucceed"){
+                sportsmodel.clear()
+                var i2=0;
+                while(recordsystem.getsportliststr(i2)!=="")
+                sportsmodel.append({"value":recordsystem.getsportliststr(i2++)})
+            }
+
+
+
             if(Statue==="uploadexerciseSucceed"){
                 myjava.toastMsg("保存成功")
             }
@@ -104,13 +136,13 @@ Rectangle {
                 }
 
                 if(lunchmodel.count==0){
-                    lunchmodel.append({"Food":"点击选择食物"})
+                    lunchmodel.append({"Food":"米饭"})
                     lunchmodel.append({"Food":"点击选择食物"})
                     lunchmodel.append({"Food":"点击选择食物"})
                 }
 
                 if(dinnermodel.count==0){
-                    dinnermodel.append({"Food":"点击选择食物"})
+                    dinnermodel.append({"Food":"米饭"})
                     dinnermodel.append({"Food":"点击选择食物"})
                     dinnermodel.append({"Food":"点击选择食物"})
                 }
@@ -282,13 +314,13 @@ family: "微软雅黑"
         }
         ListModel{
             id:lunchmodel
-            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"米饭"}
             ListElement{Food:"点击选择食物"}
             ListElement{Food:"点击选择食物"}
         }
         ListModel{
             id:dinnermodel
-            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"米饭"}
             ListElement{Food:"点击选择食物"}
             ListElement{Food:"点击选择食物"}
         }
@@ -686,8 +718,9 @@ family: "微软雅黑"
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.leftMargin: 50
-
+                    readOnly: true
                     placeholderText: "请输入项目"
+                    textColor:"grey"
 
 
                     font{
@@ -701,10 +734,18 @@ family: "微软雅黑"
                             opacity: 0
                         }
                     }
-                    //Material.theme: Material.Dark
-                    //Material.accent: Material.Purple
-                }
 
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+
+                        view.model=sportsmodel
+                        searpage.visible=true
+                        searpage.forceActiveFocus();
+                    }
+                    z:6
+                }
             }
         }
 
@@ -720,7 +761,7 @@ family: "微软雅黑"
             width: parent.width/1.2
             spacing: begintimetext.width/5
             property int editmode: 1
-            property string begintime:"08:00:00"
+            property string begintime:"00:00:00"
 
             Text{
                 id:begintimetext
@@ -761,6 +802,7 @@ family: "微软雅黑"
                     onClicked: {
                         view.model=beginhourmodel
                         searpage.visible=true
+                        searpage.forceActiveFocus();
                     }
                 }
             }
@@ -802,6 +844,7 @@ family: "微软雅黑"
                     onClicked: {
                         view.model=beginminmodel
                         searpage.visible=true
+                        searpage.forceActiveFocus();
                     }
                 }
             }
@@ -866,6 +909,7 @@ family: "微软雅黑"
                     onClicked: {
                         view.model=lasthourmodel
                         searpage.visible=true
+                        searpage.forceActiveFocus();
                     }
                 }
             }
@@ -907,6 +951,7 @@ family: "微软雅黑"
                     onClicked: {
                         view.model=lastminmodel
                         searpage.visible=true
+                        searpage.forceActiveFocus();
                     }
                 }
             }
@@ -1611,7 +1656,7 @@ family: "微软雅黑"
             height: parent.height/12
             width: parent.width
             anchors.top: parent.top
-            visible: (view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel)?1:0
+            visible: (view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel||view.model===searchedsportmodel)?1:0
             TextField{
                 height:parent.height-6
                 width: parent.width-6
@@ -1631,7 +1676,9 @@ family: "微软雅黑"
                 maximumLength:8
 
                 onTextChanged: {
-                    if(view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel){
+                    if(view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel||view.model===searchedsportmodel){
+
+                        if(view.model===foodsmodel||view.model===searchedmodel){
                         if(searchtext.text!==""){
                             searchedmodel.clear()
                             for(var i=0;i<foodsmodel.count;i++){
@@ -1643,10 +1690,33 @@ family: "微软雅黑"
                         }
                         else
                             view.model=foodsmodel
+                        }
+
+
+                        if(view.model===sportsmodel||view.model===searchedsportmodel){
+                        if(searchtext.text!==""){
+                            searchedsportmodel.clear()
+                            for(var i=0;i<sportsmodel.count;i++){
+                                var a=sportsmodel.get(i).value;
+                                if(a.indexOf(searchtext.text)>=0)
+                                    searchedsportmodel.append({"value":a})
+                            }
+                            view.model=searchedsportmodel;
+                        }
+                        else
+                            view.model=sportsmodel
+                        }
+
+
                     }
 
 
+
+
+
                     searchedmodel.append({"value":"无匹配项请点此处"})
+                    searchedsportmodel.append({"value":"无匹配项请点此处"})
+
 
 
                 }
@@ -1658,11 +1728,23 @@ family: "微软雅黑"
         ListView{
             id:view
             spacing: -1
-            anchors.top: (view.model===foodsmodel||view.model===searchedmodel)?searchbar.bottom:parent.top
+            anchors.top: (view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel||view.model===searchedsportmodel)?searchbar.bottom:parent.top
             clip: true
             width: parent.width
             height:parent.height-searchbar.height
             model: foodsmodel
+            Rectangle {
+                      id: scrollbar
+                      anchors.right: view.right
+                      anchors.rightMargin: 3
+                      y: view.visibleArea.yPosition * view.height
+                      width: 10
+                      height: view.visibleArea.heightRatio * view.height
+                      color: "grey"
+                      radius: 5
+                      z:2
+                      visible: view.dragging||view.flicking
+                  }
             delegate: Item{
                 id:delegate
                 width:view.width
@@ -1688,22 +1770,67 @@ family: "微软雅黑"
                         onClicked: {
                             if(view.model===searchedmodel){
                                 foodview.currentdiet.children[0].foodstr=""
-                                if(searchedmodel.get(index).value!=="无匹配项请点此处")
+                                if(searchedmodel.get(index).value!=="无匹配项请点此处"){
                                     foodview.currentdiet.children[0].foodstr=searchedmodel.get(index).value
+                                    for(var i=0;i<foodsmodel.count;i++)
+                                        if(foodsmodel.get(i).value===searchedmodel.get(index).value)
+                                            foodsmodel.move(i,0,1);
+                                }
                                 else{
                                     foodview.currentdiet.children[0].foodstr=searchtext.text
+                                    foodsmodel.insert(0,{"value":searchtext.text})
+
                                     dbsystem.uploadFood(searchtext.text)
                                 }
+
+                                var longstr="";
+                                for(var i=0;i<foodsmodel.count;i++)
+                                    longstr=longstr+foodsmodel.get(i).value+" ";
+                                recordsystem.savedietlist(longstr)
                             }
+
+                            if(view.model===searchedsportmodel){
+                                if(searchedsportmodel.get(index).value!=="无匹配项请点此处"){
+                                    sporttext.text=searchedmodel.get(index).value
+                                    for(var i=0;i<sportsmodel.count;i++)
+                                        if(sportsmodel.get(i).value===searchedsportmodel.get(index).value)
+                                            sportsmodel.move(i,0,1);
+                                }
+                                else{
+                                    sporttext.text=searchtext.text
+                                    sportsmodel.insert(0,{"value":searchtext.text})
+
+                                    dbsystem.uploadFood(searchtext.text)
+                                }
+
+                                var longstr="";
+                                for(var i=0;i<sportsmodel.count;i++)
+                                    longstr=longstr+sportsmodel.get(i).value+" ";
+                                recordsystem.savesportlist(longstr)
+                            }
+
+
 
                             if(view.model===foodsmodel){
                                 foodview.currentdiet.children[0].foodstr=""
                                 foodview.currentdiet.children[0].foodstr=foodsmodel.get(index).value
+                                foodsmodel.move(index,0,1);
+
+                                var longstr="";
+                                for(var i=0;i<foodsmodel.count;i++)
+                                    longstr=longstr+foodsmodel.get(i).value+" ";
+                                recordsystem.savedietlist(longstr)
                             }
 
 
                             if(view.model===sportsmodel){
                                 sporttext.text=sportsmodel.get(index).value
+
+                                sportsmodel.move(index,0,1);
+                                var longstr="";
+                                for(var i=0;i<sportsmodel.count;i++)
+                                    longstr=longstr+sportsmodel.get(i).value+" ";
+                                recordsystem.savesportlist(longstr)
                             }
 
                             if(view.model===beginhourmodel){
@@ -1738,6 +1865,9 @@ family: "微软雅黑"
         id:searchedmodel
     }
 
+    ListModel{
+        id:searchedsportmodel
+    }
 
 
     ListModel{

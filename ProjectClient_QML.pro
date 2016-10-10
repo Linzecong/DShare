@@ -6,6 +6,7 @@ QT+=androidextras
 QT += qml quick
 CONFIG += c++11
 QT += qml quick quickcontrols2
+QT += charts
 SOURCES += main.cpp \
     LoginSystem.cpp \
     RegistSystem.cpp \
@@ -13,7 +14,8 @@ SOURCES += main.cpp \
     JavaMethod.cpp \
     SendImageSystem.cpp \
     DataSystem.cpp \
-    RecordSystem.cpp
+    RecordSystem.cpp \
+    ReportSystem.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,7 +38,8 @@ HEADERS += \
     JavaMethod.h \
     SendImageSystem.h \
     DataSystem.h \
-    RecordSystem.h
+    RecordSystem.h \
+    ReportSystem.h
 
 DISTFILES += \
     MainPage.qml \

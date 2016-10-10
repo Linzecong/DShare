@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQuickView>
 #include <QQuickStyle>
 #include <QQmlEngine>
@@ -11,9 +11,10 @@
 #include"SendImageSystem.h"
 #include"DataSystem.h"
 #include"RecordSystem.h"
+#include"ReportSystem.h"
 
 int main(int argc, char *argv[]){
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     //将C++注册到QML中
     qmlRegisterType<LoginSystem>("LoginSystem",1,0,"LoginSystem");
@@ -23,8 +24,8 @@ int main(int argc, char *argv[]){
     qmlRegisterType<SendImageSystem>("SendImageSystem",1,0,"SendImageSystem");
     qmlRegisterType<DataSystem>("DataSystem",1,0,"DataSystem");
     qmlRegisterType<RecordSystem>("RecordSystem",1,0,"RecordSystem");
+    qmlRegisterType<ReportSystem>("ReportSystem",1,0,"ReportSystem");
 
-    //QQuickStyle::setStyle("Material");
     QQuickView viewer;
 
 

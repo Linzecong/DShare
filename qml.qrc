@@ -34,5 +34,6 @@
         <file>image/searchblack.png</file>
         <file>image/checkin.png</file>
         <file>image/clock.png</file>
+        <file>ReportPage.qml</file>
     </qresource>
 </RCC>

@@ -179,7 +179,7 @@ Rectangle{
                 pixelSize: backbutton.height/1.5
 
             }
-            color: "white";
+            color: "white"
             MouseArea{
                 id:headma
                 anchors.fill: parent
@@ -205,7 +205,7 @@ Rectangle{
                 family: "微软雅黑"
                 pixelSize: head.height/3
             }
-            color: "white";
+            color: "white"
         }
     }
 

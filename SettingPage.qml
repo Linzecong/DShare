@@ -57,7 +57,7 @@ StackView{
 
     Rectangle {
         id:pickhead
-        color: "black";
+        color: "black"
 
         onWidthChanged: mask.recalc();
         onHeightChanged: mask.recalc();
@@ -73,7 +73,7 @@ StackView{
             asynchronous: true;
             onStatusChanged: {
                 if(status == Image.Ready){
-                    console.log("image loaded");
+                    console.log("image loaded")
                     mask.recalc();
                 }
             }

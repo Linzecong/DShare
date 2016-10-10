@@ -267,7 +267,7 @@ Rectangle{
                     Label{
                         anchors.centerIn: parent
                         visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                        text:(parent.status==Image.Loading)?"加载中":"无"
+                        text:((parent.status==Image.Loading)?"加载中":"无")
                         color:"grey"
                     }
                     MouseArea{

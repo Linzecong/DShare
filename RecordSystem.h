@@ -6,6 +6,7 @@
 #include <QtNetwork/QtNetwork>
 
 struct Exercise{
+    QString DateTime;
     QString Type;
     QString BeginTime;
     int LastTime;//min
@@ -45,6 +46,19 @@ public:
      Q_INVOKABLE void getlocaldiet();//获取内容
      Q_INVOKABLE QString getlocaldietstr(int i,int j);//获取某一餐的某一个食物
      Q_INVOKABLE void savelocaldiet(QString longstr);//保存
+
+     QStringList DietList;
+     Q_INVOKABLE void getdietlist();//获取内容
+     Q_INVOKABLE QString getdietliststr(int i);//获取内容
+     Q_INVOKABLE void savedietlist(QString longstr);
+
+     QStringList SportList;
+     Q_INVOKABLE void getsportlist();//获取内容
+     Q_INVOKABLE QString getsportliststr(int i);//获取内容
+     Q_INVOKABLE void savesportlist(QString longstr);
+
+
+
 
 public:
      void tcpReadMessage();

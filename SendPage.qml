@@ -7,6 +7,7 @@ import JavaMethod 1.0
 import SendImageSystem 1.0
 import PostsSystem 1.0
 import QtQuick.Dialogs 1.2
+import QtCharts 2.0
 Rectangle { 
     MouseArea{
         anchors.bottom: parent.bottom
@@ -56,7 +57,7 @@ Rectangle {
     }
 
     function settext(b){
-        note.text="已为您生成文本~请输入你的感想~"
+        note.text="请输入你的感想~"
         hiddentext=b;
     }
     function setimg(b){
@@ -190,105 +191,6 @@ Rectangle {
         ListElement{value:"暂无实际功能"}
     }
 
-//    Rectangle{
-//        id:boxrect
-//        anchors.top: teambox.bottom
-//        anchors.horizontalCenter: teambox.horizontalCenter
-//        width: teambox.width
-//        height: photobutton.height*1.5
-//        z:2
-//        visible: false
-//        ListView{
-
-//            id:boxview
-//            clip:true
-//            anchors.fill: parent
-//            width: teambox.width
-
-//            spacing: -1
-//            boundsBehavior:Flickable.StopAtBounds
-//            delegate: Item{
-//                id:postitem
-//                width:teambox.width
-//                height:photobutton.height/3
-//                Rectangle{
-//                    border.color: "grey"
-//                    border.width: 1
-//                    anchors.fill: parent
-//                    radius: photobutton.width/10
-//                    Label{
-//                        id:mytext
-//                        anchors.centerIn: parent
-//                        text: value
-//                        font{
-//
-//                            pixelSize: photobutton.height/5
-//                        }
-//                    }
-//                    MouseArea{
-//                        anchors.fill: parent
-//                        onClicked: {
-//                            boxview.currenttext=mytext.text
-//                            boxrect.visible=false;
-//                        }
-//                    }
-//                }
-//            }
-//            model: model
-//            property string currenttext:model.get(0).value
-
-
-
-//        }
-//    }
-
-
-//    Label{
-//        id:label
-//        anchors.left: photobutton.right
-//        anchors.leftMargin: mainpage.width/30
-//        height: photobutton.height/3
-//        anchors.top: photobutton.top
-//       // anchors.topMargin: photobutton.height/10
-//        text: "分组:"
-
-
-//        font{
-//
-//            pixelSize: photobutton.height/5
-//        }
-//    }
-
-
-//    Rectangle{
-//        id:teambox
-//        border.color: "grey"
-//        border.width: 1
-//        radius: photobutton.width/10
-//        anchors.left: label.right
-
-//        anchors.top: photobutton.top
-
-//        width: photobutton.width*1.5
-//        height: photobutton.height/3
-//        Text {
-//            x: photobutton.height/8
-//            id: boxtext
-//            height: parent.height
-//            color: "grey"
-//            text:boxview.currenttext
-//            verticalAlignment: Text.AlignVCenter
-//            font.pixelSize: photobutton.height/6
-//            font.
-//        }
-//        MouseArea{
-//            anchors.fill: parent
-//            onClicked: {
-//                boxrect.visible=true
-//            }
-//        }
-
-//    }
 
 
     Rectangle{
@@ -378,7 +280,7 @@ Rectangle {
                     if(hiddentext=="")
                     sendmsgsystem.sendPost(str_userid,messageedit.text+hiddentext,0,"");
                     else
-                    sendmsgsystem.sendPost(str_userid,messageedit.text+"<br><br>"+hiddentext,0,"");
+                    sendmsgsystem.sendPost(str_userid,messageedit.text+"<br>"+hiddentext,0,"");
 
                 }
             }
@@ -398,7 +300,7 @@ Rectangle {
                     if(hiddentext=="")
                         sendmsgsystem.sendPost(str_userid,messageedit.text+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
                 else
-                        sendmsgsystem.sendPost(str_userid,messageedit.text+"<br><br>"+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
+                        sendmsgsystem.sendPost(str_userid,messageedit.text+"<br>"+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
 
                 }
                 if(Statue=="DBError"){
@@ -500,6 +402,9 @@ Rectangle {
         }
 
     }
+
+
+
 
 
 }

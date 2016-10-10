@@ -7,6 +7,7 @@ import QtQuick.Dialogs 1.2
 import DataSystem 1.0
 import JavaMethod 1.0
 import SendImageSystem 1.0
+import ReportSystem 1.0
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Material 2.0
 
@@ -112,6 +113,15 @@ Rectangle {
         anchors.fill: parent
         visible: false
         source:"NoticeList.qml"
+        z:102
+    }
+
+    //用于显示侧边栏的我的报告
+    Loader{
+        id:reportpage;
+        anchors.fill: parent
+        visible: false
+        source:"ReportPage.qml"
         z:102
     }
 
@@ -453,8 +463,63 @@ Rectangle {
         }
 
 
-        GestureArea{
+        Rectangle{
+            id:reportbutton
             anchors.top: messagebutton.bottom
+            anchors.right: parent.right
+            height: sidepage.height/10
+            width: sidepage.width
+            color:ma7.pressed?"#aaaaaa":"white"
+            Behavior on color{
+                ColorAnimation {
+                    easing.type: Easing.Linear
+                    duration: 200
+                }
+            }
+            Image {
+                id:reporticon
+                anchors.left: parent.left
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                source: "image/conpassword.png"
+                width: height
+                height: parent.height/2
+            }
+
+            Label{
+                anchors.left: reporticon.right
+                anchors.leftMargin: sidepagetop.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                text:"我的报告"
+                font{
+
+                    pixelSize: followingbutton.height/4
+                }
+                color: Material.color(Material.BlueGrey)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            MouseArea{
+                id:ma7
+                anchors.fill: parent
+                property int isget: 1
+                onClicked: {
+                      //if((isget--)==1)
+                      reportpage.item.getalldiet(str_userid,nickname)
+
+                      reportpage.item.forceActiveFocus()
+                      reportpage.visible=true
+                }
+            }
+
+
+
+        }
+
+
+        GestureArea{
+            anchors.top: reportbutton.bottom
             anchors.bottom: linecenter.top
             width:parent.width
 
@@ -798,6 +863,9 @@ family: "微软雅黑"
                 id:mainpagebutton
                 anchors.fill: parent
                 onClicked: {
+                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+                      messageDialog.open()
+
                     bottom.currentPage="首页"
                     mainrect.x=0;
 
@@ -849,10 +917,7 @@ family: "微软雅黑"
                 onClicked: {
                     bottom.currentPage="分享"
                     mainrect.x=-mainwindow.width*2
-                    //                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-                    //                        messageDialog.open()
 
-                    //sendpage.item.setnull()
                 }
             }
 
@@ -899,6 +964,9 @@ family: "微软雅黑"
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
+                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+                      messageDialog.open()
+
                     bottom.currentPage="记录"
                     mainrect.x=-mainwindow.width*3
                 }
