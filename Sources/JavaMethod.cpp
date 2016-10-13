@@ -1,4 +1,4 @@
-#include "JavaMethod.h"
+#include "Headers/JavaMethod.h"
 #ifdef ANDROID
 #include <QtAndroidExtras/QAndroidJniObject>
 #include <unistd.h>

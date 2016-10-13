@@ -1,5 +1,5 @@
-#include "DataSystem.h"
-#include "JavaMethod.h"
+#include "Headers/DataSystem.h"
+#include "Headers/JavaMethod.h"
 #include<QPixmap>
 
 DataSystem::DataSystem(QObject *parent) : QObject(parent){

@@ -40,19 +40,20 @@ Rectangle {
         onStatueChanged: {
             console.log(Statue)
             if(Statue=="getnameSucceed"){
-                name.text="昵称："+dbsystem.getName();
-                nickname=dbsystem.getName();
-                dbsystem.getHeadByID(str_userid);
-                mainpage.item.nickname=dbsystem.getName();
+                name.text="昵称："+dbsystem.getName()
+                nickname=dbsystem.getName()
+                dbsystem.getHeadByID(str_userid)
+                mainpage.item.nickname=dbsystem.getName()
             }
+
             if(Statue=="changenameSucceed"){
-                dbsystem.getNameByID(str_userid);
-                nickname=dbsystem.getName();
-                mainpage.item.nickname=dbsystem.getName();
+                dbsystem.getNameByID(str_userid)
+                nickname=dbsystem.getName()
+                mainpage.item.nickname=dbsystem.getName()
             }
             if(Statue=="getheadSucceed"){
 
-                headurl=dbsystem.getHead();
+                headurl=dbsystem.getHead()
             }
 
 
@@ -94,7 +95,7 @@ Rectangle {
         id:friends;
         anchors.fill: parent
         visible: false
-        source:"UsersPage.qml"
+        source:"qrc:/QML/UsersPage.qml"
         z:102
     }
 
@@ -103,7 +104,7 @@ Rectangle {
         id:mypost;
         anchors.fill: parent
         visible: false
-        source:"PostsPage.qml"
+        source:"qrc:/QML/PostsPage.qml"
         z:102
     }
 
@@ -112,7 +113,7 @@ Rectangle {
         id:noticelist;
         anchors.fill: parent
         visible: false
-        source:"NoticeList.qml"
+        source:"qrc:/QML/NoticeList.qml"
         z:102
     }
 
@@ -121,7 +122,7 @@ Rectangle {
         id:reportpage;
         anchors.fill: parent
         visible: false
-        source:"ReportPage.qml"
+        source:"qrc:/QML/ReportPage.qml"
         z:102
     }
 
@@ -135,7 +136,7 @@ Rectangle {
         }
         anchors.fill: parent
         visible: false
-        source:"SettingPage.qml"
+        source:"qrc:/QML/SettingPage.qml"
         z:102
     }
 
@@ -177,7 +178,7 @@ Rectangle {
 
         Rectangle{
             id:sidepagetop
-            color:"#32dc96"
+            color:"#02ae4a"
             width: sidepage.width
             height: sidepage.height/4
             anchors.top: sidepage.top
@@ -279,7 +280,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: sidepagetop.height/10
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image/user.png"
+                source: "qrc:/image/user.png"
                 width: height
                 height: parent.height/2
 
@@ -331,7 +332,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: sidepagetop.height/10
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image/nickname.png"
+                source: "qrc:/image/nickname.png"
                 width: height
                 height: parent.height/2
             }
@@ -385,7 +386,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: sidepagetop.height/10
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image/photo.png"
+                source: "qrc:/image/photo.png"
                 width: height
                 height: parent.height/2
             }
@@ -433,7 +434,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: sidepagetop.height/10
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image/conpassword.png"
+                source: "qrc:/image/conpassword.png"
                 width: height
                 height: parent.height/2
             }
@@ -481,7 +482,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: sidepagetop.height/10
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image/conpassword.png"
+                source: "qrc:/image/conpassword.png"
                 width: height
                 height: parent.height/2
             }
@@ -566,7 +567,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: sidepagetop.height/10
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image/save.png"
+                source: "qrc:/image/save.png"
                 width: height
                 height: parent.height/2
             }
@@ -612,7 +613,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: sidepagetop.height/10
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image/password.png"
+                source: "qrc:/image/password.png"
                 width: height
                 height: parent.height/2
             }
@@ -696,7 +697,7 @@ Rectangle {
         id:head;
         width:parent.width;
         height: parent.height/16*1.5;
-        color:"#32dc96"
+        color:"#02ae4a"
         x:0
         y:0
 
@@ -1012,14 +1013,14 @@ family: "微软雅黑"
             anchors.left: parent.left
             height:parent.height
             width:mainwindow.width
-            source: "MainPage.qml";
+            source: "qrc:/QML/MainPage.qml";
         }
         Loader{
             id:newspage
             anchors.left: mainpage.right
             height:parent.height
             width:mainwindow.width
-            source: "NewsPage.qml";
+            source: "qrc:/QML/NewsPage.qml";
 
 
         }
@@ -1028,14 +1029,14 @@ family: "微软雅黑"
             anchors.left: newspage.right
             height:parent.height
             width:mainwindow.width
-            source: "SendPage.qml";
+            source: "qrc:/QML/SendPage.qml";
         }
         Loader{
             id:recordpage
             anchors.left: sendpage.right
             height:parent.height
             width:mainwindow.width
-            source: "RecordPage.qml";
+            source: "qrc:/QML/RecordPage.qml";
             y:-3
         }
 
@@ -1044,7 +1045,7 @@ family: "微软雅黑"
             anchors.left: recordpage.right
             height:parent.height
             width:mainwindow.width
-            source: "SearchPage.qml";
+            source: "qrc:/QML/SearchPage.qml";
         }
 
         Behavior on x{

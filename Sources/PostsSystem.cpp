@@ -1,5 +1,5 @@
-#include "PostsSystem.h"
-#include "JavaMethod.h"
+#include "Headers/PostsSystem.h"
+#include "Headers/JavaMethod.h"
 #include <QNetworkAccessManager>
 #include <QUrl>
 #include <QNetworkRequest>

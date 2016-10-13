@@ -58,11 +58,11 @@ Rectangle {
 
     function settext(b){
         note.text="请输入你的感想~"
-        hiddentext=b;
+        hiddentext=b
     }
     function setimg(b){
-        image.source="file://"+b;
-        imagePath=b;
+        image.source="file://"+b
+        imagePath=b
     }
 
 
@@ -141,7 +141,7 @@ Rectangle {
             id:text
             visible:image.source==""?true:false
             text: "+";
-            color:"#32dc96"
+            color:"#02ae4a"
             font{
                 pixelSize: photobutton.height/3
                 bold: true
@@ -219,7 +219,7 @@ Rectangle {
                 messageDialog.open()
             }
         }
-        color:cma.pressed?"#32dc96":"white"
+        color:cma.pressed?"#02ae4a":"white"
         Behavior on color{
             ColorAnimation{
                 easing.type: Easing.Linear
@@ -393,7 +393,7 @@ Rectangle {
             }
         }
 
-        color:sma.pressed?"#32dc96":"#29cc88"
+        color:sma.pressed?"#02ae4a":"#29cc88"
         Behavior on color{
             ColorAnimation{
                 easing.type: Easing.Linear

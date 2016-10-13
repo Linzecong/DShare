@@ -222,13 +222,13 @@ Rectangle {
             width:parent.width/3
             anchors.top: parent.top
             anchors.topMargin: 2
-            x:foodbutton.color=="#32dc96"?0:(sportbutton.color=="#32dc96"?width:width*2)
+            x:foodbutton.color=="#02ae4a"?0:(sportbutton.color=="#02ae4a"?width:width*2)
         }
 
         Label{
             id:foodbutton
             text: "饮食"
-            color:header.currentpage==text?"#32dc96":"grey"
+            color:header.currentpage==text?"#02ae4a":"grey"
             font{
 family: "微软雅黑"
                 pixelSize: header.height/2
@@ -247,7 +247,7 @@ family: "微软雅黑"
         Label{
             id:sportbutton
             text: "运动"
-            color:header.currentpage==text?"#32dc96":"grey"
+            color:header.currentpage==text?"#02ae4a":"grey"
             font{
 family: "微软雅黑"
                 pixelSize: header.height/2
@@ -265,7 +265,7 @@ family: "微软雅黑"
         Label{
             id:searchbutton
             text: "查看"
-            color:header.currentpage==text?"#32dc96":"grey"
+            color:header.currentpage==text?"#02ae4a":"grey"
             font{
 family: "微软雅黑"
                 pixelSize: header.height/2
@@ -1140,7 +1140,7 @@ family: "微软雅黑"
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: parent.height/5
                 anchors.horizontalCenter: parent.horizontalCenter
-                text:"<strong><font color=\"#35dca2\">"+dosportdaysrect.checkinday.toString()+"天</font></strong>"
+                text:"<strong><font color=\"#02ae4a\">"+dosportdaysrect.checkinday.toString()+"天</font></strong>"
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
@@ -1229,12 +1229,12 @@ family: "微软雅黑"
                     }
                     else{
                         sporttimer.stop()
-                        // modebutton.color="#32dc96"
+                        // modebutton.color="#02ae4a"
                         //modebutton.enabled=true;
                         sportsavebutton.enabled=true
-                        //sportsavebutton.color="#32dc96"
+                        //sportsavebutton.color="#02ae4a"
                         sportsharebutton.enabled=true
-                        //sportsharebutton.color="#32dc96"
+                        //sportsharebutton.color="#02ae4a"
                         begintimerow.editmode=1
 
                         lasttimehourtext.text=parseInt(sporttimer.mins/60).toString()

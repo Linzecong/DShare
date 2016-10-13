@@ -1,5 +1,5 @@
-#include "LoginSystem.h"
-#include "JavaMethod.h"
+#include "Headers/LoginSystem.h"
+#include "Headers/JavaMethod.h"
 
 void LoginSystem::login(QString name, QString pass){
     Username=name;

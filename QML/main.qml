@@ -31,7 +31,7 @@ StackView{
     //启动等待界面
     Rectangle{
         id:openrect
-        color:"#32dc96"
+        color:"#02ae4a"
         anchors.fill: parent
         z:100
         Behavior on opacity {
@@ -91,7 +91,7 @@ StackView{
             id:toprect;
             width:parent.width;
             height: parent.height/16*5.5;
-            color:"#32dc96";
+            color:"#02ae4a";
             anchors.top: parent.top;
             Image{
                 //顶部应用图标
@@ -185,7 +185,7 @@ StackView{
             anchors.right: userrow.right
             anchors.top: passrow.bottom
             anchors.topMargin: passrow.height
-            color:loginma.pressed?"33dd97":"#32dc96";
+            color:loginma.pressed?"33dd97":"#02ae4a";
             radius: height/4
             Label{
                 id:logintext
@@ -282,7 +282,7 @@ StackView{
 
 
 
-                    mainpage.source="MainWindow.qml";//加载首页
+                    mainpage.source="qrc:/QML/MainWindow.qml";//加载首页
                     mainpage.x=0;
                     myjava.toastMsg("登录成功")
                 }
@@ -323,7 +323,7 @@ StackView{
                 id:registtoprect;
                 width:parent.width;
                 height: parent.height/16*1.5;
-                color:"#32dc96";
+                color:"#02ae4a";
                 anchors.top: parent.top;
                 Label{
                     text:"  <";
@@ -724,7 +724,7 @@ StackView{
                         loginsystem.saveusernamepassword(registidtext.text,registpasstext.text);
                         stack.str_userid=registidtext.text
                         stack.pop();
-                        mainpage.source="MainWindow.qml";
+                        mainpage.source="qrc:/QML/MainWindow.qml";
                         mainpage.x=0;
                         myjava.toastMsg("注册成功！")
                     }
@@ -773,7 +773,7 @@ StackView{
                 id:xieyitoprect;
                 width:parent.width;
                 height: parent.height/16*1.5;
-                color:"#32dc96";
+                color:"#02ae4a";
                 anchors.top: parent.top;
                 Label{
                     text:"  <";

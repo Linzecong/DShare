@@ -582,7 +582,7 @@ StackView{
             id:headrect
             width:parent.width;
             height: parent.height/16*1.5;
-            color:"#32dc96"
+            color:"#02ae4a"
             anchors.top: parent.top;
 
             Label{
@@ -707,7 +707,7 @@ StackView{
                 id:changedatahead;
                 width:parent.width;
                 height: parent.height/16*1.5;
-                color:"#32dc96"
+                color:"#02ae4a"
                 anchors.top: parent.top;
                 Label{
                     text:" ＜";
@@ -930,7 +930,7 @@ pickhead.forceActiveFocus()
                 id:xieyitoprect;
                 width:parent.width;
                 height: parent.height/16*1.5;
-                color:"#32dc96";
+                color:"#02ae4a";
                 anchors.top: parent.top;
                 Label{
                     text:"  <";

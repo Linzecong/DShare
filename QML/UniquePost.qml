@@ -164,7 +164,7 @@ Rectangle{
         id:head;
         width:parent.width;
         height: parent.height/16*1.5;
-        color:"#32dc96"
+        color:"#02ae4a"
         anchors.top: parent.top;
         Label{
             text:" ＜";
@@ -348,7 +348,7 @@ Rectangle{
                 width:parent.width-headimage.height/3*4
                 text: liker
                 wrapMode: Text.Wrap;
-                color: "#32dc96"
+                color: "#02ae4a"
                 font{
                     pixelSize: headimage.height/3
                 }
@@ -362,7 +362,7 @@ Rectangle{
             width:delegaterect.width
             anchors.topMargin: 10
             anchors.left: delegaterect.left
-            text:"<strong><font color=\"#35dca2\">暂无评论</font></strong>"
+            text:"<strong><font color=\"#02ae4a\">暂无评论</font></strong>"
             visible: commentmodel.count==0?true:false
 
         }
@@ -417,7 +417,7 @@ Rectangle{
                         anchors.right: parent.right
                         anchors.rightMargin: headimage.height/4
 
-                        text: "  <strong><font color=\"#35dca2\">"+CommentatorName+(BeCommentatorName===""?"：</font></strong>":(" 回复 "+BeCommentatorName+"：</font></strong>"))+Message
+                        text: "  <strong><font color=\"#02ae4a\">"+CommentatorName+(BeCommentatorName===""?"：</font></strong>":(" 回复 "+BeCommentatorName+"：</font></strong>"))+Message
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.Wrap
                         font{

@@ -74,7 +74,7 @@ Rectangle{
         x:0
         y:-parent.height/8
         visible: false
-        source:"PostsPage.qml"
+        source:"qrc:/QML/PostsPage.qml"
         z:102
     }
 
@@ -85,7 +85,7 @@ Rectangle{
         x:0
         y:-parent.height/8
         visible: false
-        source:"UniquePost.qml"
+        source:"qrc:/QML/UniquePost.qml"
         z:102
     }
 
@@ -267,7 +267,7 @@ Rectangle{
                     Label{
                         anchors.centerIn: parent
                         visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                        text:((parent.status==Image.Loading)?"加载中":"无")
+                        text:(parent.status==Image.Loading)?"加载中":"无"
                         color:"grey"
                     }
                     MouseArea{
@@ -378,7 +378,7 @@ Rectangle{
 
 
                     wrapMode: Text.Wrap;
-                    color: "#32dc96"
+                    color: "#02ae4a"
                     font{
                         pixelSize: headimage.height/3
                     }
@@ -408,7 +408,7 @@ Rectangle{
                     text: "     "+CommentCount+" 条评论"
                     width:parent.width-headimage.height/3*4
                     wrapMode: Text.Wrap;
-                    color: "#32dc96"
+                    color: "#02ae4a"
                     font{
 
                         pixelSize: headimage.height/3
@@ -439,7 +439,7 @@ Rectangle{
                     Rectangle{
                         id:likebutton
                         visible: false
-                        color:"#30d090"
+                        color:"#02ae4a"
                         height:headimage.height/1.5
                         width: photo.width/5
                         radius: height/6
@@ -466,7 +466,7 @@ Rectangle{
                     Rectangle{
                         id:commentbutton
                         visible: false
-                        color:"#30d090"
+                        color:"#02ae4a"
                         radius: height/6
                         height:headimage.height/1.5
                         width: photo.width/5

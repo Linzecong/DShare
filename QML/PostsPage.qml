@@ -64,7 +64,7 @@ Rectangle {
         id:uniquepost;
         anchors.fill: parent
         visible: false
-        source:"UniquePost.qml"
+        source:"qrc:/QML/UniquePost.qml"
         z:102
     }
 
@@ -73,7 +73,7 @@ Rectangle {
         id:head;
         width:parent.width;
         height: parent.height/16*1.5;
-        color:"#32dc96"
+        color:"#02ae4a"
         anchors.top: parent.top;
         layer.enabled: true
         layer.effect: DropShadow {
@@ -103,7 +103,7 @@ Rectangle {
                 id:headma
                 onClicked: {
                     mainwindow.parent.visible=false
-                    mainwindow.parent.parent.forceActiveFocus();
+                    mainwindow.parent.parent.forceActiveFocus()
                 }
             }
         }
@@ -112,10 +112,10 @@ Rectangle {
             text:"分享列表"
             anchors.centerIn: parent
             font{
-family: "微软雅黑"
+                family: "微软雅黑"
                 pixelSize: head.height/2.5
             }
-            color: "white";
+            color: "white"
         }
     }
 
@@ -131,17 +131,17 @@ family: "微软雅黑"
         property string username
 
         function setusername(a){
-            username=a;
-            refreshpost(a);
+            username=a
+            refreshpost(a)
         }
 
         function refreshpost(a){
-            postmodel.clear();
+            postmodel.clear()
             postsystem.i=0;
-            postsystem.pi=0;
-            postsystem.getuserposts(a);
-            refreshtimer.refreshtime=0;
-            refreshtimer.start();
+            postsystem.pi=0
+            postsystem.getuserposts(a)
+            refreshtimer.refreshtime=0
+            refreshtimer.start()
         }
 
 
@@ -161,7 +161,7 @@ family: "微软雅黑"
             Keys.enabled: true
             Keys.onBackPressed: {
 
-                mainrect.forceActiveFocus();
+                mainrect.forceActiveFocus()
 
                 bigphoto.x=0
                 bigphoto.y=0
@@ -375,7 +375,7 @@ family: "微软雅黑"
                         textFormat:Text.RichText
                         wrapMode: Text.Wrap;
                         font{
-family: "微软雅黑"
+                            family: "微软雅黑"
                             pixelSize: headimage.height/3
                         }
                     }
@@ -415,7 +415,7 @@ family: "微软雅黑"
                         width:parent.width-headimage.height/3*4
 
                         wrapMode: Text.Wrap;
-                        color: "#32dc96"
+                        color: "#02ae4a"
                         font{
 
                             pixelSize: headimage.height/3
@@ -442,7 +442,7 @@ family: "微软雅黑"
                         text: "     "+CommentCount+" 条评论"
                         width:parent.width-headimage.height/3*4
                         wrapMode: Text.Wrap;
-                        color: "#32dc96"
+                        color: "#02ae4a"
                         font{
 
                             pixelSize: headimage.height/3
@@ -474,7 +474,7 @@ family: "微软雅黑"
                         Rectangle{
                             id:likebutton
                             visible: false
-                            color:"#30d090"
+                            color:"#02ae4a"
                             height:headimage.height/1.5
                             width: photo.width/5
                             radius: height/6
@@ -502,7 +502,7 @@ family: "微软雅黑"
                         Rectangle{
                             id:commentbutton
                             visible: false
-                            color:"#30d090"
+                            color:"#02ae4a"
                             radius: height/6
                             height:headimage.height/1.5
                             width: photo.width/5
@@ -671,7 +671,7 @@ family: "微软雅黑"
                     if(Statue=="deletepostSucceed"){
                         myjava.toastMsg("删除成功")
                         if(postmodel.count<=5)
-                        mainrect.setusername(str_userid)
+                            mainrect.setusername(str_userid)
                     }
                     if(Statue=="deletepostDBError"){
                         myjava.toastMsg("删除失败")

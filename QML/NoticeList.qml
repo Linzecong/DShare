@@ -39,7 +39,7 @@ Rectangle {
         id:uniquepost;
         anchors.fill: parent
         visible: false
-        source:"UniquePost.qml"
+        source:"qrc:/QML/UniquePost.qml"
         z:102
     }
 
@@ -109,7 +109,7 @@ Rectangle {
         id:head
         width:parent.width
         height: parent.height/16*1.5
-        color:"#32dc96"
+        color: "#02ae4a"
         anchors.top: parent.top
         Label{
             id:back

@@ -1,5 +1,5 @@
-#include "RecordSystem.h"
-#include "JavaMethod.h"
+#include "Headers/RecordSystem.h"
+#include "Headers/JavaMethod.h"
 #include <QFile>
 #include <QTextStream>
 

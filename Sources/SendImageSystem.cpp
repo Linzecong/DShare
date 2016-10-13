@@ -1,5 +1,5 @@
-#include "SendImageSystem.h"
-#include "JavaMethod.h"
+#include "Headers/SendImageSystem.h"
+#include "Headers/JavaMethod.h"
 #include <QBuffer>
 #include <QImage>
 #include<QDir>

@@ -1,13 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>MainWindow.qml</file>
-        <file>MainPage.qml</file>
-        <file>NewsPage.qml</file>
-        <file>RecordPage.qml</file>
-        <file>SearchPage.qml</file>
-        <file>SendPage.qml</file>
-        <file>UsersPage.qml</file>
         <file>image/conpassword.png</file>
         <file>image/delete.png</file>
         <file>image/mainpage.png</file>
@@ -23,17 +15,25 @@
         <file>image/jia.png</file>
         <file>image/save.png</file>
         <file>image/icon.png</file>
-        <file>PostsPage.qml</file>
-        <file>SettingPage.qml</file>
-        <file>GestureArea.qml</file>
-        <file>UniquePost.qml</file>
-        <file>NoticeList.qml</file>
         <file>image/mainpageblack.png</file>
         <file>image/recordpageblack.png</file>
         <file>image/sharepageblack.png</file>
         <file>image/searchblack.png</file>
         <file>image/checkin.png</file>
         <file>image/clock.png</file>
-        <file>ReportPage.qml</file>
+        <file>QML/GestureArea.qml</file>
+        <file>QML/main.qml</file>
+        <file>QML/MainPage.qml</file>
+        <file>QML/MainWindow.qml</file>
+        <file>QML/NewsPage.qml</file>
+        <file>QML/NoticeList.qml</file>
+        <file>QML/PostsPage.qml</file>
+        <file>QML/RecordPage.qml</file>
+        <file>QML/ReportPage.qml</file>
+        <file>QML/SearchPage.qml</file>
+        <file>QML/SendPage.qml</file>
+        <file>QML/SettingPage.qml</file>
+        <file>QML/UniquePost.qml</file>
+        <file>QML/UsersPage.qml</file>
     </qresource>
 </RCC>

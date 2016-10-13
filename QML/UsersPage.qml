@@ -127,7 +127,7 @@ property string nickname;
 
 
         visible: false
-        source:"PostsPage.qml"
+        source:"qrc:/QML/PostsPage.qml"
         z:102
     }
 
@@ -135,7 +135,7 @@ property string nickname;
         id:head
         width:parent.width
         height: parent.height/16*1.5
-        color:"#32dc96"
+        color:"#02ae4a"
         anchors.top: parent.top
         Label{
             id:back
@@ -339,7 +339,7 @@ property string nickname;
 
                 Rectangle{
                     id:buttonrect
-                    color:iss?(yiguanzhu?"grey":"#32dc96"):"red";
+                    color:iss?(yiguanzhu?"grey":"#02ae4a"):"red";
                     height: useridtext.height*1.5
                     width:height*2
                     anchors.right: parent.right

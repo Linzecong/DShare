@@ -1,4 +1,4 @@
-#include "RegistSystem.h"
+#include "Headers/RegistSystem.h"
 
 RegistSystem::RegistSystem(QObject *parent) : QObject(parent){
     tcpSocket = new QTcpSocket(this);
