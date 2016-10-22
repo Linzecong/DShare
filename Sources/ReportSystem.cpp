@@ -33,6 +33,13 @@ void ReportSystem::getalldiet(QString name)
     tcpSocket->write(out.toUtf8());
 }
 
+void ReportSystem::getallexercise(QString name)
+{
+    Exercises.clear();
+    QString out="@getallexercises@"+name;
+    tcpSocket->write(out.toUtf8());
+}
+
 void ReportSystem::als_Top5(int type)
 {
     QStringList ALLFood;
@@ -167,7 +174,7 @@ void ReportSystem::als_Time(int type)
         sec=map[1].first;
         thr=map[2].first;
         Als_Time_FoodName=fir+"@"+sec+"@"+thr;
-        getTop3FoodCount(29,fnum,snum,tnum,fir,sec,thr);
+        getTop3FoodCount(9,fnum,snum,tnum,fir,sec,thr);
     }
 
     if(type==1){
@@ -375,14 +382,14 @@ QList<QPair<QString,int> > ReportSystem::getTop3FoodName(int days,int sort)
     }
 
     if(sort)
-    for(int i=0;i<map.length();i++)
-        for(int j=i+1;j<map.length();j++){
-            if(map[i].second<map[j].second){
-                QPair<QString,int> temp=map[j];
-                map[j]=map[i];
-                map[i]=temp;
+        for(int i=0;i<map.length();i++)
+            for(int j=i+1;j<map.length();j++){
+                if(map[i].second<map[j].second){
+                    QPair<QString,int> temp=map[j];
+                    map[j]=map[i];
+                    map[i]=temp;
+                }
             }
-        }
 
     return map;
 }
@@ -396,68 +403,68 @@ void ReportSystem::getTop3FoodCount(int days, int *fnum, int *snum, int *tnum,QS
         if(day>=0&&day<=days){
 
             if(days==29){
-            if(day>=0&&day<=2)day=0;
-            if(day>=3&&day<=5)day=1;
-            if(day>=6&&day<=8)day=2;
-            if(day>=9&&day<=11)day=3;
-            if(day>=12&&day<=14)day=4;
-            if(day>=15&&day<=17)day=5;
-            if(day>=18&&day<=20)day=6;
-            if(day>=21&&day<=23)day=7;
-            if(day>=24&&day<=26)day=8;
-            if(day>=27&&day<=29)day=9;
+                if(day>=0&&day<=2)day=0;
+                if(day>=3&&day<=5)day=1;
+                if(day>=6&&day<=8)day=2;
+                if(day>=9&&day<=11)day=3;
+                if(day>=12&&day<=14)day=4;
+                if(day>=15&&day<=17)day=5;
+                if(day>=18&&day<=20)day=6;
+                if(day>=21&&day<=23)day=7;
+                if(day>=24&&day<=26)day=8;
+                if(day>=27&&day<=29)day=9;
             }
 
             if(days==59){
-            if(day>=0&&day<=5)day=0;
-            if(day>=6&&day<=11)day=1;
-            if(day>=12&&day<=17)day=2;
-            if(day>=18&&day<=23)day=3;
-            if(day>=24&&day<=29)day=4;
-            if(day>=30&&day<=35)day=5;
-            if(day>=36&&day<=41)day=6;
-            if(day>=42&&day<=47)day=7;
-            if(day>=48&&day<=53)day=8;
-            if(day>=54&&day<=59)day=9;
+                if(day>=0&&day<=5)day=0;
+                if(day>=6&&day<=11)day=1;
+                if(day>=12&&day<=17)day=2;
+                if(day>=18&&day<=23)day=3;
+                if(day>=24&&day<=29)day=4;
+                if(day>=30&&day<=35)day=5;
+                if(day>=36&&day<=41)day=6;
+                if(day>=42&&day<=47)day=7;
+                if(day>=48&&day<=53)day=8;
+                if(day>=54&&day<=59)day=9;
             }
 
             if(days==89){
-            if(day>=0&&day<=8)day=0;
-            if(day>=9&&day<=17)day=1;
-            if(day>=18&&day<=26)day=2;
-            if(day>=27&&day<=35)day=3;
-            if(day>=36&&day<=44)day=4;
-            if(day>=45&&day<=53)day=5;
-            if(day>=54&&day<=62)day=6;
-            if(day>=63&&day<=71)day=7;
-            if(day>=72&&day<=80)day=8;
-            if(day>=81&&day<=89)day=9;
+                if(day>=0&&day<=8)day=0;
+                if(day>=9&&day<=17)day=1;
+                if(day>=18&&day<=26)day=2;
+                if(day>=27&&day<=35)day=3;
+                if(day>=36&&day<=44)day=4;
+                if(day>=45&&day<=53)day=5;
+                if(day>=54&&day<=62)day=6;
+                if(day>=63&&day<=71)day=7;
+                if(day>=72&&day<=80)day=8;
+                if(day>=81&&day<=89)day=9;
             }
 
             if(days==179){
-            if(day>=0&&day<=17)day=0;
-            if(day>=18&&day<=35)day=1;
-            if(day>=36&&day<=53)day=2;
-            if(day>=54&&day<=71)day=3;
-            if(day>=72&&day<=89)day=4;
-            if(day>=90&&day<=107)day=5;
-            if(day>=108&&day<=125)day=6;
-            if(day>=126&&day<=143)day=7;
-            if(day>=144&&day<=161)day=8;
-            if(day>=162&&day<=179)day=9;
+                if(day>=0&&day<=17)day=0;
+                if(day>=18&&day<=35)day=1;
+                if(day>=36&&day<=53)day=2;
+                if(day>=54&&day<=71)day=3;
+                if(day>=72&&day<=89)day=4;
+                if(day>=90&&day<=107)day=5;
+                if(day>=108&&day<=125)day=6;
+                if(day>=126&&day<=143)day=7;
+                if(day>=144&&day<=161)day=8;
+                if(day>=162&&day<=179)day=9;
             }
 
             if(days==359){
-            if(day>=0&&day<=35)day=0;
-            if(day>=36&&day<=71)day=1;
-            if(day>=72&&day<=107)day=2;
-            if(day>=108&&day<=143)day=3;
-            if(day>=144&&day<=179)day=4;
-            if(day>=180&&day<=215)day=5;
-            if(day>=216&&day<=251)day=6;
-            if(day>=252&&day<=287)day=7;
-            if(day>=288&&day<=323)day=8;
-            if(day>=324&&day<=359)day=9;
+                if(day>=0&&day<=35)day=0;
+                if(day>=36&&day<=71)day=1;
+                if(day>=72&&day<=107)day=2;
+                if(day>=108&&day<=143)day=3;
+                if(day>=144&&day<=179)day=4;
+                if(day>=180&&day<=215)day=5;
+                if(day>=216&&day<=251)day=6;
+                if(day>=252&&day<=287)day=7;
+                if(day>=288&&day<=323)day=8;
+                if(day>=324&&day<=359)day=9;
             }
 
 
@@ -562,6 +569,174 @@ QString ReportSystem::als_Type_getCount(){
     return Als_Type_Count;
 }
 
+void ReportSystem::als_Time_Exe(int type)
+{
+    QDate currentDate=QDate::currentDate();
+
+    int num[10]={0,0,0,0,0,0,0,0,0,0};
+    int days=9;
+    switch(type){
+    case 0:
+        days=9;
+        break;
+    case 1:
+        days=29;
+        break;
+    case 2:
+        days=59;
+        break;
+    case 3:
+        days=89;
+        break;
+    case 4:
+        days=179;
+        break;
+    case 5:
+        days=359;
+        break;
+    }
+
+
+
+    for(int i=0;i<Exercises.length();i++)
+    {
+        int day=QDate::fromString(Exercises[i].DateTime,"yyyy-MM-dd").daysTo(currentDate);
+
+        if(day>=0&&day<=days){
+
+            if(days==29){
+                if(day>=0&&day<=2)day=0;
+                if(day>=3&&day<=5)day=1;
+                if(day>=6&&day<=8)day=2;
+                if(day>=9&&day<=11)day=3;
+                if(day>=12&&day<=14)day=4;
+                if(day>=15&&day<=17)day=5;
+                if(day>=18&&day<=20)day=6;
+                if(day>=21&&day<=23)day=7;
+                if(day>=24&&day<=26)day=8;
+                if(day>=27&&day<=29)day=9;
+            }
+
+            if(days==59){
+                if(day>=0&&day<=5)day=0;
+                if(day>=6&&day<=11)day=1;
+                if(day>=12&&day<=17)day=2;
+                if(day>=18&&day<=23)day=3;
+                if(day>=24&&day<=29)day=4;
+                if(day>=30&&day<=35)day=5;
+                if(day>=36&&day<=41)day=6;
+                if(day>=42&&day<=47)day=7;
+                if(day>=48&&day<=53)day=8;
+                if(day>=54&&day<=59)day=9;
+            }
+
+            if(days==89){
+                if(day>=0&&day<=8)day=0;
+                if(day>=9&&day<=17)day=1;
+                if(day>=18&&day<=26)day=2;
+                if(day>=27&&day<=35)day=3;
+                if(day>=36&&day<=44)day=4;
+                if(day>=45&&day<=53)day=5;
+                if(day>=54&&day<=62)day=6;
+                if(day>=63&&day<=71)day=7;
+                if(day>=72&&day<=80)day=8;
+                if(day>=81&&day<=89)day=9;
+            }
+
+            if(days==179){
+                if(day>=0&&day<=17)day=0;
+                if(day>=18&&day<=35)day=1;
+                if(day>=36&&day<=53)day=2;
+                if(day>=54&&day<=71)day=3;
+                if(day>=72&&day<=89)day=4;
+                if(day>=90&&day<=107)day=5;
+                if(day>=108&&day<=125)day=6;
+                if(day>=126&&day<=143)day=7;
+                if(day>=144&&day<=161)day=8;
+                if(day>=162&&day<=179)day=9;
+            }
+
+            if(days==359){
+                if(day>=0&&day<=35)day=0;
+                if(day>=36&&day<=71)day=1;
+                if(day>=72&&day<=107)day=2;
+                if(day>=108&&day<=143)day=3;
+                if(day>=144&&day<=179)day=4;
+                if(day>=180&&day<=215)day=5;
+                if(day>=216&&day<=251)day=6;
+                if(day>=252&&day<=287)day=7;
+                if(day>=288&&day<=323)day=8;
+                if(day>=324&&day<=359)day=9;
+            }
+
+            num[day]+=Exercises[i].LastTime;
+        }
+    }
+
+    Als_Time_Count_Exe="";
+    for(int i=0;i<10;i++){
+        Als_Time_Count_Exe+=QString::number(num[9-i]);
+        if(i!=9)
+            Als_Time_Count_Exe+="@";
+    }
+
+
+    Als_Time_Name_Exe="";
+    if(type==0)for(int i=0;i<10;i++){
+        Als_Time_Name_Exe+=currentDate.addDays(i-9).toString("MM-dd");
+        if(i!=9)
+            Als_Time_Name_Exe+="@";
+    }
+
+    if(type==1)for(int i=0;i<10;i++){
+        Als_Time_Name_Exe+=currentDate.addDays((3*i)+2-29).toString("MM-dd");
+        if(i!=9)
+            Als_Time_Name_Exe+="@";
+    }
+
+    if(type==2)for(int i=0;i<10;i++){
+        Als_Time_Name_Exe+=currentDate.addDays((6*i)+5-59).toString("MM-dd");
+        if(i!=9)
+            Als_Time_Name_Exe+="@";
+    }
+
+    if(type==3)for(int i=0;i<10;i++){
+        Als_Time_Name_Exe+=currentDate.addDays((9*i)+8-89).toString("MM-dd");
+        if(i!=9)
+            Als_Time_Name_Exe+="@";
+    }
+
+    if(type==4)for(int i=0;i<10;i++){
+        Als_Time_Name_Exe+=currentDate.addDays((18*i)+17-179).toString("MM-dd");
+        if(i!=9)
+            Als_Time_Name_Exe+="@";
+    }
+
+    if(type==5)for(int i=0;i<10;i++){
+        Als_Time_Name_Exe+=currentDate.addDays((36*i)+35-359).toString("MM-dd");
+        if(i!=9)
+            Als_Time_Name_Exe+="@";
+    }
+
+
+
+    m_Statue="als_Time_ExeDONE";
+
+    emit statueChanged(m_Statue);
+
+
+}
+
+QString ReportSystem::als_Time_Exe_getCount()
+{
+    return Als_Time_Count_Exe;
+}
+
+QString ReportSystem::als_Time_Exe_getName()
+{
+    return Als_Time_Name_Exe;
+}
+
 
 
 
@@ -603,6 +778,42 @@ void ReportSystem::tcpReadMessage(){
 
     if(message.indexOf("@getuniquediets@NoMore@")>=0)
         m_Statue="getalldietsSucceed";
+
+
+
+
+
+
+
+
+    if(message=="@getallexercises@DBError@")
+        m_Statue="getallexercisesDBError";
+
+    if(message=="@getallexercises@FirstSucceed@")
+    {
+        QString out="@getuniqueexercises@";
+        tcpSocket->write(out.toUtf8());
+        return;
+    }
+
+
+    if(message.indexOf("@getuniqueexercises@Succeed@")>=0){
+        QStringList inf=message.split("|||");
+
+        Exercise temp;
+        temp.DateTime=inf[1];
+        temp.Type=inf[2];
+        temp.LastTime=inf[3].toInt();
+
+        Exercises.append(temp);
+
+        QString out="@getuniqueexercises@";
+        tcpSocket->write(out.toUtf8());
+        return;
+    }
+
+    if(message.indexOf("@getuniqueexercises@NoMore@")>=0)
+        m_Statue="getallexercisesSucceed";
 
 
 

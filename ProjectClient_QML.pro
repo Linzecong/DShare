@@ -8,6 +8,10 @@ CONFIG += c++11
 QT += qml quick quickcontrols2
 QT += charts
 
+QT+=network
+QT       += script
+QT += multimedia
+
 SOURCES += \
     Sources/DataSystem.cpp \
     Sources/JavaMethod.cpp \
@@ -17,7 +21,8 @@ SOURCES += \
     Sources/RecordSystem.cpp \
     Sources/RegistSystem.cpp \
     Sources/ReportSystem.cpp \
-    Sources/SendImageSystem.cpp
+    Sources/SendImageSystem.cpp \
+    Sources/SpeechSystem.cpp
 
 RESOURCES += qml.qrc
 
@@ -33,7 +38,9 @@ HEADERS += \
     Framework/Post.h \
     Framework/Record.h \
     Framework/System.h \
-    Framework/User.h
+    Framework/User.h \
+    Headers/ReportData.h \
+    Headers/SpeechSystem.h
 
 HEADERS += \
     Headers/DataSystem.h \
@@ -42,7 +49,6 @@ HEADERS += \
     Headers/PostsSystem.h \
     Headers/RecordSystem.h \
     Headers/RegistSystem.h \
-    Headers/reportdata.h \
     Headers/ReportSystem.h \
     Headers/SendImageSystem.h
 

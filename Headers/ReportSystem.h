@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtNetwork/QtNetwork>
 #include <QMap>
+#include "Headers/RecordSystem.h"
 struct Diet{
     QString DateTime;
     QStringList Breakfast;
@@ -33,6 +34,9 @@ public:
      QList<Diet> Diets;//6餐内容
      Q_INVOKABLE void getalldiet(QString name);//获取特定时间的饮食数据
 
+     QList<Exercise> Exercises;//6餐内容
+     Q_INVOKABLE void getallexercise(QString name);//获取特定时间的运动数据
+
      QString Als_Top5_Count;
      QString Als_Top5_Name;
      Q_INVOKABLE void als_Top5(int type);//分析吃得最多的前五个食材
@@ -59,6 +63,15 @@ public:
      Q_INVOKABLE void als_Type(int type,int days);//分析性状吃得最多的前五个食材
      Q_INVOKABLE QString als_Type_getCount();
 
+
+
+
+     QString Als_Time_Count_Exe;
+     QString Als_Time_Name_Exe;
+
+     Q_INVOKABLE void als_Time_Exe(int type);//分析一定时间内运动时间分布
+     Q_INVOKABLE QString als_Time_Exe_getCount();
+     Q_INVOKABLE QString als_Time_Exe_getName();
 
 
 

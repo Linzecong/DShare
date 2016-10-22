@@ -8,6 +8,8 @@ import SendImageSystem 1.0
 import PostsSystem 1.0
 import QtQuick.Dialogs 1.2
 import QtCharts 2.0
+import SpeechSystem 1.0
+
 Rectangle { 
     MouseArea{
         anchors.bottom: parent.bottom
@@ -69,6 +71,21 @@ Rectangle {
     JavaMethod{
         id:myjava
     }
+
+    SpeechSystem{
+        id:speechsystem
+        onStatueChanged: {
+            indicator.visible=false
+
+            if(Statue=="")
+                myjava.toastMsg("识别失败！....")
+            else
+            messageedit.text=Statue;
+
+        }
+    }
+
+
 
 
 
@@ -403,6 +420,97 @@ Rectangle {
 
     }
 
+
+
+    Rectangle{
+        id:reminder
+        height:rect.width/3.5
+        width:height*2
+        anchors.bottom: recordbutton.top
+        anchors.bottomMargin: mainpage.width/20
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        border.width: 2
+        border.color: "grey"
+        radius: width/5
+        visible: false
+        Label{
+            visible:true
+            text: "请说话";
+            color:"#02ae4a"
+            font{
+                pixelSize: photobutton.height/4
+            }
+            anchors.centerIn: parent;
+        }
+
+    }
+
+
+    Rectangle{
+        id:recordbutton;
+        height:rect.width/3.5
+        width:height
+        anchors.top: photobutton.bottom
+        anchors.topMargin: mainpage.width/10
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        border.width: 2
+        border.color: "grey"
+        radius: width/2
+        Label{
+            visible:true
+            text: "语音输入";
+            color:"#02ae4a"
+            font{
+                pixelSize: photobutton.height/6
+                bold: true
+
+            }
+            anchors.centerIn: parent;
+        }
+
+        MouseArea{
+            anchors.fill: parent
+            onPressed: {
+                speechsystem.inclick()
+                recordbutton.color="green"
+                reminder.visible=true
+                speechlengthtimer.time=0
+                speechlengthtimer.start()
+            }
+            onReleased: {
+                speechlengthtimer.stop()
+
+                if(speechlengthtimer.time>10){
+                reminder.visible=false
+                speechsystem.outclick("zh")
+                recordbutton.color="white"
+                indicator.visible=true
+                }
+                else{
+                    reminder.visible=false
+                    recordbutton.color="white"
+                    speechsystem.outclick("short")
+                    myjava.toastMsg("时间太短...")
+                }
+
+            }
+        }
+
+        Timer{
+            id:speechlengthtimer
+            repeat: true
+            interval: 100
+            property int time:0
+            onTriggered: {
+                time++
+            }
+        }
+
+    }
 
 
 

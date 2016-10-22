@@ -70,8 +70,10 @@ property string nickname;
 
               while(dbsystem.getFollowingName(modelindex)!==""){
 
-                  if(headname.text!=="我的粉丝")
+                  if(headname.text==="我的关注")
                   model1.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowingID(modelindex)+".jpg", "username":dbsystem.getFollowingID(modelindex),"nickname":dbsystem.getFollowingName(modelindex),"yiguanzhu":1})
+
+
                   searchmodel.append({"headurl": "http://119.29.15.43/userhead/"+dbsystem.getFollowingID(modelindex)+".jpg", "username":dbsystem.getFollowingID(modelindex),"nickname":dbsystem.getFollowingName(modelindex),"yiguanzhu":1})
                   modelindex++;
               }
@@ -259,14 +261,29 @@ property string nickname;
 
     }
 
+
+
     ListView{
         id:view
+        cacheBuffer:20000
         spacing: -1
         anchors.top: searchbar.visible?searchbar.bottom:head.bottom
         clip: true
         width: parent.width
         height:parent.height-head.height-(searchbar.visible?searchbar.height:0)
         model: model1
+        Rectangle {
+                  id: scrollbar
+                  anchors.right: view.right
+                  anchors.rightMargin: 3
+                  y: view.visibleArea.yPosition * view.height
+                  width: 10
+                  height: view.visibleArea.heightRatio * view.height
+                  color: "grey"
+                  radius: 5
+                  z:50
+                  visible: view.dragging||view.flicking
+              }
         delegate: Item{
             id:delegate
             width:mainrect.width

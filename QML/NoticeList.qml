@@ -171,6 +171,7 @@ Rectangle {
         width: parent.width
         height:parent.height-head.height
         model: noticemodel
+
         Rectangle {
                   id: scrollbar
                   anchors.right: view.right
@@ -183,6 +184,7 @@ Rectangle {
                   z:50
                   visible: view.dragging||view.flicking
               }
+
         delegate: Item{
             id:delegate
             width:mainrect.width

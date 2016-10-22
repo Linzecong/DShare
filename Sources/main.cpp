@@ -12,6 +12,7 @@
 #include"Headers/DataSystem.h"
 #include"Headers/RecordSystem.h"
 #include"Headers/ReportSystem.h"
+#include"Headers/SpeechSystem.h"
 
 int main(int argc, char *argv[]){
     QApplication app(argc, argv);
@@ -25,6 +26,7 @@ int main(int argc, char *argv[]){
     qmlRegisterType<DataSystem>("DataSystem",1,0,"DataSystem");
     qmlRegisterType<RecordSystem>("RecordSystem",1,0,"RecordSystem");
     qmlRegisterType<ReportSystem>("ReportSystem",1,0,"ReportSystem");
+    qmlRegisterType<SpeechSystem>("SpeechSystem",1,0,"SpeechSystem");
 
     QQuickView viewer;
 

@@ -68,6 +68,10 @@ if(i<PostList.length()){
     JavaMethod java;
     QDir *tempdir = new QDir;
     QString nnFileName=PostList[i].HeadURL.left(PostList[i].HeadURL.lastIndexOf('.'));
+    if(nnFileName=="")
+        return "";
+
+
     nnFileName=nnFileName+"_temp.jpg";
 
     Photoname=nnFileName.right(nnFileName.size()-nnFileName.lastIndexOf('/')-1);
@@ -127,11 +131,17 @@ QString PostsSystem::getpostphoto(int i){
         JavaMethod java;
         QDir *tempdir = new QDir;
         QString nnFileName=PostList[i].ImageURL.left(PostList[i].ImageURL.lastIndexOf('.'));
+
+        if(nnFileName=="")
+            return "";
+
         nnFileName=nnFileName+"_temp.jpg";
 
         Photoname=nnFileName.right(nnFileName.size()-nnFileName.lastIndexOf('/')-1);
         QString path=java.getSDCardPath();
         path=path+"/DShare/"+Photoname+".dbnum";
+
+
 
         if(tempdir->exists(path)){
             return "file://"+path;

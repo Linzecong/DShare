@@ -221,6 +221,8 @@ Rectangle{
         contentHeight: delegaterect.height+commentview.height+commentbar.height
         clip: true
 
+
+
         Rectangle{
             id:delegaterect
             border.color: "grey"
@@ -368,6 +370,7 @@ Rectangle{
         }
 
 
+
         ListView{
             id:commentview
             anchors.top: delegaterect.bottom
@@ -383,17 +386,17 @@ Rectangle{
             spacing:-1
 
             Rectangle {
-                id: scrollbar
-                anchors.right: commentview.right
-                anchors.rightMargin: 3
-                y: commentview.visibleArea.yPosition * commentview.height
-                width: 10
-                height: commentview.visibleArea.heightRatio * commentview.height
-                color: "grey"
-                radius: 5
-                z:50
-                visible: commentview.dragging||commentview.flicking
-            }
+                      id: scrollbar
+                      anchors.right: commentview.right
+                      anchors.rightMargin: 3
+                      y: commentview.visibleArea.yPosition * commentview.height
+                      width: 10
+                      height: commentview.visibleArea.heightRatio * commentview.height
+                      color: "grey"
+                      radius: 5
+                      z:2
+                      visible: commentview.dragging||commentview.flicking
+                  }
 
             delegate: Item{
                 id:uniquecomment

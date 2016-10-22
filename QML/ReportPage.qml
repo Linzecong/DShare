@@ -21,6 +21,8 @@ Rectangle {
         nickname=mnickname
         myjava.toastMsg("获取中...请耐心等待...")
         reportsystem.getalldiet(userid)
+
+
         forceActiveFocus()//用于响应返回键
     }
     MouseArea{
@@ -30,15 +32,21 @@ Rectangle {
     ReportSystem{
         id:reportsystem
         onStatueChanged: {
-            if(Statue==="getalldietsDBError")
+            if(Statue==="getalldietsDBError"||Statue==="getallexercisesDBError")
                 myjava.toastMsg("网络出错..请重试");
 
             if(Statue==="getalldietsSucceed"){
-
+                reportsystem.getallexercise(str_userid)
                 reportsystem.als_Top5(foodcountchart.currentPage)
                 reportsystem.als_Time(foodtimechart.currentPage)
                 reportsystem.als_Type(foodtypechart.currentPage,foodtimechart.currentPage)
 
+            }
+
+            if(Statue==="getallexercisesSucceed"){
+
+                myjava.toastMsg("获取运动数据成功~！")
+                reportsystem.als_Time_Exe(sporttimechart.currentPage)
             }
 
 
@@ -59,7 +67,29 @@ Rectangle {
 
 
 
-                als_Top5_getName().split("@")
+
+
+
+            }
+
+            if(Statue==="als_Time_ExeDONE"){
+
+
+
+
+
+                var maxnum=-1;
+                var a=0;
+                sporttimechartline.clear();
+                for(var i=0;i<=9;i++){
+                    sporttimechartline.append(i,a=parseInt(als_Time_Exe_getCount().split("@")[i]))
+                    maxnum=maxnum>a?maxnum:a;
+                }
+
+                sporttimechartbcax.categories=als_Time_Exe_getName().split("@")
+
+
+                sporttimechartyAxis.max=maxnum*1.1
 
 
             }
@@ -226,7 +256,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.bottom:parent.bottom
 
-        contentHeight: foodcountchart.height+foodtimechart.height+foodtypechart.height
+        contentHeight: foodcountchart.height+foodtimechart.height+foodtypechart.height+sporttimechart.height
 
 
         ChartView {
@@ -521,7 +551,7 @@ Rectangle {
             animationOptions:ChartView.SeriesAnimations
 
 
-            property int currentPage: 1
+            property int currentPage: 0
             onCurrentPageChanged: {
                 var temp;
                 switch(foodtimechart.currentPage){
@@ -611,6 +641,126 @@ Rectangle {
                             foodtypechart.currentPage=1;
                         reportsystem.als_Type(foodtypechart.currentPage,foodtimechart.currentPage)
                     }
+                }
+            }
+
+
+        }
+
+        ChartView {
+            id: sporttimechart
+
+            title: "最近10天运动时间"
+            titleFont{
+                family: "微软雅黑"
+                pixelSize: head.height/4
+            }
+
+            legend.alignment: Qt.AlignBottom
+            legend.visible:true
+            legend.font{
+                family: "微软雅黑"
+                pixelSize: head.height/5
+            }
+
+
+            antialiasing: true
+
+            anchors.top: foodtypechart.bottom
+
+            height: mainwindow.height/2
+            width: parent.width
+            animationOptions:ChartView.SeriesAnimations
+
+
+            property int currentPage: 0
+            onCurrentPageChanged: {
+
+                switch(currentPage){
+                case 0:
+                    title="最近10天运动时间"
+                    break;
+                case 1:
+                    title="最近30天运动时间"
+                    break;
+                case 2:
+                    title="最近60天运动时间"
+                    break;
+                case 3:
+                    title="最近90天运动时间"
+                    break;
+                case 4:
+                    title="最近半年运动时间"
+                    break;
+                case 5:
+                    title="最近一年运动时间"
+                    break;
+                default:
+                    title="最近10天运动时间"
+                    break;
+                }
+
+            }
+
+            BarCategoryAxis {
+                id:sporttimechartbcax
+                labelsFont{
+                    family: "微软雅黑"
+                    pixelSize: head.height/7
+                    bold:true
+                }
+            }
+            ValueAxis {
+                id: sporttimechartyAxis
+                labelFormat: "%d"
+                min: -0.9
+                max: 10
+            }
+
+            SplineSeries {
+                name: "分钟"
+                id:sporttimechartline
+                axisX:sporttimechartbcax
+                axisY: sporttimechartyAxis
+            }
+
+
+            Rectangle{
+                id:sporttimechartleft
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.margins: head.height/3
+                height: head.height/3
+                width: parent.width/7
+                color:"yellow"
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        sporttimechart.currentPage--
+                        if(sporttimechart.currentPage==-1)
+                            sporttimechart.currentPage=5;
+
+                        reportsystem.als_Time_Exe(sporttimechart.currentPage)
+                        }
+                }
+            }
+
+            Rectangle{
+                id:sporttimechartright
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.margins: head.height/3
+                height: head.height/3
+                width: parent.width/7
+                color:"yellow"
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        sporttimechart.currentPage++
+                        if(sporttimechart.currentPage==6)
+                            sporttimechart.currentPage=0;
+                        reportsystem.als_Time_Exe(sporttimechart.currentPage)
+                        }
                 }
             }
 

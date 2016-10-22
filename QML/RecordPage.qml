@@ -9,6 +9,7 @@ import PostsSystem 1.0
 import JavaMethod 1.0
 import RecordSystem 1.0
 import DataSystem 1.0
+import SpeechSystem 1.0
 
 Rectangle {
     color:"white"
@@ -20,6 +21,25 @@ Rectangle {
         dbsystem.getcheckinday(str_userid);
         recordsystem.getdietlist()
         recordsystem.getsportlist()
+    }
+
+    Rectangle{
+        id: indicator
+        height: parent.height*1.3
+        width: parent.width
+        x:0
+        y:-parent.height/8
+
+        visible: false
+        color:"black"
+        opacity: 0.6
+        z:1001
+        BusyIndicator{
+            width:parent.width/7
+            height:width
+            anchors.centerIn: parent
+            running: true
+        }
     }
 
     DataSystem{
@@ -283,9 +303,11 @@ family: "微软雅黑"
         }
     }
 
+
     //饮食记录页面
     ListView{
         id:foodview
+        cacheBuffer:20000
         visible: header.currentpage=="饮食"?true:false
         height: parent.height-header.height
         width:parent.width
@@ -294,6 +316,19 @@ family: "微软雅黑"
         spacing: 5
         property var currentdiet;
         property int currentfood;
+
+        Rectangle {
+                  id: scrollbar
+                  anchors.right: foodview.right
+                  anchors.rightMargin: 3
+                  y: foodview.visibleArea.yPosition * foodview.height
+                  width: 10
+                  height: foodview.visibleArea.heightRatio * foodview.height
+                  color: "grey"
+                  radius: 5
+                  z:50
+                  visible: foodview.dragging||foodview.flicking
+              }
 
         //餐饮model
         ListModel{
@@ -486,6 +521,124 @@ family: "微软雅黑"
 
                     }
                 }
+
+                SpeechSystem{
+                    id:speechsystem
+                    onStatueChanged: {
+                        if(Statue=="splitDone"){
+                            var list=[];
+                            list=speechsystem.getSplitSpeech().split("@");
+                            foodlist.model.clear()
+                            for(var i=0;i<list.length;i++)
+                            foodlist.model.append({"Food":list[i]})
+
+
+                        }
+                        else{
+                            indicator.visible=false
+                            if(Statue=="")
+                                myjava.toastMsg("识别失败！....")
+                            else
+                            speechsystem.splitSpeech(Statue)
+                        }
+
+                    }
+                }
+
+                Rectangle{
+                    id:reminder
+                    height:speechbutton.height*1.3
+                    width:speechbutton.width*1.2
+                    anchors.bottom: speechbutton.top
+                    anchors.bottomMargin: speechbutton.height/2
+
+                    anchors.horizontalCenter: speechbutton.horizontalCenter
+
+                    border.width: 1
+                    border.color: "grey"
+                    radius: width/5
+                    visible: false
+                    Label{
+                        visible:true
+                        text: "请说话";
+                        color:"#02ae4a"
+                        font{
+                            pixelSize: parent.height/2.2
+                        }
+                        anchors.centerIn: parent;
+                    }
+
+                }
+
+                Rectangle{
+                    id:speechbutton
+                    border.color: "grey"
+                    border.width: 2
+                    radius: width/4
+                    color:"white"
+
+
+                    height: addfoodbutton.height
+                    width: foodlist.width/2
+
+                    anchors.top: addfoodbutton.top
+                    anchors.right: sharebutton.left
+                    anchors.rightMargin: sharebutton.width
+
+                    Text {
+                        id:speechtext
+                        anchors.centerIn: parent
+                        text:"语音输入"
+                        color:"grey"
+                        font{
+                            pixelSize: parent.height/2.5
+                        }
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onPressed: {
+                            savetimer.start()
+                            speechsystem.inclick()
+                            speechbutton.color="green"
+
+                            reminder.visible=true
+                            speechlengthtimer.time=0
+                            speechlengthtimer.start()
+                        }
+                        onReleased: {
+                             speechlengthtimer.stop()
+
+                            if(speechlengthtimer.time>8){
+                                reminder.visible=false
+                                speechsystem.outclick("zh")
+                                speechbutton.color="white"
+                                indicator.visible=true
+                            }
+                            else{
+                                reminder.visible=false
+                                speechbutton.color="white"
+                                speechsystem.outclick("short")
+                                myjava.toastMsg("时间太短...")
+                            }
+                        }
+
+
+
+                    }
+
+                }
+
+                Timer{
+                    id:speechlengthtimer
+                    repeat: true
+                    interval: 100
+                    property int time:0
+                    onTriggered: {
+                        time++
+                    }
+                }
+
 
                 Rectangle{
                     id:addfoodbutton
@@ -1349,6 +1502,19 @@ family: "微软雅黑"
             property string day;
 
 
+
+            TumblerColumn {
+                id: tumblerDayColumn
+                width:tumbler.width/3
+                model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
+                onCurrentIndexChanged: {
+                    tumbler.day=model[currentIndex].toString();
+                    if(parseInt(tumbler.day)>tumbler.days[monthColumn.currentIndex])
+                        tumbler.day="0";
+                }
+            }
+
+
             TumblerColumn {
                 width:tumbler.width/3
                 model: ListModel {
@@ -1386,21 +1552,9 @@ family: "微软雅黑"
 
                 }
             }
-            TumblerColumn {
-                id: tumblerDayColumn
-                width:tumbler.width/3
-                model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
-                onCurrentIndexChanged: {
-                    tumbler.day=model[currentIndex].toString();
-                    if(parseInt(tumbler.day)>tumbler.days[monthColumn.currentIndex])
-                        tumbler.day="0";
-                }
-            }
-
-
-
 
         }
+
 
 
 
@@ -1734,7 +1888,6 @@ family: "微软雅黑"
             height:parent.height-searchbar.height
             model: foodsmodel
             Rectangle {
-                      id: scrollbar
                       anchors.right: view.right
                       anchors.rightMargin: 3
                       y: view.visibleArea.yPosition * view.height

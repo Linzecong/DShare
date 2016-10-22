@@ -226,6 +226,7 @@ Rectangle {
             id:listview;
             anchors.fill: parent
             clip:true
+            cacheBuffer:20000
             property int likeindex:0
             property int commentindex:0
             //            spacing:20;

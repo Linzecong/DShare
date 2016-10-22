@@ -195,6 +195,7 @@ Rectangle{
         anchors.fill: parent
         clip:true
 //        spacing:20;
+        cacheBuffer:20000
         property int likeindex:0
         property int commentindex:0
         
