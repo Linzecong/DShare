@@ -23,15 +23,15 @@ Rectangle {
 
     //初始化各种数据
     function setusername(a){
-        mainpage.item.setusername(a);//初始话分享列表
+        mainpage.item.setusername(a)//初始话分享列表
         str_userid=a;
-        dbsystem.getNameByID(str_userid);
+        dbsystem.getNameByID(str_userid)
 
 
-        userid.text="ID："+a;//初始化侧边栏
-        sendpage.item.str_userid=a;//初始化发送页面的id
-        recordpage.item.str_userid=a;//初始化记录页面的id
-        recordpage.item.getcheckinday();
+        userid.text="ID："+a//初始化侧边栏
+        sendpage.item.str_userid=a//初始化发送页面的id
+        recordpage.item.str_userid=a//初始化记录页面的id
+        recordpage.item.getcheckinday()
     }
 
 

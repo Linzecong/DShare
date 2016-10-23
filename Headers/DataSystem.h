@@ -72,6 +72,7 @@ public:
 
     Q_INVOKABLE QString getdate();//返回日期
     Q_INVOKABLE void uploadFood(QString a);//上传食物
+    Q_INVOKABLE void uploadExercise(QString a);//上传运动
 
     Q_INVOKABLE void delusernamepassword();//注销时删除内存卡中的用户
 

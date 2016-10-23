@@ -73,7 +73,7 @@ Rectangle {
     }
 
     SpeechSystem{
-        id:speechsystem
+        id:sendspeechsystem
         onStatueChanged: {
             indicator.visible=false
 
@@ -475,7 +475,7 @@ Rectangle {
         MouseArea{
             anchors.fill: parent
             onPressed: {
-                speechsystem.inclick()
+                sendspeechsystem.inclick()
                 recordbutton.color="green"
                 reminder.visible=true
                 speechlengthtimer.time=0
@@ -486,14 +486,14 @@ Rectangle {
 
                 if(speechlengthtimer.time>10){
                 reminder.visible=false
-                speechsystem.outclick("zh")
+                sendspeechsystem.outclick("zh")
                 recordbutton.color="white"
                 indicator.visible=true
                 }
                 else{
                     reminder.visible=false
                     recordbutton.color="white"
-                    speechsystem.outclick("short")
+                    sendspeechsystem.outclick("short")
                     myjava.toastMsg("时间太短...")
                 }
 

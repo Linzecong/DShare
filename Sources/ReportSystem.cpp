@@ -574,27 +574,14 @@ void ReportSystem::als_Time_Exe(int type)
     QDate currentDate=QDate::currentDate();
 
     int num[10]={0,0,0,0,0,0,0,0,0,0};
+
     int days=9;
-    switch(type){
-    case 0:
-        days=9;
-        break;
-    case 1:
-        days=29;
-        break;
-    case 2:
-        days=59;
-        break;
-    case 3:
-        days=89;
-        break;
-    case 4:
-        days=179;
-        break;
-    case 5:
-        days=359;
-        break;
-    }
+    if(type==0)days=9;
+    if(type==1)days=29;
+    if(type==2)days=59;
+    if(type==3)days=89;
+    if(type==4)days=179;
+    if(type==5)days=359;
 
 
 

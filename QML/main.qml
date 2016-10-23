@@ -185,7 +185,7 @@ StackView{
             anchors.right: userrow.right
             anchors.top: passrow.bottom
             anchors.topMargin: passrow.height
-            color:loginma.pressed?"33dd97":"#02ae4a";
+            color:loginma.pressed?"33dd97":"#02ae4a"
             radius: height/4
             Label{
                 id:logintext

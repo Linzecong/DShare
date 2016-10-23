@@ -534,7 +534,6 @@ Rectangle {
                 pixelSize: head.height/4
             }
 
-            legend.alignment: Qt.AlignBottom
             legend.visible:true
             legend.font{
                 family: "微软雅黑"
@@ -656,7 +655,7 @@ Rectangle {
                 pixelSize: head.height/4
             }
 
-            legend.alignment: Qt.AlignBottom
+            legend.alignment: Qt.AlignTop
             legend.visible:true
             legend.font{
                 family: "微软雅黑"

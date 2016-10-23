@@ -231,6 +231,12 @@ void DataSystem::uploadFood(QString a){
     tcpSocket->write(out.toUtf8());
 }
 
+void DataSystem::uploadExercise(QString a)
+{
+    QString out="@uploadExercise@"+a;
+    tcpSocket->write(out.toUtf8());
+}
+
 void DataSystem::delusernamepassword(){
 #ifdef ANDROID
         JavaMethod java;

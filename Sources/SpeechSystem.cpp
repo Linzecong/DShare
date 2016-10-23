@@ -15,7 +15,7 @@ SpeechSystem::SpeechSystem(QObject *parent) : QObject(parent)
     manager3 = new QNetworkAccessManager(this);
     QObject::connect(manager3,&QNetworkAccessManager::finished,this,&SpeechSystem::getSplitSpeechResult);
 
-
+SplitSpeechText="";
 }
 
 void SpeechSystem::setStatue(QString s)
@@ -64,81 +64,82 @@ void SpeechSystem::outclick(QString lan)
     audio_in->stop();
 
     outputFile.close();
-    // QMessageBox::information(this,"提示","已录音");
-
-
-    QFile www;
-
-    www.setFileName(path);
-    www.open(QIODevice::ReadOnly );
-
-    QByteArray raw(www.readAll());
-    www.close();
-
-    QString path2=java.getSDCardPath();
-
-    path2=path2+"/DShare/test.wav";
-
-    QFile f;
-    f.setFileName(path2);
-    f.open(QIODevice::WriteOnly|QIODevice::Truncate );
-
-    typedef struct{
-        char riff_fileid[4];//"RIFF"
-        unsigned long riff_fileLen;
-        char waveid[4];//"WAVE"
-
-        char fmt_chkid[4];//"fmt"
-        unsigned long fmt_chkLen;
-
-        unsigned short    wFormatTag;        /* format type */
-        unsigned short    nChannels;         /* number of channels (i.e. mono, stereo, etc.) */
-        unsigned long   nSamplesPerSec;    /* sample rate */
-        unsigned long   nAvgBytesPerSec;   /* for buffer estimation */
-        unsigned short    nBlockAlign;       /* block size of data */
-        unsigned short    wBitsPerSample;
-
-
-        char data_chkid[4];//"DATA"
-        unsigned short data_chkLen;
-    }WaveHeader;
-
-    QAudioFormat format;
-    // set up the format you want, eg.
-    format.setSampleRate(8000);
-    format.setChannelCount(1);
-    format.setSampleSize(16);
-    format.setCodec("audio/pcm");
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::UnSignedInt);
-
-    WaveHeader wh={0};
-    strcpy(wh.riff_fileid, "RIFF");
-    wh.riff_fileLen = raw.length() + 32;
-    strcpy(wh.waveid, "WAVE");
-
-    strcpy(wh.fmt_chkid, "fmt ");
-    wh.fmt_chkLen = 16;
-
-    wh.wFormatTag = 0x0001;
-    wh.nChannels = format.channelCount();
-    wh.nSamplesPerSec = format.sampleRate();
-    wh.wBitsPerSample = format.sampleSize();
-    wh.nBlockAlign =wh.nChannels*wh.wBitsPerSample/8;
-    wh.nAvgBytesPerSec =   wh.nBlockAlign*wh.nSamplesPerSec;
-
-    strcpy(wh.data_chkid, "data");
 
 
 
-    wh.data_chkLen = raw.length();
+
+//    QFile www;
+
+//    www.setFileName(path);
+//    www.open(QIODevice::ReadOnly );
+
+//    QByteArray raw(www.readAll());
+//    www.close();
+
+//    QString path2=java.getSDCardPath();
+
+//    path2=path2+"/DShare/test.wav";
+
+//    QFile f;
+//    f.setFileName(path2);
+//    f.open(QIODevice::WriteOnly|QIODevice::Truncate );
+
+//    typedef struct{
+//        char riff_fileid[4];//"RIFF"
+//        unsigned long riff_fileLen;
+//        char waveid[4];//"WAVE"
+
+//        char fmt_chkid[4];//"fmt"
+//        unsigned long fmt_chkLen;
+
+//        unsigned short    wFormatTag;        /* format type */
+//        unsigned short    nChannels;         /* number of channels (i.e. mono, stereo, etc.) */
+//        unsigned long   nSamplesPerSec;    /* sample rate */
+//        unsigned long   nAvgBytesPerSec;   /* for buffer estimation */
+//        unsigned short    nBlockAlign;       /* block size of data */
+//        unsigned short    wBitsPerSample;
 
 
-    f.write((char *)&wh, sizeof(wh));
-    f.write(raw);
-    f.close();
+//        char data_chkid[4];//"DATA"
+//        unsigned short data_chkLen;
+//    }WaveHeader;
 
-    FileNameLabel=path2;
+//    QAudioFormat format;
+//    // set up the format you want, eg.
+//    format.setSampleRate(8000);
+//    format.setChannelCount(1);
+//    format.setSampleSize(16);
+//    format.setCodec("audio/pcm");
+//    format.setByteOrder(QAudioFormat::LittleEndian);
+//    format.setSampleType(QAudioFormat::UnSignedInt);
+
+//    WaveHeader wh={0};
+//    strcpy(wh.riff_fileid, "RIFF");
+//    wh.riff_fileLen = raw.length() + 32;
+//    strcpy(wh.waveid, "WAVE");
+
+//    strcpy(wh.fmt_chkid, "fmt ");
+//    wh.fmt_chkLen = 16;
+
+//    wh.wFormatTag = 0x0001;
+//    wh.nChannels = format.channelCount();
+//    wh.nSamplesPerSec = format.sampleRate();
+//    wh.wBitsPerSample = format.sampleSize();
+//    wh.nBlockAlign =wh.nChannels*wh.wBitsPerSample/8;
+//    wh.nAvgBytesPerSec =   wh.nBlockAlign*wh.nSamplesPerSec;
+
+//    strcpy(wh.data_chkid, "data");
+
+
+
+//    wh.data_chkLen = raw.length();
+
+
+//    f.write((char *)&wh, sizeof(wh));
+//    f.write(raw);
+//    f.close();
+
+    FileNameLabel=path;
 
     if(TypeLabel!="short")
     uploadClick();
@@ -327,6 +328,8 @@ void SpeechSystem::getResult(QNetworkReply *reply)
 
 
     m_Statue=list.at(0).toString().replace(",","").replace("，","");
+
+    qDebug()<<m_Statue;
     emit statueChanged(m_Statue);
 
 
@@ -334,19 +337,25 @@ void SpeechSystem::getResult(QNetworkReply *reply)
 
 void SpeechSystem::splitSpeech(QString str)
 {
-    QUrl url("http://api.pullword.com/get.php?source="+str+"&param1=0.7&param2=0");
+    str=QString::fromStdString(str.toStdString())+"&param1=0&param2=0";
+
+    QUrl url("http://api.pullword.com/get.php?source="+str);
+
 
     QNetworkRequest request(url);
+    qDebug()<<request.url().toString();
     manager3->get(request);
 }
 
 QString SpeechSystem::getSplitSpeech()
 {
-    return SplitSpeechText;
+    QString temp=SplitSpeechText;
+    return temp;
 }
 
 void SpeechSystem::getSplitSpeechResult(QNetworkReply *reply)
 {
+
     SplitSpeechText="";
 
     QStringList temp;
@@ -356,12 +365,15 @@ void SpeechSystem::getSplitSpeechResult(QNetworkReply *reply)
     temp.append(reply->readLine());
 
     SplitSpeechText=temp.join("@");
-    SplitSpeechText=SplitSpeechText.replace("\r\n","").replace("@@@","").replace("@@","");
+    qDebug()<<SplitSpeechText;
+    SplitSpeechText=SplitSpeechText.replace("\r\n","").replace("@@@","").replace("@@","")+"@";
 
     if(SplitSpeechText.indexOf("error")>=0)
     m_Statue="";
     else
-        m_Statue="splitDone";
+    m_Statue="splitdone";
+
+
     emit statueChanged(m_Statue);
 }
 

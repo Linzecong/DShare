@@ -24,7 +24,7 @@ Rectangle {
     }
 
     Rectangle{
-        id: indicator
+        id: indicator2
         height: parent.height*1.3
         width: parent.width
         x:0
@@ -87,14 +87,14 @@ Rectangle {
                 foodsmodel.clear()
                 var i=0;
                 while(recordsystem.getdietliststr(i)!=="")
-                foodsmodel.append({"value":recordsystem.getdietliststr(i++)})
+                    foodsmodel.append({"value":recordsystem.getdietliststr(i++)})
             }
 
             if(Statue==="getsportlistSucceed"){
                 sportsmodel.clear()
                 var i2=0;
                 while(recordsystem.getsportliststr(i2)!=="")
-                sportsmodel.append({"value":recordsystem.getsportliststr(i2++)})
+                    sportsmodel.append({"value":recordsystem.getsportliststr(i2++)})
             }
 
 
@@ -250,7 +250,7 @@ Rectangle {
             text: "饮食"
             color:header.currentpage==text?"#02ae4a":"grey"
             font{
-family: "微软雅黑"
+                family: "微软雅黑"
                 pixelSize: header.height/2
             }
             anchors.left: parent.left
@@ -269,7 +269,7 @@ family: "微软雅黑"
             text: "运动"
             color:header.currentpage==text?"#02ae4a":"grey"
             font{
-family: "微软雅黑"
+                family: "微软雅黑"
                 pixelSize: header.height/2
             }
             anchors.horizontalCenter: parent.horizontalCenter
@@ -287,7 +287,7 @@ family: "微软雅黑"
             text: "查看"
             color:header.currentpage==text?"#02ae4a":"grey"
             font{
-family: "微软雅黑"
+                family: "微软雅黑"
                 pixelSize: header.height/2
             }
             anchors.right: parent.right
@@ -318,17 +318,17 @@ family: "微软雅黑"
         property int currentfood;
 
         Rectangle {
-                  id: scrollbar
-                  anchors.right: foodview.right
-                  anchors.rightMargin: 3
-                  y: foodview.visibleArea.yPosition * foodview.height
-                  width: 10
-                  height: foodview.visibleArea.heightRatio * foodview.height
-                  color: "grey"
-                  radius: 5
-                  z:50
-                  visible: foodview.dragging||foodview.flicking
-              }
+            id: scrollbar
+            anchors.right: foodview.right
+            anchors.rightMargin: 3
+            y: foodview.visibleArea.yPosition * foodview.height
+            width: 10
+            height: foodview.visibleArea.heightRatio * foodview.height
+            color: "grey"
+            radius: 5
+            z:50
+            visible: foodview.dragging||foodview.flicking
+        }
 
         //餐饮model
         ListModel{
@@ -525,22 +525,64 @@ family: "微软雅黑"
                 SpeechSystem{
                     id:speechsystem
                     onStatueChanged: {
-                        if(Statue=="splitDone"){
-                            var list=[];
-                            list=speechsystem.getSplitSpeech().split("@");
-                            foodlist.model.clear()
-                            for(var i=0;i<list.length;i++)
-                            foodlist.model.append({"Food":list[i]})
 
 
+                        if(Statue==="splitdone"){
+                            indicator2.visible=false
+
+                            var list=[]
+                            list=speechsystem.getSplitSpeech().split("@")
+                                foodlist.model.clear()
+
+
+
+                                for(var i=0;i<list.length-1;i++){
+                                    foodlist.model.append({"Food":list[i]})
+
+
+
+                                    var have=0;//判断是否有那个食材
+                                    for(var j=0;j<foodsmodel.count;j++)
+                                        if(foodsmodel.get(j).value===list[i]){
+                                            foodsmodel.move(j,0,1)
+                                            have=1;
+                                        }
+
+
+                                        if(have==0){
+                                            foodsmodel.insert(0,{"value":list[i]})
+
+                                            dbsystem.uploadFood(list[i])
+                                        }
+
+                                }
+
+                                var longstr="";
+                                for(var i2=0;i2<foodsmodel.count;i2++)
+                                    longstr=longstr+foodsmodel.get(i2).value+" "
+                                recordsystem.savedietlist(longstr)
+
+                            return
+
+                        }
+
+
+
+
+
+                        if(Statue==""){
+                            myjava.toastMsg("识别失败！....")
+                            indicator2.visible=false
+                            return
                         }
                         else{
-                            indicator.visible=false
-                            if(Statue=="")
-                                myjava.toastMsg("识别失败！....")
-                            else
+                            myjava.toastMsg("分析中..."+Statue)
                             speechsystem.splitSpeech(Statue)
+                            return
                         }
+
+
+
 
                     }
                 }
@@ -598,6 +640,7 @@ family: "微软雅黑"
                     MouseArea{
                         anchors.fill: parent
                         onPressed: {
+                            foodview.interactive=false
                             savetimer.start()
                             speechsystem.inclick()
                             speechbutton.color="green"
@@ -607,13 +650,15 @@ family: "微软雅黑"
                             speechlengthtimer.start()
                         }
                         onReleased: {
-                             speechlengthtimer.stop()
+                            foodview.interactive=true
+                            speechlengthtimer.stop()
 
                             if(speechlengthtimer.time>8){
                                 reminder.visible=false
+                                indicator2.visible=true
                                 speechsystem.outclick("zh")
                                 speechbutton.color="white"
-                                indicator.visible=true
+
                             }
                             else{
                                 reminder.visible=false
@@ -801,7 +846,7 @@ family: "微软雅黑"
                             for(var i=0;i<foodlist.model.count;i++){
                                 if(foodlist.model.get(i).Food!=="点击选择食物")
                                     if(i==foodlist.model.count-1)
-                                    foodstr123=foodstr123+foodlist.model.get(i).Food;
+                                        foodstr123=foodstr123+foodlist.model.get(i).Food;
                                     else
                                         foodstr123=foodstr123+foodlist.model.get(i).Food+"、";
                             }
@@ -1219,7 +1264,7 @@ family: "微软雅黑"
                                 myjava.toastMsg("保存成功")
 
 
-                           // var str="<br><strong>运动：</strong>"+begintimerow.begintime+" <strong>"+sporttext.text+"</strong> 持续 "+lasttimerow.lasttime+"分钟";
+                            // var str="<br><strong>运动：</strong>"+begintimerow.begintime+" <strong>"+sporttext.text+"</strong> 持续 "+lasttimerow.lasttime+"分钟";
 
                             var str="<br><strong>运动：</strong>"+"<strong>"+sporttext.text+"</strong> "+lasttimerow.lasttime+"分钟";
 
@@ -1833,32 +1878,32 @@ family: "微软雅黑"
                     if(view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel||view.model===searchedsportmodel){
 
                         if(view.model===foodsmodel||view.model===searchedmodel){
-                        if(searchtext.text!==""){
-                            searchedmodel.clear()
-                            for(var i=0;i<foodsmodel.count;i++){
-                                var a=foodsmodel.get(i).value;
-                                if(a.indexOf(searchtext.text)>=0)
-                                    searchedmodel.append({"value":a})
+                            if(searchtext.text!==""){
+                                searchedmodel.clear()
+                                for(var i=0;i<foodsmodel.count;i++){
+                                    var a=foodsmodel.get(i).value;
+                                    if(a.indexOf(searchtext.text)>=0)
+                                        searchedmodel.append({"value":a})
+                                }
+                                view.model=searchedmodel;
                             }
-                            view.model=searchedmodel;
-                        }
-                        else
-                            view.model=foodsmodel
+                            else
+                                view.model=foodsmodel
                         }
 
 
                         if(view.model===sportsmodel||view.model===searchedsportmodel){
-                        if(searchtext.text!==""){
-                            searchedsportmodel.clear()
-                            for(var i=0;i<sportsmodel.count;i++){
-                                var a=sportsmodel.get(i).value;
-                                if(a.indexOf(searchtext.text)>=0)
-                                    searchedsportmodel.append({"value":a})
+                            if(searchtext.text!==""){
+                                searchedsportmodel.clear()
+                                for(var i=0;i<sportsmodel.count;i++){
+                                    var a=sportsmodel.get(i).value;
+                                    if(a.indexOf(searchtext.text)>=0)
+                                        searchedsportmodel.append({"value":a})
+                                }
+                                view.model=searchedsportmodel;
                             }
-                            view.model=searchedsportmodel;
-                        }
-                        else
-                            view.model=sportsmodel
+                            else
+                                view.model=sportsmodel
                         }
 
 
@@ -1888,16 +1933,16 @@ family: "微软雅黑"
             height:parent.height-searchbar.height
             model: foodsmodel
             Rectangle {
-                      anchors.right: view.right
-                      anchors.rightMargin: 3
-                      y: view.visibleArea.yPosition * view.height
-                      width: 10
-                      height: view.visibleArea.heightRatio * view.height
-                      color: "grey"
-                      radius: 5
-                      z:2
-                      visible: view.dragging||view.flicking
-                  }
+                anchors.right: view.right
+                anchors.rightMargin: 3
+                y: view.visibleArea.yPosition * view.height
+                width: 10
+                height: view.visibleArea.heightRatio * view.height
+                color: "grey"
+                radius: 5
+                z:2
+                visible: view.dragging||view.flicking
+            }
             delegate: Item{
                 id:delegate
                 width:view.width
@@ -1953,7 +1998,7 @@ family: "微软雅黑"
                                     sporttext.text=searchtext.text
                                     sportsmodel.insert(0,{"value":searchtext.text})
 
-                                    dbsystem.uploadFood(searchtext.text)
+                                    dbsystem.uploadExercise(searchtext.text)
                                 }
 
                                 var longstr="";
