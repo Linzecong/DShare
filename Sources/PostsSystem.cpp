@@ -181,6 +181,8 @@ QString PostsSystem::getpostlikers(int i){
     return "";
 }
 
+
+
 int PostsSystem::getpostID(int i)
 {
     if(i<PostList.length())

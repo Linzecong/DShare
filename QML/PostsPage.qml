@@ -72,7 +72,7 @@ Rectangle {
     Rectangle{
         id:head;
         width:parent.width;
-        height: parent.height/16*1.5;
+        height: parent.height/16*1.5
         color:"#02ae4a"
         anchors.top: parent.top;
         layer.enabled: true
@@ -91,10 +91,11 @@ Rectangle {
             width:height
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: (parent.height-height)/5
             verticalAlignment: Text.AlignVCenter
             font{
 
-                pixelSize: head.height/1.5
+                pixelSize: (head.height)/1.5
 
             }
             color: "white";
@@ -111,9 +112,10 @@ Rectangle {
             id:headname
             text:"分享列表"
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: (parent.height-height)/5
             font{
                 family: "微软雅黑"
-                pixelSize: head.height/2.5
+                pixelSize: (head.height)/2.5
             }
             color: "white"
         }
@@ -248,7 +250,7 @@ Rectangle {
             delegate: Item{
                 id:postitem
                 width:parent.width
-                height:headimage.height/5*7+headimage.height+message.height+photo.height+likers.height+comments.height*1.2
+                height:headimage.height/5*7+headimage.height+message.height+photo.height+comments.height*1.5
                 property int postID: ID//用于实现点赞功能
                 property string publisherid: PublisherID//用于显示删除
                 Rectangle{
@@ -341,7 +343,7 @@ Rectangle {
                     Label{
                         id:username
                         anchors.left: headimage.right
-                        anchors.leftMargin: headimage.width/5
+                        anchors.leftMargin: headimage.width/4
                         anchors.top: headimage.top
                         anchors.topMargin:height/5
                         height: headimage.height/2
@@ -356,7 +358,7 @@ Rectangle {
                     Label{
                         id:posttime
                         anchors.left: headimage.right
-                        anchors.leftMargin: headimage.width/5
+                        anchors.leftMargin: headimage.width/4
                         anchors.bottom: headimage.bottom
                         anchors.bottomMargin: -height/5
                         height: headimage.height/2
@@ -369,9 +371,12 @@ Rectangle {
                     Label{
                         id:message
                         anchors.left: headimage.left
+                        anchors.right: parent.right
                         anchors.top: headimage.bottom
                         anchors.topMargin: headimage.height/3
-                        width:parent.width-headimage.height/3*2
+
+                        //width:parent.width-headimage.height/3*2
+
                         text: Message
                         textFormat:Text.RichText
                         wrapMode: Text.Wrap;
@@ -409,11 +414,13 @@ Rectangle {
 
                     Label{
                         id:likers
+                        property string likerStr: Liker
                         anchors.left: headimage.left
                         anchors.top: photo.bottom
                         anchors.topMargin: headimage.height/5
-                        text: " "+Liker
-                        width:parent.width-headimage.height/3*4
+                        text: LikerNum+" 个点赞 · "
+
+                        //width:parent.width-headimage.height/3*4
 
                         wrapMode: Text.Wrap;
                         color: "#02ae4a"
@@ -422,26 +429,27 @@ Rectangle {
                             pixelSize: headimage.height/3
                         }
 
-                        Rectangle{
-                            anchors.left: parent.left
-                            anchors.top: parent.top
-                            height: parent.height
-                            width: parent.width
-                            color:"grey"
-                            opacity: 0.1
-                            visible: likers.text==" 暂无人点赞"?true:false
+//                        Rectangle{
+//                            anchors.left: parent.left
+//                            anchors.top: parent.top
+//                            height: parent.height
+//                            width: parent.width
+//                            color:"grey"
+//                            opacity: 0.1
+//                            visible: likers.text==" 暂无人点赞"?true:false
 
-                        }
+//                        }
+
                     }
 
                     Label{
                         id:comments
                         visible: posttime.text==""?false:true
-                        anchors.left: headimage.left
-                        anchors.top: likers.bottom
+                        anchors.left: likers.right
+                        anchors.top: photo.bottom
                         anchors.topMargin: headimage.height/5
-                        text: "     "+CommentCount+" 条评论"
-                        width:parent.width-headimage.height/3*4
+                        text: CommentCount+" 条评论"
+                        //width:parent.width-headimage.height/3*4
                         wrapMode: Text.Wrap;
                         color: "#02ae4a"
                         font{
@@ -463,7 +471,8 @@ Rectangle {
 
                     RowLayout{
                         id:buttonlayout
-                        anchors.top: likers.bottom
+                        anchors.verticalCenter: likers.verticalCenter
+
                         anchors.right: parent.right
                         anchors.rightMargin: headimage.height/8
                         visible: posttime.text==""?false:true
@@ -480,11 +489,11 @@ Rectangle {
                             width: photo.width/5
                             radius: height/6
                             Label{
-                                text:"❤点赞";
+                                text:"❤";
                                 anchors.centerIn: parent
                                 color: "white";
                                 font{
-                                    pixelSize: parent.height/2
+                                    pixelSize: parent.height/1.2
                                 }
                             }
                             MouseArea{
@@ -508,15 +517,14 @@ Rectangle {
                             height:headimage.height/1.5
                             width: photo.width/5
 
-                            anchors.leftMargin: width/2
 
                             Label{
-                                text:"✉评论";
+                                text:"✉";
                                 anchors.centerIn: parent
                                 color: "white";
                                 font{
 
-                                    pixelSize: parent.height/2
+                                    pixelSize: parent.height/1.3
                                 }
                             }
                             MouseArea{
@@ -539,7 +547,7 @@ Rectangle {
                             Label{
                                 anchors.centerIn: parent
                                 id:morebutton
-                                text:"..."
+                                text:"←"
                                 color:"white"
                                 font{
                                     bold: true
@@ -619,12 +627,26 @@ Rectangle {
                         }
                         else
                             postmodel.setProperty(listview.likeindex,"Liker",postmodel.get(listview.likeindex).Liker+","+nickname);
+
+                        postmodel.setProperty(listview.likeindex,"LikerNum",postmodel.get(listview.likeindex).LikerNum+1);
+
                     }
 
                     if(Statue=="getmorefriendspostsSucceed"){
-                        var likers2=getpostlikers(i);
-                        if(likers2==="")
+                        var likenum=0
+                        var likers2=getpostlikers(i)
+                        if(likers2===""){
                             likers2="暂无人点赞"
+                            likenum=0
+                        }
+                        else{
+                            var list=[]
+                            list=likers2.split(",")
+                            if(list.length==0)
+                            likenum=1
+                            else
+                                likenum=list.length
+                        }
 
                         postmodel.append({
                                              "Hasimage":getposthasimage(i),
@@ -635,6 +657,7 @@ Rectangle {
                                              "Photo":getpostphoto(i),
                                              "BigPhoto":getbigpostphotourl(i),
                                              "Liker":likers2,
+                                             "LikerNum":likenum,
                                              "ID":getpostID(i),
                                              "PublisherID":getpostpublisher(i),
                                              "CommentCount":getpostcommentcount(i)
@@ -658,6 +681,7 @@ Rectangle {
                                                  "Message":"该用户暂无任何分享喔~",
                                                  "Photo":"",
                                                  "Liker":"",
+                                                 "LikerNum":"0",
                                                  "ID":0,
                                                  "PublisherID":"",
                                                  "CommentCount":0

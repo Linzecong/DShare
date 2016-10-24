@@ -45,6 +45,7 @@ public:
     Q_INVOKABLE int getpostID(int i);
     Q_INVOKABLE int getpostcommentcount(int i);
 
+
     Q_INVOKABLE void getcomments(int postid);//1有更多
     Q_INVOKABLE QString getcommentatorname(int i);
     Q_INVOKABLE QString getbecommentatorname(int i);

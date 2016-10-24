@@ -38,7 +38,6 @@ Rectangle {
     DataSystem{
         id:dbsystem;
         onStatueChanged: {
-            console.log(Statue)
             if(Statue=="getnameSucceed"){
                 name.text="昵称："+dbsystem.getName()
                 nickname=dbsystem.getName()
@@ -694,9 +693,10 @@ Rectangle {
 
     //主页面的顶部栏
     Rectangle{
-        id:head;
+        id:head
         width:parent.width;
         height: parent.height/16*1.5;
+
         color:"#02ae4a"
         x:0
         y:0
@@ -727,6 +727,9 @@ Rectangle {
             source: "qrc:/image/side.png"
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+
+            anchors.verticalCenterOffset: (parent.height-height)/5
+
             anchors.leftMargin: parent.height/4
             MouseArea{
                 anchors.fill: parent
@@ -747,9 +750,10 @@ Rectangle {
             id:headname
             text:bottom.currentPage
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: (parent.height-height)/5
             font{
 family: "微软雅黑"
-                pixelSize: head.height/2.5
+                pixelSize: (head.height)/2.5
             }
             color: "white";
             MouseArea{
@@ -768,6 +772,7 @@ family: "微软雅黑"
             anchors.right: parent.right
             anchors.rightMargin: parent.height/4
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: (parent.height-height)/5
             height: parent.height/2
             width:height
             MouseArea{

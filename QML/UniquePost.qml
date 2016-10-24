@@ -163,7 +163,7 @@ Rectangle{
     Rectangle{
         id:head;
         width:parent.width;
-        height: parent.height/16*1.5;
+        height: parent.height/16*1.5
         color:"#02ae4a"
         anchors.top: parent.top;
         Label{
@@ -173,6 +173,7 @@ Rectangle{
             width:height
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: (parent.height-height)/5
             verticalAlignment: Text.AlignVCenter
             font{
                 
@@ -201,9 +202,10 @@ Rectangle{
             id:headname
             text:"评论列表"
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: (parent.height-height)/5
             font{
                 family: "微软雅黑"
-                pixelSize: head.height/3
+                pixelSize: (head.height)/3
             }
             color: "white"
         }
@@ -237,7 +239,7 @@ Rectangle{
 
             anchors.margins: 10
 
-            height:headimage.height/3*4+headimage.height+messagelabel.height+photolabel.height+likers.height
+            height:headimage.height/5*7+headimage.height+messagelabel.height+photolabel.height+likers.height
 
             z:2
 
@@ -283,7 +285,9 @@ Rectangle{
             Label{
                 id:posttimelabel
                 anchors.left: headimage.right
+
                 anchors.leftMargin: headimage.width/2
+
                 anchors.bottom: headimage.bottom
                 anchors.bottomMargin: -height/5
                 height: headimage.height/2
@@ -471,7 +475,7 @@ Rectangle{
 
     Rectangle{
         id:commentbar
-        height: head.height/1.5
+        height: (head.height)/1.5
         width: parent.width
         anchors.bottom: parent.bottom
         anchors.bottomMargin: headimage.height/4

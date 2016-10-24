@@ -10,7 +10,7 @@ import JavaMethod 1.0
 import RecordSystem 1.0
 import DataSystem 1.0
 import SpeechSystem 1.0
-
+import QtQuick.Dialogs 1.2
 Rectangle {
     color:"white"
     anchors.fill: parent
@@ -18,7 +18,7 @@ Rectangle {
     id:mainrect
 
     function getcheckinday(){
-        dbsystem.getcheckinday(str_userid);
+        dbsystem.getcheckinday(str_userid)
         recordsystem.getdietlist()
         recordsystem.getsportlist()
     }
@@ -46,7 +46,7 @@ Rectangle {
         id:dbsystem;
         onStatueChanged: {
             if(Statue=="getcheckindaySucceed")
-                dosportdaysrect.checkinday=dbsystem.getcheckinday();
+                dosportdaysrect.checkinday=dbsystem.getcheckinday()
 
             if(Statue=="checkinSucceed"){
                 dosportdaysrect.checkinday++;
@@ -72,14 +72,14 @@ Rectangle {
             if(Statue==="getdietlistError"){
                 var longstr="";
                 for(var i=0;i<foodsmodel.count;i++)
-                    longstr=longstr+foodsmodel.get(i).value+" ";
+                    longstr=longstr+foodsmodel.get(i).value+" "
                 recordsystem.savedietlist(longstr)
             }
 
             if(Statue==="getsportlistError"){
                 var longstr="";
                 for(var i=0;i<sportsmodel.count;i++)
-                    longstr=longstr+sportsmodel.get(i).value+" ";
+                    longstr=longstr+sportsmodel.get(i).value+" "
                 recordsystem.savesportlist(longstr)
             }
 
@@ -134,16 +134,16 @@ Rectangle {
                         breakfastmodel.append({"Food":recordsystem.getlocaldietstr(0,i) })
 
                     if(recordsystem.getlocaldietstr(1,i)!=="")
-                        lunchmodel.append({"Food":recordsystem.getlocaldietstr(1,i)});
+                        lunchmodel.append({"Food":recordsystem.getlocaldietstr(1,i)})
 
                     if(recordsystem.getlocaldietstr(2,i)!=="")
-                        dinnermodel.append({"Food":recordsystem.getlocaldietstr(2,i)});
+                        dinnermodel.append({"Food":recordsystem.getlocaldietstr(2,i)})
 
                     if(recordsystem.getlocaldietstr(3,i)!=="")
-                        snackmodel.append({"Food":recordsystem.getlocaldietstr(3,i)});
+                        snackmodel.append({"Food":recordsystem.getlocaldietstr(3,i)})
 
                     if(recordsystem.getlocaldietstr(4,i)!=="")
-                        dessertmodel.append({"Food":recordsystem.getlocaldietstr(4,i)});
+                        dessertmodel.append({"Food":recordsystem.getlocaldietstr(4,i)})
 
                     if(recordsystem.getlocaldietstr(5,i)!=="")
                         othersmodel.append({"Food":recordsystem.getlocaldietstr(5,i)});
@@ -228,7 +228,8 @@ Rectangle {
     Rectangle {
         id: header
         anchors.top: parent.top
-        width: parent.width
+        width: parent.width+2
+        anchors.horizontalCenter: parent.horizontalCenter
         height: parent.height/11
         border.width: 2
         border.color: "grey"
@@ -304,19 +305,43 @@ Rectangle {
     }
 
 
+
+
+
+
     //饮食记录页面
     ListView{
+
+        header:Rectangle{
+            id:recommendbutton
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width/3*1.1
+            color:"#02ae4a"
+            height:header.height*1.2
+            Text{
+                text:"今日推荐"
+                color:"white"
+                anchors.centerIn: parent
+                font.pixelSize: header.height/2.5
+            }
+            border.width: height/5
+            border.color: "white"
+            radius: height/4
+
+        }
+
         id:foodview
         cacheBuffer:20000
         visible: header.currentpage=="饮食"?true:false
         height: parent.height-header.height
         width:parent.width
+
         anchors.top: header.bottom
+
         clip:true
-        spacing: 5
         property var currentdiet;
         property int currentfood;
-
+        spacing: -1
         Rectangle {
             id: scrollbar
             anchors.right: foodview.right
@@ -346,30 +371,36 @@ Rectangle {
             id:breakfastmodel
             ListElement{Food:"点击选择食物"}
             ListElement{Food:"点击选择食物"}
+
         }
         ListModel{
             id:lunchmodel
             ListElement{Food:"米饭"}
             ListElement{Food:"点击选择食物"}
             ListElement{Food:"点击选择食物"}
+
         }
         ListModel{
             id:dinnermodel
             ListElement{Food:"米饭"}
             ListElement{Food:"点击选择食物"}
             ListElement{Food:"点击选择食物"}
+
         }
         ListModel{
             id:snackmodel
             ListElement{Food:"点击选择食物"}
+
         }
         ListModel{
             id:dessertmodel
             ListElement{Food:"点击选择食物"}
+
         }
         ListModel{
             id:othersmodel
             ListElement{Food:"点击选择食物"}
+
         }
 
         Component.onCompleted: {
@@ -386,14 +417,18 @@ Rectangle {
         delegate: Item{
             id:dietitem
             width:parent.width
-            height: title.height+foodlist.height+header.height/2+header.height/5*2+addfoodbutton.height+header.height/3
+
+            height: foodlist.height+header.height/1.5+addfoodbutton.height
             property string imagePath:Photo
             Rectangle{
+
                 border.color: "grey"
-                border.width: 2
-                radius: header.height/3
+                border.width: 1
+                //radius: header.height/3
                 anchors.fill: parent
-                anchors.margins: header.height/5
+
+                //anchors.margins: header.height/5
+
                 id:delegaterect
                 property string foodstr;
 
@@ -403,14 +438,13 @@ Rectangle {
 
                 Label{
                     id:title
-                    text:Title
+                    text:Title+"："
                     anchors.top:parent.top
                     anchors.topMargin: height/2
                     anchors.left: parent.left
-                    anchors.leftMargin: parent.width/10
+                    anchors.leftMargin: parent.width/20
                     color:"grey"
                     font{
-
                         pixelSize: header.height/2
                     }
 
@@ -442,36 +476,33 @@ Rectangle {
                 //各种餐饮model中内嵌食物model
                 ListView{
                     id:foodlist
-                    width: dietitem.width/1.5
+                    width: parent.width
                     height:foodlist.model.count*(title.height*1.5+mainrect.height/36)
-                    anchors.left: title.left
-                    anchors.top: title.bottom
-                    anchors.topMargin: mainrect.height/60
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    anchors.top: parent.top
+                    anchors.topMargin: title.height/2
+
                     spacing: mainrect.height/36
+
                     delegate:Item{
                         id:food
                         height:title.height*1.5
                         width: parent.width
-                        Label{
-                            id:diettitle
-                            anchors.verticalCenter: parent.verticalCenter
-                            text:"食物"+(index+1).toString()
-                            color:"grey"
-                            font{
 
-                                pixelSize: header.height/2
-                            }
-                        }
+
                         Rectangle{
                             id:foodtext
                             border.color: "grey"
-                            border.width: 2
+                            border.width: 1
                             radius: header.height/7
                             color:"white"
                             height: parent.height
-                            width: parent.width-diettitle.width-deletebutton.width/1.5
-                            anchors.left: diettitle.right
-                            anchors.leftMargin: diettitle.width/2
+                            width: parent.width/2
+
+                            anchors.horizontalCenter: parent.horizontalCenter
+
                             Text {
                                 anchors.centerIn: parent
                                 text:Food
@@ -493,12 +524,16 @@ Rectangle {
                                 }
                             }
                         }
+
                         Rectangle{
                             id:deletebutton
-                            anchors.left: food.right
-                            anchors.leftMargin: diettitle.width/10
+                            anchors.right: parent.right
+                            anchors.rightMargin: height
+                            x:parent.width-(parent.width-foodtext.x+foodtext.height)/2+width*1.5
+
                             //anchors.top: foodtext.top
                             anchors.verticalCenter: foodtext.verticalCenter
+
                             height: foodtext.height/1.4
                             width: height*1.6
                             Image{
@@ -514,6 +549,8 @@ Rectangle {
                                 onClicked: {
 
                                     foodlist.model.remove(index)
+                                    if(foodlist.model.count===0)
+                                        foodlist.model.append({"Food":"点击选择食物"})
                                 }
                             }
 
@@ -532,35 +569,35 @@ Rectangle {
 
                             var list=[]
                             list=speechsystem.getSplitSpeech().split("@")
-                                foodlist.model.clear()
+                            foodlist.model.clear()
 
 
 
-                                for(var i=0;i<list.length-1;i++){
-                                    foodlist.model.append({"Food":list[i]})
+                            for(var i=0;i<list.length-1;i++){
+                                foodlist.model.append({"Food":list[i]})
 
 
 
-                                    var have=0;//判断是否有那个食材
-                                    for(var j=0;j<foodsmodel.count;j++)
-                                        if(foodsmodel.get(j).value===list[i]){
-                                            foodsmodel.move(j,0,1)
-                                            have=1;
-                                        }
+                                var have=0;//判断是否有那个食材
+                                for(var j=0;j<foodsmodel.count;j++)
+                                    if(foodsmodel.get(j).value===list[i]){
+                                        foodsmodel.move(j,0,1)
+                                        have=1;
+                                    }
 
 
-                                        if(have==0){
-                                            foodsmodel.insert(0,{"value":list[i]})
+                                if(have==0){
+                                    foodsmodel.insert(0,{"value":list[i]})
 
-                                            dbsystem.uploadFood(list[i])
-                                        }
-
+                                    dbsystem.uploadFood(list[i])
                                 }
 
-                                var longstr="";
-                                for(var i2=0;i2<foodsmodel.count;i2++)
-                                    longstr=longstr+foodsmodel.get(i2).value+" "
-                                recordsystem.savedietlist(longstr)
+                            }
+
+                            var longstr="";
+                            for(var i2=0;i2<foodsmodel.count;i2++)
+                                longstr=longstr+foodsmodel.get(i2).value+" "
+                            recordsystem.savedietlist(longstr)
 
                             return
 
@@ -614,9 +651,9 @@ Rectangle {
 
                 Rectangle{
                     id:speechbutton
-                    border.color: "grey"
-                    border.width: 2
-                    radius: width/4
+//                    border.color: "grey"
+//                    border.width: 2
+//                    radius: width/4
                     color:"white"
 
 
@@ -624,22 +661,19 @@ Rectangle {
                     width: foodlist.width/2
 
                     anchors.top: addfoodbutton.top
-                    anchors.right: sharebutton.left
-                    anchors.rightMargin: sharebutton.width
 
-                    Text {
-                        id:speechtext
-                        anchors.centerIn: parent
-                        text:"语音输入"
-                        color:"grey"
-                        font{
-                            pixelSize: parent.height/2.5
-                        }
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Image{
+                        fillMode: Image.PreserveAspectFit
+                        anchors.fill: parent
+                        source: "qrc:/image/speech.png"
                     }
 
                     MouseArea{
                         anchors.fill: parent
-                        onPressed: {
+                        onPressAndHold: {
                             foodview.interactive=false
                             savetimer.start()
                             speechsystem.inclick()
@@ -649,6 +683,7 @@ Rectangle {
                             speechlengthtimer.time=0
                             speechlengthtimer.start()
                         }
+
                         onReleased: {
                             foodview.interactive=true
                             speechlengthtimer.stop()
@@ -687,8 +722,10 @@ Rectangle {
 
                 Rectangle{
                     id:addfoodbutton
-                    anchors.left: foodlist.left
-                    anchors.leftMargin: 10
+
+                    anchors.horizontalCenter: title.horizontalCenter
+                    anchors.horizontalCenterOffset: -width/3
+
                     anchors.top: foodlist.bottom
                     height: title.height*1.2
                     width: height
@@ -800,7 +837,8 @@ Rectangle {
                 Rectangle{
                     id:sharebutton
                     anchors.right: foodlist.right
-                    anchors.rightMargin: -savebutton.width*1.2
+                    anchors.rightMargin: savebutton.width
+
                     anchors.top: addfoodbutton.top
                     //anchors.topMargin: header.height/5
                     height: title.height*1.2
@@ -871,6 +909,7 @@ Rectangle {
 
 
             }
+
         }
     }
 
@@ -1964,6 +2003,68 @@ Rectangle {
 
                     }
                     MouseArea{
+                        MessageDialog {
+                            id: checklog
+                            title: "提示"
+                            text: "确定要删除吗？"
+                            standardButtons:  StandardButton.No|StandardButton.Yes
+
+                            onYes: {
+
+                                if(view.model===searchedmodel){
+
+                                    for(var i=0;i<foodsmodel.count;i++)
+                                        if(foodsmodel.get(i).value===searchedmodel.get(index).value){
+                                            foodsmodel.remove(i)
+                                            searchedmodel.remove(index)
+                                            break
+                                        }
+
+                                    var longstr="";
+
+                                    for(var i=0;i<foodsmodel.count;i++)
+                                        longstr=longstr+foodsmodel.get(i).value+" ";
+                                    recordsystem.savedietlist(longstr)
+                                }
+
+                                if(view.model===foodsmodel){
+                                    foodsmodel.remove(index)
+
+                                    var longstr="";
+                                    for(var i=0;i<foodsmodel.count;i++)
+                                        longstr=longstr+foodsmodel.get(i).value+" ";
+                                    recordsystem.savedietlist(longstr)
+                                }
+
+                                if(view.model===searchedsportmodel){
+
+                                    for(var i=0;i<sportsmodel.count;i++)
+                                        if(sportsmodel.get(i).value===searchedsportmodel.get(index).value){
+                                            sportsmodel.remove(i)
+                                            searchedsportmodel.remove(index)
+                                            break
+                                        }
+
+                                    var longstr="";
+                                    for(var i=0;i<sportsmodel.count;i++)
+                                        longstr=longstr+sportsmodel.get(i).value+" ";
+                                    recordsystem.savesportlist(longstr)
+                                }
+
+                                if(view.model===sportsmodel){
+                                    sportsmodel.remove(index)
+
+                                    var longstr="";
+                                    for(var i=0;i<sportsmodel.count;i++)
+                                        longstr=longstr+sportsmodel.get(i).value+" ";
+                                    recordsystem.savesportlist(longstr)
+                                }
+                            }
+                            onNo: {
+
+                            }
+                        }
+
                         anchors.fill: parent
                         onClicked: {
                             if(view.model===searchedmodel){
@@ -2007,7 +2108,15 @@ Rectangle {
                                 recordsystem.savesportlist(longstr)
                             }
 
+                            if(view.model===sportsmodel){
+                                sporttext.text=sportsmodel.get(index).value
 
+                                sportsmodel.move(index,0,1);
+                                var longstr="";
+                                for(var i=0;i<sportsmodel.count;i++)
+                                    longstr=longstr+sportsmodel.get(i).value+" ";
+                                recordsystem.savesportlist(longstr)
+                            }
 
                             if(view.model===foodsmodel){
                                 foodview.currentdiet.children[0].foodstr=""
@@ -2021,15 +2130,7 @@ Rectangle {
                             }
 
 
-                            if(view.model===sportsmodel){
-                                sporttext.text=sportsmodel.get(index).value
 
-                                sportsmodel.move(index,0,1);
-                                var longstr="";
-                                for(var i=0;i<sportsmodel.count;i++)
-                                    longstr=longstr+sportsmodel.get(i).value+" ";
-                                recordsystem.savesportlist(longstr)
-                            }
 
                             if(view.model===beginhourmodel){
                                 begintimehourtext.text=beginhourmodel.get(index).value
@@ -2046,6 +2147,11 @@ Rectangle {
                             }
                             searpage.visible=false
                             searchtext.text=""
+
+
+                        }
+                        onPressAndHold: {
+                            checklog.open()
 
 
                         }

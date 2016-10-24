@@ -460,21 +460,17 @@ Rectangle {
         border.width: 2
         border.color: "grey"
         radius: width/2
-        Label{
-            visible:true
-            text: "语音输入";
-            color:"#02ae4a"
-            font{
-                pixelSize: photobutton.height/6
-                bold: true
+        Image{
 
-            }
-            anchors.centerIn: parent;
+            fillMode: Image.PreserveAspectFit
+            anchors.fill: parent
+            anchors.margins: parent.width/7
+            source: "qrc:/image/speech.png"
         }
 
         MouseArea{
             anchors.fill: parent
-            onPressed: {
+            onPressAndHold: {
                 sendspeechsystem.inclick()
                 recordbutton.color="green"
                 reminder.visible=true

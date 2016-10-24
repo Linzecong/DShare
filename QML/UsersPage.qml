@@ -146,10 +146,11 @@ property string nickname;
             text:" ＜"
             color: "white"
             font{
-                pixelSize: head.height/1.5
+                pixelSize: (head.height)/1.5
             }
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: (parent.height-height)/5
             verticalAlignment: Text.AlignVCenter
             MouseArea{
                 id:headma
@@ -167,9 +168,10 @@ property string nickname;
             id:headname
             text:"我的关注"
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: (parent.height-height)/5
             font{
                 family: "微软雅黑"
-                pixelSize: head.height/2.5
+                pixelSize: (head.height)/2.5
             }
             color: "white"
             MouseArea{
@@ -186,7 +188,7 @@ property string nickname;
 
     Rectangle{
         id:searchbar
-        height: head.height/1.5
+        height: (head.height)/1.5
         width: parent.width
         anchors.top: head.bottom
 

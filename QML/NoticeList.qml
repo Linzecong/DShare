@@ -123,6 +123,7 @@ Rectangle {
             }
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: (parent.height-height)/5
             verticalAlignment: Text.AlignVCenter
             MouseArea{
                 anchors.fill: parent
@@ -138,9 +139,10 @@ Rectangle {
             id:headname
             text:"我的消息"
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: (parent.height-height)/5
             font{
                 
-                pixelSize: head.height/2.5
+                pixelSize: (head.height)/2.5
             }
             color: "white";
             MouseArea{
@@ -210,11 +212,11 @@ Rectangle {
                     id:textlabel;
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
-                    anchors.leftMargin:head.height/2
+                    anchors.leftMargin:(head.height)/2
                     wrapMode: Text.WordWrap
                     font{
                         
-                        pixelSize: head.height/3
+                        pixelSize: (head.height)/3
                     }
                     text:"<strong><font color=\"#35dca2\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\"#35dca2\">你</font></strong>"
 
@@ -224,12 +226,12 @@ Rectangle {
                     id:timelabel;
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
-                    anchors.rightMargin:head.height/2
+                    anchors.rightMargin:(head.height)/2
                     color: "grey"
                     wrapMode: Text.WordWrap
                     font{
                         
-                        pixelSize: head.height/3
+                        pixelSize: (head.height)/3
                     }
                     text:SendTime
 

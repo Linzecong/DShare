@@ -33,7 +33,7 @@ Rectangle {
         id:reportsystem
         onStatueChanged: {
             if(Statue==="getalldietsDBError"||Statue==="getallexercisesDBError")
-                myjava.toastMsg("网络出错..请重试");
+                myjava.toastMsg("网络出错..请重试")
 
             if(Statue==="getalldietsSucceed"){
                 reportsystem.getallexercise(str_userid)
@@ -198,7 +198,7 @@ Rectangle {
     Rectangle{
         id:head;
         width:parent.width;
-        height: parent.height/16*1.5;
+        height: parent.height/16*1.5
         color:"#02ae4a"
         anchors.top: parent.top;
         layer.enabled: true
@@ -217,10 +217,11 @@ Rectangle {
             width:height
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: (parent.height-height)/5
             verticalAlignment: Text.AlignVCenter
             font{
 
-                pixelSize: head.height/1.5
+                pixelSize: (head.height)/1.5
 
             }
             color: "white";
@@ -237,9 +238,10 @@ Rectangle {
             id:headname
             text:"我的报告"
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: (parent.height-height)/5
             font{
                 family: "微软雅黑"
-                pixelSize: head.height/2.5
+                pixelSize: (head.height)/2.5
             }
             color: "white";
 
@@ -263,7 +265,7 @@ Rectangle {
             title: "总食用次数Top5"
             titleFont{
                 family: "微软雅黑"
-                pixelSize: head.height/4
+                pixelSize: (head.height)/4
             }
             property int currentPage: 0
             onCurrentPageChanged: {
@@ -307,7 +309,7 @@ Rectangle {
                     id:foodcountchartbcax
                     labelsFont{
                         family: "微软雅黑"
-                        pixelSize: head.height/5
+                        pixelSize: (head.height)/5
                         bold:true
                     }
                 }
@@ -328,8 +330,8 @@ Rectangle {
                 id:foodcountchartleft
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.margins: head.height/3
-                height: head.height/3
+                anchors.margins: (head.height)/3
+                height: (head.height)/3
                 width: parent.width/7
                 color:"yellow"
                 MouseArea{
@@ -347,8 +349,8 @@ Rectangle {
                 id:foodcountchartright
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: head.height/3
-                height: head.height/3
+                anchors.margins: (head.height)/3
+                height: (head.height)/3
                 width: parent.width/7
                 color:"yellow"
                 MouseArea{
@@ -369,7 +371,7 @@ Rectangle {
             title: "最近10天食用次数前三"
             titleFont{
                 family: "微软雅黑"
-                pixelSize: head.height/4
+                pixelSize: (head.height)/4
             }
             anchors.top: foodcountchart.bottom
 
@@ -453,14 +455,14 @@ Rectangle {
                 id:foodtimechartbcax
                 labelsFont{
                     family: "微软雅黑"
-                    pixelSize: head.height/7
+                    pixelSize: (head.height)/8
                     bold:true
                 }
             }
             ValueAxis {
                 id: foodtimechartyAxis
                 labelFormat: "%d"
-                min: -0.9
+                min: -0.1
                 max: 10
             }
 
@@ -487,8 +489,8 @@ Rectangle {
                 id:foodtimechartleft
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.margins: head.height/3
-                height: head.height/3
+                anchors.margins: (head.height)/3
+                height: (head.height)/3
                 width: parent.width/7
                 color:"yellow"
                 MouseArea{
@@ -508,8 +510,8 @@ Rectangle {
                 id:foodtimechartright
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: head.height/3
-                height: head.height/3
+                anchors.margins: (head.height)/3
+                height: (head.height)/3
                 width: parent.width/7
                 color:"yellow"
                 MouseArea{
@@ -531,13 +533,13 @@ Rectangle {
             title: "食物性状分布"
             titleFont{
                 family: "微软雅黑"
-                pixelSize: head.height/4
+                pixelSize: (head.height)/4
             }
 
             legend.visible:true
             legend.font{
                 family: "微软雅黑"
-                pixelSize: head.height/5
+                pixelSize: (head.height)/5
             }
 
 
@@ -609,8 +611,8 @@ Rectangle {
                 id:foodtypechartleft
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.margins: head.height/3
-                height: head.height/3
+                anchors.margins: (head.height)/3
+                height: (head.height)/3
                 width: parent.width/7
                 color:"yellow"
                 MouseArea{
@@ -628,8 +630,8 @@ Rectangle {
                 id:foodtypechartright
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: head.height/3
-                height: head.height/3
+                anchors.margins: (head.height)/3
+                height: (head.height)/3
                 width: parent.width/7
                 color:"yellow"
                 MouseArea{
@@ -652,14 +654,14 @@ Rectangle {
             title: "最近10天运动时间"
             titleFont{
                 family: "微软雅黑"
-                pixelSize: head.height/4
+                pixelSize: (head.height)/4
             }
 
             legend.alignment: Qt.AlignTop
             legend.visible:true
             legend.font{
                 family: "微软雅黑"
-                pixelSize: head.height/5
+                pixelSize: (head.height)/5
             }
 
 
@@ -705,14 +707,15 @@ Rectangle {
                 id:sporttimechartbcax
                 labelsFont{
                     family: "微软雅黑"
-                    pixelSize: head.height/7
+                    pixelSize: (head.height)/8
                     bold:true
                 }
             }
+
             ValueAxis {
                 id: sporttimechartyAxis
                 labelFormat: "%d"
-                min: -0.9
+                min: -0.1
                 max: 10
             }
 
@@ -728,8 +731,8 @@ Rectangle {
                 id:sporttimechartleft
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.margins: head.height/3
-                height: head.height/3
+                anchors.margins: (head.height)/3
+                height: (head.height)/3
                 width: parent.width/7
                 color:"yellow"
                 MouseArea{
@@ -748,8 +751,8 @@ Rectangle {
                 id:sporttimechartright
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: head.height/3
-                height: head.height/3
+                anchors.margins: (head.height)/3
+                height: (head.height)/3
                 width: parent.width/7
                 color:"yellow"
                 MouseArea{

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.app.PendingIntent;
 import android.widget.Toast;
+import android.view.WindowManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -15,8 +16,27 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.net.Uri;
 import java.io.File;
+
 public class MyJava extends org.qtproject.qt5.android.bindings.QtActivity
 {
+
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
+
+                        //透明状态栏
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                        //透明导航栏
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+
+
+
+
+        }
+
 
     private static MyJava m_instance;
     private static String imagePath = "Qt";
