@@ -54,25 +54,13 @@ Rectangle{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     //用户显示特定用户的分享列表
     Loader{
         id:mypost;
-        height: parent.height*1.25
+        height: myjava.getHeight()
         width: parent.width
         x:0
-        y:-parent.height/8
+        y:-myjava.getHeight()/16*2;
         visible: false
         source:"qrc:/QML/PostsPage.qml"
         z:102
@@ -80,10 +68,10 @@ Rectangle{
 
     Loader{
         id:uniquepost;
-        height: parent.height*1.25
+        height: myjava.getHeight()
         width: parent.width
         x:0
-        y:-parent.height/8
+        y:-myjava.getHeight()/16*1.8;
         visible: false
         source:"qrc:/QML/UniquePost.qml"
         z:102
@@ -214,7 +202,7 @@ Rectangle{
                   anchors.right: listview.right
                   anchors.rightMargin: 3
                   y: listview.visibleArea.yPosition * listview.height
-                  width: 10
+                  width: 5
                   height: listview.visibleArea.heightRatio * listview.height
                   color: "grey"
                   radius: 5
@@ -225,7 +213,7 @@ Rectangle{
         delegate: Item{
             id:postitem
             width:parent.width
-            height:headimage.height/5*6+headimage.height+message.height+photo.height+comments.height*1.5
+            height:headimage.height/5*5+headimage.height+message.height+photo.height+comments.height
             property int postID: ID//用于实现点赞功能
             property string publisherid: PublisherID//用于显示头像
             //每一个分享的框框
@@ -335,7 +323,7 @@ Rectangle{
                     wrapMode: Text.Wrap;
                     textFormat:Text.RichText
                     font{
-                        family: "微软雅黑"
+                        //family: "微软雅黑"
                         pixelSize: headimage.height/3
                     }
                 }
@@ -344,8 +332,11 @@ Rectangle{
                 Image{
                     id:photo
                     anchors.top: message.bottom
-                    anchors.topMargin:headimage.height/5
-                    height: parent.hasimage?listview.width/2:0;
+
+                    anchors.topMargin:parent.hasimage?headimage.height/5:0
+
+                    height: parent.hasimage?listview.width/2:0
+
                     anchors.horizontalCenter: parent.horizontalCenter
                     width:listview.width-100
                     source:Photo
@@ -391,16 +382,15 @@ Rectangle{
                     }
 
 
-//                    Rectangle{
-//                        anchors.left: parent.left
-//                        anchors.top: parent.top
-//                        height: parent.height
-//                        width: parent.width
-//                        color:"grey"
-//                        opacity: 0.1
-//                        visible: likers.text==" 暂无人点赞"?true:false
-
-//                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            listview.likeindex=index;
+                            postsystem.likepost(postitem.postID,mainrect.username);
+                            likebutton.visible=false
+                            commentbutton.visible=false
+                        }
+                    }
 
                 }
 
@@ -452,6 +442,7 @@ Rectangle{
                         height:headimage.height/1.5
                         width: photo.width/5
                         radius: height/6
+
                         Label{
                             text:"❤";
                             anchors.centerIn: parent
@@ -479,6 +470,7 @@ Rectangle{
                         radius: height/6
                         height:headimage.height/1.5
                         width: photo.width/5
+
                         Label{
                             text:"✉";
                             anchors.centerIn: parent
@@ -512,6 +504,7 @@ Rectangle{
                             id:morebutton
                             text:"←"
                             color:"white"
+                            verticalAlignment: Text.AlignVCenter
                             font{
                                 bold: true
                                 pixelSize: parent.height
@@ -527,6 +520,7 @@ Rectangle{
 
                             }
                         }
+
 
 
                     }

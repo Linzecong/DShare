@@ -45,5 +45,13 @@ int JavaMethod::getWidth(){
 
 int JavaMethod::getHeight(){
 
-return QGuiApplication::screens().first()->availableSize().height();
+    return QGuiApplication::screens().first()->availableSize().height();
+}
+
+QString JavaMethod::getStatusBarHeight()
+{
+#ifdef ANDROID
+    QAndroidJniObject str=QAndroidJniObject::callStaticObjectMethod("an/qt/myjava/MyJava","getStatusBarHeight","()Ljava/lang/String;");
+    return str.toString();
+#endif
 }

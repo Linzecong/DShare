@@ -9,7 +9,7 @@ import PostsSystem 1.0
 import QtQuick.Dialogs 1.2
 import QtCharts 2.0
 import SpeechSystem 1.0
-
+import QtGraphicalEffects 1.0
 Rectangle { 
     MouseArea{
         anchors.bottom: parent.bottom
@@ -80,7 +80,7 @@ Rectangle {
             if(Statue=="")
                 myjava.toastMsg("识别失败！....")
             else
-            messageedit.text=Statue;
+                messageedit.text=Statue;
 
         }
     }
@@ -152,13 +152,24 @@ Rectangle {
         anchors.topMargin: mainpage.width/20
         anchors.left: rect.left
         anchors.leftMargin: mainpage.width/30
-        border.width: 2
-        border.color: "grey"
+
+        color:"#02ae4a"
+
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            horizontalOffset: 3
+            verticalOffset: 3
+            radius: 8
+            color: "grey"
+        }
+
+
         Label{
             id:text
             visible:image.source==""?true:false
             text: "+";
-            color:"#02ae4a"
+            color:"white"
             font{
                 pixelSize: photobutton.height/3
                 bold: true
@@ -170,9 +181,6 @@ Rectangle {
             id:image
             visible: image.source==""?false:true
             anchors.fill: parent
-
-
-
         }
 
 
@@ -187,6 +195,7 @@ Rectangle {
         Timer{
             id:timer;
             interval: 1500
+            repeat: true
             onTriggered: {
                 var temp=myjava.getImagePath();
                 if(temp!=="Qt"){
@@ -212,8 +221,8 @@ Rectangle {
 
     Rectangle{
         id:clear
-        border.color: "grey"
-        border.width: 2
+        border.color: "black"
+        border.width: 1
         radius: photobutton.width/10
         anchors.left: photobutton.right
         anchors.leftMargin: photobutton.height/4
@@ -224,7 +233,7 @@ Rectangle {
         Text {
             anchors.centerIn: parent
             id: cleartext
-            color: "grey"
+            color: "red"
             text:"清除"
             verticalAlignment: Text.AlignVCenter
             font.pixelSize: photobutton.height/5
@@ -270,6 +279,16 @@ Rectangle {
 
         width: photobutton.width/1.2
         height: photobutton.height/3
+
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            horizontalOffset: 3
+            verticalOffset: 3
+            radius: 8
+            color: "grey"
+        }
+
         Text {
             anchors.centerIn: parent
             id: sendtext
@@ -295,9 +314,16 @@ Rectangle {
                 }
                 else{
                     if(hiddentext=="")
-                    sendmsgsystem.sendPost(str_userid,messageedit.text+hiddentext,0,"");
+                        sendmsgsystem.sendPost(str_userid,messageedit.text+hiddentext,0,"");
                     else
-                    sendmsgsystem.sendPost(str_userid,messageedit.text+"<br>"+hiddentext,0,"");
+                    {
+                        if(messageedit.text!="")
+                            sendmsgsystem.sendPost(str_userid,messageedit.text+"<br><br>"+hiddentext,0,"");
+                        else
+                            sendmsgsystem.sendPost(str_userid,messageedit.text+hiddentext,0,"");
+
+                    }
+
 
                 }
             }
@@ -316,9 +342,14 @@ Rectangle {
                 if(Statue=="Succeed"){
                     if(hiddentext=="")
                         sendmsgsystem.sendPost(str_userid,messageedit.text+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
-                else
-                        sendmsgsystem.sendPost(str_userid,messageedit.text+"<br>"+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
+                    else
+                    {
+                        if(messageedit.text!="")
+                            sendmsgsystem.sendPost(str_userid,messageedit.text+"<br><br>"+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
+                        else
+                            sendmsgsystem.sendPost(str_userid,messageedit.text+hiddentext,1,"http://119.29.15.43/projectimage/"+imgname+".jpg");
 
+                    }
                 }
                 if(Statue=="DBError"){
                     myjava.toastMsg("远程服务器出错，请联系开发者！");
@@ -349,7 +380,7 @@ Rectangle {
                 if(Statue=="sendpostSucceed"){
                     indicator.visible=false
                     myjava.toastMsg("发送成功！");
-                    mainpage.parent.parent.currentPage="首页"
+                    mainpage.parent.parent.currentPage="DShare"
                     mainpage.parent.parent.x=0;
                     mainpage.parent.parent.children[0].item.refreshpost(str_userid);
                     messageedit.text="";
@@ -410,7 +441,7 @@ Rectangle {
             }
         }
 
-        color:sma.pressed?"#02ae4a":"#29cc88"
+        color:sma.pressed?"#33bf5b":"#02ae4a"
         Behavior on color{
             ColorAnimation{
                 easing.type: Easing.Linear
@@ -457,7 +488,7 @@ Rectangle {
 
         anchors.horizontalCenter: parent.horizontalCenter
 
-        border.width: 2
+        border.width: 1
         border.color: "grey"
         radius: width/2
         Image{
@@ -470,9 +501,8 @@ Rectangle {
 
         MouseArea{
             anchors.fill: parent
-            onPressAndHold: {
+            onPressed: {
                 sendspeechsystem.inclick()
-                recordbutton.color="green"
                 reminder.visible=true
                 speechlengthtimer.time=0
                 speechlengthtimer.start()
@@ -481,14 +511,14 @@ Rectangle {
                 speechlengthtimer.stop()
 
                 if(speechlengthtimer.time>10){
-                reminder.visible=false
-                sendspeechsystem.outclick("zh")
-                recordbutton.color="white"
-                indicator.visible=true
+                    reminder.visible=false
+                    sendspeechsystem.outclick("zh")
+
+                    indicator.visible=true
                 }
                 else{
                     reminder.visible=false
-                    recordbutton.color="white"
+
                     sendspeechsystem.outclick("short")
                     myjava.toastMsg("时间太短...")
                 }

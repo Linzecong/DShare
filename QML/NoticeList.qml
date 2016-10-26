@@ -106,24 +106,30 @@ Rectangle {
 
 
     Rectangle{
+        Rectangle{
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height:myjava.getStatusBarHeight()
+            color:"green"
+        }
         id:head
         width:parent.width
-        height: parent.height/16*1.5
+        height: parent.height/16*2
         color: "#02ae4a"
         anchors.top: parent.top
         Label{
             id:back
             height: parent.height
             width:height
-            text:"  <"
+            text:" ＜"
             color: "white"
             font{
-                
-                pixelSize: back.height/1.5
+                pixelSize: (head.height)/2
             }
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
             MouseArea{
                 anchors.fill: parent
@@ -139,10 +145,10 @@ Rectangle {
             id:headname
             text:"我的消息"
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
                 
-                pixelSize: (head.height)/2.5
+                pixelSize: (head.height)/4
             }
             color: "white";
             MouseArea{
@@ -179,7 +185,7 @@ Rectangle {
                   anchors.right: view.right
                   anchors.rightMargin: 3
                   y: view.visibleArea.yPosition * view.height
-                  width: 10
+                  width: 5
                   height: view.visibleArea.heightRatio * view.height
                   color: "grey"
                   radius: 5
@@ -198,7 +204,7 @@ Rectangle {
                 color:IsRead?"#dddddd":"white"
 
                 border.color: "grey"
-                border.width: 2
+                border.width: 1
 
                 MouseArea{
                     anchors.fill: parent
@@ -212,11 +218,10 @@ Rectangle {
                     id:textlabel;
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
-                    anchors.leftMargin:(head.height)/2
+                    anchors.leftMargin:30
                     wrapMode: Text.WordWrap
                     font{
-                        
-                        pixelSize: (head.height)/3
+                        pixelSize: (head.height)/4
                     }
                     text:"<strong><font color=\"#35dca2\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\"#35dca2\">你</font></strong>"
 
@@ -226,12 +231,12 @@ Rectangle {
                     id:timelabel;
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
-                    anchors.rightMargin:(head.height)/2
+                    anchors.rightMargin:30
                     color: "grey"
                     wrapMode: Text.WordWrap
                     font{
                         
-                        pixelSize: (head.height)/3
+                        pixelSize: (head.height)/4
                     }
                     text:SendTime
 

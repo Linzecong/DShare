@@ -27,17 +27,27 @@ public class MyJava extends org.qtproject.qt5.android.bindings.QtActivity
 
 
                         //透明状态栏
-                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
                         //透明导航栏
-                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+                        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
 
 
 
 
+                        //获取status_bar_height资源的ID
+                        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+                        if (resourceId > 0) {
+                            //根据资源ID获取响应的尺寸值
+
+                            statusBarHeight1 = String.valueOf(getResources().getDimensionPixelSize(resourceId));
+                            Log.e("s",statusBarHeight1);
+                            }
+
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-
+    private static String statusBarHeight1 = "-1";
     private static MyJava m_instance;
     private static String imagePath = "Qt";
 
@@ -93,6 +103,13 @@ public class MyJava extends org.qtproject.qt5.android.bindings.QtActivity
     public static String getImagePath(){
         return imagePath;
     }
+
+public static String getStatusBarHeight(){
+    return statusBarHeight1;
+}
+
+
+
 
     public static String getSdcardPath(){
            File sdDir = null;

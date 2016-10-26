@@ -70,19 +70,29 @@ Rectangle {
 
     //顶部栏
     Rectangle{
+        Rectangle{
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height:myjava.getStatusBarHeight()
+            color:"green"
+        }
+
         id:head;
         width:parent.width;
-        height: parent.height/16*1.5
+        height: parent.height/16*2
+
         color:"#02ae4a"
-        anchors.top: parent.top;
+        anchors.top: parent.top
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
-            horizontalOffset: -2
-            radius: 8
+            verticalOffset: 3
+            radius: 16
             color: "black"
-
         }
+
+        z:3
 
         Label{
             text:" ＜";
@@ -91,11 +101,12 @@ Rectangle {
             width:height
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
+
             verticalAlignment: Text.AlignVCenter
             font{
 
-                pixelSize: (head.height)/1.5
+                pixelSize: (head.height)/2
 
             }
             color: "white";
@@ -112,10 +123,10 @@ Rectangle {
             id:headname
             text:"分享列表"
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
-                family: "微软雅黑"
-                pixelSize: (head.height)/2.5
+                //family: "微软雅黑"
+                pixelSize: (head.height)/4
             }
             color: "white"
         }
@@ -238,7 +249,7 @@ Rectangle {
                 anchors.right: listview.right
                 anchors.rightMargin: 3
                 y: listview.visibleArea.yPosition * listview.height
-                width: 10
+                width: 5
                 height: listview.visibleArea.heightRatio * listview.height
                 color: "grey"
                 radius: 5
@@ -250,7 +261,7 @@ Rectangle {
             delegate: Item{
                 id:postitem
                 width:parent.width
-                height:headimage.height/5*7+headimage.height+message.height+photo.height+comments.height*1.5
+                height:headimage.height/5*6+headimage.height+message.height+photo.height+comments.height
                 property int postID: ID//用于实现点赞功能
                 property string publisherid: PublisherID//用于显示删除
                 Rectangle{
@@ -381,14 +392,14 @@ Rectangle {
                         textFormat:Text.RichText
                         wrapMode: Text.Wrap;
                         font{
-                            family: "微软雅黑"
+                            //family: "微软雅黑"
                             pixelSize: headimage.height/3
                         }
                     }
                     Image{
                         id:photo
                         anchors.top: message.bottom
-                        anchors.topMargin: headimage.height/5
+                        anchors.topMargin: parent.hasimage?headimage.height/5:0
                         height: parent.hasimage?listview.width/2:0;
                         anchors.horizontalCenter: parent.horizontalCenter
                         width:listview.width-100
@@ -429,16 +440,15 @@ Rectangle {
                             pixelSize: headimage.height/3
                         }
 
-//                        Rectangle{
-//                            anchors.left: parent.left
-//                            anchors.top: parent.top
-//                            height: parent.height
-//                            width: parent.width
-//                            color:"grey"
-//                            opacity: 0.1
-//                            visible: likers.text==" 暂无人点赞"?true:false
-
-//                        }
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                listview.likeindex=index;
+                                postsystem.likepost(postitem.postID,mainrect.username);
+                                likebutton.visible=false
+                                commentbutton.visible=false
+                            }
+                        }
 
                     }
 
@@ -488,6 +498,7 @@ Rectangle {
                             height:headimage.height/1.5
                             width: photo.width/5
                             radius: height/6
+
                             Label{
                                 text:"❤";
                                 anchors.centerIn: parent
@@ -517,7 +528,6 @@ Rectangle {
                             height:headimage.height/1.5
                             width: photo.width/5
 
-
                             Label{
                                 text:"✉";
                                 anchors.centerIn: parent
@@ -544,17 +554,18 @@ Rectangle {
                             width: height*1.5
                             color:"lightgreen"
                             radius: height/5
+
+
                             Label{
                                 anchors.centerIn: parent
                                 id:morebutton
                                 text:"←"
                                 color:"white"
+                                verticalAlignment: Text.AlignVCenter
                                 font{
                                     bold: true
                                     pixelSize: parent.height
                                 }
-
-
                             }
                             MouseArea{
                                 anchors.fill: parent

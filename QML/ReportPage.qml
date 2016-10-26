@@ -196,9 +196,16 @@ Rectangle {
 
     //顶部栏
     Rectangle{
+        Rectangle{
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height:myjava.getStatusBarHeight()
+            color:"green"
+        }
         id:head;
         width:parent.width;
-        height: parent.height/16*1.5
+        height: parent.height/16*2
         color:"#02ae4a"
         anchors.top: parent.top;
         layer.enabled: true
@@ -217,11 +224,11 @@ Rectangle {
             width:height
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
             font{
 
-                pixelSize: (head.height)/1.5
+                pixelSize: (head.height)/2
 
             }
             color: "white";
@@ -238,10 +245,10 @@ Rectangle {
             id:headname
             text:"我的报告"
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
-                family: "微软雅黑"
-                pixelSize: (head.height)/2.5
+                //family: "微软雅黑
+                pixelSize: (head.height)/4
             }
             color: "white";
 
@@ -264,7 +271,7 @@ Rectangle {
         ChartView {
             title: "总食用次数Top5"
             titleFont{
-                family: "微软雅黑"
+                //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
             property int currentPage: 0
@@ -308,7 +315,7 @@ Rectangle {
                 axisX: BarCategoryAxis {
                     id:foodcountchartbcax
                     labelsFont{
-                        family: "微软雅黑"
+                        //family: "微软雅黑"
                         pixelSize: (head.height)/5
                         bold:true
                     }
@@ -370,7 +377,7 @@ Rectangle {
         ChartView {
             title: "最近10天食用次数前三"
             titleFont{
-                family: "微软雅黑"
+                //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
             anchors.top: foodcountchart.bottom
@@ -454,7 +461,7 @@ Rectangle {
             BarCategoryAxis {
                 id:foodtimechartbcax
                 labelsFont{
-                    family: "微软雅黑"
+                    //family: "微软雅黑"
                     pixelSize: (head.height)/8
                     bold:true
                 }
@@ -532,13 +539,13 @@ Rectangle {
 
             title: "食物性状分布"
             titleFont{
-                family: "微软雅黑"
+                //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
 
             legend.visible:true
             legend.font{
-                family: "微软雅黑"
+                //family: "微软雅黑"
                 pixelSize: (head.height)/5
             }
 
@@ -653,14 +660,14 @@ Rectangle {
 
             title: "最近10天运动时间"
             titleFont{
-                family: "微软雅黑"
+                //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
 
             legend.alignment: Qt.AlignTop
             legend.visible:true
             legend.font{
-                family: "微软雅黑"
+                //family: "微软雅黑"
                 pixelSize: (head.height)/5
             }
 
@@ -706,7 +713,7 @@ Rectangle {
             BarCategoryAxis {
                 id:sporttimechartbcax
                 labelsFont{
-                    family: "微软雅黑"
+                    //family: "微软雅黑"
                     pixelSize: (head.height)/8
                     bold:true
                 }

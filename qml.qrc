@@ -36,5 +36,6 @@
         <file>QML/UniquePost.qml</file>
         <file>QML/UsersPage.qml</file>
         <file>image/speech.png</file>
+        <file>Resources/msyh.ttf</file>
     </qresource>
 </RCC>

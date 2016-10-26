@@ -64,8 +64,8 @@ Rectangle {
     property int quit: 0
     Keys.enabled: true
     Keys.onBackPressed: {
-        if(headname.text!="首页"){
-            bottom.currentPage="首页"
+        if(headname.text!="DShare"){
+            bottom.currentPage="DShare"
             mainrect.x=0;
         }
         else{
@@ -176,6 +176,13 @@ Rectangle {
         }
 
         Rectangle{
+            Rectangle{
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height:myjava.getStatusBarHeight()
+                color:"green"
+            }
             id:sidepagetop
             color:"#02ae4a"
             width: sidepage.width
@@ -186,8 +193,9 @@ Rectangle {
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
-                horizontalOffset: -10
-                radius: 8
+                verticalOffset: 3
+                horizontalOffset: -20
+                radius: 10
                 color: "black"
             }
 
@@ -505,11 +513,11 @@ Rectangle {
                 anchors.fill: parent
                 property int isget: 1
                 onClicked: {
-                      //if((isget--)==1)
-                      reportpage.item.getalldiet(str_userid,nickname)
+                    //if((isget--)==1)
+                    reportpage.item.getalldiet(str_userid,nickname)
 
-                      reportpage.item.forceActiveFocus()
-                      reportpage.visible=true
+                    reportpage.item.forceActiveFocus()
+                    reportpage.visible=true
                 }
             }
 
@@ -665,12 +673,6 @@ Rectangle {
 
 
 
-
-
-
-
-
-
     //显示侧边栏时，点击侧边可以返回
     MouseArea{
         id:backarea
@@ -693,22 +695,30 @@ Rectangle {
 
     //主页面的顶部栏
     Rectangle{
+        Rectangle{
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height:myjava.getStatusBarHeight()
+            color:"green"
+        }
+
         id:head
         width:parent.width;
-        height: parent.height/16*1.5;
+        height: parent.height/16*2;
 
         color:"#02ae4a"
         x:0
         y:0
 
-        z:5
+        z:7
+
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
-            horizontalOffset: -2
-            radius: 8
+            verticalOffset: 3
+            radius: 12
             color: "black"
-
         }
 
         Behavior on y{
@@ -722,13 +732,14 @@ Rectangle {
         //侧边栏按钮
         Image{
             id:sidebarbutton
-            height: parent.height/2
+            height: parent.height/2.5
             width:height
+
             source: "qrc:/image/side.png"
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
 
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
 
             anchors.leftMargin: parent.height/4
             MouseArea{
@@ -743,23 +754,25 @@ Rectangle {
         }
 
 
-
-
-
         Label{
             id:headname
             text:bottom.currentPage
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
+            FontLoader {
+                id: localFont
+                source:"qrc:/Resources/msyh.ttf"
+            }
             font{
-family: "微软雅黑"
-                pixelSize: (head.height)/2.5
+                family: localFont.name
+                //pixelSize: (head.height)/4
+                pointSize: 40
             }
             color: "white";
             MouseArea{
                 anchors.fill: parent
                 onDoubleClicked: {
-                    if(headname.text=="首页")
+                    if(headname.text=="DShare")
                         mainpage.item.refreshpost(str_userid);
                 }
             }
@@ -772,8 +785,8 @@ family: "微软雅黑"
             anchors.right: parent.right
             anchors.rightMargin: parent.height/4
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: (parent.height-height)/5
-            height: parent.height/2
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
+            height: parent.height/2.5
             width:height
             MouseArea{
                 anchors.fill: parent
@@ -813,18 +826,21 @@ family: "微软雅黑"
     Rectangle{
         id:bottom
 
-        //anchors.bottom: parent.bottom;
-
-        x:0
-        y:parent.height-height
+        anchors.bottom: parent.bottom;
 
 
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 8
+            color: "black"
+        }
 
 
         width:parent.width+4;
         height: parent.height/16*1.5;
         color:"white"
-        property string currentPage:"首页"
+        property string currentPage:"DShare"
         z:5
 
 
@@ -837,7 +853,7 @@ family: "微软雅黑"
             Image {
                 height: parent.height
                 width: height
-                source: bottom.currentPage=="首页"?"qrc:/image/mainpage.png":"qrc:/image/mainpageblack.png"
+                source: bottom.currentPage=="DShare"?"qrc:/image/mainpage.png":"qrc:/image/mainpageblack.png"
                 fillMode: Image.PreserveAspectFit
 
 
@@ -851,10 +867,10 @@ family: "微软雅黑"
                         else
                             parent.scale=1.4
                     }
-                    running: bottom.currentPage=="首页"
+                    running: bottom.currentPage=="DShare"
                     onRunningChanged: {
                         if(running==false)
-                        parent.scale=1
+                            parent.scale=1
                     }
                 }
                 Behavior on scale{
@@ -870,9 +886,9 @@ family: "微软雅黑"
                 anchors.fill: parent
                 onClicked: {
                     if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-                      messageDialog.open()
+                        messageDialog.open()
 
-                    bottom.currentPage="首页"
+                    bottom.currentPage="DShare"
                     mainrect.x=0;
 
 
@@ -907,7 +923,7 @@ family: "微软雅黑"
                     running: bottom.currentPage=="分享"
                     onRunningChanged: {
                         if(running==false)
-                        parent.scale=1
+                            parent.scale=1
                     }
                 }
                 Behavior on scale{
@@ -922,7 +938,7 @@ family: "微软雅黑"
                 anchors.fill: parent
                 onClicked: {
                     bottom.currentPage="分享"
-                    mainrect.x=-mainwindow.width*2
+                    mainrect.x=-mainwindow.width*1
 
                 }
             }
@@ -956,7 +972,7 @@ family: "微软雅黑"
                     running: bottom.currentPage=="记录"
                     onRunningChanged: {
                         if(running==false)
-                        parent.scale=1
+                            parent.scale=1
                     }
                 }
                 Behavior on scale{
@@ -971,10 +987,10 @@ family: "微软雅黑"
                 anchors.fill: parent
                 onClicked: {
                     if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-                      messageDialog.open()
+                        messageDialog.open()
 
                     bottom.currentPage="记录"
-                    mainrect.x=-mainwindow.width*3
+                    mainrect.x=-mainwindow.width*2
                 }
             }
         }
@@ -1021,17 +1037,8 @@ family: "微软雅黑"
             source: "qrc:/QML/MainPage.qml";
         }
         Loader{
-            id:newspage
-            anchors.left: mainpage.right
-            height:parent.height
-            width:mainwindow.width
-            source: "qrc:/QML/NewsPage.qml";
-
-
-        }
-        Loader{
             id:sendpage
-            anchors.left: newspage.right
+            anchors.left: mainpage.right
             height:parent.height
             width:mainwindow.width
             source: "qrc:/QML/SendPage.qml";
@@ -1042,15 +1049,6 @@ family: "微软雅黑"
             height:parent.height
             width:mainwindow.width
             source: "qrc:/QML/RecordPage.qml";
-            y:-3
-        }
-
-        Loader{
-            id:searchpage
-            anchors.left: recordpage.right
-            height:parent.height
-            width:mainwindow.width
-            source: "qrc:/QML/SearchPage.qml";
         }
 
         Behavior on x{

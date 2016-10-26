@@ -155,27 +155,60 @@ Rectangle {
                     breakfastmodel.append({"Food":"点击选择食物"})
                 }
 
+                if(breakfastmodel.count==1){
+                    breakfastmodel.append({"Food":"点击选择食物"})
+                }
+
                 if(lunchmodel.count==0){
-                    lunchmodel.append({"Food":"米饭"})
                     lunchmodel.append({"Food":"点击选择食物"})
+                    lunchmodel.append({"Food":"点击选择食物"})
+                    lunchmodel.append({"Food":"点击选择食物"})
+                }
+
+                if(lunchmodel.count==1){
+                    lunchmodel.append({"Food":"点击选择食物"})
+                    lunchmodel.append({"Food":"点击选择食物"})
+                }
+
+                if(lunchmodel.count==2){
                     lunchmodel.append({"Food":"点击选择食物"})
                 }
 
                 if(dinnermodel.count==0){
-                    dinnermodel.append({"Food":"米饭"})
+                    dinnermodel.append({"Food":"点击选择食物"})
                     dinnermodel.append({"Food":"点击选择食物"})
                     dinnermodel.append({"Food":"点击选择食物"})
                 }
+                if(dinnermodel.count==1){
+                    dinnermodel.append({"Food":"点击选择食物"})
+                    dinnermodel.append({"Food":"点击选择食物"})
+                }
+                if(dinnermodel.count==2){
+                    dinnermodel.append({"Food":"点击选择食物"})
+                }
 
-                if(snackmodel.count==0)
+                if(snackmodel.count==0){
+                    snackmodel.append({"Food":"点击选择食物"})
+                    snackmodel.append({"Food":"点击选择食物"})
+                }
+                if(snackmodel.count==1)
                     snackmodel.append({"Food":"点击选择食物"})
 
 
-                if(dessertmodel.count==0)
+
+                if(dessertmodel.count==0){
+                    dessertmodel.append({"Food":"点击选择食物"})
+                    dessertmodel.append({"Food":"点击选择食物"})
+                }
+                if(dessertmodel.count==1)
                     dessertmodel.append({"Food":"点击选择食物"})
 
 
-                if(othersmodel.count==0)
+                if(othersmodel.count==0){
+                    othersmodel.append({"Food":"点击选择食物"})
+                    othersmodel.append({"Food":"点击选择食物"})
+                }
+                if(othersmodel.count==1)
                     othersmodel.append({"Food":"点击选择食物"})
 
 
@@ -235,6 +268,13 @@ Rectangle {
         border.color: "grey"
         property string currentpage: "饮食"
 
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            verticalOffset: 3
+            radius: 12
+            color: "black"
+        }
 
         Rectangle{
             id:inrect
@@ -251,7 +291,7 @@ Rectangle {
             text: "饮食"
             color:header.currentpage==text?"#02ae4a":"grey"
             font{
-                family: "微软雅黑"
+               // family: "微软雅黑"
                 pixelSize: header.height/2
             }
             anchors.left: parent.left
@@ -270,7 +310,7 @@ Rectangle {
             text: "运动"
             color:header.currentpage==text?"#02ae4a":"grey"
             font{
-                family: "微软雅黑"
+              //  family: "微软雅黑"
                 pixelSize: header.height/2
             }
             anchors.horizontalCenter: parent.horizontalCenter
@@ -288,7 +328,7 @@ Rectangle {
             text: "查看"
             color:header.currentpage==text?"#02ae4a":"grey"
             font{
-                family: "微软雅黑"
+               // family: "微软雅黑"
                 pixelSize: header.height/2
             }
             anchors.right: parent.right
@@ -311,22 +351,37 @@ Rectangle {
 
     //饮食记录页面
     ListView{
-
         header:Rectangle{
-            id:recommendbutton
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width/3*1.1
-            color:"#02ae4a"
             height:header.height*1.2
+
+            Rectangle{
+                width: parent.width/1.2
+                height:header.height/1.5
+
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "black"
+                }
+
+
+            color:"#02ae4a"
+
+            id:recommendbutton
+            anchors.centerIn: parent
+
             Text{
                 text:"今日推荐"
                 color:"white"
                 anchors.centerIn: parent
                 font.pixelSize: header.height/2.5
             }
-            border.width: height/5
-            border.color: "white"
+
             radius: height/4
+            }
 
         }
 
@@ -341,13 +396,15 @@ Rectangle {
         clip:true
         property var currentdiet;
         property int currentfood;
-        spacing: -1
+
+        spacing: 20
+
         Rectangle {
             id: scrollbar
             anchors.right: foodview.right
             anchors.rightMargin: 3
             y: foodview.visibleArea.yPosition * foodview.height
-            width: 10
+            width: 5
             height: foodview.visibleArea.heightRatio * foodview.height
             color: "grey"
             radius: 5
@@ -358,12 +415,12 @@ Rectangle {
         //餐饮model
         ListModel{
             id:dietmodel
-            ListElement{Title:"早餐";Photo:""}
-            ListElement{Title:"午餐";Photo:""}
-            ListElement{Title:"晚餐";Photo:""}
-            ListElement{Title:"零食";Photo:""}
-            ListElement{Title:"点心";Photo:""}
-            ListElement{Title:"其他";Photo:""}
+            ListElement{Title:"早餐"}
+            ListElement{Title:"午餐"}
+            ListElement{Title:"晚餐"}
+            ListElement{Title:"零食"}
+            ListElement{Title:"点心"}
+            ListElement{Title:"其他"}
         }
 
         //各种细分的model
@@ -375,14 +432,14 @@ Rectangle {
         }
         ListModel{
             id:lunchmodel
-            ListElement{Food:"米饭"}
+            ListElement{Food:"点击选择食物"}
             ListElement{Food:"点击选择食物"}
             ListElement{Food:"点击选择食物"}
 
         }
         ListModel{
             id:dinnermodel
-            ListElement{Food:"米饭"}
+            ListElement{Food:"点击选择食物"}
             ListElement{Food:"点击选择食物"}
             ListElement{Food:"点击选择食物"}
 
@@ -419,11 +476,19 @@ Rectangle {
             width:parent.width
 
             height: foodlist.height+header.height/1.5+addfoodbutton.height
-            property string imagePath:Photo
+
             Rectangle{
 
                 border.color: "grey"
                 border.width: 1
+
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 10
+                    color: "black"
+                }
+
                 //radius: header.height/3
                 anchors.fill: parent
 
@@ -438,17 +503,89 @@ Rectangle {
 
                 Label{
                     id:title
-                    text:Title+"："
+                    text:Title
                     anchors.top:parent.top
-                    anchors.topMargin: height/2
+                    anchors.topMargin: height
                     anchors.left: parent.left
-                    anchors.leftMargin: parent.width/20
+                    anchors.leftMargin: parent.width/2-parent.width/4-parent.width/8-width/2
+
+                    verticalAlignment: Text.AlignVCenter
                     color:"grey"
                     font{
-                        pixelSize: header.height/2
+                        pixelSize: header.height/3
                     }
+                    property int m_height:header.height/2
 
                 }
+
+                Rectangle{
+                    id:photobutton
+
+                    anchors.horizontalCenter: title.horizontalCenter
+
+                    anchors.top: title.bottom
+                    anchors.topMargin: height/5
+
+                    height: title.m_height*1.2
+                    width: height
+z:10
+                    Image{
+                        fillMode: Image.PreserveAspectFit
+                        anchors.fill: parent
+                        source: "qrc:/image/photo.png"
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            myjava.getImage();
+                            timer.start();
+                        }
+                    }
+                }
+
+                Rectangle{
+                    id:photoimage;
+
+                    anchors.horizontalCenter: title.horizontalCenter
+
+                    anchors.top: photobutton.bottom
+                    anchors.topMargin: photobutton.height/5
+
+                    width:parent.width/5
+                    height: width/2
+
+                    z:10
+
+                    Image{
+                        id:image
+                        fillMode: Image.PreserveAspectFit
+                        property string imagePath:"Qt"
+                        anchors.fill: parent
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+
+                        }
+                    }
+                    Timer{
+                        id:timer;
+                        interval: 1500
+                        repeat: true
+                        onTriggered: {
+                            var temp=myjava.getImagePath();
+                            if(temp!=="Qt"){
+                                timer.stop();
+                                image.source="file://"+temp;
+                                image.imagePath=temp;
+                                timer.stop()
+                            }
+                        }
+                    }
+                }
+
+
 
                 Component.onCompleted: {
                     switch(index){
@@ -477,18 +614,18 @@ Rectangle {
                 ListView{
                     id:foodlist
                     width: parent.width
-                    height:foodlist.model.count*(title.height*1.5+mainrect.height/36)
+                    height:foodlist.model.count*(title.m_height*1.5+mainrect.height/36)
 
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     anchors.top: parent.top
-                    anchors.topMargin: title.height/2
+                    anchors.topMargin: title.m_height*2/3
 
                     spacing: mainrect.height/36
 
                     delegate:Item{
                         id:food
-                        height:title.height*1.5
+                        height:title.m_height*1.5
                         width: parent.width
 
 
@@ -496,6 +633,14 @@ Rectangle {
                             id:foodtext
                             border.color: "grey"
                             border.width: 1
+
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+                                radius: 8
+                                color: "black"
+                            }
+
                             radius: header.height/7
                             color:"white"
                             height: parent.height
@@ -509,7 +654,7 @@ Rectangle {
                                 color:"grey"
                                 font{
 
-                                    pixelSize: parent.height/2.5
+                                    pixelSize: parent.height/2
                                 }
                             }
                             MouseArea{
@@ -527,15 +672,20 @@ Rectangle {
 
                         Rectangle{
                             id:deletebutton
-                            anchors.right: parent.right
-                            anchors.rightMargin: height
-                            x:parent.width-(parent.width-foodtext.x+foodtext.height)/2+width*1.5
+
+                            anchors.left:foodtext.right
+                            anchors.leftMargin: parent.width-parent.width/2-parent.width/4-parent.width/8-width/2
+
+                            //x:parent.width-(parent.width-foodtext.x+foodtext.height)/2+width*2
 
                             //anchors.top: foodtext.top
                             anchors.verticalCenter: foodtext.verticalCenter
 
                             height: foodtext.height/1.4
                             width: height*1.6
+
+                            visible: Food=="点击选择食物"?false:true
+
                             Image{
                                 id:deletetext
                                 fillMode: Image.PreserveAspectFit
@@ -547,10 +697,11 @@ Rectangle {
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
+                                    Food="点击选择食物"
 
-                                    foodlist.model.remove(index)
-                                    if(foodlist.model.count===0)
-                                        foodlist.model.append({"Food":"点击选择食物"})
+//                                    foodlist.model.remove(index)
+//                                    if(foodlist.model.count===0)
+//                                        foodlist.model.append({"Food":"点击选择食物"})
                                 }
                             }
 
@@ -658,7 +809,7 @@ Rectangle {
 
 
                     height: addfoodbutton.height
-                    width: foodlist.width/2
+                    width: height
 
                     anchors.top: addfoodbutton.top
 
@@ -673,12 +824,10 @@ Rectangle {
 
                     MouseArea{
                         anchors.fill: parent
-                        onPressAndHold: {
+                        onPressed: {
                             foodview.interactive=false
                             savetimer.start()
                             speechsystem.inclick()
-                            speechbutton.color="green"
-
                             reminder.visible=true
                             speechlengthtimer.time=0
                             speechlengthtimer.start()
@@ -692,12 +841,10 @@ Rectangle {
                                 reminder.visible=false
                                 indicator2.visible=true
                                 speechsystem.outclick("zh")
-                                speechbutton.color="white"
 
                             }
                             else{
                                 reminder.visible=false
-                                speechbutton.color="white"
                                 speechsystem.outclick("short")
                                 myjava.toastMsg("时间太短...")
                             }
@@ -723,11 +870,11 @@ Rectangle {
                 Rectangle{
                     id:addfoodbutton
 
-                    anchors.horizontalCenter: title.horizontalCenter
-                    anchors.horizontalCenterOffset: -width/3
+                    anchors.left: foodlist.left
+                    anchors.leftMargin: parent.width/2-parent.width/4
 
                     anchors.top: foodlist.bottom
-                    height: title.height*1.2
+                    height: title.m_height*1.2
                     width: height
                     Image{
                         id:addtext
@@ -749,6 +896,98 @@ Rectangle {
                             else
                                 myjava.toastMsg("请先填满之前的食物")
                         }
+                    }
+
+                }
+
+                Rectangle{
+                    id:savebutton
+
+                    anchors.left:sharebutton.right
+                    anchors.leftMargin: parent.width-parent.width/2-parent.width/4-parent.width/8-width/2
+
+                    anchors.top: sharebutton.top
+                    height: title.m_height*1.2
+                    width: height
+
+                    Timer{
+                        id:animationtimer
+                        interval: 800
+                        repeat:true
+                        onTriggered: {
+                            if(savebutton.scale==1.2)
+                                savebutton.scale=1
+                            else
+                                savebutton.scale=1.2
+                        }
+                        running: true
+                    }
+                    Behavior on scale{
+                        NumberAnimation{
+                            duration: 800
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+
+                    Image{
+                        fillMode: Image.PreserveAspectFit
+                        anchors.fill: parent
+                        source: "qrc:/image/save.png"
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+
+                        onClicked: {
+                            animationtimer.running=false
+                            savebutton.scale=1
+                            myjava.toastMsg("保存成功！")
+                            var lstr="|||";
+                            for(var i=0;i<breakfastmodel.count;i++){
+                                if(breakfastmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+breakfastmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<lunchmodel.count;i++){
+                                if(lunchmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+lunchmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<dinnermodel.count;i++){
+                                if(dinnermodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+dinnermodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<snackmodel.count;i++){
+                                if(snackmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+snackmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<dessertmodel.count;i++){
+                                if(dessertmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+dessertmodel.get(i).Food+"{|}";
+                            }
+                            lstr=lstr+"|||";
+                            for(var i=0;i<othersmodel.count;i++){
+                                if(othersmodel.get(i).Food!=="点击选择食物")
+                                    lstr=lstr+othersmodel.get(i).Food+"{|}";
+                            }
+
+                            if(sharebutton.lastsaved!=lstr){
+                                sharebutton.lastsaved=lstr;
+                                recordsystem.savelocaldiet(lstr);
+
+                                var foodstr123="";
+                                for(var i=0;i<foodlist.model.count;i++){
+                                    if(foodlist.model.get(i).Food!=="点击选择食物")
+                                        foodstr123=foodstr123+foodlist.model.get(i).Food+"、";
+                                }
+                                if(savetimer.lastupload!==foodstr123){
+                                    savetimer.lastupload=foodstr123
+                                    recordsystem.uploaddiet(str_userid,foodstr123,index);
+                                }
+                            }
+                        }
+
                     }
 
                 }
@@ -790,8 +1029,8 @@ Rectangle {
                                 lstr=lstr+othersmodel.get(i).Food+"{|}";
                         }
 
-                        if(savebutton.lastsaved!=lstr){
-                            savebutton.lastsaved=lstr;
+                        if(sharebutton.lastsaved!=lstr){
+                            sharebutton.lastsaved=lstr;
                             recordsystem.savelocaldiet(lstr);
 
 
@@ -808,69 +1047,20 @@ Rectangle {
                     }
                 }
 
-                Rectangle{
-                    id:savebutton
-                    property string lastsaved:"123"
-                    anchors.right: sharebutton.left
-                    anchors.rightMargin: sharebutton.width
-                    anchors.top: addfoodbutton.top
-                    anchors.topMargin: header.height/5
-                    height: title.height*1.2
-                    width: height
-                    visible: false
-                    Image{
-                        id:savetext
-                        fillMode: Image.PreserveAspectFit
-                        anchors.fill: parent
-                        source: "qrc:/image/save.png"
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-
-                        }
-                    }
-
-                }
 
                 Rectangle{
                     id:sharebutton
                     anchors.right: foodlist.right
-                    anchors.rightMargin: savebutton.width
-
+                    anchors.rightMargin: parent.width/2-parent.width/4
+                    property string lastsaved:""
                     anchors.top: addfoodbutton.top
                     //anchors.topMargin: header.height/5
-                    height: title.height*1.2
+                    height: title.m_height*1.2
                     width: height
-
-                    Timer{
-                        id:animationtimer
-                        interval: 800
-                        repeat:true
-                        onTriggered: {
-                            if(sharebutton.scale==1.2)
-                                sharebutton.scale=1
-                            else
-                                sharebutton.scale=1.2
-                        }
-                        running: true
-                    }
-
-
-                    Behavior on scale{
-                        NumberAnimation{
-                            duration: 800
-                            easing.type: Easing.OutCubic
-                        }
-                    }
-
 
                     Image{
                         id:sharetext
                         fillMode: Image.PreserveAspectFit
-
-
                         anchors.fill: parent
                         source: "qrc:/image/share.png"
                     }
@@ -879,28 +1069,27 @@ Rectangle {
                         anchors.fill: parent
                         onClicked: {
 
-                            var str="<strong>"+title.text+"：</strong>";
-                            var foodstr123="";
+                            var str="<strong>"+title.text+"：</strong>"
+                            var foodstr123=""
                             for(var i=0;i<foodlist.model.count;i++){
                                 if(foodlist.model.get(i).Food!=="点击选择食物")
                                     if(i==foodlist.model.count-1)
                                         foodstr123=foodstr123+foodlist.model.get(i).Food;
                                     else
-                                        foodstr123=foodstr123+foodlist.model.get(i).Food+"、";
+                                        foodstr123=foodstr123+foodlist.model.get(i).Food+"、"
                             }
-
+                            var ss=""
                             if(foodstr123=="")
-                                str="<br>"+str+"什么都没吃……";
+                                ss=str+"什么都没吃……";
                             else
-                                str="<br>"+str+foodstr123;
+                                ss=str+foodstr123;
 
-                            console.log(str)
+
 
                             mainrect.parent.parent.currentPage="分享"
-                            mainrect.parent.parent.x=-mainrect.width*2
-                            mainrect.parent.parent.children[2].item.settext("<font color=\"#45ada8\">"+str+"</font>")
-                            //if(dietimage.source!=="")
-                            //    mainrect.parent.parent.children[2].item.setimg(dietitem.imagePath)
+                            mainrect.parent.parent.x=-mainrect.width*1
+                            mainrect.parent.parent.children[1].item.settext("<font color=\"#45ada8\">"+ss+"</font>")
+
                         }
                     }
 
@@ -945,6 +1134,13 @@ Rectangle {
                 id:sporttype
                 border.color: "grey"
                 border.width: 2
+
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "grey"
+                }
                 radius: height/4
                 color:"white"
                 height: parent.height
@@ -997,7 +1193,7 @@ Rectangle {
             height: typerow.height
             width: parent.width/1.2
             spacing: begintimetext.width/5
-            property int editmode: 1
+            property int editmode: 0
             property string begintime:"00:00:00"
 
             Text{
@@ -1015,6 +1211,12 @@ Rectangle {
                 id:begintimehour
                 border.color: "grey"
                 border.width: begintimerow.editmode?2:0
+                layer.enabled: begintimerow.editmode?true:false
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 16
+                    color: "grey"
+                }
                 radius: height/4
                 color:"white"
                 height: parent.height
@@ -1058,6 +1260,14 @@ Rectangle {
                 id:begintimemin
                 border.color: "grey"
                 border.width: begintimerow.editmode?2:0
+                layer.enabled: begintimerow.editmode?true:false
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    radius: 8
+                    color: "grey"
+                }
                 radius: height/4
                 color:"white"
                 height: parent.height
@@ -1123,6 +1333,14 @@ Rectangle {
                 id:lasttimehour
                 border.color: "grey"
                 border.width: begintimerow.editmode?2:0
+                layer.enabled: begintimerow.editmode?true:false
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    radius: 8
+                    color: "grey"
+                }
                 radius: height/4
                 color:"white"
                 height: parent.height
@@ -1165,6 +1383,14 @@ Rectangle {
                 id:lasttimemin
                 border.color: "grey"
                 border.width: begintimerow.editmode?2:0
+                layer.enabled: begintimerow.editmode?true:false
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    radius: 8
+                    color: "grey"
+                }
                 radius: height/4
                 color:"white"
                 height: parent.height
@@ -1216,6 +1442,24 @@ Rectangle {
             height: typerow.height*1.1
             width: height*3
 
+            Rectangle{
+                id:changeeditmodebutton
+                height: parent.height
+                width: height
+                visible:antimetimer.running==false
+                Image{
+                    fillMode: Image.PreserveAspectFit
+                    anchors.fill: parent
+                    source: "qrc:/image/recordpage.png"
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        begintimerow.editmode==0?begintimerow.editmode=1:begintimerow.editmode=0
+                    }
+                }
+            }
+
 
             Rectangle{
                 id:sportsavebutton
@@ -1260,6 +1504,7 @@ Rectangle {
                 width: height
 
                 Timer{
+                    id:sharebuttontimer
                     interval: 800
                     repeat:true
                     onTriggered: {
@@ -1305,12 +1550,12 @@ Rectangle {
 
                             // var str="<br><strong>运动：</strong>"+begintimerow.begintime+" <strong>"+sporttext.text+"</strong> 持续 "+lasttimerow.lasttime+"分钟";
 
-                            var str="<br><strong>运动：</strong>"+"<strong>"+sporttext.text+"</strong> "+lasttimerow.lasttime+"分钟";
+                            var str="<strong>运动：</strong>"+"<strong>"+sporttext.text+"</strong> "+lasttimerow.lasttime+"分钟";
 
 
                             mainrect.parent.parent.currentPage="分享"
-                            mainrect.parent.parent.x=-mainrect.width*2
-                            mainrect.parent.parent.children[2].item.settext("<font color=\"#45ada8\">"+str+"</font>")
+                            mainrect.parent.parent.x=-mainrect.width*1
+                            mainrect.parent.parent.children[1].item.settext("<font color=\"#45ada8\">"+str+"</font>")
 
                             sporttext.text=""
                             lasttimemintext.text="00"
@@ -1331,6 +1576,14 @@ Rectangle {
             radius: height/10
             border.color: "grey"
             border.width: 2
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 3
+                verticalOffset: 3
+                radius: 8
+                color: "grey"
+            }
             anchors.top: buttonrow.bottom
             anchors.topMargin: sportview.height/30
             anchors.left: sportview.left
@@ -1404,6 +1657,14 @@ Rectangle {
             radius: height/10
             border.color: "grey"
             border.width: 2
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 3
+                verticalOffset: 3
+                radius: 8
+                color: "grey"
+            }
             anchors.top: buttonrow.bottom
             anchors.topMargin: sportview.height/30
             anchors.right: sportview.right
@@ -1422,8 +1683,28 @@ Rectangle {
                 height:parent.width/2
                 width:height
                 source: "qrc:/image/clock.png"
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 500
+                        easing.type: Easing.OutCubic
+                    }
+                }
 
             }
+
+            Timer{
+                id:antimetimer
+                interval: 500
+                repeat:true
+                onTriggered: {
+                    if(clockimage.scale==1.1)
+                        clockimage.scale=1
+                    else
+                        clockimage.scale=1.1
+                }
+                running: false
+            }
+
 
 
             Text{
@@ -1433,7 +1714,7 @@ Rectangle {
                 anchors.bottomMargin: parent.height/5
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                text:"运动计时"
+                text:"点击计时"
                 verticalAlignment: Text.AlignVCenter
 
                 color:"grey"
@@ -1444,14 +1725,20 @@ Rectangle {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
+
+
+
                     if(!sporttimer.running){
-                        begintimerow.editmode=0
+                        sharebuttontimer.running=false
+                        antimetimer.running=true
+
                         sportsavebutton.enabled=false
 
                         sportsharebutton.enabled=false
 
                         sporttimer.mins=0;
-                        timertext.text=sporttimer.mins.toString()+"分钟"
+                        //timertext.text=sporttimer.mins.toString()+"分钟"
+                        timertext.text="计时中"
                         var time= new Date()
                         sporttimer.beginhour=time.getHours()
                         sporttimer.beginmin=time.getMinutes()
@@ -1465,6 +1752,8 @@ Rectangle {
                         delete time;
                     }
                     else{
+                        sharebuttontimer.running=true
+                        antimetimer.running=false
                         sporttimer.stop()
                         // modebutton.color="#02ae4a"
                         //modebutton.enabled=true;
@@ -1472,11 +1761,11 @@ Rectangle {
                         //sportsavebutton.color="#02ae4a"
                         sportsharebutton.enabled=true
                         //sportsharebutton.color="#02ae4a"
-                        begintimerow.editmode=1
+
 
                         lasttimehourtext.text=parseInt(sporttimer.mins/60).toString()
                         lasttimemintext.text=(sporttimer.mins%60).toString()
-                        timertext.text="运动计时"
+                        timertext.text="点击计时"
                     }
                 }
             }
@@ -1502,7 +1791,7 @@ Rectangle {
                     mins=(time.getHours()+24-sporttimer.beginhour)*60+(60-sporttimer.beginmin)+time.getMinutes();
                 }
 
-                timertext.text=sporttimer.mins.toString()+"分钟"
+                //timertext.text=sporttimer.mins.toString()+"分钟"
 
                 lasttimehourtext.text=parseInt(sporttimer.mins/60).toString()
                 lasttimemintext.text=(sporttimer.mins%60).toString()
@@ -1528,6 +1817,14 @@ Rectangle {
             id:timechooser
             border.color: "grey"
             border.width: 2
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 3
+                verticalOffset: 3
+                radius: 8
+                color: "grey"
+            }
             radius: height/4
             color:"white"
             anchors.top: parent.top
@@ -1585,20 +1882,6 @@ Rectangle {
             property string month;
             property string day;
 
-
-
-            TumblerColumn {
-                id: tumblerDayColumn
-                width:tumbler.width/3
-                model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
-                onCurrentIndexChanged: {
-                    tumbler.day=model[currentIndex].toString();
-                    if(parseInt(tumbler.day)>tumbler.days[monthColumn.currentIndex])
-                        tumbler.day="0";
-                }
-            }
-
-
             TumblerColumn {
                 width:tumbler.width/3
                 model: ListModel {
@@ -1623,6 +1906,7 @@ Rectangle {
                         tumbler.days[1]=29
                 }
             }
+
             TumblerColumn {
                 id: monthColumn
                 width:tumbler.width/3
@@ -1636,6 +1920,18 @@ Rectangle {
 
                 }
             }
+
+            TumblerColumn {
+                id: tumblerDayColumn
+                width:tumbler.width/3
+                model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
+                onCurrentIndexChanged: {
+                    tumbler.day=model[currentIndex].toString();
+                    if(parseInt(tumbler.day)>tumbler.days[monthColumn.currentIndex])
+                        tumbler.day="0";
+                }
+            }
+
 
         }
 
@@ -1657,11 +1953,13 @@ Rectangle {
             Rectangle{
                 id:foodtablerect
                 border.color: "grey"
-                border.width: 2
-                radius: header.height/5
+                border.width: 1
+
                 height:foodtabletitle.height*2+ header.height/3*7+breakfast.height+lunch.height+dinner.height+snack.height+dessert.height+others.height
-                width: parent.width-20
+                width: parent.width+2
+
                 x:parent.width/2-width/2
+
                 anchors.top: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
                 property string breakfaststr:"暂无数据"
@@ -1784,10 +2082,9 @@ Rectangle {
             Rectangle{
                 id:sporttablerect
                 border.color: "grey"
-                border.width: 2
-                radius: header.height/5
+                border.width: 1
                 height:sporttableview.height+header.height/3*2+sporttabletitle.height
-                width: parent.width-20
+                width: parent.width+2
                 x:parent.width/2-width/2
                 anchors.top: foodtablerect.bottom
                 anchors.topMargin: header.height/3
@@ -1964,6 +2261,47 @@ Rectangle {
 
 
         ListView{
+            header:Rectangle{
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width/3*1.1
+                height:header.height*1.2
+
+                Rectangle{
+                    width: height*2
+                    height:header.height/1.5
+
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+                        horizontalOffset: 3
+                        verticalOffset: 3
+                        radius: 8
+                        color: "grey"
+                    }
+                color:"#02ae4a"
+                anchors.centerIn: parent
+
+                Text{
+                    text:"返回"
+                    color:"white"
+                    anchors.centerIn: parent
+                    font.pixelSize: header.height/2.5
+                }
+
+                radius: height/4
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        searchtext.text=""
+                        searpage.visible=false
+                        mainrect.parent.parent.parent.forceActiveFocus();
+                    }
+                }
+
+            }
+
+
             id:view
             spacing: -1
             anchors.top: (view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel||view.model===searchedsportmodel)?searchbar.bottom:parent.top
@@ -1975,7 +2313,7 @@ Rectangle {
                 anchors.right: view.right
                 anchors.rightMargin: 3
                 y: view.visibleArea.yPosition * view.height
-                width: 10
+                width: 5
                 height: view.visibleArea.heightRatio * view.height
                 color: "grey"
                 radius: 5

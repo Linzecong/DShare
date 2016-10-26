@@ -161,9 +161,16 @@ Rectangle{
     }
 
     Rectangle{
+        Rectangle{
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height:myjava.getStatusBarHeight()
+            color:"green"
+        }
         id:head;
         width:parent.width;
-        height: parent.height/16*1.5
+        height: parent.height/16*2
         color:"#02ae4a"
         anchors.top: parent.top;
         Label{
@@ -173,11 +180,11 @@ Rectangle{
             width:height
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
             font{
                 
-                pixelSize: backbutton.height/1.5
+                pixelSize: backbutton.height/2
 
             }
             color: "white"
@@ -202,10 +209,10 @@ Rectangle{
             id:headname
             text:"评论列表"
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
-                family: "微软雅黑"
-                pixelSize: (head.height)/3
+                //family: "微软雅黑"
+                pixelSize: (head.height)/4
             }
             color: "white"
         }
@@ -310,7 +317,7 @@ Rectangle{
                 wrapMode: Text.Wrap;
                 textFormat:Text.RichText
                 font{
-                    family: "微软雅黑"
+                    //family: "微软雅黑"
                     pixelSize: headimage.height/3
                 }
             }
@@ -394,7 +401,7 @@ Rectangle{
                       anchors.right: commentview.right
                       anchors.rightMargin: 3
                       y: commentview.visibleArea.yPosition * commentview.height
-                      width: 10
+                      width: 5
                       height: commentview.visibleArea.heightRatio * commentview.height
                       color: "grey"
                       radius: 5

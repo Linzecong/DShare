@@ -15,6 +15,10 @@ public:
 
      Q_INVOKABLE int getWidth();//返回SDcard地址
      Q_INVOKABLE int getHeight();//返回SDcard地址
+
+
+    Q_INVOKABLE QString getStatusBarHeight();//返回SDcard地址
+
 signals:
 
 public slots:

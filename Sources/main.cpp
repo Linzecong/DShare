@@ -13,9 +13,12 @@
 #include"Headers/RecordSystem.h"
 #include"Headers/ReportSystem.h"
 #include"Headers/SpeechSystem.h"
+#include <QFontDatabase>
 
 int main(int argc, char *argv[]){
     QApplication app(argc, argv);
+
+
 
     //将C++注册到QML中
     qmlRegisterType<LoginSystem>("LoginSystem",1,0,"LoginSystem");

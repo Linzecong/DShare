@@ -134,9 +134,16 @@ property string nickname;
     }
 
     Rectangle{
+        Rectangle{
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height:myjava.getStatusBarHeight()
+            color:"green"
+        }
         id:head
         width:parent.width
-        height: parent.height/16*1.5
+        height: parent.height/16*2
         color:"#02ae4a"
         anchors.top: parent.top
         Label{
@@ -146,11 +153,11 @@ property string nickname;
             text:" ＜"
             color: "white"
             font{
-                pixelSize: (head.height)/1.5
+                pixelSize: (head.height)/2
             }
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
             MouseArea{
                 id:headma
@@ -168,10 +175,10 @@ property string nickname;
             id:headname
             text:"我的关注"
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: (parent.height-height)/5
+            anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
-                family: "微软雅黑"
-                pixelSize: (head.height)/2.5
+                //family: "微软雅黑"
+                pixelSize: (head.height)/4
             }
             color: "white"
             MouseArea{
@@ -279,7 +286,7 @@ property string nickname;
                   anchors.right: view.right
                   anchors.rightMargin: 3
                   y: view.visibleArea.yPosition * view.height
-                  width: 10
+                  width: 5
                   height: view.visibleArea.heightRatio * view.height
                   color: "grey"
                   radius: 5

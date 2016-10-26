@@ -163,7 +163,7 @@ StackView{
 
             function getImageData(){
                 return context.getImageData(frameX - 128, frameY - 128,
-     256, 256);
+                                            256, 256);
             }
 
             onPaint: {
@@ -296,10 +296,10 @@ StackView{
                         //headimage.source="file://"+path;
                         headurl="file://"+path;
 
-//                        if(headimage.status==Image.Error){
-//                            myjava.toastMsg("照片有误！");
-//                            return
-//                        }
+                        //                        if(headimage.status==Image.Error){
+                        //                            myjava.toastMsg("照片有误！");
+                        //                            return
+                        //                        }
 
                         imagePath=path;
                         sendimgsystem1.sendHead(imagePath,str_userid);
@@ -537,10 +537,10 @@ StackView{
                         headurl=source.source
 
 
-//                        if(headimage.status==Image.Error){
-//                            myjava.toastMsg("照片有误！");
-//                            return
-//                        }
+                        //                        if(headimage.status==Image.Error){
+                        //                            myjava.toastMsg("照片有误！");
+                        //                            return
+                        //                        }
 
                         imagePath=chooseimage;
                         sendimgsystem1.sendHead(imagePath,str_userid);
@@ -579,9 +579,16 @@ StackView{
 
 
         Rectangle{
-            id:headrect
+            Rectangle{
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height:myjava.getStatusBarHeight()
+                color:"green"
+            }
+            id:head
             width:parent.width;
-            height: parent.height/16*1.5;
+            height: parent.height/16*2
             color:"#02ae4a"
             anchors.top: parent.top;
 
@@ -592,10 +599,11 @@ StackView{
                 width:height
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                 verticalAlignment: Text.AlignVCenter
                 font{
                     
-                    pixelSize: headrect.height/1.5
+                    pixelSize: (head.height)/2
                 }
                 color: "white";
                 MouseArea{
@@ -613,9 +621,10 @@ StackView{
             Label{
                 text:"设置";
                 anchors.centerIn: parent
+                anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                 font{
-                    family: "微软雅黑"
-                    pixelSize: headrect.height/2.5
+                    //family: "微软雅黑"
+                    pixelSize: (head.height)/4
 
                 }
                 color: "white";
@@ -625,9 +634,9 @@ StackView{
 
         Rectangle{
             id:changedata
-            anchors.top: headrect.bottom
-            anchors.topMargin: headrect.height/2
-            height: headrect.height
+            anchors.top: head.bottom
+            anchors.topMargin: head.height/3
+            height: head.height
             width: parent.width
             color: "white"
             border.width: 1;
@@ -640,7 +649,7 @@ StackView{
                 verticalAlignment: Text.AlignVCenter
                 font{
                     
-                    pixelSize: headrect.height/3
+                    pixelSize: head.height/4
 
                 }
                 color:"grey"
@@ -653,35 +662,35 @@ StackView{
             }
         }
 
-//        Rectangle{
-//            id:help
-//            anchors.top: changedata.bottom
-//            anchors.topMargin: headrect.height/2
-//            height: headrect.height
-//            width: parent.width
-//            color: "white"
-//            border.width: 1;
-//            border.color: "grey"
-//            Label{
-//                text: "使用帮助"
-//                anchors.left: parent.left
-//                anchors.leftMargin: 20
-//                anchors.verticalCenter: parent.verticalCenter
-//                verticalAlignment: Text.AlignVCenter
-//                font{
-//                    
-//                    pixelSize: headrect.height/3
+        //        Rectangle{
+        //            id:help
+        //            anchors.top: changedata.bottom
+        //            anchors.topMargin: head.height/2
+        //            height: head.height
+        //            width: parent.width
+        //            color: "white"
+        //            border.width: 1;
+        //            border.color: "grey"
+        //            Label{
+        //                text: "使用帮助"
+        //                anchors.left: parent.left
+        //                anchors.leftMargin: 20
+        //                anchors.verticalCenter: parent.verticalCenter
+        //                verticalAlignment: Text.AlignVCenter
+        //                font{
+        //
+        //                    pixelSize: head.height/3
 
-//                }
-//                color:"grey"
-//            }
-//            MouseArea{
-//                anchors.fill: parent
-//                onClicked: {
-//                    stack.push(helppage)
-//                }
-//            }
-//        }
+        //                }
+        //                color:"grey"
+        //            }
+        //            MouseArea{
+        //                anchors.fill: parent
+        //                onClicked: {
+        //                    stack.push(helppage)
+        //                }
+        //            }
+        //        }
 
 
 
@@ -704,18 +713,28 @@ StackView{
             }
 
             Rectangle{
+                Rectangle{
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height:myjava.getStatusBarHeight()
+                    color:"green"
+                }
                 id:changedatahead;
                 width:parent.width;
-                height: parent.height/16*1.5;
+                height: parent.height/16*2
                 color:"#02ae4a"
                 anchors.top: parent.top;
+
                 Label{
                     text:" ＜";
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
+                    verticalAlignment: Text.AlignVCenter
                     font{
                         
-                        pixelSize: headrect.height/1.5
+                        pixelSize: (head.height)/2
                     }
                     color: "white";
                     MouseArea{
@@ -730,9 +749,10 @@ StackView{
                 Label{
                     text:"修改资料";
                     anchors.centerIn: parent
+                    anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     font{
-                        family: "微软雅黑"
-                        pixelSize: headrect.height/3
+                        //family: "微软雅黑"
+                        pixelSize: (head.height)/4
 
                     }
                     color: "white";
@@ -743,8 +763,8 @@ StackView{
             Rectangle{
                 id:changehead
                 anchors.top: changedatahead.bottom
-                anchors.topMargin: headrect.height/2
-                height: headrect.height*2
+                anchors.topMargin: head.height/3
+                height: head.height
                 width: parent.width
                 color: "white"
                 border.width: 1;
@@ -757,7 +777,7 @@ StackView{
                     verticalAlignment: Text.AlignVCenter
                     font{
                         
-                        pixelSize: headrect.height/3
+                        pixelSize: head.height/4
 
                     }
                     color:"grey"
@@ -796,22 +816,18 @@ StackView{
                 Timer{
                     id:timer;
                     interval: 1500
+                    repeat: true
                     onTriggered: {
                         var temp=myjava.getImagePath();
                         if(temp!=="Qt"){
                             timer.stop();
-chooseimage=temp
+                            chooseimage=temp
                             var url="file://"+temp;
                             source.source=url
                             mask.recalc()
-myjava.toastMsg("移动红框选取头像")
+                            myjava.toastMsg("移动红框选取头像")
                             pickhead.visible=true
-pickhead.forceActiveFocus()
-
-
-
-
-
+                            pickhead.forceActiveFocus()
                         }
                     }
                 }
@@ -821,8 +837,8 @@ pickhead.forceActiveFocus()
             Rectangle{
                 id:changename
                 anchors.top: changehead.bottom
-                anchors.topMargin: headrect.height/2
-                height: headrect.height*2
+                anchors.topMargin: head.height/3
+                height: head.height
                 width: parent.width
                 color: "white"
                 border.width: 1;
@@ -836,7 +852,7 @@ pickhead.forceActiveFocus()
                     verticalAlignment: Text.AlignVCenter
                     font{
                         
-                        pixelSize: headrect.height/3
+                        pixelSize: head.height/4
 
                     }
                     color:"grey"
@@ -895,7 +911,7 @@ pickhead.forceActiveFocus()
                                 myjava.toastMsg("非法字符，不能存在空格或特殊字符，且不得多于7个字符")
                             else{
                                 if(nickname!==changenameedit.text)
-                                dbsystem.changeName(str_userid,changenameedit.text)
+                                    dbsystem.changeName(str_userid,changenameedit.text)
                                 changenameedit.visible=false
                                 changenametext.text="修改昵称"
 
