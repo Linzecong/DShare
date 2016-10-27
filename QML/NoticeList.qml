@@ -160,7 +160,7 @@ Rectangle {
             font{
                         family: localFont.name
                 
-                pixelSize: (head.height)/4
+                pointSize: 20
             }
             color: "white";
             MouseArea{
@@ -234,7 +234,7 @@ Rectangle {
                     wrapMode: Text.WordWrap
                     font{
                         family: localFont.name
-                        pixelSize: (head.height)/4
+                        pointSize: 16
                     }
                     text:"<strong><font color=\"#35dca2\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\"#35dca2\">你</font></strong>"
 
@@ -250,7 +250,7 @@ Rectangle {
                     font{
                         family: localFont.name
                         
-                        pixelSize: (head.height)/4
+                        pointSize: 12
                     }
                     text:SendTime
 

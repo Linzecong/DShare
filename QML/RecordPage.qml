@@ -296,7 +296,7 @@ Rectangle {
             font{
                         family: localFont.name
                // family: "微软雅黑"
-                pixelSize: header.height/2
+                pointSize: 20
             }
             anchors.left: parent.left
             anchors.leftMargin: parent.width/10
@@ -316,7 +316,7 @@ Rectangle {
             font{
                         family: localFont.name
               //  family: "微软雅黑"
-                pixelSize: header.height/2
+                pointSize: 20
             }
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -335,7 +335,7 @@ Rectangle {
             font{
                         family: localFont.name
                // family: "微软雅黑"
-                pixelSize: header.height/2
+                pointSize: 20
             }
             anchors.right: parent.right
             anchors.rightMargin: parent.width/10
@@ -385,7 +385,7 @@ Rectangle {
                 text:"今日推荐"
                 color:"white"
                 anchors.centerIn: parent
-                font.pixelSize: header.height/2.5
+                font.pointSize: 14
             }
 
             //radius: height/4
@@ -516,7 +516,7 @@ spacing:-1
                     color:"grey"
                     font{
                         family: localFont.name
-                        pixelSize: header.height/3
+                        pointSize: 16
                     }
                     property int m_height:header.height/2
 
@@ -660,7 +660,7 @@ z:10
                                 font{
                         family: localFont.name
 
-                                    pixelSize: parent.height/2
+                                    pointSize: 14
                                 }
                             }
                             MouseArea{
@@ -1116,6 +1116,7 @@ z:10
         height: parent.height-header.height
         width:parent.width
         anchors.top: header.bottom
+       // anchors.horizontalCenter: parent.horizontalCenter
         color:"white"
 
         Row{
@@ -1124,17 +1125,19 @@ z:10
             anchors.topMargin: parent.height/15
             anchors.horizontalCenter: parent.horizontalCenter
             height: parent.height/15
+
             width: parent.width/1.5
-            spacing: typetext.width/2
+
+            spacing: typetext.width/4
             Text{
                 id:typetext
-                text:"项目"
+                text:"项目："
                 color:"grey"
                 anchors.verticalCenter: parent.verticalCenter
                 font{
                         family: localFont.name
 
-                    pixelSize: header.height/2
+                    pointSize: 16
                 }
             }
 
@@ -1155,9 +1158,13 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 TextField{
                     id:sporttext
+                    //anchors.centerIn: parent
+                    //horizontalAlignment: Text.horizontalAlignment
+
                     anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.leftMargin: 50
+                                        anchors.left: parent.left
+                                        anchors.leftMargin: 50
+
                     readOnly: true
                     placeholderText: "请输入项目"
                     textColor:"grey"
@@ -1166,7 +1173,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: parent.height/1.5
+                        pointSize: 14
                     }
                     z:2
 
@@ -1195,11 +1202,13 @@ z:10
             id:begintimerow
             anchors.top: typerow.bottom
             anchors.topMargin: parent.height/15
-            // anchors.horizontalCenter: parent.horizontalCenter
-            anchors.leftMargin: parent.width/10
+            //anchors.horizontalCenter: parent.horizontalCenter
+
+            anchors.leftMargin: parent.width/20
             anchors.left: parent.left
+
             height: typerow.height
-            width: parent.width/1.2
+
             spacing: begintimetext.width/5
             property int editmode: 0
             property string begintime:"00:00:00"
@@ -1212,7 +1221,7 @@ z:10
                 font{
                         family: localFont.name
 
-                    pixelSize: header.height/2
+                    pointSize: 16
                 }
             }
 
@@ -1237,7 +1246,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: parent.height/1.5
+                        pointSize: 14
                     }
                     onTextChanged: {
                         begintimerow.begintime=begintimehourtext.text+":"+begintimemintext.text;
@@ -1262,7 +1271,7 @@ z:10
                 font{
                         family: localFont.name
 
-                    pixelSize: header.height/2
+                    pointSize: 16
                 }
             }
 
@@ -1287,7 +1296,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: parent.height/1.5
+                        pointSize: 14
                     }
                     onTextChanged: {
                         begintimerow.begintime=begintimehourtext.text+":"+begintimemintext.text;
@@ -1311,7 +1320,7 @@ z:10
                 font{
                         family: localFont.name
 
-                    pixelSize: header.height/2
+                    pointSize: 16
                 }
             }
         }
@@ -1319,11 +1328,15 @@ z:10
             id:lasttimerow
             anchors.top: begintimerow.bottom
             anchors.topMargin: parent.height/15
+
             //anchors.horizontalCenter: parent.horizontalCenter
-            anchors.leftMargin: parent.width/10
+
+
+            anchors.leftMargin: parent.width/20
             anchors.left: parent.left
+width: parent.width/1.2
             height: typerow.height
-            width: parent.width/1.2
+
             spacing: begintimetext.width/5
             property int lasttime:30
             Text{
@@ -1334,7 +1347,7 @@ z:10
                 font{
                         family: localFont.name
 
-                    pixelSize: header.height/2
+                    pointSize: 16
                     bold: true
                 }
             }
@@ -1360,7 +1373,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: parent.height/1.5
+                        pointSize: 14
                     }
                     onTextChanged: {
                         lasttimerow.lasttime=parseInt(lasttimehourtext.text)*60+parseInt(lasttimemintext.text);
@@ -1379,12 +1392,12 @@ z:10
 
             Text{
                 text:"时"
-                verticalAlignment: Text.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
                         family: localFont.name
 
-                    pixelSize: header.height/2
+                    pointSize: 16
                 }
             }
 
@@ -1409,7 +1422,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: parent.height/1.5
+                        pointSize: 14
                     }
                     onTextChanged: {
                         lasttimerow.lasttime=parseInt(lasttimehourtext.text)*60+parseInt(lasttimemintext.text);
@@ -1433,7 +1446,7 @@ z:10
                 font{
                         family: localFont.name
 
-                    pixelSize: header.height/2
+                    pointSize: 16
                 }
             }
         }
@@ -1443,12 +1456,15 @@ z:10
             anchors.top: lasttimerow.bottom
             anchors.topMargin: parent.height/15
 
-            //anchors.horizontalCenter: sportview.horizontalCenter
+            //anchors.horizontalCenter: parent.horizontalCenter
+
             anchors.right: parent.right
             anchors.rightMargin: width/2
 
             height: typerow.height*1.1
-            width: height*3
+           width:height*3
+
+            //width: parent.width/2
 
             Rectangle{
                 id:changeeditmodebutton
@@ -1642,7 +1658,7 @@ z:10
                 font{
                         family: localFont.name
 
-                    pixelSize: parent.height/7
+                    pointSize: 20
                 }
             }
             MouseArea{
@@ -1725,7 +1741,7 @@ z:10
                 color:"grey"
                 font{
                         family: localFont.name
-                    pixelSize: parent.height/8
+                    pointSize: 20
                 }
             }
             MouseArea{
@@ -1843,7 +1859,7 @@ z:10
                 font{
                         family: localFont.name
 
-                    pixelSize: parent.height/1.5
+                    pointSize: 16
                 }
 
                 Component.onCompleted: {
@@ -1985,7 +2001,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: header.height/2.5
+                        pointSize: 16
                     }
                 }
 
@@ -2004,7 +2020,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: header.height/2.5
+                        pointSize: 14
                     }
                 }
                 Text{
@@ -2020,7 +2036,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: header.height/2.5
+                        pointSize: 14
                     }
                 }
                 Text{
@@ -2036,7 +2052,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: header.height/2.5
+                        pointSize: 14
                     }
                 }
                 Text{
@@ -2052,7 +2068,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: header.height/2.5
+                        pointSize: 14
                     }
                 }
                 Text{
@@ -2068,7 +2084,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: header.height/2.5
+                        pointSize: 14
                     }
                 }
                 Text{
@@ -2084,7 +2100,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: header.height/2.5
+                        pointSize: 14
                     }
                 }
 
@@ -2121,7 +2137,7 @@ z:10
                     font{
                         family: localFont.name
 
-                        pixelSize: header.height/2.5
+                        pointSize: 16
                     }
                 }
                 ListView{
@@ -2149,7 +2165,7 @@ z:10
                             font{
                         family: localFont.name
 
-                                pixelSize: header.height/2.5
+                                pointSize: 14
                             }
                         }
                         Text{
@@ -2162,7 +2178,7 @@ z:10
                             font{
                         family: localFont.name
 
-                                pixelSize: header.height/2.5
+                                pointSize: 14
                             }
                         }
                         Text{
@@ -2175,7 +2191,7 @@ z:10
                             font{
                         family: localFont.name
 
-                                pixelSize: header.height/2.5
+                                pointSize: 14
                             }
                         }
 
@@ -2300,7 +2316,7 @@ z:10
                     text:"返回"
                     color:"white"
                     anchors.centerIn: parent
-                    font.pixelSize: header.height/2.5
+                    font.pointSize: 16
                 }
 
                 //radius: height/4
@@ -2352,7 +2368,7 @@ z:10
                         font{
                         family: localFont.name
 
-                            pixelSize: delegate.height/1.5
+                            pointSize: 24
                         }
 
                     }

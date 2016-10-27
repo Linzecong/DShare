@@ -235,6 +235,7 @@ Rectangle {
             height: sidepage.height/4
             anchors.top: sidepage.top
             anchors.left: sidepage.left
+            z:2
 
             layer.enabled: true
             layer.effect: DropShadow {
@@ -286,7 +287,7 @@ Rectangle {
                 font{
                         family: localFont.name
 
-                    pixelSize: headimage2.height/4
+                    pointSize: 16
                 }
             }
 
@@ -303,7 +304,7 @@ Rectangle {
                 font{
                         family: localFont.name
 
-                    pixelSize: headimage2.height/4
+                    pointSize: 16
                 }
                 MouseArea{
                     anchors.fill: parent
@@ -316,11 +317,22 @@ Rectangle {
         }
 
 
+        Flickable{
+            anchors.top: sidepagetop.bottom
+            //anchors.topMargin: sidepagetop.height/10
+
+            anchors.right: parent.right
+            height: sidepage.height-sidepagetop.height
+            width: sidepage.width
+            contentHeight: height+1
+            flickableDirection :Flickable.VerticalFlick
+            pressDelay: 100
 
         Rectangle{
             id:followingbutton
-            anchors.top: sidepagetop.bottom
-            anchors.topMargin: sidepagetop.height/10
+            //anchors.top: sidepagetop.bottom
+            //anchors.topMargin: sidepagetop.height/10
+            anchors.top: parent.top
             anchors.right: parent.right
             height: sidepage.height/10
             width: sidepage.width
@@ -350,7 +362,7 @@ Rectangle {
                 font{
                         family: localFont.name
 
-                    pixelSize: followingbutton.height/4
+                    pointSize: 16
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -403,7 +415,7 @@ Rectangle {
                 font{
                         family: localFont.name
 
-                    pixelSize: followingbutton.height/4
+                    pointSize: 16
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -457,7 +469,7 @@ Rectangle {
                 font{
                         family: localFont.name
 
-                    pixelSize: followingbutton.height/4
+                    pointSize: 16
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -506,7 +518,7 @@ Rectangle {
                 font{
                         family: localFont.name
 
-                    pixelSize: followingbutton.height/4
+                    pointSize: 16
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -555,7 +567,7 @@ Rectangle {
                 font{
                         family: localFont.name
 
-                    pixelSize: followingbutton.height/4
+                    pointSize: 16
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -638,7 +650,7 @@ Rectangle {
                 font{
                         family: localFont.name
 
-                    pixelSize: followingbutton.height/3.5
+                    pointSize: 16
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -657,7 +669,9 @@ Rectangle {
 
         Rectangle{
             id:logoutbutton
-            anchors.bottom: sidepage.bottom
+            //anchors.bottom: sidepage.bottom
+
+            anchors.bottom: parent.bottom
             anchors.right: parent.right
             height: sidepage.height/10
             width: sidepage.width
@@ -685,7 +699,7 @@ Rectangle {
                 font{
                         family: localFont.name
 
-                    pixelSize: followingbutton.height/3.5
+                    pointSize: 16
                 }
                 color: Material.color(Material.BlueGrey)
                 verticalAlignment: Text.AlignVCenter
@@ -717,6 +731,8 @@ Rectangle {
             }
         }
 
+
+        }
     }
 
 
@@ -815,7 +831,7 @@ Rectangle {
 
             font{
                         family: localFont.name
-                //pixelSize: (head.height)/4
+
                 pointSize: 20
             }
             color: "white";

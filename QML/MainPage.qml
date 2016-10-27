@@ -299,7 +299,8 @@ Rectangle{
                     color:"green"
                     font{
                         family: localFont.name
-                        pixelSize: headimage.height/3
+                        //pixelSize: headimage.height/3
+                        pointSize: 16
                     }
 
 
@@ -317,7 +318,7 @@ Rectangle{
                     color:"grey"
                     font{
 family: localFont.name
-                        pixelSize: headimage.height/4
+                        pointSize: 12
                     }
                 }
 
@@ -337,7 +338,7 @@ family: localFont.name
                     font{
                         family: localFont.name
                         //family: "微软雅黑"
-                        pixelSize: headimage.height/3
+                        pointSize: 14
                     }
                 }
 
@@ -392,7 +393,7 @@ family: localFont.name
                     color: "#02ae4a"
                     font{
                         family: localFont.name
-                        pixelSize: headimage.height/3
+                        pointSize: 14
                     }
 
 
@@ -423,7 +424,7 @@ family: localFont.name
                     font{
                         family: localFont.name
 
-                        pixelSize: headimage.height/3
+                        pointSize: 14
                     }
                     MouseArea{
                         anchors.fill: parent

@@ -644,7 +644,7 @@ StackView{
                 font{
                         family: localFont.name
                     //family: "微软雅黑"
-                    pixelSize: (head.height)/4
+                    pointSize: 20
 
                 }
                 color: "white";
@@ -670,7 +670,7 @@ StackView{
                 font{
                         family: localFont.name
                     
-                    pixelSize: head.height/4
+                    pointSize: 16
 
                 }
                 color:"grey"
@@ -784,7 +784,7 @@ StackView{
                     font{
                         family: localFont.name
                         //family: "微软雅黑"
-                        pixelSize: (head.height)/4
+                        pointSize: 20
 
                     }
                     color: "white";
@@ -810,7 +810,7 @@ StackView{
                     font{
                         family: localFont.name
                         
-                        pixelSize: head.height/4
+                        pointSize: 16
 
                     }
                     color:"grey"
@@ -886,7 +886,7 @@ StackView{
                     font{
                         family: localFont.name
                         
-                        pixelSize: head.height/4
+                        pointSize: 16
 
                     }
                     color:"grey"

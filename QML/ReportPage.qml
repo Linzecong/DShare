@@ -255,7 +255,7 @@ Rectangle {
             font{
                         family: localFont.name
                 //family: "微软雅黑
-                pixelSize: (head.height)/4
+                pointSize: 20
             }
             color: "white";
 
@@ -280,7 +280,7 @@ Rectangle {
             titleFont{
                         family: localFont.name
                 //family: "微软雅黑"
-                pixelSize: (head.height)/4
+                pointSize: 16
             }
             property int currentPage: 0
             onCurrentPageChanged: {
@@ -388,7 +388,7 @@ Rectangle {
             titleFont{
                         family: localFont.name
                 //family: "微软雅黑"
-                pixelSize: (head.height)/4
+                pointSize: 16
             }
             anchors.top: foodcountchart.bottom
 
@@ -552,14 +552,14 @@ Rectangle {
             titleFont{
                         family: localFont.name
                 //family: "微软雅黑"
-                pixelSize: (head.height)/4
+                pointSize: 16
             }
 
             legend.visible:true
             legend.font{
                         family: localFont.name
                 //family: "微软雅黑"
-                pixelSize: (head.height)/5
+                pixelSize: (head.height)/7
             }
 
 
@@ -639,7 +639,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         foodtypechart.currentPage--
-                        if(foodtypechart.currentPage==0)
+                        if(foodtypechart.currentPage==-1)
                             foodtypechart.currentPage=3;
                         reportsystem.als_Type(foodtypechart.currentPage,foodtimechart.currentPage)
                     }
@@ -658,8 +658,8 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         foodtypechart.currentPage++
-                        if(foodtypechart.currentPage==4)
-                            foodtypechart.currentPage=1;
+                        if(foodtypechart.currentPage==3)
+                            foodtypechart.currentPage=0;
                         reportsystem.als_Type(foodtypechart.currentPage,foodtimechart.currentPage)
                     }
                 }
@@ -675,7 +675,7 @@ Rectangle {
             titleFont{
                         family: localFont.name
                 //family: "微软雅黑"
-                pixelSize: (head.height)/4
+                pointSize: 16
             }
 
             legend.alignment: Qt.AlignTop

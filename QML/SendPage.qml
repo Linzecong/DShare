@@ -123,7 +123,7 @@ Rectangle {
             wrapMode: Text.Wrap
             font{
                         family: localFont.name
-                pixelSize: rect.height/6
+                pointSize: 16
             }
             Label{
                 id:note
@@ -136,7 +136,7 @@ Rectangle {
                 color:"grey"
                 font{
                         family: localFont.name
-                    pixelSize: rect.height/6
+                    pointSize: 16
 
 
                 }
@@ -248,7 +248,7 @@ Rectangle {
             color: "red"
             text:"清除"
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: photobutton.height/5
+            font.pointSize: 14
         }
         MouseArea{
             id:cma
@@ -305,7 +305,7 @@ Rectangle {
             color: "white"
             text:"发送"
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: photobutton.height/5
+            font.pointSize: 14
         }
 
         MessageDialog {

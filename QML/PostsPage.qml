@@ -129,7 +129,7 @@ Rectangle {
             font{
                         family: localFont.name
                 //family: "微软雅黑"
-                pixelSize: (head.height)/4
+                pointSize: 20
             }
             color: "white"
         }
@@ -367,7 +367,7 @@ Rectangle {
                         font{
                         family: localFont.name
 
-                            pixelSize: headimage.height/3
+                            pointSize: 16
                         }
                     }
 
@@ -382,7 +382,7 @@ Rectangle {
                         color:"grey"
                         font{
                         family: localFont.name
-                            pixelSize: headimage.height/4
+                            pointSize: 12
                         }
                     }
                     Label{
@@ -400,7 +400,7 @@ Rectangle {
                         font{
                         family: localFont.name
                             //family: "微软雅黑"
-                            pixelSize: headimage.height/3
+                            pointSize: 14
                         }
                     }
                     Image{
@@ -445,7 +445,7 @@ Rectangle {
                         font{
                         family: localFont.name
 
-                            pixelSize: headimage.height/3
+                            pointSize: 14
                         }
 
                         MouseArea{
@@ -473,7 +473,7 @@ Rectangle {
                         font{
                         family: localFont.name
 
-                            pixelSize: headimage.height/3
+                            pointSize: 14
                         }
                         MouseArea{
                             anchors.fill: parent
