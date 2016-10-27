@@ -325,8 +325,7 @@ Rectangle {
                     labelsFont{
                         family: localFont.name
                         //family: "微软雅黑"
-                        pixelSize: (head.height)/5
-                        bold:true
+                        pixelSize: (head.height)/6
                     }
                 }
                 axisY: ValueAxis {
@@ -473,7 +472,7 @@ Rectangle {
                 labelsFont{
                         family: localFont.name
                     //family: "微软雅黑"
-                    pixelSize: (head.height)/8
+                    pixelSize: (head.height)/10
                     bold:true
                 }
             }
@@ -730,7 +729,7 @@ Rectangle {
                 labelsFont{
                         family: localFont.name
                     //family: "微软雅黑"
-                    pixelSize: (head.height)/8
+                    pixelSize: (head.height)/10
                     bold:true
                 }
             }

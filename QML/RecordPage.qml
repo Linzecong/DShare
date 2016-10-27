@@ -1364,7 +1364,7 @@ z:10
                 Text {
                     id:lasttimehourtext
                     anchors.centerIn: parent
-                    text:"00"
+                    text:"0"
                     color:"grey"
                     font{
                         family: localFont.name
@@ -1413,7 +1413,7 @@ z:10
                 Text {
                     id:lasttimemintext
                     anchors.centerIn: parent
-                    text:"00"
+                    text:"0"
                     color:"grey"
                     font{
                         family: localFont.name
@@ -1505,8 +1505,8 @@ z:10
                                 sportsavebutton.lastsaved=tt;
                                 recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
                                 sporttext.text=""
-                                lasttimemintext.text="00"
-                                lasttimehourtext.text="00"
+                                lasttimemintext.text="0"
+                                lasttimehourtext.text="0"
                                 begintimehourtext.text="00"
                                 begintimemintext.text="00"
                             }
@@ -1580,8 +1580,8 @@ z:10
                             mainrect.parent.parent.children[1].item.settext("<font color=\"#45ada8\">"+str+"</font>")
 
                             sporttext.text=""
-                            lasttimemintext.text="00"
-                            lasttimehourtext.text="00"
+                            lasttimemintext.text="0"
+                            lasttimehourtext.text="0"
                             begintimehourtext.text="00"
                             begintimemintext.text="00"
                         }
@@ -1744,43 +1744,40 @@ z:10
             }
             MouseArea{
                 anchors.fill: parent
+
                 onClicked: {
-
-
 
                     if(!sporttimer.running){
                         sharebuttontimer.running=false
                         antimetimer.running=true
 
-                        sportsavebutton.enabled=false
+                        dbsystem.checkin(str_userid)
+                        antimer.running=false
+                        checkimage.scale=1
 
-                        sportsharebutton.enabled=false
+                        sportsavebutton.visible=false
+                        sportsharebutton.visible=false
 
-                        sporttimer.mins=0;
-                        //timertext.text=sporttimer.mins.toString()+"分钟"
+                        sporttimer.mins=0
+
                         timertext.text="计时中"
                         var time= new Date()
-                        sporttimer.beginhour=time.getHours()
-                        sporttimer.beginmin=time.getMinutes()
 
-                        lasttimemintext.text="00"
-                        lasttimehourtext.text="00"
+                        lasttimemintext.text="0"
+                        lasttimehourtext.text="0"
 
                         begintimehourtext.text=time.getHours().toString()
                         begintimemintext.text=time.getMinutes().toString()
                         sporttimer.start();
-                        delete time;
                     }
                     else{
                         sharebuttontimer.running=true
                         antimetimer.running=false
+                        clockimage.scale=1
+
                         sporttimer.stop()
-                        // modebutton.color="#02ae4a"
-                        //modebutton.enabled=true;
-                        sportsavebutton.enabled=true
-                        //sportsavebutton.color="#02ae4a"
-                        sportsharebutton.enabled=true
-                        //sportsharebutton.color="#02ae4a"
+                        sportsavebutton.visible=true
+                        sportsharebutton.visible=true
 
 
                         lasttimehourtext.text=parseInt(sporttimer.mins/60).toString()
@@ -1793,29 +1790,13 @@ z:10
 
         Timer{
             id:sporttimer
-            interval: 5000
+            interval: 60000
             repeat: true
-            property int beginhour:0
-            property int beginmin:0
             property int mins: 0
             onTriggered: {
-                var time= new Date();
-                if(time.getHours()>sporttimer.beginhour){
-                    mins=(time.getHours()-sporttimer.beginhour)*60+(60-sporttimer.beginmin)+time.getMinutes();
-                }
-                if(time.getHours()==sporttimer.beginhour){
-                    mins=time.getMinutes()-sporttimer.beginmin;
-                }
-
-                if(time.getHours()<sporttimer.beginhour){
-                    mins=(time.getHours()+24-sporttimer.beginhour)*60+(60-sporttimer.beginmin)+time.getMinutes();
-                }
-
-                //timertext.text=sporttimer.mins.toString()+"分钟"
-
+                mins++
                 lasttimehourtext.text=parseInt(sporttimer.mins/60).toString()
                 lasttimemintext.text=(sporttimer.mins%60).toString()
-
             }
 
         }

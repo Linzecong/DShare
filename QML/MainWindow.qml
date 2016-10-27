@@ -20,6 +20,7 @@ Rectangle {
     property string str_userid
 
     property string headurl: ""
+    property double dp:head.height/70
 
     //初始化各种数据
     function setusername(a){
@@ -911,8 +912,13 @@ Rectangle {
         //侧边栏按钮
         Image{
             id:sidebarbutton
-            height: parent.height/2.5
-            width:height
+//            height: parent.height/2.5
+//            width:height
+
+            height: 18*dp
+            width:18*dp
+
+fillMode: Image.PreserveAspectFit
 
             source: "qrc:/image/side.png"
             anchors.left: parent.left
@@ -920,7 +926,8 @@ Rectangle {
 
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
 
-            anchors.leftMargin: parent.height/4
+            anchors.leftMargin: dp*16
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
@@ -959,11 +966,16 @@ Rectangle {
             id:morebutton
             source: "qrc:/image/search.png"
             anchors.right: parent.right
-            anchors.rightMargin: parent.height/4
+
+            anchors.rightMargin: dp*16
+
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
-            height: parent.height/2.5
-            width:height
+            fillMode: Image.PreserveAspectFit
+
+            height: 18*dp
+            width:18*dp
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
@@ -1013,8 +1025,11 @@ Rectangle {
             color: "#55000000"
         }
 
-        width:parent.width+4;
-        height: parent.height/16*1.5;
+        width:parent.width
+
+       // height: parent.height/16*1.5
+        height: 45*dp
+
         property string currentPage:"DShare"
         z:7
 
