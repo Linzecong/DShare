@@ -34,6 +34,52 @@ Rectangle {
         recordpage.item.getcheckinday()
     }
 
+    function setmypost(publisherid0,username0,nickname0){
+        mypostpage.item.getpost(publisherid0,username0,nickname0);//点击头像时显示用户分享列表
+        mypostpage.visible=true
+        mypostpage.x=0
+    }
+
+    function setuniquepost(Hasimage0,Headurl0,Username0,Posttime0,Message0,Photo0,Liker0,ID0,username0,nickname0,a1){
+        uniquepost.item.setData(Hasimage0,Headurl0,Username0,Posttime0,Message0,Photo0,Liker0,ID0,username0,nickname0,a1)
+        uniquepost.visible=true
+    }
+
+    function setcommentcount(count){
+
+        mainpage.item.setcommentcount(count)
+
+
+    }
+
+
+    function removepost(){
+
+        mainpage.item.removepost()
+
+    }
+
+    Loader{
+        id:mypostpage
+        anchors.fill: parent
+        visible: false
+        source:"qrc:/QML/PostsPage.qml"
+        z:102
+    }
+
+    Loader{
+        id:uniquepost;
+
+        anchors.fill: parent
+
+        visible: false
+        source:"qrc:/QML/UniquePost.qml"
+        z:102
+    }
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
 
     DataSystem{
         id:dbsystem;
@@ -100,7 +146,7 @@ Rectangle {
 
     //用于显示侧边栏的我的分享
     Loader{
-        id:mypost;
+        id:mypost
         anchors.fill: parent
         visible: false
         source:"qrc:/QML/PostsPage.qml"
@@ -118,7 +164,7 @@ Rectangle {
 
     //用于显示侧边栏的我的报告
     Loader{
-        id:reportpage;
+        id:reportpage
         anchors.fill: parent
         visible: false
         source:"qrc:/QML/ReportPage.qml"
@@ -193,16 +239,17 @@ Rectangle {
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
-                verticalOffset: 3
-                horizontalOffset: -20
+                horizontalOffset: -10
+                verticalOffset: 1
                 radius: 10
-                color: "black"
+                color: "#55000000"
             }
 
             //侧边栏头像
             Image{
                 id:headimage2
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width/15
                 fillMode: Image.PreserveAspectFit
@@ -237,6 +284,7 @@ Rectangle {
                 wrapMode: Text.WordWrap
                 width: parent.width-headimage2.width- parent.width/15- parent.width/10
                 font{
+                        family: localFont.name
 
                     pixelSize: headimage2.height/4
                 }
@@ -253,6 +301,7 @@ Rectangle {
                 wrapMode: Text.WordWrap
                 width: parent.width-headimage2.width- parent.width/15- parent.width/10
                 font{
+                        family: localFont.name
 
                     pixelSize: headimage2.height/4
                 }
@@ -299,6 +348,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的关注"
                 font{
+                        family: localFont.name
 
                     pixelSize: followingbutton.height/4
                 }
@@ -351,6 +401,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的粉丝"
                 font{
+                        family: localFont.name
 
                     pixelSize: followingbutton.height/4
                 }
@@ -404,6 +455,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的分享"
                 font{
+                        family: localFont.name
 
                     pixelSize: followingbutton.height/4
                 }
@@ -452,6 +504,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的消息"
                 font{
+                        family: localFont.name
 
                     pixelSize: followingbutton.height/4
                 }
@@ -500,6 +553,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的报告"
                 font{
+                        family: localFont.name
 
                     pixelSize: followingbutton.height/4
                 }
@@ -513,9 +567,7 @@ Rectangle {
                 anchors.fill: parent
                 property int isget: 1
                 onClicked: {
-                    //if((isget--)==1)
                     reportpage.item.getalldiet(str_userid,nickname)
-
                     reportpage.item.forceActiveFocus()
                     reportpage.visible=true
                 }
@@ -584,6 +636,7 @@ Rectangle {
                 anchors.leftMargin: sidepagetop.height/10
                 text:"设置"
                 font{
+                        family: localFont.name
 
                     pixelSize: followingbutton.height/3.5
                 }
@@ -630,6 +683,7 @@ Rectangle {
                 anchors.leftMargin: sidepagetop.height/10
                 text:"注销"
                 font{
+                        family: localFont.name
 
                     pixelSize: followingbutton.height/3.5
                 }
@@ -716,9 +770,8 @@ Rectangle {
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
-            verticalOffset: 3
-            radius: 12
-            color: "black"
+            radius: 10
+            color: "#55000000"
         }
 
         Behavior on y{
@@ -759,14 +812,11 @@ Rectangle {
             text:bottom.currentPage
             anchors.centerIn: parent
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
-            FontLoader {
-                id: localFont
-                source:"qrc:/Resources/msyh.ttf"
-            }
+
             font{
-                family: localFont.name
+                        family: localFont.name
                 //pixelSize: (head.height)/4
-                pointSize: 40
+                pointSize: 20
             }
             color: "white";
             MouseArea{
@@ -802,15 +852,15 @@ Rectangle {
 
     }
 
-    Rectangle{
-        id:borderline
-        width: parent.width
-        anchors.top: mainrect.bottom
-        anchors.left: bottom.left
-        height: 2
-        color:"grey"
-        z:6
-    }
+//    Rectangle{
+//        id:borderline
+//        width: parent.width
+//        anchors.top: mainrect.bottom
+//        anchors.left: bottom.left
+//        height: 2
+//        color:"grey"
+//        z:6
+//    }
 
 
     function hidebottom(){
@@ -826,22 +876,21 @@ Rectangle {
     Rectangle{
         id:bottom
 
-        anchors.bottom: parent.bottom;
+        anchors.bottom: parent.bottom
+        color:"white"
 
 
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
-            radius: 8
-            color: "black"
+            radius: 10
+            color: "#55000000"
         }
-
 
         width:parent.width+4;
         height: parent.height/16*1.5;
-        color:"white"
         property string currentPage:"DShare"
-        z:5
+        z:7
 
 
         Rectangle{

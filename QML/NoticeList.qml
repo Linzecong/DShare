@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.2
 import DataSystem 1.0
 import JavaMethod 1.0
 import PostsSystem 1.0
-
+import QtGraphicalEffects 1.0
 Rectangle {
     id:mainrect;
     anchors.fill: parent
@@ -21,7 +21,10 @@ Rectangle {
         forceActiveFocus()
     }
 
-
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
     MouseArea{
         anchors.fill: parent
 
@@ -114,10 +117,17 @@ Rectangle {
             color:"green"
         }
         id:head
+        z:5
         width:parent.width
         height: parent.height/16*2
         color: "#02ae4a"
         anchors.top: parent.top
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 10
+            color: "#55000000"
+        }
         Label{
             id:back
             height: parent.height
@@ -125,7 +135,8 @@ Rectangle {
             text:" ＜"
             color: "white"
             font{
-                pixelSize: (head.height)/2
+                        family: localFont.name
+                pixelSize: (head.height)/4
             }
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -147,6 +158,7 @@ Rectangle {
             anchors.centerIn: parent
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
+                        family: localFont.name
                 
                 pixelSize: (head.height)/4
             }
@@ -221,6 +233,7 @@ Rectangle {
                     anchors.leftMargin:30
                     wrapMode: Text.WordWrap
                     font{
+                        family: localFont.name
                         pixelSize: (head.height)/4
                     }
                     text:"<strong><font color=\"#35dca2\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\"#35dca2\">你</font></strong>"
@@ -235,6 +248,7 @@ Rectangle {
                     color: "grey"
                     wrapMode: Text.WordWrap
                     font{
+                        family: localFont.name
                         
                         pixelSize: (head.height)/4
                     }

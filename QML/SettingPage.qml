@@ -7,7 +7,7 @@ import QtQuick.Controls.Styles 1.4
 import JavaMethod 1.0
 import SendImageSystem 1.0
 import DataSystem  1.0
-
+import QtGraphicalEffects 1.0
 StackView{
     property string imagePath:"Qt"
     property string str_userid;
@@ -22,7 +22,10 @@ StackView{
 
         forceActiveFocus();
     }
-
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
     JavaMethod{
         id:myjava
     }
@@ -244,6 +247,7 @@ StackView{
                     text: "上移"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: parent.height/2
                         
                     }
@@ -275,6 +279,7 @@ StackView{
                     text: "保存"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: parent.height/2
                         
                     }
@@ -328,6 +333,7 @@ StackView{
                     text: "下移"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: parent.height/2
                         
                     }
@@ -359,6 +365,7 @@ StackView{
                     text: "左移"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: parent.height/2
                         
                     }
@@ -390,6 +397,7 @@ StackView{
                     text: "右移"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: parent.height/2
                         
                     }
@@ -421,6 +429,7 @@ StackView{
                     text: "缩小"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: parent.height/2
                         
                     }
@@ -453,6 +462,7 @@ StackView{
                     text: "放大"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: parent.height/2
                         
                     }
@@ -487,6 +497,7 @@ StackView{
                     text: "取消"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: parent.height/2
                         
                     }
@@ -524,6 +535,7 @@ StackView{
                     text: "直接应用整张图片"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: parent.height/2
                         
                     }
@@ -587,11 +599,17 @@ StackView{
                 color:"green"
             }
             id:head
+            z:5
             width:parent.width;
             height: parent.height/16*2
             color:"#02ae4a"
             anchors.top: parent.top;
-
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: 10
+                color: "#55000000"
+            }
             Label{
                 id:backbutton
                 text:" ＜";
@@ -602,8 +620,9 @@ StackView{
                 anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                 verticalAlignment: Text.AlignVCenter
                 font{
+                        family: localFont.name
                     
-                    pixelSize: (head.height)/2
+                    pixelSize: (head.height)/4
                 }
                 color: "white";
                 MouseArea{
@@ -623,6 +642,7 @@ StackView{
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                 font{
+                        family: localFont.name
                     //family: "微软雅黑"
                     pixelSize: (head.height)/4
 
@@ -648,6 +668,7 @@ StackView{
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment: Text.AlignVCenter
                 font{
+                        family: localFont.name
                     
                     pixelSize: head.height/4
 
@@ -678,6 +699,7 @@ StackView{
         //                anchors.verticalCenter: parent.verticalCenter
         //                verticalAlignment: Text.AlignVCenter
         //                font{
+                        //family: localFont.name
         //
         //                    pixelSize: head.height/3
 
@@ -721,10 +743,18 @@ StackView{
                     color:"green"
                 }
                 id:changedatahead;
+                z:5
                 width:parent.width;
                 height: parent.height/16*2
                 color:"#02ae4a"
                 anchors.top: parent.top;
+
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 10
+                    color: "#55000000"
+                }
 
                 Label{
                     text:" ＜";
@@ -733,8 +763,9 @@ StackView{
                     anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     verticalAlignment: Text.AlignVCenter
                     font{
+                        family: localFont.name
                         
-                        pixelSize: (head.height)/2
+                        pixelSize: (head.height)/4
                     }
                     color: "white";
                     MouseArea{
@@ -751,6 +782,7 @@ StackView{
                     anchors.centerIn: parent
                     anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     font{
+                        family: localFont.name
                         //family: "微软雅黑"
                         pixelSize: (head.height)/4
 
@@ -776,6 +808,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     verticalAlignment: Text.AlignVCenter
                     font{
+                        family: localFont.name
                         
                         pixelSize: head.height/4
 
@@ -851,6 +884,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     verticalAlignment: Text.AlignVCenter
                     font{
+                        family: localFont.name
                         
                         pixelSize: head.height/4
 
@@ -953,6 +987,7 @@ StackView{
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     font{
+                        family: localFont.name
                         
                         pixelSize: xieyitoprect.height/1.5
                         bold:true;
@@ -970,6 +1005,7 @@ StackView{
                     text:"使用帮助";
                     anchors.centerIn: parent
                     font{
+                        family: localFont.name
                         
                         pixelSize: xieyitoprect.height/3
                         bold:true
@@ -985,6 +1021,7 @@ StackView{
                 anchors.topMargin: xieyitoprect.height*1.5
                 anchors.fill: parent
                 font{
+                        family: localFont.name
                     
                     pixelSize: xieyitoprect.height/3
                 }

@@ -19,7 +19,10 @@ Rectangle {
 
         }
     }
-
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
     Rectangle{
         id: indicator
         height: parent.height*1.3
@@ -92,15 +95,18 @@ Rectangle {
     Rectangle{
         id:rect
         height: parent.height/4
-        width: parent.width-parent.width/10
+        width: parent.width-parent.width/25
         anchors.top:parent.top
-        anchors.topMargin: parent.width/20
+        anchors.topMargin: parent.width/30
         anchors.horizontalCenter: parent.horizontalCenter
 
 
-        border.color: "grey"
-        border.width: 2
-        radius: parent.width/40
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 8
+            color: "#55000000"
+        }
 
 
         TextArea{
@@ -116,6 +122,7 @@ Rectangle {
 
             wrapMode: Text.Wrap
             font{
+                        family: localFont.name
                 pixelSize: rect.height/6
             }
             Label{
@@ -128,6 +135,7 @@ Rectangle {
                 text:"请输入文本"
                 color:"grey"
                 font{
+                        family: localFont.name
                     pixelSize: rect.height/6
 
 
@@ -151,17 +159,15 @@ Rectangle {
         anchors.top: rect.bottom
         anchors.topMargin: mainpage.width/20
         anchors.left: rect.left
-        anchors.leftMargin: mainpage.width/30
+        anchors.leftMargin: mainpage.width/40
 
         color:"#02ae4a"
 
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
-            horizontalOffset: 3
-            verticalOffset: 3
             radius: 8
-            color: "grey"
+            color: "#02ae4a"
         }
 
 
@@ -171,6 +177,7 @@ Rectangle {
             text: "+";
             color:"white"
             font{
+                        family: localFont.name
                 pixelSize: photobutton.height/3
                 bold: true
 
@@ -221,9 +228,14 @@ Rectangle {
 
     Rectangle{
         id:clear
-        border.color: "black"
-        border.width: 1
-        radius: photobutton.width/10
+
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 8
+            color: "#55000000"
+        }
+
         anchors.left: photobutton.right
         anchors.leftMargin: photobutton.height/4
         anchors.verticalCenter: photobutton.verticalCenter
@@ -272,9 +284,9 @@ Rectangle {
 
     Rectangle{
         id:sendbutton
-        radius: photobutton.width/10
+
         anchors.left: clear.right
-        anchors.leftMargin: photobutton.height/5
+        anchors.leftMargin: photobutton.height/4
         anchors.verticalCenter: photobutton.verticalCenter
 
         width: photobutton.width/1.2
@@ -283,10 +295,8 @@ Rectangle {
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
-            horizontalOffset: 3
-            verticalOffset: 3
             radius: 8
-            color: "grey"
+            color: "#55000000"
         }
 
         Text {
@@ -471,6 +481,7 @@ Rectangle {
             text: "请说话";
             color:"#02ae4a"
             font{
+                        family: localFont.name
                 pixelSize: photobutton.height/4
             }
             anchors.centerIn: parent;
@@ -488,8 +499,13 @@ Rectangle {
 
         anchors.horizontalCenter: parent.horizontalCenter
 
-        border.width: 1
-        border.color: "grey"
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 8
+            color: "#55000000"
+        }
+
         radius: width/2
         Image{
 

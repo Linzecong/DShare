@@ -8,9 +8,14 @@ import RegistSystem 1.0;
 import JavaMethod 1.0
 import DataSystem 1.0
 import QtQuick.Dialogs 1.2
+import QtGraphicalEffects 1.0
 StackView{
     JavaMethod{
         id:myjava
+    }
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
     }
     property string str_userid;//ID
     //防止其他页面点击
@@ -103,6 +108,13 @@ StackView{
                 fillMode: Image.PreserveAspectFit
                 source:"qrc:/image/icon.png"
             }
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                verticalOffset: 2
+                radius: 8
+                color: "#55000000"
+            }
         }
 
         //ID行
@@ -134,10 +146,16 @@ StackView{
                 style: TextFieldStyle{
                     background: Rectangle{
                         radius: control.height/4
-                        border.width: 1;
-                        border.color: "grey"
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            transparentBorder: true
+
+                            radius: 8
+                            color: "#55000000"
+                        }
                     }
                 }
+
             }
         }
 
@@ -169,8 +187,13 @@ StackView{
                 style: TextFieldStyle{
                     background: Rectangle{
                         radius: control.height/4
-                        border.width: 1;
-                        border.color: "grey"
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            transparentBorder: true
+
+                            radius: 8
+                            color: "#55000000"
+                        }
                     }
                 }
 
@@ -187,11 +210,19 @@ StackView{
             anchors.topMargin: passrow.height
             color:loginma.pressed?"33dd97":"#02ae4a"
             radius: height/4
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+
+                radius: 8
+                color: "#55000000"
+            }
             Label{
                 id:logintext
                 text: "登录"
                 color: "white"
                 font{
+                        family: localFont.name
                     pixelSize: loginbutton.height/2
                     
                     bold: true;
@@ -237,11 +268,19 @@ StackView{
             anchors.topMargin: passrow.height
             color:registma.pressed?"1084e5":"#1589e8";
             radius: height/4
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+
+                radius: 8
+                color: "#55000000"
+            }
             Label{
                 id:registtext
                 text: "注册"
                 color: "white"
                 font{
+                        family: localFont.name
                     pixelSize: loginbutton.height/2
                     
                     bold: true;
@@ -321,17 +360,34 @@ StackView{
             //注册页面顶部栏
             Rectangle{
                 id:registtoprect;
+                z:5
+                Rectangle{
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height:myjava.getStatusBarHeight()
+                    color:"green"
+                }
                 width:parent.width;
                 height: parent.height/16*1.5;
                 color:"#02ae4a";
                 anchors.top: parent.top;
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+
+                    radius: 10
+                    color: "#55000000"
+                }
                 Label{
-                    text:"  <";
+                    text:" ＜";
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     font{
+                        family: localFont.name
                         
-                        pixelSize: registtoprect.height/1.5
+                        pixelSize: registtoprect.height/4
                         bold:true;
                     }
                     color: "white";
@@ -345,9 +401,11 @@ StackView{
                 Label{
                     text:"新用户注册";
                     anchors.centerIn: parent
+                    anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     font{
+                        family: localFont.name
                         
-                        pixelSize: registtoprect.height/3
+                        pixelSize: registtoprect.height/4
                         bold:true
                     }
                     color: "white";
@@ -367,6 +425,7 @@ StackView{
                     width: registtoprect.width/4;
                     horizontalAlignment: Text.AlignRight;
                     font{
+                        family: localFont.name
                         
                         pixelSize: registidrow.height/1.5
                     }
@@ -381,8 +440,13 @@ StackView{
                     style: TextFieldStyle{
                         background: Rectangle{
                             radius: control.height/4
-                            border.width: 1;
-                            border.color: "grey"
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+
+                                radius: 8
+                                color: "#55000000"
+                            }
                         }
                     }
                     //Material.theme: Material.Dark
@@ -404,6 +468,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
+                        family: localFont.name
                         
                         pixelSize: registidrow.height/1.5
                     }
@@ -419,8 +484,13 @@ StackView{
                     style: TextFieldStyle{
                         background: Rectangle{
                             radius: control.height/4
-                            border.width: 1;
-                            border.color: "grey"
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+
+                                radius: 8
+                                color: "#55000000"
+                            }
                         }
                     }
                     //Material.theme: Material.Dark
@@ -441,6 +511,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
+                        family: localFont.name
                         
                         pixelSize: registidrow.height/1.5
                     }
@@ -457,8 +528,13 @@ StackView{
                     style: TextFieldStyle{
                         background: Rectangle{
                             radius: control.height/4
-                            border.width: 1;
-                            border.color: "grey"
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+
+                                radius: 8
+                                color: "#55000000"
+                            }
                         }
                     }
                     //Material.theme: Material.Dark
@@ -479,6 +555,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
+                        family: localFont.name
                         
                         pixelSize: registidrow.height/1.5
                     }
@@ -493,8 +570,13 @@ StackView{
                     style: TextFieldStyle{
                         background: Rectangle{
                             radius: control.height/4
-                            border.width: 1;
-                            border.color: "grey"
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+
+                                radius: 8
+                                color: "#55000000"
+                            }
                         }
                     }
                     //Material.theme: Material.Dark
@@ -515,6 +597,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
+                        family: localFont.name
                         
                         pixelSize: registidrow.height/1.5
                     }
@@ -526,8 +609,13 @@ StackView{
                     width: registtoprect.width/3*1.7
                     id:sextext
                     radius:height/4
-                    border.width: 1;
-                    border.color: "grey"
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+
+                        radius: 8
+                        color: "#55000000"
+                    }
                     property string currentText: "男"
                     Text{
                         text: sextext.currentText+"  轻点切换"
@@ -535,6 +623,7 @@ StackView{
                         anchors.verticalCenter: parent.verticalCenter
                         color:"grey"
                         font{
+                        family: localFont.name
                             
                             pixelSize: registidrow.height/1.5
                         }
@@ -564,6 +653,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
+                        family: localFont.name
                         
                         pixelSize: registidrow.height/1.5
                     }
@@ -580,8 +670,13 @@ StackView{
                     style: TextFieldStyle{
                         background: Rectangle{
                             radius: control.height/4
-                            border.width: 1;
-                            border.color: "grey"
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+
+                                radius: 8
+                                color: "#55000000"
+                            }
                         }
                     }
                 }
@@ -629,6 +724,7 @@ StackView{
             //                    anchors.left: check.right
             //                    horizontalAlignment: Text.AlignLeft
             //                    font{
+                        //family: localFont.name
             //                        
             //                        pixelSize: registidrow.height/1.5
             //                    }
@@ -652,11 +748,19 @@ StackView{
                 anchors.horizontalCenter: parent.horizontalCenter
                 color:registma.pressed?"1084e5":"#1589e8";
                 radius: height/4
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+
+                    radius: 8
+                    color: "#55000000"
+                }
                 Label{
                     id:registtext
                     text: "注册"
                     color: "white"
                     font{
+                        family: localFont.name
                         pixelSize: registbutton.height/2
                         
                         bold: true;
@@ -780,6 +884,7 @@ StackView{
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     font{
+                        family: localFont.name
                         
                         pixelSize: xieyitoprect.height/1.5
                         bold:true;
@@ -797,6 +902,7 @@ StackView{
                     text:"用户协议";
                     anchors.centerIn: parent
                     font{
+                        family: localFont.name
                         
                         pixelSize: xieyitoprect.height/3
                         bold:true
@@ -811,6 +917,7 @@ StackView{
                 anchors.topMargin: xieyitoprect.height*1.5
                 anchors.fill: parent
                 font{
+                        family: localFont.name
                     
                     pixelSize: xieyitoprect.height/3
                 }

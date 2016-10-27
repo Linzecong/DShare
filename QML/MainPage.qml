@@ -12,6 +12,7 @@ Rectangle{
     anchors.fill: parent
     property string username
     property string nickname
+    property alias commentindex0: listview.commentindex
 
     function abs(a){
         if(a<0)
@@ -38,6 +39,9 @@ Rectangle{
 
 
 
+
+
+
     function setcommentcount(count){
 
         postmodel.get(listview.commentindex).CommentCount=count
@@ -55,30 +59,35 @@ Rectangle{
 
 
     //用户显示特定用户的分享列表
-    Loader{
-        id:mypost;
-        height: myjava.getHeight()
-        width: parent.width
-        x:0
-        y:-myjava.getHeight()/16*2;
-        visible: false
-        source:"qrc:/QML/PostsPage.qml"
-        z:102
-    }
 
-    Loader{
-        id:uniquepost;
-        height: myjava.getHeight()
-        width: parent.width
-        x:0
-        y:-myjava.getHeight()/16*1.8;
-        visible: false
-        source:"qrc:/QML/UniquePost.qml"
-        z:102
-    }
+//    Loader{
+//        id:mypost;
+//        height: myjava.getHeight()
+//        width: parent.width
+//        x:0
+//        y:-myjava.getHeight()/16*2;
+//        visible: false
+//        source:"qrc:/QML/PostsPage.qml"
+//        z:102
+//    }
+
+//    Loader{
+//        id:uniquepost;
+//        height: myjava.getHeight()
+//        width: parent.width
+//        x:0
+//        y:-myjava.getHeight()/16*2;
+//        visible: false
+//        source:"qrc:/QML/UniquePost.qml"
+//        z:102
+//    }
+
 
     //用于显示大图
-
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
     Rectangle{
         property int isbig:0
         id: bigphotorect
@@ -183,7 +192,7 @@ Rectangle{
         anchors.fill: parent
         clip:true
 //        spacing:20;
-        cacheBuffer:20000
+        cacheBuffer:10000
         property int likeindex:0
         property int commentindex:0
         
@@ -213,7 +222,7 @@ Rectangle{
         delegate: Item{
             id:postitem
             width:parent.width
-            height:headimage.height/5*5+headimage.height+message.height+photo.height+comments.height
+            height:headimage.height/5*5+headimage.height+message.height+photo.height+comments.height//+delegaterect.hasimage?headimage.height/5:0
             property int postID: ID//用于实现点赞功能
             property string publisherid: PublisherID//用于显示头像
             //每一个分享的框框
@@ -262,9 +271,12 @@ Rectangle{
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            mypost.item.getpost(publisherid,mainrect.username,nickname);//点击头像时显示用户分享列表
-                            mypost.visible=true
-                            mypost.x=0
+//                            mypost.item.getpost(publisherid,mainrect.username,nickname);//点击头像时显示用户分享列表
+//                            mypost.visible=true
+//                            mypost.x=0
+
+                            mainrect.parent.parent.parent.setmypost(publisherid,mainrect.username,nickname)
+
                         }
                     }
                     //用于网速慢，头像加载慢时先显示文字
@@ -286,7 +298,7 @@ Rectangle{
                     text: Username
                     color:"green"
                     font{
-
+                        family: localFont.name
                         pixelSize: headimage.height/3
                     }
 
@@ -304,7 +316,7 @@ Rectangle{
                     text: Posttime
                     color:"grey"
                     font{
-
+family: localFont.name
                         pixelSize: headimage.height/4
                     }
                 }
@@ -323,6 +335,7 @@ Rectangle{
                     wrapMode: Text.Wrap;
                     textFormat:Text.RichText
                     font{
+                        family: localFont.name
                         //family: "微软雅黑"
                         pixelSize: headimage.height/3
                     }
@@ -378,6 +391,7 @@ Rectangle{
                     wrapMode: Text.Wrap;
                     color: "#02ae4a"
                     font{
+                        family: localFont.name
                         pixelSize: headimage.height/3
                     }
 
@@ -407,6 +421,7 @@ Rectangle{
                     wrapMode: Text.Wrap;
                     color: "#02ae4a"
                     font{
+                        family: localFont.name
 
                         pixelSize: headimage.height/3
                     }
@@ -414,8 +429,11 @@ Rectangle{
                         anchors.fill: parent
                         onClicked: {
                             listview.commentindex=index
-                            uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
-                            uniquepost.visible=true
+//                            uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
+//                            uniquepost.visible=true
+
+                            mainrect.parent.parent.parent.setuniquepost(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
+
 
                             likebutton.visible=false
                             commentbutton.visible=false
@@ -448,6 +466,7 @@ Rectangle{
                             anchors.centerIn: parent
                             color: "white";
                             font{
+                        family: localFont.name
                                 pixelSize: parent.height/1.2
                             }
                         }
@@ -476,6 +495,7 @@ Rectangle{
                             anchors.centerIn: parent
                             color: "white";
                             font{
+                        family: localFont.name
 
                                 pixelSize: parent.height/1.3
                             }
@@ -484,8 +504,9 @@ Rectangle{
                             anchors.fill: parent
                             onClicked: {
                                 listview.commentindex=index
-                                uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
-                                uniquepost.visible=true
+                                //uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
+                                //uniquepost.visible=true
+                                mainrect.parent.parent.parent.setuniquepost(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
 
                                 likebutton.visible=false
                                 commentbutton.visible=false
@@ -506,6 +527,7 @@ Rectangle{
                             color:"white"
                             verticalAlignment: Text.AlignVCenter
                             font{
+                        family: localFont.name
                                 bold: true
                                 pixelSize: parent.height
                             }

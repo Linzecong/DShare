@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.2
 import QtQuick.Dialogs 1.1
 import PostsSystem 1.0
 import JavaMethod 1.0
+import QtGraphicalEffects 1.0
 Rectangle{
     id:uniquepost
     anchors.fill: parent
@@ -48,7 +49,10 @@ Rectangle{
     MouseArea{
         anchors.fill: parent
     }
-
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
     Keys.enabled: true
     Keys.onBackPressed: {
         commenttext.hiddentext=""
@@ -169,10 +173,17 @@ Rectangle{
             color:"green"
         }
         id:head;
+        z:5
         width:parent.width;
         height: parent.height/16*2
         color:"#02ae4a"
         anchors.top: parent.top;
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 10
+            color: "#55000000"
+        }
         Label{
             text:" ＜";
             id:backbutton
@@ -183,8 +194,9 @@ Rectangle{
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
             font{
+                        family: localFont.name
                 
-                pixelSize: backbutton.height/2
+                pixelSize: (head.height)/4
 
             }
             color: "white"
@@ -211,6 +223,7 @@ Rectangle{
             anchors.centerIn: parent
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
+                        family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
@@ -283,6 +296,7 @@ Rectangle{
                 text: username
                 color:"green"
                 font{
+                        family: localFont.name
 
                     pixelSize: headimage.height/3
                 }
@@ -301,6 +315,7 @@ Rectangle{
                 text: posttime
                 color:"grey"
                 font{
+                        family: localFont.name
 
                     pixelSize: headimage.height/4
                 }
@@ -317,6 +332,7 @@ Rectangle{
                 wrapMode: Text.Wrap;
                 textFormat:Text.RichText
                 font{
+                        family: localFont.name
                     //family: "微软雅黑"
                     pixelSize: headimage.height/3
                 }
@@ -363,6 +379,7 @@ Rectangle{
                 wrapMode: Text.Wrap;
                 color: "#02ae4a"
                 font{
+                        family: localFont.name
                     pixelSize: headimage.height/3
                 }
 
@@ -435,6 +452,7 @@ Rectangle{
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.Wrap
                         font{
+                        family: localFont.name
 
                             pixelSize: headimage.height/3
                         }

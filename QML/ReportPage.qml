@@ -25,6 +25,11 @@ Rectangle {
 
         forceActiveFocus()//用于响应返回键
     }
+
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
     MouseArea{
         anchors.fill: parent
     }
@@ -204,17 +209,17 @@ Rectangle {
             color:"green"
         }
         id:head;
+        z:5
         width:parent.width;
         height: parent.height/16*2
         color:"#02ae4a"
         anchors.top: parent.top;
+
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
-            horizontalOffset: -2
-            radius: 8
-            color: "black"
-
+            radius: 10
+            color: "#55000000"
         }
 
         Label{
@@ -227,8 +232,9 @@ Rectangle {
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
             font{
+                        family: localFont.name
 
-                pixelSize: (head.height)/2
+                pixelSize: (head.height)/4
 
             }
             color: "white";
@@ -247,6 +253,7 @@ Rectangle {
             anchors.centerIn: parent
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
+                        family: localFont.name
                 //family: "微软雅黑
                 pixelSize: (head.height)/4
             }
@@ -271,6 +278,7 @@ Rectangle {
         ChartView {
             title: "总食用次数Top5"
             titleFont{
+                        family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
@@ -315,6 +323,7 @@ Rectangle {
                 axisX: BarCategoryAxis {
                     id:foodcountchartbcax
                     labelsFont{
+                        family: localFont.name
                         //family: "微软雅黑"
                         pixelSize: (head.height)/5
                         bold:true
@@ -377,6 +386,7 @@ Rectangle {
         ChartView {
             title: "最近10天食用次数前三"
             titleFont{
+                        family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
@@ -461,6 +471,7 @@ Rectangle {
             BarCategoryAxis {
                 id:foodtimechartbcax
                 labelsFont{
+                        family: localFont.name
                     //family: "微软雅黑"
                     pixelSize: (head.height)/8
                     bold:true
@@ -539,12 +550,14 @@ Rectangle {
 
             title: "食物性状分布"
             titleFont{
+                        family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
 
             legend.visible:true
             legend.font{
+                        family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/5
             }
@@ -660,6 +673,7 @@ Rectangle {
 
             title: "最近10天运动时间"
             titleFont{
+                        family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
@@ -667,6 +681,7 @@ Rectangle {
             legend.alignment: Qt.AlignTop
             legend.visible:true
             legend.font{
+                        family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/5
             }
@@ -713,6 +728,7 @@ Rectangle {
             BarCategoryAxis {
                 id:sporttimechartbcax
                 labelsFont{
+                        family: localFont.name
                     //family: "微软雅黑"
                     pixelSize: (head.height)/8
                     bold:true

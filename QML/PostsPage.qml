@@ -35,7 +35,10 @@ Rectangle {
         mainwindow.parent.visible=false
         mainwindow.parent.parent.forceActiveFocus();
     }
-
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
     MouseArea{
         anchors.fill: parent
     }
@@ -79,6 +82,7 @@ Rectangle {
         }
 
         id:head;
+        z:5
         width:parent.width;
         height: parent.height/16*2
 
@@ -87,12 +91,9 @@ Rectangle {
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
-            verticalOffset: 3
-            radius: 16
-            color: "black"
+            radius: 10
+            color: "#55000000"
         }
-
-        z:3
 
         Label{
             text:" ＜";
@@ -105,8 +106,9 @@ Rectangle {
 
             verticalAlignment: Text.AlignVCenter
             font{
+                        family: localFont.name
 
-                pixelSize: (head.height)/2
+                pixelSize: (head.height)/4
 
             }
             color: "white";
@@ -125,6 +127,7 @@ Rectangle {
             anchors.centerIn: parent
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
+                        family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
@@ -239,7 +242,7 @@ Rectangle {
             id:listview;
             anchors.fill: parent
             clip:true
-            cacheBuffer:20000
+            cacheBuffer:10000
             property int likeindex:0
             property int commentindex:0
             //            spacing:20;
@@ -261,7 +264,7 @@ Rectangle {
             delegate: Item{
                 id:postitem
                 width:parent.width
-                height:headimage.height/5*6+headimage.height+message.height+photo.height+comments.height
+                height:headimage.height/5*6+headimage.height+message.height+photo.height+comments.height//+delegaterect.hasimage?headimage.height/5:0
                 property int postID: ID//用于实现点赞功能
                 property string publisherid: PublisherID//用于显示删除
                 Rectangle{
@@ -325,6 +328,7 @@ Rectangle {
                             horizontalAlignment: Text.AlignHCenter
                             color: "white";
                             font{
+                        family: localFont.name
                                 pixelSize: parent.height
                             }
                         }
@@ -361,6 +365,7 @@ Rectangle {
                         text: Username
                         color:"green"
                         font{
+                        family: localFont.name
 
                             pixelSize: headimage.height/3
                         }
@@ -376,6 +381,7 @@ Rectangle {
                         text: Posttime
                         color:"grey"
                         font{
+                        family: localFont.name
                             pixelSize: headimage.height/4
                         }
                     }
@@ -392,6 +398,7 @@ Rectangle {
                         textFormat:Text.RichText
                         wrapMode: Text.Wrap;
                         font{
+                        family: localFont.name
                             //family: "微软雅黑"
                             pixelSize: headimage.height/3
                         }
@@ -436,6 +443,7 @@ Rectangle {
                         wrapMode: Text.Wrap;
                         color: "#02ae4a"
                         font{
+                        family: localFont.name
 
                             pixelSize: headimage.height/3
                         }
@@ -463,6 +471,7 @@ Rectangle {
                         wrapMode: Text.Wrap;
                         color: "#02ae4a"
                         font{
+                        family: localFont.name
 
                             pixelSize: headimage.height/3
                         }
@@ -504,6 +513,7 @@ Rectangle {
                                 anchors.centerIn: parent
                                 color: "white";
                                 font{
+                        family: localFont.name
                                     pixelSize: parent.height/1.2
                                 }
                             }
@@ -533,6 +543,7 @@ Rectangle {
                                 anchors.centerIn: parent
                                 color: "white";
                                 font{
+                        family: localFont.name
 
                                     pixelSize: parent.height/1.3
                                 }
@@ -563,6 +574,7 @@ Rectangle {
                                 color:"white"
                                 verticalAlignment: Text.AlignVCenter
                                 font{
+                        family: localFont.name
                                     bold: true
                                     pixelSize: parent.height
                                 }

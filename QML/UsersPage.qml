@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 import DataSystem 1.0
-
+import QtGraphicalEffects 1.0
 Rectangle {
     id:mainrect;
     anchors.fill: parent
@@ -28,7 +28,10 @@ property string nickname;
 
 
 
-
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
 
     DataSystem{
         id:dbsystem;
@@ -142,10 +145,17 @@ property string nickname;
             color:"green"
         }
         id:head
+        z:5
         width:parent.width
         height: parent.height/16*2
         color:"#02ae4a"
         anchors.top: parent.top
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 10
+            color: "#55000000"
+        }
         Label{
             id:back
             height: parent.height
@@ -153,7 +163,8 @@ property string nickname;
             text:" ＜"
             color: "white"
             font{
-                pixelSize: (head.height)/2
+                        family: localFont.name
+                pixelSize: (head.height)/4
             }
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -177,6 +188,7 @@ property string nickname;
             anchors.centerIn: parent
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
+                        family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/4
             }
@@ -274,7 +286,7 @@ property string nickname;
 
     ListView{
         id:view
-        cacheBuffer:20000
+        cacheBuffer:10000
         spacing: -1
         anchors.top: searchbar.visible?searchbar.bottom:head.bottom
         clip: true
@@ -341,6 +353,7 @@ property string nickname;
                     wrapMode: Text.WordWrap
                     width: parent.width-headimage.width
                     font{
+                        family: localFont.name
                         
                         pixelSize: headimage.height/4
                     }
@@ -357,6 +370,7 @@ property string nickname;
                     wrapMode: Text.WordWrap
                     width: parent.width-headimage.width
                     font{
+                        family: localFont.name
                         
                         pixelSize: headimage.height/4
                     }
@@ -395,6 +409,7 @@ property string nickname;
 
                         }
                         font{
+                        family: localFont.name
                             
                             pixelSize: buttonrect.height/1.6;
                         }

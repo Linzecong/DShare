@@ -22,7 +22,10 @@ Rectangle {
         recordsystem.getdietlist()
         recordsystem.getsportlist()
     }
-
+    FontLoader {
+        id: localFont
+        source:"qrc:/Resources/msyh.ttf"
+    }
     Rectangle{
         id: indicator2
         height: parent.height*1.3
@@ -261,20 +264,20 @@ Rectangle {
     Rectangle {
         id: header
         anchors.top: parent.top
-        width: parent.width+2
+        width: parent.width
         anchors.horizontalCenter: parent.horizontalCenter
         height: parent.height/11
-        border.width: 2
-        border.color: "grey"
         property string currentpage: "饮食"
 
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             verticalOffset: 3
-            radius: 12
-            color: "black"
+            radius: 6
+            color: "#55000000"
         }
+
+        z:3
 
         Rectangle{
             id:inrect
@@ -291,6 +294,7 @@ Rectangle {
             text: "饮食"
             color:header.currentpage==text?"#02ae4a":"grey"
             font{
+                        family: localFont.name
                // family: "微软雅黑"
                 pixelSize: header.height/2
             }
@@ -310,6 +314,7 @@ Rectangle {
             text: "运动"
             color:header.currentpage==text?"#02ae4a":"grey"
             font{
+                        family: localFont.name
               //  family: "微软雅黑"
                 pixelSize: header.height/2
             }
@@ -328,6 +333,7 @@ Rectangle {
             text: "查看"
             color:header.currentpage==text?"#02ae4a":"grey"
             font{
+                        family: localFont.name
                // family: "微软雅黑"
                 pixelSize: header.height/2
             }
@@ -351,6 +357,7 @@ Rectangle {
 
     //饮食记录页面
     ListView{
+
         header:Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width/3*1.1
@@ -363,8 +370,9 @@ Rectangle {
                 layer.enabled: true
                 layer.effect: DropShadow {
                     transparentBorder: true
+
                     radius: 8
-                    color: "black"
+                    color: "#02ae4a"
                 }
 
 
@@ -380,13 +388,13 @@ Rectangle {
                 font.pixelSize: header.height/2.5
             }
 
-            radius: height/4
+            //radius: height/4
             }
 
         }
 
         id:foodview
-        cacheBuffer:20000
+        cacheBuffer:10000
         visible: header.currentpage=="饮食"?true:false
         height: parent.height-header.height
         width:parent.width
@@ -396,8 +404,9 @@ Rectangle {
         clip:true
         property var currentdiet;
         property int currentfood;
+spacing:-1
 
-        spacing: 20
+
 
         Rectangle {
             id: scrollbar
@@ -482,12 +491,6 @@ Rectangle {
                 border.color: "grey"
                 border.width: 1
 
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    transparentBorder: true
-                    radius: 10
-                    color: "black"
-                }
 
                 //radius: header.height/3
                 anchors.fill: parent
@@ -512,6 +515,7 @@ Rectangle {
                     verticalAlignment: Text.AlignVCenter
                     color:"grey"
                     font{
+                        family: localFont.name
                         pixelSize: header.height/3
                     }
                     property int m_height:header.height/2
@@ -631,17 +635,18 @@ z:10
 
                         Rectangle{
                             id:foodtext
-                            border.color: "grey"
-                            border.width: 1
+//                            border.color: "grey"
+//                            border.width: 1
 
                             layer.enabled: true
                             layer.effect: DropShadow {
                                 transparentBorder: true
+
                                 radius: 8
-                                color: "black"
+                                color: "#55000000"
                             }
 
-                            radius: header.height/7
+                            //radius: header.height/7
                             color:"white"
                             height: parent.height
                             width: parent.width/2
@@ -653,6 +658,7 @@ z:10
                                 text:Food
                                 color:"grey"
                                 font{
+                        family: localFont.name
 
                                     pixelSize: parent.height/2
                                 }
@@ -786,13 +792,14 @@ z:10
 
                     border.width: 1
                     border.color: "grey"
-                    radius: width/5
+                    //radius: width/5
                     visible: false
                     Label{
                         visible:true
                         text: "请说话";
                         color:"#02ae4a"
                         font{
+                        family: localFont.name
                             pixelSize: parent.height/2.2
                         }
                         anchors.centerIn: parent;
@@ -1125,6 +1132,7 @@ z:10
                 color:"grey"
                 anchors.verticalCenter: parent.verticalCenter
                 font{
+                        family: localFont.name
 
                     pixelSize: header.height/2
                 }
@@ -1132,16 +1140,15 @@ z:10
 
             Rectangle{
                 id:sporttype
-                border.color: "grey"
-                border.width: 2
 
                 layer.enabled: true
                 layer.effect: DropShadow {
                     transparentBorder: true
                     radius: 8
-                    color: "grey"
+
+                    color: "#55000000"
                 }
-                radius: height/4
+                //radius: height/4
                 color:"white"
                 height: parent.height
                 width: parent.width-typetext.width*2
@@ -1157,6 +1164,7 @@ z:10
 
 
                     font{
+                        family: localFont.name
 
                         pixelSize: parent.height/1.5
                     }
@@ -1202,6 +1210,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
+                        family: localFont.name
 
                     pixelSize: header.height/2
                 }
@@ -1209,15 +1218,14 @@ z:10
 
             Rectangle{
                 id:begintimehour
-                border.color: "grey"
-                border.width: begintimerow.editmode?2:0
+
                 layer.enabled: begintimerow.editmode?true:false
                 layer.effect: DropShadow {
                     transparentBorder: true
-                    radius: 16
-                    color: "grey"
+                    radius:8
+                    color: "#55000000"
                 }
-                radius: height/4
+                //radius: height/4
                 color:"white"
                 height: parent.height
                 width: begintimerow.width/6
@@ -1227,6 +1235,7 @@ z:10
                     text:"00"
                     color:"grey"
                     font{
+                        family: localFont.name
 
                         pixelSize: parent.height/1.5
                     }
@@ -1251,6 +1260,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
+                        family: localFont.name
 
                     pixelSize: header.height/2
                 }
@@ -1258,17 +1268,14 @@ z:10
 
             Rectangle{
                 id:begintimemin
-                border.color: "grey"
-                border.width: begintimerow.editmode?2:0
+
                 layer.enabled: begintimerow.editmode?true:false
                 layer.effect: DropShadow {
                     transparentBorder: true
-                    horizontalOffset: 3
-                    verticalOffset: 3
                     radius: 8
-                    color: "grey"
+                    color: "#55000000"
                 }
-                radius: height/4
+                //radius: height/4
                 color:"white"
                 height: parent.height
                 width:begintimerow.width/6
@@ -1278,6 +1285,7 @@ z:10
                     text:"00"
                     color:"grey"
                     font{
+                        family: localFont.name
 
                         pixelSize: parent.height/1.5
                     }
@@ -1301,6 +1309,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
+                        family: localFont.name
 
                     pixelSize: header.height/2
                 }
@@ -1323,6 +1332,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
+                        family: localFont.name
 
                     pixelSize: header.height/2
                     bold: true
@@ -1331,17 +1341,14 @@ z:10
 
             Rectangle{
                 id:lasttimehour
-                border.color: "grey"
-                border.width: begintimerow.editmode?2:0
+
                 layer.enabled: begintimerow.editmode?true:false
                 layer.effect: DropShadow {
                     transparentBorder: true
-                    horizontalOffset: 3
-                    verticalOffset: 3
                     radius: 8
-                    color: "grey"
+                    color: "#55000000"
                 }
-                radius: height/4
+                //radius: height/4
                 color:"white"
                 height: parent.height
                 width: lasttimerow.width/6
@@ -1351,6 +1358,7 @@ z:10
                     text:"00"
                     color:"grey"
                     font{
+                        family: localFont.name
 
                         pixelSize: parent.height/1.5
                     }
@@ -1374,6 +1382,7 @@ z:10
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
+                        family: localFont.name
 
                     pixelSize: header.height/2
                 }
@@ -1381,17 +1390,14 @@ z:10
 
             Rectangle{
                 id:lasttimemin
-                border.color: "grey"
-                border.width: begintimerow.editmode?2:0
+
                 layer.enabled: begintimerow.editmode?true:false
                 layer.effect: DropShadow {
                     transparentBorder: true
-                    horizontalOffset: 3
-                    verticalOffset: 3
                     radius: 8
-                    color: "grey"
+                    color: "#55000000"
                 }
-                radius: height/4
+               // radius: height/4
                 color:"white"
                 height: parent.height
                 width:lasttimerow.width/6
@@ -1401,6 +1407,7 @@ z:10
                     text:"00"
                     color:"grey"
                     font{
+                        family: localFont.name
 
                         pixelSize: parent.height/1.5
                     }
@@ -1424,6 +1431,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
+                        family: localFont.name
 
                     pixelSize: header.height/2
                 }
@@ -1573,16 +1581,14 @@ z:10
             id:dosportdaysrect
             height: sportview.width/2.5
             width:height
-            radius: height/10
-            border.color: "grey"
-            border.width: 2
+            //radius: height/10
+
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
-                horizontalOffset: 3
-                verticalOffset: 3
+
                 radius: 8
-                color: "grey"
+                color: "#55000000"
             }
             anchors.top: buttonrow.bottom
             anchors.topMargin: sportview.height/30
@@ -1634,6 +1640,7 @@ z:10
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
+                        family: localFont.name
 
                     pixelSize: parent.height/7
                 }
@@ -1654,16 +1661,14 @@ z:10
             id:timerrect
             height: sportview.width/2.5
             width:height
-            radius: height/10
-            border.color: "grey"
-            border.width: 2
+            //radius: height/10
+
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
-                horizontalOffset: 3
-                verticalOffset: 3
+
                 radius: 8
-                color: "grey"
+                color: "#55000000"
             }
             anchors.top: buttonrow.bottom
             anchors.topMargin: sportview.height/30
@@ -1719,6 +1724,7 @@ z:10
 
                 color:"grey"
                 font{
+                        family: localFont.name
                     pixelSize: parent.height/8
                 }
             }
@@ -1815,20 +1821,18 @@ z:10
 
         Rectangle{
             id:timechooser
-            border.color: "grey"
-            border.width: 2
+
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
-                horizontalOffset: 3
-                verticalOffset: 3
                 radius: 8
-                color: "grey"
+
+                color: "#55000000"
             }
-            radius: height/4
+            //radius: height/4
             color:"white"
             anchors.top: parent.top
-            anchors.topMargin: parent.height/15
+            anchors.topMargin: parent.height/20
             anchors.horizontalCenter: parent.horizontalCenter
             height: parent.height/15
             width: parent.width/1.5
@@ -1837,6 +1841,7 @@ z:10
                 anchors.centerIn: parent
                 color:"grey"
                 font{
+                        family: localFont.name
 
                     pixelSize: parent.height/1.5
                 }
@@ -1940,7 +1945,7 @@ z:10
 
         Flickable{
             anchors.top: timechooser.bottom
-            anchors.topMargin: timechooser.height
+            anchors.topMargin: parent.height/20
             height: parent.height-timechooser.height*3
             width:parent.width
             contentHeight: foodtablerect.height+sporttablerect.height+header.height/3*2
@@ -1978,6 +1983,7 @@ z:10
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     font{
+                        family: localFont.name
 
                         pixelSize: header.height/2.5
                     }
@@ -1996,6 +2002,7 @@ z:10
                     anchors.leftMargin: header.height/3
 
                     font{
+                        family: localFont.name
 
                         pixelSize: header.height/2.5
                     }
@@ -2011,6 +2018,7 @@ z:10
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
+                        family: localFont.name
 
                         pixelSize: header.height/2.5
                     }
@@ -2026,6 +2034,7 @@ z:10
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
+                        family: localFont.name
 
                         pixelSize: header.height/2.5
                     }
@@ -2041,6 +2050,7 @@ z:10
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
+                        family: localFont.name
 
                         pixelSize: header.height/2.5
                     }
@@ -2056,6 +2066,7 @@ z:10
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
+                        family: localFont.name
 
                         pixelSize: header.height/2.5
                     }
@@ -2071,6 +2082,7 @@ z:10
                     anchors.left: parent.left
                     anchors.leftMargin: header.height/3
                     font{
+                        family: localFont.name
 
                         pixelSize: header.height/2.5
                     }
@@ -2107,6 +2119,7 @@ z:10
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     font{
+                        family: localFont.name
 
                         pixelSize: header.height/2.5
                     }
@@ -2134,6 +2147,7 @@ z:10
                             anchors.top: sporttabeldelegate.top
                             anchors.left: parent.left
                             font{
+                        family: localFont.name
 
                                 pixelSize: header.height/2.5
                             }
@@ -2146,6 +2160,7 @@ z:10
                             anchors.topMargin: header.height/3
                             anchors.left: parent.left
                             font{
+                        family: localFont.name
 
                                 pixelSize: header.height/2.5
                             }
@@ -2158,6 +2173,7 @@ z:10
                             anchors.topMargin: header.height/3
                             anchors.left: parent.left
                             font{
+                        family: localFont.name
 
                                 pixelSize: header.height/2.5
                             }
@@ -2201,7 +2217,7 @@ z:10
                 placeholderText:"请输入要搜索的内容"
                 style: TextFieldStyle{
                     background: Rectangle{
-                        radius: control.height/4
+                        //radius: control.height/4
                         border.width: 1;
                         border.color: "grey"
                         id:searchrect
@@ -2273,10 +2289,9 @@ z:10
                     layer.enabled: true
                     layer.effect: DropShadow {
                         transparentBorder: true
-                        horizontalOffset: 3
-                        verticalOffset: 3
+
                         radius: 8
-                        color: "grey"
+                        color: "#55000000"
                     }
                 color:"#02ae4a"
                 anchors.centerIn: parent
@@ -2288,7 +2303,7 @@ z:10
                     font.pixelSize: header.height/2.5
                 }
 
-                radius: height/4
+                //radius: height/4
                 }
                 MouseArea{
                     anchors.fill: parent
@@ -2316,7 +2331,7 @@ z:10
                 width: 5
                 height: view.visibleArea.heightRatio * view.height
                 color: "grey"
-                radius: 5
+                //radius: 5
                 z:2
                 visible: view.dragging||view.flicking
             }
@@ -2335,6 +2350,7 @@ z:10
                         color: "grey"
                         text:value
                         font{
+                        family: localFont.name
 
                             pixelSize: delegate.height/1.5
                         }
