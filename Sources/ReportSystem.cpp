@@ -534,19 +534,19 @@ void ReportSystem::als_Type(int type, int days)
     QList<QPair<QString,int> > map=getTop3FoodName(days,0);
 
     int num[6]={0,0,0,0,0,0};
-    if(type==1){
+    if(type==0){
         for(int i=0;i<map.length();i++){
             num[XZMap[map[i].first]]+=map[i].second;
         }
     }
 
-    if(type==2){
+    if(type==1){
         for(int i=0;i<map.length();i++){
             num[YYMap[map[i].first]]+=map[i].second;
         }
     }
 
-    if(type==3){
+    if(type==2){
         for(int i=0;i<map.length();i++){
             num[YLMap[map[i].first]]+=map[i].second;
         }

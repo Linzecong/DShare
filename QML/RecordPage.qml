@@ -26,24 +26,24 @@ Rectangle {
         id: localFont
         source:"qrc:/Resources/msyh.ttf"
     }
-    Rectangle{
-        id: indicator2
-        height: parent.height*1.3
-        width: parent.width
-        x:0
-        y:-parent.height/8
+//    Rectangle{
+//        id: indicator2
+//        height: parent.height*1.3
+//        width: parent.width
+//        x:0
+//        y:-parent.height/8
 
-        visible: false
-        color:"black"
-        opacity: 0.6
-        z:1001
-        BusyIndicator{
-            width:parent.width/7
-            height:width
-            anchors.centerIn: parent
-            running: true
-        }
-    }
+//        visible: false
+//        color:"black"
+//        opacity: 0.6
+//        z:1001
+//        BusyIndicator{
+//            width:parent.width/7
+//            height:width
+//            anchors.centerIn: parent
+//            running: true
+//        }
+//    }
 
     DataSystem{
         id:dbsystem;
@@ -722,7 +722,7 @@ z:10
 
 
                         if(Statue==="splitdone"){
-                            indicator2.visible=false
+                            mainrect.parent.parent.parent.setbusy(false)
 
                             var list=[]
                             list=speechsystem.getSplitSpeech().split("@")
@@ -766,7 +766,7 @@ z:10
 
                         if(Statue==""){
                             myjava.toastMsg("识别失败！....")
-                            indicator2.visible=false
+                            mainrect.parent.parent.parent.setbusy(false)
                             return
                         }
                         else{
@@ -846,7 +846,7 @@ z:10
 
                             if(speechlengthtimer.time>8){
                                 reminder.visible=false
-                                indicator2.visible=true
+                                mainrect.parent.parent.parent.setbusy(true)
                                 speechsystem.outclick("zh")
 
                             }
@@ -1125,9 +1125,6 @@ z:10
             anchors.topMargin: parent.height/15
             anchors.horizontalCenter: parent.horizontalCenter
             height: parent.height/15
-
-            width: parent.width/1.5
-
             spacing: typetext.width/4
             Text{
                 id:typetext
@@ -1154,16 +1151,17 @@ z:10
                 //radius: height/4
                 color:"white"
                 height: parent.height
-                width: parent.width-typetext.width*2
+                width: header.width/3
                 anchors.verticalCenter: parent.verticalCenter
                 TextField{
                     id:sporttext
-                    //anchors.centerIn: parent
-                    //horizontalAlignment: Text.horizontalAlignment
+                    anchors.centerIn: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
 
-                    anchors.top: parent.top
-                                        anchors.left: parent.left
-                                        anchors.leftMargin: 50
+//                    anchors.top: parent.top
+//                    anchors.left: parent.left
+//                    anchors.leftMargin: 50
 
                     readOnly: true
                     placeholderText: "请输入项目"
@@ -1202,10 +1200,9 @@ z:10
             id:begintimerow
             anchors.top: typerow.bottom
             anchors.topMargin: parent.height/15
-            //anchors.horizontalCenter: parent.horizontalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
 
-            anchors.leftMargin: parent.width/20
-            anchors.left: parent.left
+
 
             height: typerow.height
 
@@ -1237,7 +1234,7 @@ z:10
                 //radius: height/4
                 color:"white"
                 height: parent.height
-                width: begintimerow.width/6
+                width: height*1.5
                 Text {
                     id:begintimehourtext
                     anchors.centerIn: parent
@@ -1287,7 +1284,7 @@ z:10
                 //radius: height/4
                 color:"white"
                 height: parent.height
-                width:begintimerow.width/6
+                width:height*1.5
                 Text {
                     id:begintimemintext
                     anchors.centerIn: parent
@@ -1329,12 +1326,11 @@ z:10
             anchors.top: begintimerow.bottom
             anchors.topMargin: parent.height/15
 
-            //anchors.horizontalCenter: parent.horizontalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
 
 
-            anchors.leftMargin: parent.width/20
-            anchors.left: parent.left
-width: parent.width/1.2
+
+
             height: typerow.height
 
             spacing: begintimetext.width/5
@@ -1364,7 +1360,7 @@ width: parent.width/1.2
                 //radius: height/4
                 color:"white"
                 height: parent.height
-                width: lasttimerow.width/6
+                width: height*1.5
                 Text {
                     id:lasttimehourtext
                     anchors.centerIn: parent
@@ -1413,7 +1409,7 @@ width: parent.width/1.2
                // radius: height/4
                 color:"white"
                 height: parent.height
-                width:lasttimerow.width/6
+                width:height*1.5
                 Text {
                     id:lasttimemintext
                     anchors.centerIn: parent
@@ -1451,26 +1447,21 @@ width: parent.width/1.2
             }
         }
 
-        RowLayout{
-            id:buttonrow
-            anchors.top: lasttimerow.bottom
-            anchors.topMargin: parent.height/15
 
-            //anchors.horizontalCenter: parent.horizontalCenter
 
-            anchors.right: parent.right
-            anchors.rightMargin: width/2
 
-            height: typerow.height*1.1
-           width:height*3
 
-            //width: parent.width/2
 
             Rectangle{
                 id:changeeditmodebutton
-                height: parent.height
+
                 width: height
                 visible:antimetimer.running==false
+                anchors.top: lasttimerow.bottom
+                anchors.topMargin: parent.height/15
+                height:lasttimerow.height*1.1
+                anchors.horizontalCenter: dosportdaysrect.horizontalCenter
+
                 Image{
                     fillMode: Image.PreserveAspectFit
                     anchors.fill: parent
@@ -1488,7 +1479,11 @@ width: parent.width/1.2
             Rectangle{
                 id:sportsavebutton
                 property string lastsaved:"123"
-                height: parent.height
+                anchors.top: lasttimerow.bottom
+                anchors.topMargin: parent.height/15
+                height:lasttimerow.height*1.1
+                anchors.horizontalCenter: parent.horizontalCenter
+
                 width: height
 
                 Image{
@@ -1524,7 +1519,10 @@ width: parent.width/1.2
 
             Rectangle{
                 id:sportsharebutton
-                height: parent.height
+                anchors.top: lasttimerow.bottom
+                anchors.topMargin: parent.height/15
+                height:lasttimerow.height*1.1
+                anchors.horizontalCenter: timerrect.horizontalCenter
                 width: height
 
                 Timer{
@@ -1591,7 +1589,7 @@ width: parent.width/1.2
                 }
             }
 
-        }
+
 
         Rectangle{
             id:dosportdaysrect
@@ -1606,10 +1604,10 @@ width: parent.width/1.2
                 radius: 8
                 color: "#55000000"
             }
-            anchors.top: buttonrow.bottom
+            anchors.top: sportsharebutton.bottom
             anchors.topMargin: sportview.height/30
             anchors.left: sportview.left
-            anchors.leftMargin: buttonrow.height/2
+            anchors.leftMargin: sportsharebutton.height/2
             color:"white"
             property int checkinday
 
@@ -1686,10 +1684,10 @@ width: parent.width/1.2
                 radius: 8
                 color: "#55000000"
             }
-            anchors.top: buttonrow.bottom
+            anchors.top: sportsharebutton.bottom
             anchors.topMargin: sportview.height/30
             anchors.right: sportview.right
-            anchors.rightMargin: buttonrow.height/2
+            anchors.rightMargin: sportsharebutton.height/2
             color:"white"
 
 

@@ -24,10 +24,7 @@ Rectangle {
         forceActiveFocus();//用于响应返回键
     }
     function setcommentcount(count){
-
         postmodel.get(listview.commentindex).CommentCount=count
-
-
     }
 
     Keys.enabled: true
@@ -62,6 +59,83 @@ Rectangle {
         }
 
     }
+
+    Rectangle{
+        property int isbig:0
+        id: bigphotorect
+        height: parent.height*1.3
+        width: parent.width
+        x:0
+        y:-parent.height/8
+        z:22
+        visible: false
+
+        color: "black"
+
+        Keys.enabled: true
+        Keys.onBackPressed: {
+
+            mainrect.forceActiveFocus()
+
+            bigphoto.x=0
+            bigphoto.y=0
+            bigphoto.scale=1
+            bigphotorect.isbig=0
+            bigphotorect.visible=false
+        }
+
+        Flickable{
+            id:flick
+            height:parent.height
+            width: parent.width
+            contentHeight: bigphoto.height-1
+            contentWidth: bigphoto.width-1
+            Image {
+                id: bigphoto
+                fillMode: Image.PreserveAspectFit
+                height: bigphotorect.height
+                width: bigphotorect.width
+                Timer{
+                    id:doubletimer
+                    interval: 300
+                    repeat: false
+                    onTriggered: {
+                        mainrect.forceActiveFocus();
+
+                        bigphoto.x=0
+                        bigphoto.y=0
+                        bigphoto.scale=1
+                        bigphotorect.isbig=0
+                        bigphotorect.visible=false
+                    }
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        if(!doubletimer.running)
+                            doubletimer.running=true
+                        else{
+                            doubletimer.running=false
+                            if(!bigphotorect.isbig){
+                                bigphoto.scale=1.5
+                                bigphotorect.isbig=1
+                            }
+                            else{
+                                bigphoto.scale=1
+                                bigphotorect.isbig=0
+                            }
+                        }
+                    }
+
+
+                }
+            }
+
+        }
+    }
+
 
     Loader{
         id:uniquepost;
@@ -162,81 +236,6 @@ Rectangle {
 
 
 
-        Rectangle{
-            property int isbig:0
-            id: bigphotorect
-            height: parent.height*1.3
-            width: parent.width
-            x:0
-            y:-parent.height/8
-            z:22
-            visible: false
-
-            color: "black"
-
-            Keys.enabled: true
-            Keys.onBackPressed: {
-
-                mainrect.forceActiveFocus()
-
-                bigphoto.x=0
-                bigphoto.y=0
-                bigphoto.scale=1
-                bigphotorect.isbig=0
-                bigphotorect.visible=false
-            }
-
-            Flickable{
-                id:flick
-                height:parent.height
-                width: parent.width
-                contentHeight: bigphoto.height-1
-                contentWidth: bigphoto.width-1
-                Image {
-                    id: bigphoto
-                    fillMode: Image.PreserveAspectFit
-                    height: bigphotorect.height
-                    width: bigphotorect.width
-                    Timer{
-                        id:doubletimer
-                        interval: 300
-                        repeat: false
-                        onTriggered: {
-                            mainrect.forceActiveFocus();
-
-                            bigphoto.x=0
-                            bigphoto.y=0
-                            bigphoto.scale=1
-                            bigphotorect.isbig=0
-                            bigphotorect.visible=false
-                        }
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent
-
-                        onClicked: {
-                            if(!doubletimer.running)
-                                doubletimer.running=true
-                            else{
-                                doubletimer.running=false
-                                if(!bigphotorect.isbig){
-                                    bigphoto.scale=1.5
-                                    bigphotorect.isbig=1
-                                }
-                                else{
-                                    bigphoto.scale=1
-                                    bigphotorect.isbig=0
-                                }
-                            }
-                        }
-
-
-                    }
-                }
-
-            }
-        }
 
         ListView{
             id:listview;

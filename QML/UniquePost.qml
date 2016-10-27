@@ -352,11 +352,6 @@ Rectangle{
                     anchors.fill: parent
                     onClicked: {
                         indicator.visible=true
-                        indicator.visible=true
-                        indicator.visible=true
-                        indicator.visible=true
-                        indicator.visible=true
-
                         bigphoto.source=photo
                         bigphotorect.visible=true
                         bigphotorect.forceActiveFocus()

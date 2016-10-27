@@ -59,6 +59,116 @@ Rectangle {
 
     }
 
+    function setbusy(a){
+        indicator2.visible=a
+    }
+
+
+    Rectangle{
+        id: indicator2
+        anchors.fill: parent
+        visible: false
+        color:"black"
+        opacity: 0.6
+        z:2001
+        BusyIndicator{
+            width:parent.width/7
+            height:width
+            anchors.centerIn: parent
+            running: true
+        }
+        MouseArea{
+            anchors.fill: parent
+            onClicked: {
+
+            }
+        }
+    }
+
+    function showbigphoto(a){
+        bigphoto.source=a
+        bigphotorect.visible=true
+        bigphotorect.forceActiveFocus()
+    }
+
+    Rectangle{
+        property int isbig:0
+        id: bigphotorect
+        anchors.fill: parent
+
+        z:22
+        visible: false
+
+        color: "black"
+
+        Keys.enabled: true
+        Keys.onBackPressed: {
+
+            mainrect.forceActiveFocus();
+
+            bigphoto.x=0
+            bigphoto.y=0
+            bigphoto.scale=1
+            bigphotorect.isbig=0
+            bigphotorect.visible=false
+        }
+
+        Flickable{
+            id:flick
+            height:parent.height
+            width: parent.width
+            contentHeight: bigphoto.height-1
+            contentWidth: bigphoto.width-1
+            Image {
+                id: bigphoto
+                fillMode: Image.PreserveAspectFit
+                height: bigphotorect.height
+                width: bigphotorect.width
+                Timer{
+                    id:doubletimer
+                    interval: 300
+                    repeat: false
+                    onTriggered: {
+                        mainrect.forceActiveFocus();
+
+                        bigphoto.x=0
+                        bigphoto.y=0
+                        bigphoto.scale=1
+                        bigphotorect.isbig=0
+                        bigphotorect.visible=false
+                    }
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        if(!doubletimer.running)
+                            doubletimer.running=true
+                        else{
+                            doubletimer.running=false
+                            if(!bigphotorect.isbig){
+                                bigphoto.scale=1.5
+                                bigphotorect.isbig=1
+                            }
+                            else{
+                                bigphoto.scale=1
+                                bigphotorect.isbig=0
+                            }
+                        }
+                    }
+
+
+                }
+            }
+
+        }
+    }
+
+
+
+
+
     Loader{
         id:mypostpage
         anchors.fill: parent

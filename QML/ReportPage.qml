@@ -548,7 +548,7 @@ Rectangle {
         ChartView {
             id: foodtypechart
 
-            title: "食物性状分布"
+            title: "最近10天性状分布"
             titleFont{
                         family: localFont.name
                 //family: "微软雅黑"
@@ -640,7 +640,7 @@ Rectangle {
                     onClicked: {
                         foodtypechart.currentPage--
                         if(foodtypechart.currentPage==-1)
-                            foodtypechart.currentPage=3;
+                            foodtypechart.currentPage=2;
                         reportsystem.als_Type(foodtypechart.currentPage,foodtimechart.currentPage)
                     }
                 }

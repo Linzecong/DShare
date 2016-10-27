@@ -88,103 +88,104 @@ Rectangle{
         id: localFont
         source:"qrc:/Resources/msyh.ttf"
     }
-    Rectangle{
-        property int isbig:0
-        id: bigphotorect
-        height: parent.height*1.3
-        width: parent.width
-        x:0
-        y:-parent.height/8
-        z:22
-        visible: false
 
-        color: "black"
+//    Rectangle{
+//        property int isbig:0
+//        id: bigphotorect
+//        height: parent.height*1.3
+//        width: parent.width
+//        x:0
+//        y:-parent.height/8
+//        z:22
+//        visible: false
 
-        Keys.enabled: true
-        Keys.onBackPressed: {
+//        color: "black"
 
-            mainrect.forceActiveFocus();
+//        Keys.enabled: true
+//        Keys.onBackPressed: {
 
-            bigphoto.x=0
-            bigphoto.y=0
-            bigphoto.scale=1
-            bigphotorect.isbig=0
-            bigphotorect.visible=false
-        }
+//            mainrect.forceActiveFocus();
 
-        Flickable{
-            id:flick
-            height:parent.height
-            width: parent.width
-            contentHeight: bigphoto.height-1
-            contentWidth: bigphoto.width-1
-            Image {
-                id: bigphoto
-                fillMode: Image.PreserveAspectFit
-                height: bigphotorect.height
-                width: bigphotorect.width
-                Timer{
-                    id:doubletimer
-                    interval: 300
-                    repeat: false
-                    onTriggered: {
-                        mainrect.forceActiveFocus();
+//            bigphoto.x=0
+//            bigphoto.y=0
+//            bigphoto.scale=1
+//            bigphotorect.isbig=0
+//            bigphotorect.visible=false
+//        }
 
-                        bigphoto.x=0
-                        bigphoto.y=0
-                        bigphoto.scale=1
-                        bigphotorect.isbig=0
-                        bigphotorect.visible=false
-                    }
-                }
+//        Flickable{
+//            id:flick
+//            height:parent.height
+//            width: parent.width
+//            contentHeight: bigphoto.height-1
+//            contentWidth: bigphoto.width-1
+//            Image {
+//                id: bigphoto
+//                fillMode: Image.PreserveAspectFit
+//                height: bigphotorect.height
+//                width: bigphotorect.width
+//                Timer{
+//                    id:doubletimer
+//                    interval: 300
+//                    repeat: false
+//                    onTriggered: {
+//                        mainrect.forceActiveFocus();
 
-                MouseArea{
-                    anchors.fill: parent
+//                        bigphoto.x=0
+//                        bigphoto.y=0
+//                        bigphoto.scale=1
+//                        bigphotorect.isbig=0
+//                        bigphotorect.visible=false
+//                    }
+//                }
 
-                    onClicked: {
-                        if(!doubletimer.running)
-                            doubletimer.running=true
-                        else{
-                            doubletimer.running=false
-                            if(!bigphotorect.isbig){
-                                bigphoto.scale=1.5
-                                bigphotorect.isbig=1
-                            }
-                            else{
-                                bigphoto.scale=1
-                                bigphotorect.isbig=0
-                            }
-                        }
-                    }
+//                MouseArea{
+//                    anchors.fill: parent
 
-
-                }
-            }
-
-        }
-    }
+//                    onClicked: {
+//                        if(!doubletimer.running)
+//                            doubletimer.running=true
+//                        else{
+//                            doubletimer.running=false
+//                            if(!bigphotorect.isbig){
+//                                bigphoto.scale=1.5
+//                                bigphotorect.isbig=1
+//                            }
+//                            else{
+//                                bigphoto.scale=1
+//                                bigphotorect.isbig=0
+//                            }
+//                        }
+//                    }
 
 
+//                }
+//            }
 
-    Rectangle{
-        id: indicator
-        height: parent.height*1.3
-        width: parent.width
-        x:0
-        y:-parent.height/8
+//        }
+//    }
 
-        visible: false
-        color:"black"
-        opacity: 0.6
-        z:1001
-        BusyIndicator{
-            width:parent.width/7
-            height:width
-            anchors.centerIn: parent
-            running: true
-        }
 
-    }
+
+//    Rectangle{
+//        id: indicator
+//        height: parent.height*1.3
+//        width: parent.width
+//        x:0
+//        y:-parent.height/8
+
+//        visible: false
+//        color:"black"
+//        opacity: 0.6
+//        z:1001
+//        BusyIndicator{
+//            width:parent.width/7
+//            height:width
+//            anchors.centerIn: parent
+//            running: true
+//        }
+
+//    }
 
     //显示列表
     ListView{
@@ -358,16 +359,10 @@ family: localFont.name
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            indicator.visible=true
-                            indicator.visible=true
-                            indicator.visible=true
-                            indicator.visible=true
-                            indicator.visible=true
+                            mainrect.parent.parent.parent.setbusy(true)
 
-                            bigphoto.source=postsystem.getbigpostphoto(delegaterect.bigimg);
-                            bigphotorect.visible=true
-                            bigphotorect.forceActiveFocus()
-                            indicator.visible=false
+                            mainrect.parent.parent.parent.showbigphoto(postsystem.getbigpostphoto(delegaterect.bigimg))
+                            mainrect.parent.parent.parent.setbusy(false)
                         }
                     }
                 }

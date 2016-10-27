@@ -23,25 +23,25 @@ Rectangle {
         id: localFont
         source:"qrc:/Resources/msyh.ttf"
     }
-    Rectangle{
-        id: indicator
-        height: parent.height*1.3
-        width: parent.width
-        x:0
-        y:-parent.height/8
+//    Rectangle{
+//        id: indicator
+//        height: parent.height*1.3
+//        width: parent.width
+//        x:0
+//        y:-parent.height/8
 
-        visible: false
-        color:"black"
-        opacity: 0.6
-        z:1001
-        BusyIndicator{
-            width:parent.width/7
-            height:width
-            anchors.centerIn: parent
-            running: true
-        }
+//        visible: false
+//        color:"black"
+//        opacity: 0.6
+//        z:1001
+//        BusyIndicator{
+//            width:parent.width/7
+//            height:width
+//            anchors.centerIn: parent
+//            running: true
+//        }
 
-    }
+//    }
 
     id:mainpage
     anchors.fill: parent
@@ -78,7 +78,7 @@ Rectangle {
     SpeechSystem{
         id:sendspeechsystem
         onStatueChanged: {
-            indicator.visible=false
+            mainpage.parent.parent.parent.setbusy(false)
 
             if(Statue=="")
                 myjava.toastMsg("识别失败！....")
@@ -315,7 +315,7 @@ Rectangle {
             standardButtons:  StandardButton.No|StandardButton.Yes
             detailedText:"内容：<br>"+messagetext+"<br>"+hiddentext
             onYes: {
-                indicator.visible=true
+                mainpage.parent.parent.parent.setbusy(true)
                 refreshtimer.refreshtime=0;
                 refreshtimer.start();
                 if(imagePath!==""){
@@ -364,18 +364,18 @@ Rectangle {
                 if(Statue=="DBError"){
                     myjava.toastMsg("远程服务器出错，请联系开发者！");
                     refreshtimer.refreshtime=62
-                    indicator.visible=false
+                    mainpage.parent.parent.parent.setbusy(false)
                 }
                 if(Statue=="Error"){
                     myjava.toastMsg("照片有误！！");
                     refreshtimer.refreshtime=62
-                    indicator.visible=false
+                    mainpage.parent.parent.parent.setbusy(false)
                 }
 
                 if(Statue=="Wait"){
                     myjava.toastMsg("服务器繁忙，请重新发送！");
                     refreshtimer.refreshtime=62
-                    indicator.visible=false
+                    mainpage.parent.parent.parent.setbusy(false)
                 }
 
                 if(Statue=="Sending..."){
@@ -388,7 +388,7 @@ Rectangle {
             id:sendmsgsystem
             onStatueChanged: {
                 if(Statue=="sendpostSucceed"){
-                    indicator.visible=false
+                    mainpage.parent.parent.parent.setbusy(false)
                     myjava.toastMsg("发送成功！");
                     mainpage.parent.parent.currentPage="DShare"
                     mainpage.parent.parent.x=0;
@@ -530,7 +530,7 @@ Rectangle {
                     reminder.visible=false
                     sendspeechsystem.outclick("zh")
 
-                    indicator.visible=true
+                    mainpage.parent.parent.parent.setbusy(true)
                 }
                 else{
                     reminder.visible=false
