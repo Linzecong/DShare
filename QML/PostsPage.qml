@@ -9,7 +9,7 @@ import JavaMethod 1.0
 import SendImageSystem 1.0
 import PostsSystem 1.0
 import QtGraphicalEffects 1.0
-
+import "qrc:/GlobalVariable.js" as GlobalColor
 Rectangle {
     id:mainwindow
     anchors.fill: parent
@@ -17,11 +17,12 @@ Rectangle {
     property string myid
     property string nickname
     property double dp:head.height/70
+
     function getpost(userid,mmid,mnickname){
         str_userid=userid
         myid=mmid
         nickname=mnickname
-        mainrect.setusername(userid)
+        mainrect.setusername(userid,myid)
         forceActiveFocus();//用于响应返回键
     }
     function setcommentcount(count){
@@ -161,7 +162,7 @@ Rectangle {
         width:parent.width;
         height: parent.height/16*2
 
-        color:"#02ae4a"
+        color:GlobalColor.Green400
         anchors.top: parent.top
         layer.enabled: true
         layer.effect: DropShadow {
@@ -171,11 +172,12 @@ Rectangle {
         }
 
         Label{
-            text:" ＜";
+            text:"＜";
             id:backbutton
             height: parent.height
             width:height
             anchors.left: parent.left
+            anchors.leftMargin: 16*dp
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
 
@@ -218,9 +220,11 @@ Rectangle {
         height: parent.height-head.height
         width: parent.width
         property string username
+        property string myid
 
-        function setusername(a){
+        function setusername(a,b){
             username=a
+            myid=b
             refreshpost(a)
         }
 
@@ -365,7 +369,7 @@ Rectangle {
                         anchors.topMargin:2*dp
 
                         text: Username
-                        color:"green"
+                        color:GlobalColor.Teal500
                         font{
                             family: localFont.name
                             pointSize: 16
@@ -443,10 +447,10 @@ Rectangle {
 
                         text: LikerNum+" 个点赞 · "
 
-                        //width:parent.width-headimage.height/3*4
+                        visible: posttime.text==""?false:true
 
                         wrapMode: Text.Wrap;
-                        color: "#02ae4a"
+                        color: "grey"
                         font{
                             family: localFont.name
 
@@ -457,7 +461,7 @@ Rectangle {
                             anchors.fill: parent
                             onClicked: {
                                 listview.likeindex=index;
-                                postsystem.likepost(postitem.postID,mainrect.username);
+                                postsystem.likepost(postitem.postID,mainrect.myid);
                                 likebutton.visible=false
                                 commentbutton.visible=false
                             }
@@ -474,7 +478,7 @@ Rectangle {
                         text: CommentCount+" 条评论"
                         //width:parent.width-headimage.height/3*4
                         wrapMode: Text.Wrap;
-                        color: "#02ae4a"
+                        color: "grey"
                         font{
                             family: localFont.name
 
@@ -484,7 +488,7 @@ Rectangle {
                             anchors.fill: parent
                             onClicked: {
                                 listview.commentindex=index
-                                uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
+                                uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.myid,nickname,1)
                                 uniquepost.visible=true
 
                                 likebutton.visible=false
@@ -508,7 +512,7 @@ Rectangle {
                         Rectangle{
                             id:likebutton
                             visible: false
-                            color:"#02ae4a"
+                            color:GlobalColor.Green400
                             height:headimage.height/1.5
                             width: photo.width/5
                             layer.enabled: true
@@ -530,7 +534,7 @@ Rectangle {
                                 anchors.fill: parent
                                 onClicked: {
                                     listview.likeindex=index;
-                                    postsystem.likepost(postitem.postID,myid);
+                                    postsystem.likepost(postitem.postID,mainrect.myid);
 
                                     likebutton.visible=false
                                     commentbutton.visible=false
@@ -542,7 +546,7 @@ Rectangle {
                         Rectangle{
                             id:commentbutton
                             visible: false
-                            color:"#02ae4a"
+                            color:GlobalColor.Green400
                             height:headimage.height/1.5
                             width: photo.width/5
                             layer.enabled: true
@@ -565,7 +569,7 @@ Rectangle {
                                 anchors.fill: parent
                                 onClicked: {
                                     listview.commentindex=index
-                                    uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,myid,nickname,1)
+                                    uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.myid,nickname,1)
                                     uniquepost.visible=true
 
                                     likebutton.visible=false
@@ -576,7 +580,7 @@ Rectangle {
                         Rectangle{
                             height:headimage.height/2.5
                             width: height*1.5
-                            color:"lightgreen"
+                            color:GlobalColor.LightBlue400
 
                             layer.effect: DropShadow {
                                 transparentBorder: true
@@ -723,7 +727,7 @@ Rectangle {
                                                  "Message":"该用户暂无任何分享喔~",
                                                  "Photo":"",
                                                  "Liker":"",
-                                                 "LikerNum":"0",
+                                                 "LikerNum":0,
                                                  "ID":0,
                                                  "PublisherID":"",
                                                  "CommentCount":0

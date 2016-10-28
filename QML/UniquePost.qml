@@ -6,6 +6,7 @@ import QtQuick.Dialogs 1.1
 import PostsSystem 1.0
 import JavaMethod 1.0
 import QtGraphicalEffects 1.0
+import "qrc:/GlobalVariable.js" as GlobalColor
 Rectangle{
     id:uniquepost
     anchors.fill: parent
@@ -27,12 +28,17 @@ Rectangle{
     property double dp:head.height/70
     property int needset
 
+
+
+
     function setData(mhasimage,mheadurl,musername,mposttime,mmessage,mphoto,mliker,mid,muserid,mnickname,need){
         forceActiveFocus();//用于响应返回键
         commentmodel.clear()
         hasimage=mhasimage
         headurl=mheadurl
+
         username=musername
+
         posttime=mposttime
         message=mmessage
         photo=mphoto
@@ -251,7 +257,7 @@ Rectangle{
         z:7
         width:parent.width;
         height: parent.height/16*2
-        color:"#02ae4a"
+        color:GlobalColor.Green400
         anchors.top: parent.top;
 
         layer.enabled: true
@@ -261,11 +267,12 @@ Rectangle{
             color: "#55000000"
         }
         Label{
-            text:" ＜";
+            text:"＜";
             id:backbutton
             height: parent.height
             width:height
             anchors.left: parent.left
+            anchors.leftMargin: 16*dp
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
@@ -462,7 +469,7 @@ Rectangle{
                 width:parent.width-headimage.height/3*4
                 text: liker
                 wrapMode: Text.Wrap;
-                color: "#02ae4a"
+                color: GlobalColor.Teal500
                 font{
                         family: localFont.name
                     pointSize: 14
@@ -479,7 +486,7 @@ Rectangle{
             anchors.topMargin: 10*dp
             anchors.left: delegaterect.left
             anchors.leftMargin: 10*dp
-            text:"<font color=\"#02ae4a\">暂无评论</font>"
+            text:"<font color=\""+GlobalColor.Teal500+"\">暂无评论</font>"
             visible: commentmodel.count==0?true:false
             font{
                 family: localFont.name
@@ -503,18 +510,12 @@ Rectangle{
             clip:true
             spacing:-1
 
-            Rectangle {
-                      id: scrollbar
-                      anchors.right: commentview.right
-                      anchors.rightMargin: 3
-                      y: commentview.visibleArea.yPosition * commentview.height
-                      width: 5
-                      height: commentview.visibleArea.heightRatio * commentview.height
-                      color: "grey"
-                      radius: 5
-                      z:2
-                      visible: commentview.dragging||commentview.flicking
-                  }
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: 8
+                color: "#55000000"
+            }
 
             delegate: Item{
                 id:uniquecomment
@@ -535,7 +536,7 @@ Rectangle{
                         anchors.rightMargin: 4*dp
 
 
-                        text: "  <strong><font color=\"#02ae4a\">"+CommentatorName+(BeCommentatorName===""?"：</font></strong>":(" 回复 "+BeCommentatorName+"：</font></strong>"))+"<font color=\"grey\">"+Message+"</font>"
+                        text: " <font color=\""+GlobalColor.Teal500+"\">"+CommentatorName+(BeCommentatorName===""?"：</font>":(" 回复 "+BeCommentatorName+"：</font>"))+"<font color=\"grey\">"+Message+"</font>"
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.Wrap
                         font{
@@ -590,20 +591,20 @@ Rectangle{
 
     Rectangle{
         id:commentbar
-        height: zanwupinglun.height*3
+        height: (head.height)/2
 
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: 8*dp
+        anchors.margins: 10*dp
 
-        color:"#02ae4a"
+        color:"white"
 
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: "#02ae4a"
+            color: GlobalColor.Cyan400
         }
 
         TextField{
@@ -619,7 +620,6 @@ Rectangle{
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.margins: 4*dp
 
             placeholderText:"评论..."
             font{
@@ -629,12 +629,12 @@ Rectangle{
             style: TextFieldStyle{
                 textColor:"grey"
                 background: Rectangle{
-                    layer.enabled: true
-                    layer.effect: DropShadow {
-                        transparentBorder: true
-                        radius: 6
-                        color: "#02ae4a"
-                    }
+//                    layer.enabled: true
+//                    layer.effect: DropShadow {
+//                        transparentBorder: true
+//                        radius: 6
+//                        color: GlobalColor.Green400
+//                    }
                     id:searchrect
                 }
             }
@@ -670,7 +670,7 @@ Rectangle{
             anchors.bottom: parent.bottom
 
             width:height*1.5
-            color:"#35dca2"
+            color:GlobalColor.Cyan400
 
             Text{
                 anchors.centerIn: parent
