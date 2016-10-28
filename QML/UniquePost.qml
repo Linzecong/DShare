@@ -24,7 +24,7 @@ Rectangle{
     property string photo
     property string liker
     property string iD
-
+    property double dp:head.height/70
     property int needset
 
     function setData(mhasimage,mheadurl,musername,mposttime,mmessage,mphoto,mliker,mid,muserid,mnickname,need){
@@ -164,6 +164,81 @@ Rectangle{
 
     }
 
+
+    ListModel{
+        id:commentmodel
+    }
+
+    JavaMethod{
+        id:myjava
+    }
+
+    PostsSystem{
+        id:postssystem
+        onStatueChanged: {
+            if(Statue=="getcommentsSucceed"){
+                commentmodel.clear()
+                var i=0
+                while(postssystem.getcommentid(i)!==-1){
+                    commentmodel.append({
+                                            "CommentID":getcommentid(i),
+                                            "CommentatorName":getcommentatorname(i),
+                                            "BeCommentatorName":getbecommentatorname(i),
+                                            "CommentatorID":getcommentatorid(i),
+                                            "Message":getcommentmessage(i),
+                                        }
+                                        );
+                    i++
+                }
+            }
+
+            if(Statue=="getcommentsDBError"){
+                myjava.toastMsg("获取评论系统出错！请联系开发者")
+            }
+
+            if(Statue=="deletecommentSucceed"){
+                myjava.toastMsg("删除成功")
+            }
+
+            if(Statue=="deletecommentDBError"){
+                myjava.toastMsg("删除失败")
+            }
+
+
+            if(Statue=="sendcommentSucceed"){
+                myjava.toastMsg("评论成功！")
+
+                postssystem.getcomments(iD);
+
+                commenttext.hiddentext=""
+                bcid=""
+                commenttext.writtentext=""
+                commenttext.text=""
+                commenttext.firstnull=1
+
+
+            }
+            if(Statue=="sendcommentDBError"){
+                myjava.toastMsg("该分享已被删除！")
+
+                commenttext.hiddentext=""
+                bcid=""
+                commenttext.writtentext=""
+                commenttext.text=""
+                commenttext.firstnull=1
+
+                uniquepost.parent.visible=false
+                uniquepost.parent.parent.forceActiveFocus();
+
+                uniquepost.parent.parent.removepost()
+
+
+            }
+        }
+
+    }
+
+
     Rectangle{
         Rectangle{
             anchors.top: parent.top
@@ -173,11 +248,12 @@ Rectangle{
             color:"green"
         }
         id:head;
-        z:5
+        z:7
         width:parent.width;
         height: parent.height/16*2
         color:"#02ae4a"
         anchors.top: parent.top;
+
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
@@ -240,26 +316,29 @@ Rectangle{
 
         height:parent.height-head.height-commentbar.height
 
-        contentHeight: delegaterect.height+commentview.height+commentbar.height
+        contentHeight: delegaterect.height+commentview.height+commentbar.height/3
         clip: true
 
 
 
         Rectangle{
             id:delegaterect
-            border.color: "grey"
-            border.width: 2
-            radius: 10
+
 
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
 
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: 8
+                color: "#55000000"
+            }
 
+            anchors.margins: 8*dp
 
-            anchors.margins: 10
-
-            height:headimage.height/5*7+headimage.height+messagelabel.height+photolabel.height+likers.height
+            height:headimage.height/5*6+headimage.height+messagelabel.height+photolabel.height+likers.height+(hasimage?10*dp:0)
 
             z:2
 
@@ -269,10 +348,11 @@ Rectangle{
                 id:headimage
                 visible: posttime===""?false:true
                 anchors.top:parent.top
-                anchors.topMargin: width/3
+                anchors.topMargin: 10*dp
+
                 anchors.left: parent.left
-                anchors.leftMargin: width/3
-                height: parent.width/8
+                anchors.leftMargin: 8*dp
+                height: 40*dp
                 width: height
                 fillMode: Image.PreserveAspectFit
                 source:posttime===""?"":headurl
@@ -286,13 +366,15 @@ Rectangle{
             }
 
             //用户名
-            Label{
+            Text{
                 id:usernamelabel
                 anchors.left: headimage.right
-                anchors.leftMargin: headimage.width/2
+                anchors.leftMargin: 10*dp
+
                 anchors.top: headimage.top
-                anchors.topMargin:height/5
-                height: headimage.height/2
+                anchors.topMargin:2*dp
+
+
                 text: username
                 color:"green"
                 font{
@@ -303,15 +385,16 @@ Rectangle{
             }
 
             //发表时间
-            Label{
+            Text{
                 id:posttimelabel
                 anchors.left: headimage.right
 
-                anchors.leftMargin: headimage.width/2
+                anchors.leftMargin: 10*dp
 
                 anchors.bottom: headimage.bottom
-                anchors.bottomMargin: -height/5
-                height: headimage.height/2
+                anchors.bottomMargin: 2*dp
+
+
                 text: posttime
                 color:"grey"
                 font{
@@ -325,9 +408,14 @@ Rectangle{
             Label{
                 id:messagelabel
                 anchors.left: headimage.left
+                anchors.right: parent.right
+                anchors.rightMargin: 8*dp
+
                 anchors.top: headimage.bottom
-                anchors.topMargin: headimage.height/3
-                width:parent.width-headimage.height/3*2
+                anchors.topMargin: 10*dp
+
+
+                //width:parent.width-headimage.height/3*2
                 text: message
                 wrapMode: Text.Wrap;
                 textFormat:Text.RichText
@@ -342,7 +430,8 @@ Rectangle{
             Image{
                 id:photolabel
                 anchors.top: messagelabel.bottom
-                anchors.topMargin: hasimage?headimage.height/3:0
+                anchors.topMargin: hasimage?10*dp:0
+
                 height: hasimage?parent.width/2:0;
                 anchors.horizontalCenter: parent.horizontalCenter
                 width:parent.width-100
@@ -368,7 +457,8 @@ Rectangle{
                 visible: posttime===""?false:true
                 anchors.left: headimage.left
                 anchors.top: photolabel.bottom
-                anchors.topMargin: headimage.height/3
+                anchors.topMargin: 12*dp
+
                 width:parent.width-headimage.height/3*4
                 text: liker
                 wrapMode: Text.Wrap;
@@ -383,12 +473,18 @@ Rectangle{
         }
 
         Label{
+            id:zanwupinglun
             anchors.top: delegaterect.bottom
             width:delegaterect.width
-            anchors.topMargin: 10
+            anchors.topMargin: 10*dp
             anchors.left: delegaterect.left
-            text:"<strong><font color=\"#02ae4a\">暂无评论</font></strong>"
+            anchors.leftMargin: 10*dp
+            text:"<font color=\"#02ae4a\">暂无评论</font>"
             visible: commentmodel.count==0?true:false
+            font{
+                family: localFont.name
+                pointSize: 14
+            }
 
         }
 
@@ -398,8 +494,7 @@ Rectangle{
             id:commentview
             anchors.top: delegaterect.bottom
             width:delegaterect.width
-            anchors.topMargin: 10
-
+            anchors.topMargin: 10*dp
             anchors.left: delegaterect.left
 
             // height: parent.height-head.height-delegaterect.height-commentbar.height-sendbutton.height/5-50
@@ -424,34 +519,31 @@ Rectangle{
             delegate: Item{
                 id:uniquecomment
                 width:parent.width
-                height: commenttextlabel.height*1.5
+                height: commenttextlabel.height+16*dp
                 Rectangle{
 
                     border.color: "grey"
-                    border.width: 2
-                    radius: headimage.height/10
-                    height: commenttextlabel.height*1.5
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-
-                    Label{
+                    border.width: 1
+                    anchors.fill: parent
+                    Text{
                         id:commenttextlabel
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: headimage.height/4
-                        anchors.right: parent.right
-                        anchors.rightMargin: headimage.height/4
 
-                        text: "  <strong><font color=\"#02ae4a\">"+CommentatorName+(BeCommentatorName===""?"：</font></strong>":(" 回复 "+BeCommentatorName+"：</font></strong>"))+Message
+                        anchors.left: parent.left
+                        anchors.leftMargin: 4*dp
+                        anchors.right: parent.right
+                        anchors.rightMargin: 4*dp
+
+
+                        text: "  <strong><font color=\"#02ae4a\">"+CommentatorName+(BeCommentatorName===""?"：</font></strong>":(" 回复 "+BeCommentatorName+"：</font></strong>"))+"<font color=\"grey\">"+Message+"</font>"
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.Wrap
                         font{
                         family: localFont.name
-
                             pointSize: 14
                         }
                     }
+
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
@@ -472,20 +564,23 @@ Rectangle{
                             }
                         }
                     }
-                    MessageDialog {
-                        id: messageDialog
-                        title: "提示"
-                        text: "确定要删除这条评论吗？"
-                        detailedText: Message
-                        standardButtons:  StandardButton.No|StandardButton.Yes
-                        onYes: {
 
-                            postsystem.deleteComment(CommentID)
-                            commentmodel.remove(index)
-                        }
-                        onNo: {
+                }
 
-                        }
+
+                MessageDialog {
+                    id: messageDialog
+                    title: "提示"
+                    text: "确定要删除这条评论吗？"
+                    detailedText: Message
+                    standardButtons:  StandardButton.No|StandardButton.Yes
+                    onYes: {
+
+                        postssystem.deleteComment(CommentID)
+                        commentmodel.remove(index)
+                    }
+                    onNo: {
+
                     }
                 }
             }
@@ -495,17 +590,21 @@ Rectangle{
 
     Rectangle{
         id:commentbar
-        height: (head.height)/1.5
-        width: parent.width
+        height: zanwupinglun.height*3
+
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: headimage.height/4
         anchors.left: parent.left
-        color:"#35dca2"
-        radius: headimage.height/4
+        anchors.right: parent.right
+        anchors.margins: 8*dp
 
+        color:"#02ae4a"
 
-
-
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 8
+            color: "#02ae4a"
+        }
 
         TextField{
 
@@ -518,19 +617,28 @@ Rectangle{
 
             anchors.right: sendbutton.left
             anchors.left: parent.left
-            anchors.margins: 3
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            anchors.margins: 4*dp
 
             placeholderText:"评论..."
+            font{
+                family: localFont.name
+                pointSize: 16
+            }
             style: TextFieldStyle{
+                textColor:"grey"
                 background: Rectangle{
-                    radius: control.height/4
-                    border.width: 2;
-                    border.color: "grey"
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+                        radius: 6
+                        color: "#02ae4a"
+                    }
                     id:searchrect
                 }
             }
+
             onTextChanged: {
                 if(commenttext.text.indexOf(commenttext.hiddentext)>=0&&hiddentext!=""){
 
@@ -551,9 +659,6 @@ Rectangle{
                     }
                 }
             }
-
-
-
         }
 
 
@@ -561,21 +666,20 @@ Rectangle{
         Rectangle{
             id:sendbutton
             anchors.right: parent.right
-            anchors.margins: 3
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            width:height*2
-
-            radius: headimage.height/4
-
-
+            width:height*1.5
             color:"#35dca2"
 
             Text{
                 anchors.centerIn: parent
                 text:"发送"
                 color:"white"
+                font{
+                    family: localFont.name
+                    pointSize: 16
+                }
             }
 
             MouseArea{
@@ -606,78 +710,7 @@ Rectangle{
 
 
 
-        ListModel{
-            id:commentmodel
-        }
 
-        JavaMethod{
-            id:myjava
-        }
-
-        PostsSystem{
-            id:postssystem
-            onStatueChanged: {
-                if(Statue=="getcommentsSucceed"){
-                    commentmodel.clear()
-                    var i=0
-                    while(postssystem.getcommentid(i)!==-1){
-                        commentmodel.append({
-                                                "CommentID":getcommentid(i),
-                                                "CommentatorName":getcommentatorname(i),
-                                                "BeCommentatorName":getbecommentatorname(i),
-                                                "CommentatorID":getcommentatorid(i),
-                                                "Message":getcommentmessage(i),
-                                            }
-                                            );
-                        i++
-                    }
-                }
-
-                if(Statue=="getcommentsDBError"){
-                    myjava.toastMsg("获取评论系统出错！请联系开发者")
-                }
-
-                if(Statue=="deletecommentSucceed"){
-                    myjava.toastMsg("删除成功")
-                }
-
-                if(Statue=="deletecommentDBError"){
-                    myjava.toastMsg("删除失败")
-                }
-
-
-                if(Statue=="sendcommentSucceed"){
-                    myjava.toastMsg("评论成功！")
-
-                    postssystem.getcomments(iD);
-
-                    commenttext.hiddentext=""
-                    bcid=""
-                    commenttext.writtentext=""
-                    commenttext.text=""
-                    commenttext.firstnull=1
-
-
-                }
-                if(Statue=="sendcommentDBError"){
-                    myjava.toastMsg("该分享已被删除！")
-
-                    commenttext.hiddentext=""
-                    bcid=""
-                    commenttext.writtentext=""
-                    commenttext.text=""
-                    commenttext.firstnull=1
-
-                    uniquepost.parent.visible=false
-                    uniquepost.parent.parent.forceActiveFocus();
-
-                    uniquepost.parent.parent.removepost()
-
-
-                }
-            }
-
-        }
 
 
 

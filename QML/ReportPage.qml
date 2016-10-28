@@ -15,6 +15,7 @@ Rectangle {
     property string str_userid;//记录这个页面的人的id
 
     property string nickname
+    property double dp:head.height/70
 
     function getalldiet(userid,mnickname){
         str_userid=userid
@@ -267,9 +268,11 @@ Rectangle {
         id:view
         clip:true
         anchors.top: head.bottom
-        anchors.topMargin: 5
+
         anchors.left: parent.left
+        anchors.leftMargin: 10*dp
         anchors.right: parent.right
+        anchors.rightMargin: 10*dp
         anchors.bottom:parent.bottom
 
         contentHeight: foodcountchart.height+foodtimechart.height+foodtypechart.height+sporttimechart.height
@@ -282,6 +285,7 @@ Rectangle {
                 //family: "微软雅黑"
                 pointSize: 16
             }
+            anchors.topMargin: 20*dp
             property int currentPage: 0
             onCurrentPageChanged: {
                 switch(currentPage){
@@ -390,6 +394,7 @@ Rectangle {
                 pointSize: 16
             }
             anchors.top: foodcountchart.bottom
+            anchors.topMargin: 20*dp
 
             height: mainwindow.height/2
             width: parent.width
@@ -472,7 +477,7 @@ Rectangle {
                 labelsFont{
                         family: localFont.name
                     //family: "微软雅黑"
-                    pixelSize: (head.height)/10
+                    pixelSize: (head.height)/11
                     bold:true
                 }
             }
@@ -565,6 +570,7 @@ Rectangle {
             antialiasing: true
 
             anchors.top: foodtimechart.bottom
+            anchors.topMargin: 20*dp
 
             height: mainwindow.height/2
             width: parent.width
@@ -689,6 +695,7 @@ Rectangle {
             antialiasing: true
 
             anchors.top: foodtypechart.bottom
+            anchors.topMargin: 20*dp
 
             height: mainwindow.height/2
             width: parent.width
@@ -729,7 +736,7 @@ Rectangle {
                 labelsFont{
                         family: localFont.name
                     //family: "微软雅黑"
-                    pixelSize: (head.height)/10
+                    pixelSize: (head.height)/11
                     bold:true
                 }
             }

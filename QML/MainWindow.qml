@@ -457,7 +457,8 @@ Rectangle {
             Image {
                 id:followingicon
                 anchors.left: parent.left
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
+
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/user.png"
                 width: height
@@ -467,7 +468,7 @@ Rectangle {
 
             Label{
                 anchors.left: followingicon.right
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的关注"
                 font{
@@ -510,7 +511,7 @@ Rectangle {
             Image {
                 id:followericon
                 anchors.left: parent.left
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/nickname.png"
                 width: height
@@ -520,7 +521,7 @@ Rectangle {
 
             Label{
                 anchors.left: followericon.right
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的粉丝"
                 font{
@@ -565,7 +566,7 @@ Rectangle {
             Image {
                 id:shareicon
                 anchors.left: parent.left
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/photo.png"
                 width: height
@@ -574,7 +575,7 @@ Rectangle {
 
             Label{
                 anchors.left: shareicon.right
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的分享"
                 font{
@@ -614,7 +615,7 @@ Rectangle {
             Image {
                 id:messageicon
                 anchors.left: parent.left
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/conpassword.png"
                 width: height
@@ -623,7 +624,7 @@ Rectangle {
 
             Label{
                 anchors.left: messageicon.right
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的消息"
                 font{
@@ -663,7 +664,7 @@ Rectangle {
             Image {
                 id:reporticon
                 anchors.left: parent.left
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/conpassword.png"
                 width: height
@@ -672,7 +673,7 @@ Rectangle {
 
             Label{
                 anchors.left: reporticon.right
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的报告"
                 font{
@@ -747,7 +748,7 @@ Rectangle {
             Image {
                 id:settingicon
                 anchors.left: parent.left
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/save.png"
                 width: height
@@ -756,7 +757,7 @@ Rectangle {
             Label{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: settingicon.right
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 text:"设置"
                 font{
                         family: localFont.name
@@ -796,7 +797,7 @@ Rectangle {
             Image {
                 id:logouticon
                 anchors.left: parent.left
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/password.png"
                 width: height
@@ -805,7 +806,7 @@ Rectangle {
             Label{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: logouticon.right
-                anchors.leftMargin: sidepagetop.height/10
+                anchors.leftMargin: 10*dp
                 text:"注销"
                 font{
                         family: localFont.name

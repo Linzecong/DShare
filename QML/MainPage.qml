@@ -13,6 +13,7 @@ Rectangle{
     property string username
     property string nickname
     property alias commentindex0: listview.commentindex
+    property double dp:(myjava.getHeight()/16*2)/70
 
     function abs(a){
         if(a<0)
@@ -54,6 +55,10 @@ Rectangle{
 
         postmodel.remove(listview.commentindex)
 
+    }
+
+    JavaMethod{
+        id:myjava
     }
 
 
@@ -223,23 +228,20 @@ Rectangle{
         delegate: Item{
             id:postitem
             width:parent.width
-            height:headimage.height/5*5+headimage.height+message.height+photo.height+comments.height//+delegaterect.hasimage?headimage.height/5:0
+            height:headimage.height/5*5+headimage.height+message.height+photo.height+comments.height+10*dp+(Hasimage?10*dp:0)
             property int postID: ID//用于实现点赞功能
             property string publisherid: PublisherID//用于显示头像
             //每一个分享的框框
 
 
             Rectangle{
-
-
                 Rectangle{
                     anchors.top: parent.bottom
-                //    anchors.topMargin: 10
                     color:"grey"
                     width:mainrect.width
                     anchors.left: parent.left
                     anchors.leftMargin: -10
-                    height:2
+                    height:1
                 }
 
 
@@ -256,10 +258,15 @@ Rectangle{
                     id:headimage
                     visible: posttime.text==""?false:true
                     anchors.top:parent.top
-                    anchors.topMargin: width/5
+
+                    anchors.topMargin: 10*dp
+
                     anchors.left: parent.left
-                    anchors.leftMargin: width/4
-                    height: listview.width/8
+
+                    anchors.leftMargin: 8*dp
+
+                    height: 40*dp
+
                     width: height
                     fillMode: Image.PreserveAspectFit
                     source:posttime.text==""?"":Headurl
@@ -289,13 +296,15 @@ Rectangle{
                 }
 
                 //用户名
-                Label{
+                Text{
                     id:username
                     anchors.left: headimage.right
-                    anchors.leftMargin: headimage.width/4
+                    anchors.leftMargin: 10*dp
+
                     anchors.top: headimage.top
-                    anchors.topMargin:height/5
-                    height: headimage.height/2
+                    anchors.topMargin: 2*dp
+
+
                     text: Username
                     color:"green"
                     font{
@@ -308,17 +317,18 @@ Rectangle{
                 }
 
                 //发表时间
-                Label{
+                Text{
                     id:posttime
                     anchors.left: headimage.right
-                    anchors.leftMargin: headimage.width/4
+                    anchors.leftMargin: 10*dp
+
                     anchors.bottom: headimage.bottom
-                    anchors.bottomMargin: -height/5
-                    height: headimage.height/2
+                    anchors.bottomMargin: 2*dp
+
                     text: Posttime
                     color:"grey"
                     font{
-family: localFont.name
+                        family: localFont.name
                         pointSize: 12
                     }
                 }
@@ -328,8 +338,10 @@ family: localFont.name
                     id:message
                     anchors.left: headimage.left
                     anchors.right: parent.right
+                    anchors.rightMargin: 8*dp
+
                     anchors.top: headimage.bottom
-                    anchors.topMargin: headimage.height/5
+                    anchors.topMargin: 10*dp
 
 
                     //width:parent.width-headimage.height/3*2
@@ -348,14 +360,16 @@ family: localFont.name
                     id:photo
                     anchors.top: message.bottom
 
-                    anchors.topMargin:parent.hasimage?headimage.height/5:0
+                    anchors.topMargin:parent.hasimage?10*dp:0
 
                     height: parent.hasimage?listview.width/2:0
 
                     anchors.horizontalCenter: parent.horizontalCenter
+
                     width:listview.width-100
                     source:Photo
                     fillMode: Image.PreserveAspectFit
+
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
@@ -378,9 +392,10 @@ family: localFont.name
 
                     visible: posttime.text==""?false:true
                     anchors.left: headimage.left
+
                     anchors.top: photo.bottom
-                    anchors.topMargin: headimage.height/5
-                    //width:parent.width-headimage.height/3*4
+                    anchors.topMargin: 12*dp
+
                     text: LikerNum+" 个点赞 · "
 
 
@@ -410,8 +425,8 @@ family: localFont.name
                     id:comments
                     visible: posttime.text==""?false:true
                     anchors.left: likers.right
-                    anchors.top: photo.bottom
-                    anchors.topMargin: headimage.height/5
+                    anchors.top: likers.top
+
                     text: CommentCount+" 条评论"
                     //width:parent.width-headimage.height/3*4
                     wrapMode: Text.Wrap;
@@ -437,16 +452,16 @@ family: localFont.name
                     }
                 }
 
-                RowLayout{
+                Row{
                     id:buttonlayout
                     visible: posttime.text==""?false:true
 
                     anchors.verticalCenter: likers.verticalCenter
 
                     anchors.right: parent.right
-                    anchors.rightMargin: headimage.height/8
-                   // anchors.topMargin: parent.hasimage?headimage.height/3:0
-                    height: headimage.height/1.5
+                    anchors.rightMargin: 8*dp
+                    spacing: 10*dp
+
 
                     //点赞按钮
                     Rectangle{
@@ -455,14 +470,19 @@ family: localFont.name
                         color:"#02ae4a"
                         height:headimage.height/1.5
                         width: photo.width/5
-                        radius: height/6
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            transparentBorder: true
+                            radius: 8
+                            color: "#02ae4a"
+                        }
 
                         Label{
                             text:"❤";
                             anchors.centerIn: parent
                             color: "white";
                             font{
-                        family: localFont.name
+                                family: localFont.name
                                 pixelSize: parent.height/1.2
                             }
                         }
@@ -482,10 +502,15 @@ family: localFont.name
                         id:commentbutton
                         visible: false
                         color:"#02ae4a"
-                        radius: height/6
+
                         height:headimage.height/1.5
                         width: photo.width/5
-
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            transparentBorder: true
+                            radius: 8
+                            color: "#02ae4a"
+                        }
                         Label{
                             text:"✉";
                             anchors.centerIn: parent
@@ -515,7 +540,14 @@ family: localFont.name
                         height:headimage.height/2.5
                         width: height*1.5
                         color:"lightgreen"
-                        radius: height/5
+
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            transparentBorder: true
+                            radius: 8
+                            color: "lightgreen"
+                        }
+                        anchors.verticalCenter: parent.verticalCenter
                         Label{
                             anchors.centerIn: parent
                             id:morebutton
@@ -523,12 +555,10 @@ family: localFont.name
                             color:"white"
                             verticalAlignment: Text.AlignVCenter
                             font{
-                        family: localFont.name
+                                family: localFont.name
                                 bold: true
                                 pixelSize: parent.height
                             }
-
-
                         }
                         MouseArea{
                             anchors.fill: parent
@@ -544,11 +574,9 @@ family: localFont.name
                     }
                 }
 
-
-
-
             }
         }
+
         model: postmodel//信息model
         onDragEnded: {
             // 下拉刷新判断逻辑：已经到头了，还下拉一定距离
@@ -591,9 +619,6 @@ family: localFont.name
             id:postmodel;
         }
 
-        JavaMethod{
-            id:myjava;
-        }
 
         PostsSystem{
             id:postsystem

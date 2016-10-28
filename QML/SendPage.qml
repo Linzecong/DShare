@@ -49,7 +49,7 @@ Rectangle {
     property string str_userid
     property string hiddentext
     property string messagetext:messageedit.text
-
+    property double dp:(myjava.getHeight()/16*2)/70
     function setnull(){
         hiddentext=""
 
@@ -95,9 +95,10 @@ Rectangle {
     Rectangle{
         id:rect
         height: parent.height/4
-        width: parent.width-parent.width/25
+        width: parent.width-20*dp
         anchors.top:parent.top
-        anchors.topMargin: parent.width/30
+        anchors.topMargin: 10*dp
+
         anchors.horizontalCenter: parent.horizontalCenter
 
 
@@ -157,11 +158,11 @@ Rectangle {
         height:rect.width/3.5
         width:height
         anchors.top: rect.bottom
-        anchors.topMargin: mainpage.width/20
+        anchors.topMargin: 10*dp
         anchors.left: rect.left
-        anchors.leftMargin: mainpage.width/40
+        anchors.leftMargin: 10*dp
 
-        color:"#02ae4a"
+        color:"white"
 
         layer.enabled: true
         layer.effect: DropShadow {
@@ -237,7 +238,7 @@ Rectangle {
         }
 
         anchors.left: photobutton.right
-        anchors.leftMargin: photobutton.height/4
+        anchors.leftMargin: 23*dp
         anchors.verticalCenter: photobutton.verticalCenter
 
         width: photobutton.width/1.2
@@ -286,7 +287,7 @@ Rectangle {
         id:sendbutton
 
         anchors.left: clear.right
-        anchors.leftMargin: photobutton.height/4
+        anchors.leftMargin: 23*dp
         anchors.verticalCenter: photobutton.verticalCenter
 
         width: photobutton.width/1.2
@@ -468,13 +469,17 @@ Rectangle {
         height:rect.width/3.5
         width:height*2
         anchors.bottom: recordbutton.top
-        anchors.bottomMargin: mainpage.width/20
+        anchors.bottomMargin: 20*dp
 
         anchors.horizontalCenter: parent.horizontalCenter
 
-        border.width: 2
-        border.color: "grey"
-        radius: width/5
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 8
+            color: "#55000000"
+        }
+
         visible: false
         Label{
             visible:true

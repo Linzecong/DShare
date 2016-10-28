@@ -7,12 +7,15 @@ import DataSystem 1.0
 import JavaMethod 1.0
 import PostsSystem 1.0
 import QtGraphicalEffects 1.0
+
 Rectangle {
     id:mainrect;
     anchors.fill: parent
 
-    property string userid;
-    property string nickname;
+    property string userid
+    property string nickname
+    property double dp:head.height/70
+
     function getNotice(username,nickname1){
         noticemodel.clear()
         userid=username
@@ -208,12 +211,12 @@ Rectangle {
         delegate: Item{
             id:delegate
             width:mainrect.width
-            height:mainrect.height/14
-            property int postid: PostID
+            height: textlabel.height+timelabel.height+22*dp
 
+            property int postid: PostID
             Rectangle{
                 anchors.fill: parent
-                color:IsRead?"#dddddd":"white"
+                color:"white"
 
                 border.color: "grey"
                 border.width: 1
@@ -226,38 +229,53 @@ Rectangle {
                     }
                 }
 
-                Label{
+                Text{
                     id:textlabel;
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: 8*dp
                     anchors.left: parent.left
-                    anchors.leftMargin:30
+                    anchors.leftMargin:10*dp
+
                     wrapMode: Text.WordWrap
                     font{
                         family: localFont.name
                         pointSize: 16
                     }
-                    text:"<strong><font color=\"#35dca2\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\"#35dca2\">你</font></strong>"
+                    text:"<strong><font color=\"#02ae4a\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\"#02ae4a\">你</font></strong>"
 
                 }
 
-                Label{
+                Text{
                     id:timelabel;
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                    anchors.rightMargin:30
+                    anchors.top: textlabel.bottom
+                    anchors.topMargin: 6*dp
+                    anchors.left: textlabel.left
                     color: "grey"
                     wrapMode: Text.WordWrap
                     font{
                         family: localFont.name
-                        
                         pointSize: 12
                     }
                     text:SendTime
 
                 }
 
+                Text{
+                    id:readtext;
+                    anchors.verticalCenter: parent.verticalCenter
 
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10*dp
+                    color: "#02ae4a"
+                    wrapMode: Text.WordWrap
+                    font{
+                        family: localFont.name
+                        pointSize: 16
+                    }
+                    text:"New"
+                    visible: !IsRead
 
+                }
 
             }
         }

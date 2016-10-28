@@ -16,6 +16,7 @@ Rectangle {
     property string str_userid;//记录这个页面的人的id
     property string myid
     property string nickname
+    property double dp:head.height/70
     function getpost(userid,mmid,mnickname){
         str_userid=userid
         myid=mmid
@@ -180,7 +181,7 @@ Rectangle {
 
             verticalAlignment: Text.AlignVCenter
             font{
-                        family: localFont.name
+                family: localFont.name
 
                 pixelSize: (head.height)/4
 
@@ -201,7 +202,7 @@ Rectangle {
             anchors.centerIn: parent
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
-                        family: localFont.name
+                family: localFont.name
                 //family: "微软雅黑"
                 pointSize: 20
             }
@@ -213,11 +214,9 @@ Rectangle {
     Rectangle{
         id:mainrect
         anchors.top: head.bottom
-        anchors.topMargin: 3
         anchors.left: head.left
         height: parent.height-head.height
         width: parent.width
-
         property string username
 
         function setusername(a){
@@ -263,19 +262,19 @@ Rectangle {
             delegate: Item{
                 id:postitem
                 width:parent.width
-                height:headimage.height/5*6+headimage.height+message.height+photo.height+comments.height//+delegaterect.hasimage?headimage.height/5:0
+                height:headimage.height/5*6+headimage.height+message.height+photo.height+comments.height+10*dp+(Hasimage?10*dp:0)
                 property int postID: ID//用于实现点赞功能
                 property string publisherid: PublisherID//用于显示删除
                 Rectangle{
                     Rectangle{
                         anchors.top: parent.bottom
-                        //anchors.topMargin: 10
                         color:"grey"
                         width:mainrect.width
                         anchors.left: parent.left
                         anchors.leftMargin: -10
-                        height:2
+                        height:1
                     }
+
                     anchors.fill: parent
                     anchors.margins: 10
                     id:delegaterect
@@ -286,11 +285,14 @@ Rectangle {
                         id:headimage
                         visible: posttime.text==""?false:true
                         anchors.top:parent.top
-                        anchors.topMargin: width/5
+                        anchors.topMargin: 10*dp
+
                         anchors.left: parent.left
-                        anchors.leftMargin: width/4
-                        height: listview.width/8
+                        anchors.leftMargin: 8*dp
+
+                        height: 40*dp
                         width: height
+
                         fillMode: Image.PreserveAspectFit
                         source:posttime.text==""?"":Headurl
                         Label{
@@ -310,14 +312,14 @@ Rectangle {
                         id:deletebutton
                         visible:(ID!=0&&myid==PublisherID)?true:false
                         color:"red"
-                        height:headimage.height/2
+                        height:headimage.height/2.5
                         width: height
                         radius: height/2
 
                         anchors.top:parent.top
-                        anchors.topMargin: width/4
+                        anchors.topMargin: 10*dp
                         anchors.right: parent.right
-                        anchors.rightMargin: width/4
+                        anchors.rightMargin: 8*dp
 
                         Label{
                             text:"╳";
@@ -327,7 +329,7 @@ Rectangle {
                             horizontalAlignment: Text.AlignHCenter
                             color: "white";
                             font{
-                        family: localFont.name
+                                family: localFont.name
                                 pixelSize: parent.height
                             }
                         }
@@ -354,33 +356,33 @@ Rectangle {
                         }
                     }
 
-                    Label{
+                    Text{
                         id:username
                         anchors.left: headimage.right
-                        anchors.leftMargin: headimage.width/4
+                        anchors.leftMargin: 10*dp
+
                         anchors.top: headimage.top
-                        anchors.topMargin:height/5
-                        height: headimage.height/2
+                        anchors.topMargin:2*dp
+
                         text: Username
                         color:"green"
                         font{
-                        family: localFont.name
-
+                            family: localFont.name
                             pointSize: 16
                         }
                     }
 
-                    Label{
+                    Text{
                         id:posttime
                         anchors.left: headimage.right
-                        anchors.leftMargin: headimage.width/4
+                        anchors.leftMargin: 10*dp
                         anchors.bottom: headimage.bottom
-                        anchors.bottomMargin: -height/5
-                        height: headimage.height/2
+                        anchors.bottomMargin: 2*dp
+
                         text: Posttime
                         color:"grey"
                         font{
-                        family: localFont.name
+                            family: localFont.name
                             pointSize: 12
                         }
                     }
@@ -388,8 +390,10 @@ Rectangle {
                         id:message
                         anchors.left: headimage.left
                         anchors.right: parent.right
+                        anchors.rightMargin: 8*dp
+
                         anchors.top: headimage.bottom
-                        anchors.topMargin: headimage.height/3
+                        anchors.topMargin: 10*dp
 
                         //width:parent.width-headimage.height/3*2
 
@@ -397,7 +401,7 @@ Rectangle {
                         textFormat:Text.RichText
                         wrapMode: Text.Wrap;
                         font{
-                        family: localFont.name
+                            family: localFont.name
                             //family: "微软雅黑"
                             pointSize: 14
                         }
@@ -405,7 +409,8 @@ Rectangle {
                     Image{
                         id:photo
                         anchors.top: message.bottom
-                        anchors.topMargin: parent.hasimage?headimage.height/5:0
+                        anchors.topMargin: parent.hasimage?10*dp:0
+
                         height: parent.hasimage?listview.width/2:0;
                         anchors.horizontalCenter: parent.horizontalCenter
                         width:listview.width-100
@@ -434,7 +439,8 @@ Rectangle {
                         property string likerStr: Liker
                         anchors.left: headimage.left
                         anchors.top: photo.bottom
-                        anchors.topMargin: headimage.height/5
+                        anchors.topMargin: 12*dp
+
                         text: LikerNum+" 个点赞 · "
 
                         //width:parent.width-headimage.height/3*4
@@ -442,7 +448,7 @@ Rectangle {
                         wrapMode: Text.Wrap;
                         color: "#02ae4a"
                         font{
-                        family: localFont.name
+                            family: localFont.name
 
                             pointSize: 14
                         }
@@ -463,14 +469,14 @@ Rectangle {
                         id:comments
                         visible: posttime.text==""?false:true
                         anchors.left: likers.right
-                        anchors.top: photo.bottom
-                        anchors.topMargin: headimage.height/5
+                        anchors.top:likers.top
+
                         text: CommentCount+" 条评论"
                         //width:parent.width-headimage.height/3*4
                         wrapMode: Text.Wrap;
                         color: "#02ae4a"
                         font{
-                        family: localFont.name
+                            family: localFont.name
 
                             pointSize: 14
                         }
@@ -487,15 +493,15 @@ Rectangle {
                         }
                     }
 
-                    RowLayout{
+                    Row{
                         id:buttonlayout
                         anchors.verticalCenter: likers.verticalCenter
 
                         anchors.right: parent.right
-                        anchors.rightMargin: headimage.height/8
+                        anchors.rightMargin: 8*dp
                         visible: posttime.text==""?false:true
-                        //  anchors.topMargin: parent.hasimage?headimage.height/3:0
-                        height: headimage.height/1.5
+                        spacing: 10*dp
+
 
 
                         //点赞按钮
@@ -505,14 +511,18 @@ Rectangle {
                             color:"#02ae4a"
                             height:headimage.height/1.5
                             width: photo.width/5
-                            radius: height/6
-
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+                                radius: 8
+                                color: "#02ae4a"
+                            }
                             Label{
                                 text:"❤";
                                 anchors.centerIn: parent
                                 color: "white";
                                 font{
-                        family: localFont.name
+                                    family: localFont.name
                                     pixelSize: parent.height/1.2
                                 }
                             }
@@ -533,16 +543,20 @@ Rectangle {
                             id:commentbutton
                             visible: false
                             color:"#02ae4a"
-                            radius: height/6
                             height:headimage.height/1.5
                             width: photo.width/5
-
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+                                radius: 8
+                                color: "#02ae4a"
+                            }
                             Label{
                                 text:"✉";
                                 anchors.centerIn: parent
                                 color: "white";
                                 font{
-                        family: localFont.name
+                                    family: localFont.name
 
                                     pixelSize: parent.height/1.3
                                 }
@@ -563,9 +577,14 @@ Rectangle {
                             height:headimage.height/2.5
                             width: height*1.5
                             color:"lightgreen"
-                            radius: height/5
 
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+                                radius: 8
+                                color: "lightgreen"
+                            }
 
+                            anchors.verticalCenter: parent.verticalCenter
                             Label{
                                 anchors.centerIn: parent
                                 id:morebutton
@@ -573,11 +592,12 @@ Rectangle {
                                 color:"white"
                                 verticalAlignment: Text.AlignVCenter
                                 font{
-                        family: localFont.name
+                                    family: localFont.name
                                     bold: true
                                     pixelSize: parent.height
                                 }
                             }
+
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
@@ -665,7 +685,7 @@ Rectangle {
                             var list=[]
                             list=likers2.split(",")
                             if(list.length==0)
-                            likenum=1
+                                likenum=1
                             else
                                 likenum=list.length
                         }

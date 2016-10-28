@@ -15,6 +15,7 @@ Rectangle {
     color:"white"
     anchors.fill: parent
     property string str_userid
+    property double dp:(myjava.getHeight()/16*2)/70
     id:mainrect
 
     function getcheckinday(){
@@ -281,21 +282,18 @@ Rectangle {
 
         Rectangle{
             id:inrect
-            color:"#eeeeee"
-            height: parent.height-4
+            color:"#02ae4a"
+            height: parent.height
             width:parent.width/3
-            anchors.top: parent.top
-            anchors.topMargin: 2
-            x:foodbutton.color=="#02ae4a"?0:(sportbutton.color=="#02ae4a"?width:width*2)
+            x:header.currentpage=="饮食"?0:(header.currentpage=="运动"?width:width*2)
         }
 
         Label{
             id:foodbutton
             text: "饮食"
-            color:header.currentpage==text?"#02ae4a":"grey"
+            color:header.currentpage==text?"white":"#02ae4a"
             font{
-                        family: localFont.name
-               // family: "微软雅黑"
+                family: localFont.name
                 pointSize: 20
             }
             anchors.left: parent.left
@@ -312,10 +310,9 @@ Rectangle {
         Label{
             id:sportbutton
             text: "运动"
-            color:header.currentpage==text?"#02ae4a":"grey"
+            color:header.currentpage==text?"white":"#02ae4a"
             font{
-                        family: localFont.name
-              //  family: "微软雅黑"
+                family: localFont.name
                 pointSize: 20
             }
             anchors.horizontalCenter: parent.horizontalCenter
@@ -331,10 +328,9 @@ Rectangle {
         Label{
             id:searchbutton
             text: "查看"
-            color:header.currentpage==text?"#02ae4a":"grey"
+            color:header.currentpage==text?"white":"#02ae4a"
             font{
-                        family: localFont.name
-               // family: "微软雅黑"
+                family: localFont.name
                 pointSize: 20
             }
             anchors.right: parent.right
@@ -362,7 +358,6 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width/3*1.1
             height:header.height*1.2
-
             Rectangle{
                 width: parent.width/1.2
                 height:header.height/1.5
@@ -484,7 +479,7 @@ spacing:-1
             id:dietitem
             width:parent.width
 
-            height: foodlist.height+header.height/1.5+addfoodbutton.height
+            height: foodlist.height+addfoodbutton.height+20*dp+10*dp
 
             Rectangle{
 
@@ -508,7 +503,8 @@ spacing:-1
                     id:title
                     text:Title
                     anchors.top:parent.top
-                    anchors.topMargin: height
+                    anchors.topMargin: 16*dp
+
                     anchors.left: parent.left
                     anchors.leftMargin: parent.width/2-parent.width/4-parent.width/8-width/2
 
@@ -528,7 +524,7 @@ spacing:-1
                     anchors.horizontalCenter: title.horizontalCenter
 
                     anchors.top: title.bottom
-                    anchors.topMargin: height/5
+                    anchors.topMargin: 10*dp
 
                     height: title.m_height*1.2
                     width: height
@@ -553,7 +549,7 @@ z:10
                     anchors.horizontalCenter: title.horizontalCenter
 
                     anchors.top: photobutton.bottom
-                    anchors.topMargin: photobutton.height/5
+                    anchors.topMargin: 10*dp
 
                     width:parent.width/5
                     height: width/2
@@ -623,9 +619,9 @@ z:10
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     anchors.top: parent.top
-                    anchors.topMargin: title.m_height*2/3
+                    anchors.topMargin: 16*dp
 
-                    spacing: mainrect.height/36
+                    spacing: 8*dp
 
                     delegate:Item{
                         id:food
@@ -783,16 +779,21 @@ z:10
 
                 Rectangle{
                     id:reminder
-                    height:speechbutton.height*1.3
-                    width:speechbutton.width*1.2
+                    height:header.height
+                    width:mainrect.width/3
+
                     anchors.bottom: speechbutton.top
-                    anchors.bottomMargin: speechbutton.height/2
+                    anchors.bottomMargin: 20*dp
 
                     anchors.horizontalCenter: speechbutton.horizontalCenter
 
-                    border.width: 1
-                    border.color: "grey"
-                    //radius: width/5
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+                        radius: 8
+                        color: "#55000000"
+                    }
+
                     visible: false
                     Label{
                         visible:true
@@ -881,6 +882,7 @@ z:10
                     anchors.leftMargin: parent.width/2-parent.width/4
 
                     anchors.top: foodlist.bottom
+
                     height: title.m_height*1.2
                     width: height
                     Image{
@@ -1116,13 +1118,13 @@ z:10
         height: parent.height-header.height
         width:parent.width
         anchors.top: header.bottom
-       // anchors.horizontalCenter: parent.horizontalCenter
         color:"white"
 
         Row{
             id:typerow
             anchors.top: parent.top
-            anchors.topMargin: parent.height/15
+            anchors.topMargin: 16*dp
+
             anchors.horizontalCenter: parent.horizontalCenter
             height: parent.height/15
             spacing: typetext.width/4
@@ -1199,7 +1201,7 @@ z:10
         Row{
             id:begintimerow
             anchors.top: typerow.bottom
-            anchors.topMargin: parent.height/15
+            anchors.topMargin: 16*dp
             anchors.horizontalCenter: parent.horizontalCenter
 
 
@@ -1324,7 +1326,7 @@ z:10
         Row{
             id:lasttimerow
             anchors.top: begintimerow.bottom
-            anchors.topMargin: parent.height/15
+            anchors.topMargin: 16*dp
 
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -1458,7 +1460,7 @@ z:10
                 width: height
                 visible:antimetimer.running==false
                 anchors.top: lasttimerow.bottom
-                anchors.topMargin: parent.height/15
+                anchors.topMargin: 16*dp
                 height:lasttimerow.height*1.1
                 anchors.horizontalCenter: dosportdaysrect.horizontalCenter
 
@@ -1480,7 +1482,8 @@ z:10
                 id:sportsavebutton
                 property string lastsaved:"123"
                 anchors.top: lasttimerow.bottom
-                anchors.topMargin: parent.height/15
+                anchors.topMargin: 16*dp
+
                 height:lasttimerow.height*1.1
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -1520,7 +1523,7 @@ z:10
             Rectangle{
                 id:sportsharebutton
                 anchors.top: lasttimerow.bottom
-                anchors.topMargin: parent.height/15
+                anchors.topMargin: 16*dp
                 height:lasttimerow.height*1.1
                 anchors.horizontalCenter: timerrect.horizontalCenter
                 width: height
@@ -1605,9 +1608,12 @@ z:10
                 color: "#55000000"
             }
             anchors.top: sportsharebutton.bottom
-            anchors.topMargin: sportview.height/30
+
+            anchors.topMargin: 20*dp
+
             anchors.left: sportview.left
-            anchors.leftMargin: sportsharebutton.height/2
+            anchors.leftMargin: 16*dp
+
             color:"white"
             property int checkinday
 
@@ -1685,9 +1691,9 @@ z:10
                 color: "#55000000"
             }
             anchors.top: sportsharebutton.bottom
-            anchors.topMargin: sportview.height/30
+            anchors.topMargin: 20*dp
             anchors.right: sportview.right
-            anchors.rightMargin: sportsharebutton.height/2
+            anchors.rightMargin: 16*dp
             color:"white"
 
 
@@ -1827,9 +1833,9 @@ z:10
             //radius: height/4
             color:"white"
             anchors.top: parent.top
-            anchors.topMargin: parent.height/20
+            anchors.topMargin: 16*dp
             anchors.horizontalCenter: parent.horizontalCenter
-            height: parent.height/15
+            height: parent.height/13
             width: parent.width/1.5
             Text {
                 id:timechoosertext
@@ -1940,7 +1946,7 @@ z:10
 
         Flickable{
             anchors.top: timechooser.bottom
-            anchors.topMargin: parent.height/20
+            anchors.topMargin: 16*dp
             height: parent.height-timechooser.height*3
             width:parent.width
             contentHeight: foodtablerect.height+sporttablerect.height+header.height/3*2

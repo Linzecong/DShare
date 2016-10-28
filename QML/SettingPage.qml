@@ -8,12 +8,14 @@ import JavaMethod 1.0
 import SendImageSystem 1.0
 import DataSystem  1.0
 import QtGraphicalEffects 1.0
+
 StackView{
     property string imagePath:"Qt"
     property string str_userid;
     property string nickname;
     property string chooseimage:"Qt"
     property string headurl:""
+    property double dp:head.height/70
 
     function setdata(id,name,hurl){
         str_userid=id
@@ -240,9 +242,14 @@ StackView{
                 anchors.top: parent.top
                 color:"#bbbbbb"
                 opacity: 0.5
-                border.width: 2
-                border.color: "#bbbbbb"
-                radius: height/4
+
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "#55000000"
+                }
+
                 Label{
                     text: "上移"
                     color: "white"
@@ -272,9 +279,12 @@ StackView{
                 anchors.topMargin: height/4
                 color:"#bbbbbb"
                 opacity: 0.7
-                border.width: 2
-                border.color: "#bbbbbb"
-                radius: height/4
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "#55000000"
+                }
                 Label{
                     text: "保存"
                     color: "white"
@@ -326,9 +336,14 @@ StackView{
                 anchors.topMargin: height/4
                 color:"#bbbbbb"
                 opacity: 0.5
-                border.width: 2
-                border.color: "#bbbbbb"
-                radius: height/4
+
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "#55000000"
+                }
+
                 Label{
                     text: "下移"
                     color: "white"
@@ -358,9 +373,12 @@ StackView{
                 anchors.top: savebutton.top
                 color:"#bbbbbb"
                 opacity: 0.5
-                border.width: 2
-                border.color: "#bbbbbb"
-                radius: height/4
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "#55000000"
+                }
                 Label{
                     text: "左移"
                     color: "white"
@@ -390,9 +408,12 @@ StackView{
                 anchors.top: savebutton.top
                 color:"#bbbbbb"
                 opacity: 0.5
-                border.width: 2
-                border.color: "#bbbbbb"
-                radius: height/4
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "#55000000"
+                }
                 Label{
                     text: "右移"
                     color: "white"
@@ -422,9 +443,12 @@ StackView{
                 anchors.top: savebutton.top
                 color:"#bbbbbb"
                 opacity: 0.7
-                border.width: 2
-                border.color: "#bbbbbb"
-                radius: height/4
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "#55000000"
+                }
                 Label{
                     text: "缩小"
                     color: "white"
@@ -454,9 +478,12 @@ StackView{
                 anchors.top: savebutton.top
                 color:"#bbbbbb"
                 opacity: 0.7
-                border.width: 2
-                border.color: "#bbbbbb"
-                radius: height/4
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "#55000000"
+                }
 
                 Label{
                     text: "放大"
@@ -490,9 +517,12 @@ StackView{
                 anchors.topMargin: height/4
                 color:"#bbbbbb"
                 opacity: 0.7
-                border.width: 2
-                border.color: "#bbbbbb"
-                radius: height/4
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "#55000000"
+                }
                 Label{
                     text: "取消"
                     color: "white"
@@ -527,10 +557,12 @@ StackView{
 
                 color:"#bbbbbb"
                 opacity: 0.7
-                border.width: 2
-                border.color: "#bbbbbb"
-
-                radius: height/4
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: "#55000000"
+                }
                 Label{
                     text: "直接应用整张图片"
                     color: "white"
@@ -588,8 +620,6 @@ StackView{
 
 
 
-
-
         Rectangle{
             Rectangle{
                 anchors.top: parent.top
@@ -618,6 +648,7 @@ StackView{
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
+
                 verticalAlignment: Text.AlignVCenter
                 font{
                         family: localFont.name
@@ -655,16 +686,19 @@ StackView{
         Rectangle{
             id:changedata
             anchors.top: head.bottom
-            anchors.topMargin: head.height/3
-            height: head.height
+            anchors.topMargin: 20*dp
+
+            height: changedatatitle1.height+40*dp
             width: parent.width
+
             color: "white"
             border.width: 1;
             border.color: "grey"
             Label{
+                id:changedatatitle1
                 text: "修改资料"
                 anchors.left: parent.left
-                anchors.leftMargin: 20
+                anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment: Text.AlignVCenter
                 font{
@@ -795,16 +829,19 @@ StackView{
             Rectangle{
                 id:changehead
                 anchors.top: changedatahead.bottom
-                anchors.topMargin: head.height/3
-                height: head.height
+                anchors.topMargin: 20*dp
+                height: changeheadtitle.height+40*dp
+
                 width: parent.width
                 color: "white"
                 border.width: 1;
                 border.color: "grey"
                 Label{
+                    id:changeheadtitle
                     text: "修改头像"
                     anchors.left: parent.left
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: 10*dp
+
                     anchors.verticalCenter: parent.verticalCenter
                     verticalAlignment: Text.AlignVCenter
                     font{
@@ -819,8 +856,8 @@ StackView{
                 Image{
                     id:headimage
                     anchors.right: parent.right
-                    anchors.rightMargin: 50
-                    height: parent.height-50
+                    anchors.rightMargin: 8*dp
+                    height: parent.height-16*dp
                     width: height
                     anchors.verticalCenter: parent.verticalCenter
                     source: headurl
@@ -870,8 +907,9 @@ StackView{
             Rectangle{
                 id:changename
                 anchors.top: changehead.bottom
-                anchors.topMargin: head.height/3
-                height: head.height
+                anchors.topMargin: 16*dp
+                height: changenametext.height+40*dp
+
                 width: parent.width
                 color: "white"
                 border.width: 1;
@@ -880,7 +918,8 @@ StackView{
                     id:changenametext
                     text: "修改昵称"
                     anchors.left: parent.left
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: 10*dp
+
                     anchors.verticalCenter: parent.verticalCenter
                     verticalAlignment: Text.AlignVCenter
                     font{
@@ -912,26 +951,30 @@ StackView{
                 }
 
                 TextField{
-                    height:changenametext.height*2
+                    height:changenametext.height*1.5
                     width: parent.width/3
                     anchors.left: changenametext.right
-                    anchors.leftMargin: 50
+                    anchors.leftMargin: 16*dp
                     anchors.verticalCenter: parent.verticalCenter
                     visible: false
                     id:changenameedit
                     text:nickname
                     style: TextFieldStyle{
+                        textColor: "grey"
                         background: Rectangle{
-                            radius: control.height/4
-                            border.width: 1;
-                            border.color: "grey"
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+                                radius: 8
+                                color: "#55000000"
+                            }
                         }
                     }
-                    //Material.theme: Material.Dark
-                    //Material.accent: Material.Purple
+
                     z:2
 
                 }
+
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -941,7 +984,7 @@ StackView{
                         }
                         else{
 
-                            if(changenameedit.text.indexOf("|||")>=0||changenameedit.text==""||changenameedit.text.indexOf("@")>=0||changenameedit.text.indexOf(" ")>=0||changenameedit.text.length>7)
+                            if(changenameedit.text.indexOf("|||")>=0||changenameedit.text==""||changenameedit.text.indexOf("@")>=0||changenameedit.text.indexOf(" ")>=0||changenameedit.text.length>7||changenameedit.text.indexOf(">")>=0||changenameedit.text.indexOf("<")>=0||changenameedit.text.indexOf("/")>=0||changenameedit.text.indexOf("\\")>=0)
                                 myjava.toastMsg("非法字符，不能存在空格或特殊字符，且不得多于7个字符")
                             else{
                                 if(nickname!==changenameedit.text)

@@ -12,7 +12,8 @@ Rectangle {
     property int iss: 0//判断是否是搜索状态
     property int modelindex: 0
     property string userid;
-property string nickname;
+    property string nickname;
+    property double dp:head.height/70
 
     MouseArea{
         anchors.fill: parent
@@ -207,39 +208,47 @@ property string nickname;
 
     Rectangle{
         id:searchbar
-        height: (head.height)/1.5
-        width: parent.width
+        height: (head.height)/2
+        anchors.right: parent.right
+        anchors.rightMargin: 10*dp
+        anchors.left: parent.left
+        anchors.leftMargin: 10*dp
+
         anchors.top: head.bottom
+        anchors.topMargin: 10*dp
 
-
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 8
+            color: "#55000000"
+        }
         TextField{
-            height:parent.height-6
-            width: parent.width-6
-            x:3
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.fill: parent
+
             id:searchtext
             placeholderText:"请输入要搜索的id或昵称"
-            style: TextFieldStyle{
-                background: Rectangle{
-                    radius: control.height/4
-                    border.width: 1;
-                    border.color: "grey"
-                    id:searchrect
-                }
+            font{
+                family: localFont.name
+                pointSize: 16
             }
-            //Material.theme: Material.Dark
-            //Material.accent: Material.Purple
+
+            style: TextFieldStyle {
+                      textColor: "grey"
+                      background: Rectangle {
+                      }
+                  }
+
             onTextChanged: {
                 if(searchtext.text.length>3){
                 model1.clear();
                 dbsystem.searchUser(searchtext.text);
                 }
             }
-
             Image{
                 id:searchicon
                 anchors.right: searchtext.right
-                anchors.rightMargin: 3
+                anchors.rightMargin: 8*dp
                 anchors.verticalCenter: searchtext.verticalCenter
                 source: "qrc:/image/searchblack.png"
                 height: searchbar.height/1.5
@@ -289,9 +298,11 @@ property string nickname;
         cacheBuffer:10000
         spacing: -1
         anchors.top: searchbar.visible?searchbar.bottom:head.bottom
+        anchors.topMargin: searchbar.visible?10*dp:0
+
         clip: true
         width: parent.width
-        height:parent.height-head.height-(searchbar.visible?searchbar.height:0)
+        height:parent.height-head.height-(searchbar.visible?searchbar.height+20*dp:0)
         model: model1
         Rectangle {
                   id: scrollbar
@@ -308,8 +319,9 @@ property string nickname;
         delegate: Item{
             id:delegate
             width:mainrect.width
-            height:(username==userid?0:mainrect.height/7)
+            height:(username==userid?0:(headimage.height+20*dp))
             visible: (username==userid?false:true)//隐藏自己
+
             Rectangle{
                 anchors.fill: parent
                 color:"white"
@@ -318,13 +330,16 @@ property string nickname;
 
                 Image{
                     id:headimage
-                    height:parent.height/1.2
+                    height:60*dp
                     width:height
+
                     source: headurl
                     anchors.top: parent.top
-                    anchors.topMargin: height/10
+                    anchors.topMargin: 10*dp
+
                     anchors.left: parent.left
-                    anchors.leftMargin: height/8
+                    anchors.leftMargin: 10*dp
+
                     fillMode: Image.PreserveAspectFit
 
                     Label{
@@ -345,9 +360,9 @@ property string nickname;
                 Text{
                     id:name;
                     anchors.left: headimage.right
-                    anchors.leftMargin: headimage.width/5
+                    anchors.leftMargin: 10*dp
                     anchors.top: headimage.top
-                    anchors.topMargin: headimage.width/6
+                    anchors.topMargin: 8*dp
                     color: "grey"
                     text:"昵称:"+nickname
                     wrapMode: Text.WordWrap
@@ -363,9 +378,11 @@ property string nickname;
                 Text{
                     id:useridtext;
                     anchors.left: headimage.right
-                    anchors.leftMargin: headimage.width/5
-                    anchors.top: name.bottom
-                    anchors.topMargin: headimage.width/6
+                    anchors.leftMargin: 10*dp
+
+                    anchors.bottom: headimage.bottom
+                    anchors.bottomMargin: 8*dp
+
                     color: "grey"
                     wrapMode: Text.WordWrap
                     width: parent.width-headimage.width
@@ -379,21 +396,28 @@ property string nickname;
 
                 Rectangle{
                     id:buttonrect
-                    color:iss?(yiguanzhu?"grey":"#02ae4a"):"red";
+                    color:iss?(yiguanzhu?"grey":"#02ae4a"):"white";
                     height: useridtext.height*1.5
                     width:height*2
+
                     anchors.right: parent.right
-                    anchors.rightMargin: height/1.5
+                    anchors.rightMargin: 12*dp
                     anchors.verticalCenter: parent.verticalCenter
-                    radius: height/4
-                    border.width: 1
-                    border.color: "grey"
-                    //visible: headname.text=="我的粉丝"?false:(username==userid?false:true);
+
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+                        radius: 8
+                        color: iss?(yiguanzhu?"#55000000":"#55000000"):"red";
+                    }
+
                     Label{
                         id:button
                         anchors.centerIn:parent
                         text:iss?(yiguanzhu?"已关注":"关注"):"取消";
-                        color: "white"
+
+                        color: iss?(yiguanzhu?"white":"white"):"red";
+
                         enabled: iss?(yiguanzhu?0:1):1
 
                         MouseArea{

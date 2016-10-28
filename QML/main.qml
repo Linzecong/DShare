@@ -49,7 +49,7 @@ StackView{
             }
         }
         Image{
-            width:parent.width/3
+            width:parent.width/2.5
             height:width
             opacity: parent.opacity
             anchors.horizontalCenter: parent.horizontalCenter
@@ -124,8 +124,8 @@ StackView{
             anchors.topMargin: parent.height/16*1.5;
             anchors.horizontalCenter: parent.horizontalCenter
             height: parent.height/23;
-            width:parent.width/9*6;
-            spacing: 10
+            //width:parent.width/9*6;
+            spacing: 40
             //用户图标
             Image{
                 id:usericon;
@@ -137,7 +137,7 @@ StackView{
             //文本域
             TextField{
                 height:parent.height
-                width: parent.width-usericon.width
+                width: mainrect.width/2
                 id:usertext
                 placeholderText:"请输入ID"
                 validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
@@ -145,11 +145,9 @@ StackView{
                 //Material.accent: Material.Purple
                 style: TextFieldStyle{
                     background: Rectangle{
-                        radius: control.height/4
                         layer.enabled: true
                         layer.effect: DropShadow {
                             transparentBorder: true
-
                             radius: 8
                             color: "#55000000"
                         }
@@ -166,8 +164,8 @@ StackView{
             anchors.topMargin: usericon.width
             anchors.horizontalCenter: parent.horizontalCenter
             height: parent.height/23;
-            width:parent.width/9*6;
-            spacing: 10
+            //width:parent.width/9*6;
+            spacing: 40
             Image{
                 id:passwordicon
                 height: parent.height
@@ -177,7 +175,7 @@ StackView{
             }
             TextField{
                 height:parent.height
-                width: parent.width-usericon.width
+                width: mainrect.width/2
                 id:passwordtext
                 placeholderText:"请输入密码"
                 echoMode:TextInput.Password
@@ -186,11 +184,9 @@ StackView{
                 //Material.accent: Material.Purple
                 style: TextFieldStyle{
                     background: Rectangle{
-                        radius: control.height/4
                         layer.enabled: true
                         layer.effect: DropShadow {
                             transparentBorder: true
-
                             radius: 8
                             color: "#55000000"
                         }
@@ -203,29 +199,27 @@ StackView{
         //登录按钮
         Rectangle{
             id:loginbutton
-            width:icon.width/1.2
-            height:userrow.height*1.5
+            width:height*2
+            height:userrow.height*1.3
             anchors.right: userrow.right
+            anchors.rightMargin: 40
             anchors.top: passrow.bottom
             anchors.topMargin: passrow.height
-            color:loginma.pressed?"33dd97":"#02ae4a"
-            radius: height/4
+            color:loginma.pressed?"1589e8":"#02ae4a"
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
-
                 radius: 8
-                color: "#55000000"
+                color: "#02ae4a"
             }
             Label{
                 id:logintext
                 text: "登录"
                 color: "white"
                 font{
-                        family: localFont.name
-                    pixelSize: loginbutton.height/2
+                    family: localFont.name
+                    pointSize: 14
                     
-                    bold: true;
                 }
                 anchors.centerIn: parent
             }
@@ -261,29 +255,26 @@ StackView{
         //注册按钮
         Rectangle{
             id:registbutton
-            width:icon.width/1.2
-            height:userrow.height*1.5
+            width:height*2
+            height:userrow.height*1.3
             anchors.left: userrow.left
+            anchors.leftMargin: 40
             anchors.top: passrow.bottom
             anchors.topMargin: passrow.height
-            color:registma.pressed?"1084e5":"#1589e8";
-            radius: height/4
+            color:registma.pressed?"02ae4a":"#1589e8";
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
-
                 radius: 8
-                color: "#55000000"
+                color: "#1589e8"
             }
             Label{
                 id:registtext
                 text: "注册"
                 color: "white"
                 font{
-                        family: localFont.name
-                    pixelSize: loginbutton.height/2
-                    
-                    bold: true;
+                    family: localFont.name
+                    pointSize: 14
                 }
                 anchors.centerIn: parent
             }
@@ -347,6 +338,7 @@ StackView{
         id:registpage;
         Rectangle {
             id:mainrect
+            property double dp:registtoprect.height/70
             //用于响应返回键
             Keys.enabled: true
             Keys.onBackPressed: {
@@ -359,7 +351,7 @@ StackView{
 
             //注册页面顶部栏
             Rectangle{
-                id:registtoprect;
+                id:registtoprect
                 z:5
                 Rectangle{
                     anchors.top: parent.top
@@ -369,19 +361,20 @@ StackView{
                     color:"green"
                 }
                 width:parent.width;
-                height: parent.height/16*1.5;
+                height: parent.height/16*2;
                 color:"#02ae4a";
                 anchors.top: parent.top;
                 layer.enabled: true
                 layer.effect: DropShadow {
                     transparentBorder: true
-
                     radius: 10
                     color: "#55000000"
                 }
                 Label{
-                    text:" ＜";
+                    text:"＜";
                     anchors.left: parent.left
+                    anchors.leftMargin: 16*mainrect.dp
+
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     font{
@@ -398,15 +391,14 @@ StackView{
                         }
                     }
                 }
+
                 Label{
                     text:"新用户注册";
                     anchors.centerIn: parent
                     anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     font{
                         family: localFont.name
-                        
-                        pixelSize: registtoprect.height/4
-                        bold:true
+                        pointSize: 20
                     }
                     color: "white";
                 }
@@ -416,17 +408,18 @@ StackView{
             Row{
                 id:registidrow
                 anchors.top:registtoprect.bottom
-                anchors.topMargin: registtoprect.height
+                anchors.topMargin: registtoprect.height/2.5
+
                 height: parent.height/23;
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenterOffset: 16*mainrect.dp
+
                 Label{
                     anchors.verticalCenter: parent.verticalCenter
                     text:"ID：";
-                    width: registtoprect.width/4;
                     horizontalAlignment: Text.AlignRight;
                     font{
                         family: localFont.name
-                        
                         pixelSize: registidrow.height/1.5
                     }
                     color: "grey";
@@ -439,7 +432,6 @@ StackView{
                     validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
                     style: TextFieldStyle{
                         background: Rectangle{
-                            radius: control.height/4
                             layer.enabled: true
                             layer.effect: DropShadow {
                                 transparentBorder: true
@@ -460,11 +452,12 @@ StackView{
                 id:registpassrow
                 anchors.top:registidrow.bottom
                 anchors.topMargin: registidrow.height
-                anchors.horizontalCenter: parent.horizontalCenter
+
+                anchors.right: registidrow.right
+
                 height: parent.height/23;
                 Label{
                     text:"密码：";
-                    width: registtoprect.width/4;
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight;
                     font{
@@ -483,7 +476,6 @@ StackView{
                     validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
                     style: TextFieldStyle{
                         background: Rectangle{
-                            radius: control.height/4
                             layer.enabled: true
                             layer.effect: DropShadow {
                                 transparentBorder: true
@@ -503,7 +495,7 @@ StackView{
                 id:registcompassrow
                 anchors.top:registpassrow.bottom
                 anchors.topMargin: registpassrow.height
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.right: registidrow.right
                 height: parent.height/23;
                 Label{
                     text:"确认密码：";
@@ -527,7 +519,6 @@ StackView{
                     validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
                     style: TextFieldStyle{
                         background: Rectangle{
-                            radius: control.height/4
                             layer.enabled: true
                             layer.effect: DropShadow {
                                 transparentBorder: true
@@ -547,7 +538,7 @@ StackView{
                 id:registnamerow
                 anchors.top:registcompassrow.bottom
                 anchors.topMargin: registcompassrow.height
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.right: registidrow.right
                 height: parent.height/23;
                 Label{
                     text:"昵称：";
@@ -569,7 +560,6 @@ StackView{
                     placeholderText:"请输入昵称"
                     style: TextFieldStyle{
                         background: Rectangle{
-                            radius: control.height/4
                             layer.enabled: true
                             layer.effect: DropShadow {
                                 transparentBorder: true
@@ -589,7 +579,7 @@ StackView{
                 id:sexrow
                 anchors.top:registnamerow.bottom
                 anchors.topMargin: registnamerow.height
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.right: registidrow.right
                 height: parent.height/23;
                 Label{
                     text:"性别：";
@@ -608,7 +598,6 @@ StackView{
                     height:parent.height
                     width: registtoprect.width/3*1.7
                     id:sextext
-                    radius:height/4
                     layer.enabled: true
                     layer.effect: DropShadow {
                         transparentBorder: true
@@ -623,7 +612,7 @@ StackView{
                         anchors.verticalCenter: parent.verticalCenter
                         color:"grey"
                         font{
-                        family: localFont.name
+                            family: localFont.name
                             
                             pixelSize: registidrow.height/1.5
                         }
@@ -645,7 +634,7 @@ StackView{
                 id:agerow
                 anchors.top:sexrow.bottom
                 anchors.topMargin: sexrow.height
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.right: registidrow.right
                 height: parent.height/23;
                 Label{
                     text:"年龄：";
@@ -669,7 +658,6 @@ StackView{
                     validator:RegExpValidator{regExp:/^[0-9]{1,2}$/}
                     style: TextFieldStyle{
                         background: Rectangle{
-                            radius: control.height/4
                             layer.enabled: true
                             layer.effect: DropShadow {
                                 transparentBorder: true
@@ -724,8 +712,8 @@ StackView{
             //                    anchors.left: check.right
             //                    horizontalAlignment: Text.AlignLeft
             //                    font{
-                        //family: localFont.name
-            //                        
+            //family: localFont.name
+            //
             //                        pixelSize: registidrow.height/1.5
             //                    }
             //                    color: "grey";
@@ -746,14 +734,12 @@ StackView{
                 anchors.top: agerow.bottom
                 anchors.topMargin: agerow.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                color:registma.pressed?"1084e5":"#1589e8";
-                radius: height/4
+                color:registma.pressed?"32dc96":"#1589e8";
                 layer.enabled: true
                 layer.effect: DropShadow {
                     transparentBorder: true
-
                     radius: 8
-                    color: "#55000000"
+                    color: "#1589e8"
                 }
                 Label{
                     id:registtext
@@ -761,9 +747,7 @@ StackView{
                     color: "white"
                     font{
                         family: localFont.name
-                        pixelSize: registbutton.height/2
-                        
-                        bold: true;
+                        pointSize: 14
                     }
                     anchors.centerIn: parent
                 }
@@ -796,8 +780,8 @@ StackView{
                             myjava.toastMsg("两次密码不一致")
                             return;
                         }
-                        if(registnametext.text.indexOf(" ")>=0||registnametext.text==""){
-                            myjava.toastMsg("昵称不能为空或存在空格")
+                        if(registnametext.text.indexOf("|||")>=0||registnametext.text==""||registnametext.text.indexOf("@")>=0||registnametext.text.indexOf(" ")>=0||registnametext.text.length>7||registnametext.text.indexOf(">")>=0||registnametext.text.indexOf("<")>=0||registnametext.text.indexOf("/")>=0||registnametext.text.indexOf("\\")>=0){
+                            myjava.toastMsg("昵称不能为空或存在空格和特殊字符，且不得多于7个字符")
                             return;
                         }
                         if(registnametext.text.length>10){
@@ -917,7 +901,7 @@ StackView{
                 anchors.topMargin: xieyitoprect.height*1.5
                 anchors.fill: parent
                 font{
-                        family: localFont.name
+                    family: localFont.name
                     
                     pixelSize: xieyitoprect.height/3
                 }
