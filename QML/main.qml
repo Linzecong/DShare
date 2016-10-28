@@ -39,7 +39,7 @@ StackView{
     //启动等待界面
     Rectangle{
         id:openrect
-        color:GlobalColor.Green400
+        color:GlobalColor.Main
         anchors.fill: parent
         z:100
         Behavior on opacity {
@@ -54,7 +54,7 @@ StackView{
         Image{
             Rectangle{
                 anchors.fill: parent
-                color:GlobalColor.Green400
+                color:GlobalColor.Main
                 z:-100
             }
             width:parent.width/2.5
@@ -104,13 +104,13 @@ StackView{
             id:toprect;
             width:parent.width;
             height: parent.height/16*5.5;
-            color:GlobalColor.Green400
+            color:GlobalColor.Main
             anchors.top: parent.top;
             Image{
                 //顶部应用图标
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green400
+                    color:GlobalColor.Main
                     z:-100
                 }
                 id:icon
@@ -143,7 +143,7 @@ StackView{
             Image{
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green400
+                    color:GlobalColor.Main
                     anchors.margins: 5
                     z:-100
                 }
@@ -163,6 +163,7 @@ StackView{
                 //Material.theme: Material.Dark
                 //Material.accent: Material.Purple
                 style: TextFieldStyle{
+                    textColor:"grey"
                     background: Rectangle{
                         layer.enabled: true
                         layer.effect: DropShadow {
@@ -188,7 +189,7 @@ StackView{
             Image{
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green400
+                    color:GlobalColor.Main
                     anchors.margins: 5
                     z:-100
                 }
@@ -208,6 +209,7 @@ StackView{
                 //Material.theme: Material.Dark
                 //Material.accent: Material.Purple
                 style: TextFieldStyle{
+                    textColor:"grey"
                     background: Rectangle{
                         layer.enabled: true
                         layer.effect: DropShadow {
@@ -230,12 +232,12 @@ StackView{
             anchors.rightMargin: 40
             anchors.top: passrow.bottom
             anchors.topMargin: passrow.height
-            color:loginma.pressed?GlobalColor.Green400:GlobalColor.Green200
+            color:loginma.pressed?GlobalColor.SecondButton:GlobalColor.Main
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
                 radius: 8
-                color: "#02ae4a"
+                color: GlobalColor.Main
             }
             Label{
                 id:logintext
@@ -286,12 +288,12 @@ StackView{
             anchors.leftMargin: 40
             anchors.top: passrow.bottom
             anchors.topMargin: passrow.height
-            color:registma.pressed?GlobalColor.LightBlue400:GlobalColor.LightBlue200;
+            color:registma.pressed?GlobalColor.Main:GlobalColor.SecondButton;
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
                 radius: 8
-                color: "#1589e8"
+                color: GlobalColor.SecondButton
             }
             Label{
                 id:registtext
@@ -383,11 +385,11 @@ StackView{
                     anchors.left: parent.left
                     anchors.right: parent.right
                     height:myjava.getStatusBarHeight()
-                    color:"green"
+                    color:GlobalColor.StatusBar
                 }
                 width:parent.width;
                 height: parent.height/16*2;
-                color:GlobalColor.Green400
+                color:GlobalColor.Main
                 anchors.top: parent.top;
                 layer.enabled: true
                 layer.effect: DropShadow {
@@ -456,6 +458,7 @@ StackView{
                     placeholderText:"请输入ID"
                     validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
                     style: TextFieldStyle{
+                        textColor:"grey"
                         background: Rectangle{
                             layer.enabled: true
                             layer.effect: DropShadow {
@@ -500,6 +503,7 @@ StackView{
                     echoMode:TextInput.Password
                     validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
                     style: TextFieldStyle{
+                        textColor:"grey"
                         background: Rectangle{
                             layer.enabled: true
                             layer.effect: DropShadow {
@@ -543,6 +547,7 @@ StackView{
                     echoMode:TextInput.Password
                     validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
                     style: TextFieldStyle{
+                        textColor:"grey"
                         background: Rectangle{
                             layer.enabled: true
                             layer.effect: DropShadow {
@@ -584,6 +589,7 @@ StackView{
                     id:registnametext
                     placeholderText:"请输入昵称"
                     style: TextFieldStyle{
+                        textColor:"grey"
                         background: Rectangle{
                             layer.enabled: true
                             layer.effect: DropShadow {
@@ -682,6 +688,7 @@ StackView{
                     placeholderText:"请输入年龄"
                     validator:RegExpValidator{regExp:/^[0-9]{1,2}$/}
                     style: TextFieldStyle{
+                        textColor:"grey"
                         background: Rectangle{
                             layer.enabled: true
                             layer.effect: DropShadow {
@@ -759,7 +766,7 @@ StackView{
                 anchors.top: agerow.bottom
                 anchors.topMargin: agerow.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                color:registma.pressed?GlobalColor.LightBlue400:GlobalColor.LightBlue200
+                color:registma.pressed?GlobalColor.Main:GlobalColor.SecondButton
                 layer.enabled: true
                 layer.effect: DropShadow {
                     transparentBorder: true

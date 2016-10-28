@@ -278,14 +278,14 @@ Rectangle {
             transparentBorder: true
             verticalOffset: 3
             radius: 6
-            color: "#55000000"
+            color: GlobalColor.Main
         }
 
         z:3
 
         Rectangle{
             id:inrect
-            color:GlobalColor.Green300
+            color:GlobalColor.Main
             height: parent.height
             width:parent.width/3
             x:header.currentpage=="饮食"?0:(header.currentpage=="运动"?width:width*2)
@@ -294,7 +294,7 @@ Rectangle {
         Label{
             id:foodbutton
             text: "饮食"
-            color:header.currentpage==text?"white":GlobalColor.Green300
+            color:header.currentpage==text?"white":GlobalColor.SecondIcon
             font{
                 family: localFont.name
                 pointSize: 20
@@ -313,7 +313,7 @@ Rectangle {
         Label{
             id:sportbutton
             text: "运动"
-            color:header.currentpage==text?"white":GlobalColor.Green300
+            color:header.currentpage==text?"white":GlobalColor.SecondIcon
             font{
                 family: localFont.name
                 pointSize: 20
@@ -331,7 +331,7 @@ Rectangle {
         Label{
             id:searchbutton
             text: "查看"
-            color:header.currentpage==text?"white":GlobalColor.Green300
+            color:header.currentpage==text?"white":GlobalColor.SecondIcon
             font{
                 family: localFont.name
                 pointSize: 20
@@ -370,11 +370,11 @@ Rectangle {
         //                    transparentBorder: true
 
         //                    radius: 8
-        //                    color: "#02ae4a"
+        //                    color: GlobalColor.SecondButton
         //                }
 
 
-        //            color:GlobalColor.Green200
+        //            color:GlobalColor.SecondButton
 
         //            id:recommendbutton
         //            anchors.centerIn: parent
@@ -536,7 +536,7 @@ Rectangle {
                     Image{
                         Rectangle{
                             anchors.fill: parent
-                            color:GlobalColor.Cyan400
+                            color:GlobalColor.SecondIcon
                             anchors.margins: 5
                             z:-100
                         }
@@ -701,7 +701,7 @@ Rectangle {
                             Image{
                                 Rectangle{
                                     anchors.fill: parent
-                                    color:GlobalColor.Cyan400
+                                    color:GlobalColor.SecondIcon
                                     anchors.margins: 5
                                     z:-100
                                 }
@@ -807,14 +807,14 @@ Rectangle {
                     layer.effect: DropShadow {
                         transparentBorder: true
                         radius: 8
-                        color: "#55000000"
+                        color: GlobalColor.Main
                     }
 
                     visible: false
                     Label{
                         visible:true
                         text: "请说话";
-                        color:GlobalColor.Green400
+                        color:GlobalColor.Main
                         font{
                             family: localFont.name
                             pixelSize: parent.height/2.2
@@ -843,7 +843,7 @@ Rectangle {
                     Image{
                         Rectangle{
                             anchors.fill: parent
-                            color:GlobalColor.Cyan400
+                            color:GlobalColor.SecondIcon
                             anchors.margins: 5
                             z:-100
                         }
@@ -910,7 +910,7 @@ Rectangle {
                     Image{
                         Rectangle{
                             anchors.fill: parent
-                            color:GlobalColor.Cyan400
+                            color:GlobalColor.SecondIcon
                             anchors.margins: 5
                             z:-100
                         }
@@ -969,7 +969,7 @@ Rectangle {
                     Image{
                         Rectangle{
                             anchors.fill: parent
-                            color:GlobalColor.Cyan400
+                            color:GlobalColor.SecondIcon
                             anchors.margins: 5
                             z:-100
                         }
@@ -1104,7 +1104,7 @@ Rectangle {
                     Image{
                         Rectangle{
                             anchors.fill: parent
-                            color:GlobalColor.Cyan400
+                            color:GlobalColor.SecondIcon
                             anchors.margins: 5
                             z:-100
                         }
@@ -1137,7 +1137,7 @@ Rectangle {
 
                             mainrect.parent.parent.currentPage="分享"
                             mainrect.parent.parent.x=-mainrect.width*1
-                            mainrect.parent.parent.children[1].item.settext("<font color=\""+GlobalColor.Cyan400+"\">"+ss+"</font>")
+                            mainrect.parent.parent.children[1].item.settext("<font color=\""+GlobalColor.ShareMSG+"\">"+ss+"</font>")
 
                         }
                     }
@@ -1386,7 +1386,6 @@ Rectangle {
                     family: localFont.name
 
                     pointSize: 16
-                    bold: true
                 }
             }
 
@@ -1507,7 +1506,7 @@ Rectangle {
             Image{
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.SecondIcon
                     anchors.margins: 5
                     z:-100
                 }
@@ -1546,7 +1545,7 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.SecondIcon
                     anchors.margins: 5
                     z:-100
                 }
@@ -1612,7 +1611,7 @@ Rectangle {
 
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.SecondIcon
                     anchors.margins: 5
                     z:-100
                 }
@@ -1642,7 +1641,7 @@ Rectangle {
 
                         mainrect.parent.parent.currentPage="分享"
                         mainrect.parent.parent.x=-mainrect.width*1
-                        mainrect.parent.parent.children[1].item.settext("<font color=\""+GlobalColor.Cyan400+"\">"+str+"</font>")
+                        mainrect.parent.parent.children[1].item.settext("<font color=\""+GlobalColor.ShareMSG+"\">"+str+"</font>")
 
                         sporttext.text=""
                         lasttimemintext.text="0"
@@ -1686,7 +1685,7 @@ Rectangle {
                 anchors.topMargin: 20*dp
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.SecondIcon
                     anchors.margins: 5
                     z:-100
                 }
@@ -1723,7 +1722,7 @@ Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: parent.height/5
                 anchors.horizontalCenter: parent.horizontalCenter
-                text:"<strong><font color=\"grey\">"+dosportdaysrect.checkinday.toString()+"天</font></strong>"
+                text:dosportdaysrect.checkinday.toString()+"天"
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
@@ -1768,10 +1767,11 @@ Rectangle {
                 id:clockimage
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: height*0.1
+                anchors.topMargin: 15*dp
+
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.SecondIcon
                     anchors.margins: 5
                     z:-100
                 }
@@ -1893,138 +1893,138 @@ Rectangle {
         color:"white"
 
 
-        Rectangle{
-            id:timechooser
-
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                radius: 8
-
-                color: "#55000000"
-            }
-            //radius: height/4
-            color:"white"
-            anchors.top: parent.top
-            anchors.topMargin: 16*dp
-            anchors.horizontalCenter: parent.horizontalCenter
-            height: parent.height/13
-            width: parent.width/1.5
-            Text {
-                id:timechoosertext
-                anchors.centerIn: parent
-                color:"grey"
-                font{
-                    family: localFont.name
-
-                    pointSize: 16
-                }
-
-                Component.onCompleted: {
-
-
-                    timechoosertext.text=dbsystem.getdate();
-
-                }
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    if(!tumbler.visible){
-                        timechoosertext.text="点此处确认"
-                        tumbler.visible=true
-                    }
-                    else{
-                        if(tumbler.day==="0")
-                            myjava.toastMsg("请选择正确的日期")
-                        else{
-                            timechoosertext.text=tumbler.year+"-"+tumbler.month+"-"+tumbler.day;
-                            recordsystem.getdiet(str_userid,timechoosertext.text);
-
-                            tumbler.visible=false
-                        }
-                    }
-                }
-            }
-        }
-
-
-        Tumbler {
-            id: tumbler
-            anchors.top: timechooser.bottom
-            anchors.left: timechooser.left
-            z:200
-            visible: false
-            width: parent.width/1.7
-            readonly property var days: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            property string year;
-            property string month;
-            property string day;
-
-            TumblerColumn {
-                width:tumbler.width/3
-                model: ListModel {
-                    id:yearmodel
-                    Component.onCompleted: {
-                        for (var i = 2016; i < 2100; ++i) {
-                            append({value: i.toString()});
-                        }
-                    }
-                }
-
-                onCurrentIndexChanged: {
-                    var yearint=yearmodel.get(currentIndex).value
-                    tumbler.year=yearint.toString();
-                    tumbler.day=tumblerDayColumn.model[tumblerDayColumn.currentIndex].toString();
-                    if(yearint%4!=0){
-                        if(tumbler.day==="29")
-                            tumbler.day="0"
-                        tumbler.days[1]=28
-                    }
-                    else
-                        tumbler.days[1]=29
-                }
-            }
-
-            TumblerColumn {
-                id: monthColumn
-                width:tumbler.width/3
-                model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
-                onCurrentIndexChanged: {
-                    tumbler.month=model[currentIndex].toString();
-                    tumbler.day=tumblerDayColumn.model[tumblerDayColumn.currentIndex].toString();
-                    if(tumbler.days[currentIndex]<parseInt(tumbler.day))
-                        tumbler.day="0"
-
-
-                }
-            }
-
-            TumblerColumn {
-                id: tumblerDayColumn
-                width:tumbler.width/3
-                model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
-                onCurrentIndexChanged: {
-                    tumbler.day=model[currentIndex].toString();
-                    if(parseInt(tumbler.day)>tumbler.days[monthColumn.currentIndex])
-                        tumbler.day="0";
-                }
-            }
-
-
-        }
-
-
-
 
         Flickable{
-            anchors.top: timechooser.bottom
-            anchors.topMargin: 16*dp
-            height: parent.height-timechooser.height*3
+            id:flick
+            anchors.top: parent.top
+            height: parent.height
             width:parent.width
-            contentHeight: foodtablerect.height+sporttablerect.height+header.height/3*2
+            contentHeight: foodtablerect.height+sporttablerect.height+timechooser.height+4*16*dp
             contentWidth: parent.width
             clip: true
+
+            Rectangle{
+                id:timechooser
+
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+
+                    color: GlobalColor.Main
+                }
+                //radius: height/4
+                color:"white"
+                anchors.top: parent.top
+                anchors.topMargin: 16*dp
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: searchview.height/13
+                width: searchview.width/1.5
+                Text {
+                    id:timechoosertext
+                    anchors.centerIn: parent
+                    color:"grey"
+                    font{
+                        family: localFont.name
+
+                        pointSize: 16
+                    }
+
+                    Component.onCompleted: {
+
+
+                        timechoosertext.text=dbsystem.getdate();
+
+                    }
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        if(!tumbler.visible){
+                            flick.interactive=false
+                            timechoosertext.text="点此处确认"
+                            tumbler.visible=true
+                        }
+                        else{
+                            if(tumbler.day==="0")
+                                myjava.toastMsg("请选择正确的日期")
+                            else{
+                                timechoosertext.text=tumbler.year+"-"+tumbler.month+"-"+tumbler.day;
+                                recordsystem.getdiet(str_userid,timechoosertext.text);
+
+                                tumbler.visible=false
+                                flick.interactive=true
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            Tumbler {
+                id: tumbler
+                anchors.top: timechooser.bottom
+                anchors.left: timechooser.left
+                z:200
+                visible: false
+                width: parent.width/1.7
+                readonly property var days: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                property string year;
+                property string month;
+                property string day;
+
+                TumblerColumn {
+                    width:tumbler.width/3
+                    model: ListModel {
+                        id:yearmodel
+                        Component.onCompleted: {
+                            for (var i = 2016; i < 2100; ++i) {
+                                append({value: i.toString()});
+                            }
+                        }
+                    }
+
+                    onCurrentIndexChanged: {
+                        var yearint=yearmodel.get(currentIndex).value
+                        tumbler.year=yearint.toString();
+                        tumbler.day=tumblerDayColumn.model[tumblerDayColumn.currentIndex].toString();
+                        if(yearint%4!=0){
+                            if(tumbler.day==="29")
+                                tumbler.day="0"
+                            tumbler.days[1]=28
+                        }
+                        else
+                            tumbler.days[1]=29
+                    }
+                }
+
+                TumblerColumn {
+                    id: monthColumn
+                    width:tumbler.width/3
+                    model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                    onCurrentIndexChanged: {
+                        tumbler.month=model[currentIndex].toString();
+                        tumbler.day=tumblerDayColumn.model[tumblerDayColumn.currentIndex].toString();
+                        if(tumbler.days[currentIndex]<parseInt(tumbler.day))
+                            tumbler.day="0"
+
+
+                    }
+                }
+
+                TumblerColumn {
+                    id: tumblerDayColumn
+                    width:tumbler.width/3
+                    model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
+                    onCurrentIndexChanged: {
+                        tumbler.day=model[currentIndex].toString();
+                        if(parseInt(tumbler.day)>tumbler.days[monthColumn.currentIndex])
+                            tumbler.day="0";
+                    }
+                }
+
+
+            }
 
 
 
@@ -2039,7 +2039,8 @@ Rectangle {
 
                 x:parent.width/2-width/2
 
-                anchors.top: parent.top
+                anchors.top: timechooser.bottom
+                anchors.topMargin: 16*dp
                 anchors.horizontalCenter: parent.horizontalCenter
                 property string breakfaststr:"暂无数据"
                 property string lunchstr:"暂无数据"
@@ -2291,7 +2292,7 @@ Rectangle {
             layer.effect: DropShadow {
                 transparentBorder: true
                 radius: 8
-                color: GlobalColor.Cyan400
+                color: GlobalColor.Main
             }
 
             visible: (view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel||view.model===searchedsportmodel)?1:0
@@ -2300,15 +2301,8 @@ Rectangle {
                 id:searchtext
                 placeholderText:"请输入要搜索的内容"
                 style: TextFieldStyle{
+                    textColor:"grey"
                     background: Rectangle{
-
-                        layer.enabled: true
-                        layer.effect: DropShadow {
-                            transparentBorder: true
-
-                            radius: 8
-                            color: "#55000000"
-                        }
 
                         id:searchrect
                     }
@@ -2381,9 +2375,9 @@ Rectangle {
                         transparentBorder: true
 
                         radius: 8
-                        color: "#55000000"
+                        color: GlobalColor.SecondButton
                     }
-                    color:GlobalColor.Green200
+                    color:GlobalColor.SecondButton
                     anchors.centerIn: parent
 
                     Text{

@@ -146,19 +146,19 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             height:myjava.getStatusBarHeight()
-            color:"green"
+            color:GlobalColor.StatusBar
         }
         id:head
         z:5
         width:parent.width
         height: parent.height/16*2
-        color:GlobalColor.Green400
+        color:GlobalColor.Main
         anchors.top: parent.top
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 10
-            color: "#55000000"
+            color: GlobalColor.Main
         }
         Label{
             id:back
@@ -225,7 +225,7 @@ Rectangle {
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: GlobalColor.Cyan400
+            color: GlobalColor.Main
         }
         TextField{
             anchors.fill: parent
@@ -252,7 +252,7 @@ Rectangle {
             Image{
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Cyan400
+                    color:GlobalColor.Main
                     z:-100
                 }
                 id:searchicon
@@ -405,7 +405,7 @@ Rectangle {
 
                 Rectangle{
                     id:buttonrect
-                    color:iss?(yiguanzhu?"grey":GlobalColor.Green200):"white";
+                    color:iss?(yiguanzhu?"grey":GlobalColor.Main):"white";
                     height: useridtext.height*1.5
                     width:height*2
 
@@ -417,7 +417,7 @@ Rectangle {
                     layer.effect: DropShadow {
                         transparentBorder: true
                         radius: 8
-                        color: iss?(yiguanzhu?"#55000000":"#55000000"):"red";
+                        color: iss?(yiguanzhu?"grey":GlobalColor.Main):"red";
                     }
 
                     Label{

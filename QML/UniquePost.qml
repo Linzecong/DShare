@@ -251,20 +251,20 @@ Rectangle{
             anchors.left: parent.left
             anchors.right: parent.right
             height:myjava.getStatusBarHeight()
-            color:"green"
+            color:GlobalColor.StatusBar
         }
         id:head;
         z:7
         width:parent.width;
         height: parent.height/16*2
-        color:GlobalColor.Green400
+        color:GlobalColor.Main
         anchors.top: parent.top;
 
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 10
-            color: "#55000000"
+            color: GlobalColor.Main
         }
         Label{
             text:"＜";
@@ -317,13 +317,11 @@ Rectangle{
 
     Flickable{
         anchors.top: head.bottom
-        anchors.bottom: commentbar.top
         anchors.left: head.left
         anchors.right: head.right
+        height:parent.height-head.height
 
-        height:parent.height-head.height-commentbar.height
-
-        contentHeight: delegaterect.height+commentview.height+commentbar.height/3
+        contentHeight: delegaterect.height+commentview.height+commentbar.height
         clip: true
 
 
@@ -340,10 +338,10 @@ Rectangle{
             layer.effect: DropShadow {
                 transparentBorder: true
                 radius: 8
-                color: "#55000000"
+                color: GlobalColor.Main
             }
 
-            anchors.margins: 8*dp
+            anchors.margins: 5*dp
 
             height:headimage.height/5*6+headimage.height+messagelabel.height+photolabel.height+likers.height+(hasimage?10*dp:0)
 
@@ -383,7 +381,7 @@ Rectangle{
 
 
                 text: username
-                color:"green"
+                color:GlobalColor.Word
                 font{
                         family: localFont.name
 
@@ -469,7 +467,7 @@ Rectangle{
                 width:parent.width-headimage.height/3*4
                 text: liker
                 wrapMode: Text.Wrap;
-                color: GlobalColor.Teal500
+                color: GlobalColor.Word
                 font{
                         family: localFont.name
                     pointSize: 14
@@ -486,7 +484,7 @@ Rectangle{
             anchors.topMargin: 10*dp
             anchors.left: delegaterect.left
             anchors.leftMargin: 10*dp
-            text:"<font color=\""+GlobalColor.Teal500+"\">暂无评论</font>"
+            text:"<font color=\""+GlobalColor.Word+"\">暂无评论</font>"
             visible: commentmodel.count==0?true:false
             font{
                 family: localFont.name
@@ -514,7 +512,7 @@ Rectangle{
             layer.effect: DropShadow {
                 transparentBorder: true
                 radius: 8
-                color: "#55000000"
+                color: GlobalColor.Main
             }
 
             delegate: Item{
@@ -523,7 +521,7 @@ Rectangle{
                 height: commenttextlabel.height+16*dp
                 Rectangle{
 
-                    border.color: "grey"
+                    border.color: "lightgrey"
                     border.width: 1
                     anchors.fill: parent
                     Text{
@@ -536,7 +534,7 @@ Rectangle{
                         anchors.rightMargin: 4*dp
 
 
-                        text: " <font color=\""+GlobalColor.Teal500+"\">"+CommentatorName+(BeCommentatorName===""?"：</font>":(" 回复 "+BeCommentatorName+"：</font>"))+"<font color=\"grey\">"+Message+"</font>"
+                        text: " <font color=\""+GlobalColor.Word+"\">"+CommentatorName+(BeCommentatorName===""?"：</font>":(" 回复 "+BeCommentatorName+"：</font>"))+"<font color=\"grey\">"+Message+"</font>"
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.Wrap
                         font{
@@ -604,7 +602,7 @@ Rectangle{
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: GlobalColor.Cyan400
+            color: GlobalColor.Main
         }
 
         TextField{
@@ -618,8 +616,9 @@ Rectangle{
 
             anchors.right: sendbutton.left
             anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
+
+            anchors.verticalCenter: parent.verticalCenter
+
 
             placeholderText:"评论..."
             font{
@@ -670,8 +669,13 @@ Rectangle{
             anchors.bottom: parent.bottom
 
             width:height*1.5
-            color:GlobalColor.Cyan400
-
+            color:GlobalColor.Main
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: 8
+                color: GlobalColor.Main
+            }
             Text{
                 anchors.centerIn: parent
                 text:"发送"

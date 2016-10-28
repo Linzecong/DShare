@@ -170,7 +170,7 @@ Rectangle {
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: "#55000000"
+            color: GlobalColor.Main
         }
 
 
@@ -178,7 +178,7 @@ Rectangle {
             id:text
             visible:image.source==""?true:false
             text: "+";
-            color:GlobalColor.Green300
+            color:GlobalColor.Main
             font{
                         family: localFont.name
                 pixelSize: photobutton.height/3
@@ -236,7 +236,7 @@ Rectangle {
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: "#55000000"
+            color: "grey"
         }
 
         anchors.left: photobutton.right
@@ -248,7 +248,7 @@ Rectangle {
         Text {
             anchors.centerIn: parent
             id: cleartext
-            color: "red"
+            color: "grey"
             text:"清除"
             verticalAlignment: Text.AlignVCenter
             font.pointSize: 14
@@ -299,7 +299,7 @@ Rectangle {
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: "#55000000"
+            color: GlobalColor.Main
         }
 
         Text {
@@ -454,7 +454,7 @@ Rectangle {
             }
         }
 
-        color:sma.pressed?GlobalColor.Green200:GlobalColor.Green400
+        color:sma.pressed?GlobalColor.SecondButton:GlobalColor.Main
         Behavior on color{
             ColorAnimation{
                 easing.type: Easing.Linear
@@ -479,14 +479,14 @@ Rectangle {
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: "#55000000"
+            color: GlobalColor.Main
         }
 
         visible: false
         Label{
             visible:true
             text: "请说话";
-            color:GlobalColor.Green400
+            color:GlobalColor.Main
             font{
                         family: localFont.name
                 pixelSize: photobutton.height/4
@@ -510,14 +510,14 @@ Rectangle {
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: "#55000000"
+            color: GlobalColor.Main
         }
 
         radius: width/2
         Image{
             Rectangle{
                 anchors.fill: parent
-                color:GlobalColor.Cyan400
+                color:GlobalColor.Main
                 anchors.margins: 10
                 z:-100
             }
@@ -530,12 +530,14 @@ Rectangle {
         MouseArea{
             anchors.fill: parent
             onPressed: {
+                recordbutton.layer.enabled=false
                 sendspeechsystem.inclick()
                 reminder.visible=true
                 speechlengthtimer.time=0
                 speechlengthtimer.start()
             }
             onReleased: {
+                recordbutton.layer.enabled=true
                 speechlengthtimer.stop()
 
                 if(speechlengthtimer.time>10){

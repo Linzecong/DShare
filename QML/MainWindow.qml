@@ -338,13 +338,13 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height:myjava.getStatusBarHeight()
-                color:"green"
+                color:GlobalColor.StatusBar
             }
 
             id:sidepagetop
 
             //color:"#02ae4a"
-            color: GlobalColor.Green400
+            color: GlobalColor.Main
 
             width: sidepage.width
             height: sidepage.height/4
@@ -358,7 +358,7 @@ Rectangle {
                 horizontalOffset: -10
                 verticalOffset: 1
                 radius: 10
-                color: "#55000000"
+                color: GlobalColor.Main
             }
 
             //侧边栏头像
@@ -464,7 +464,7 @@ Rectangle {
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.FirstIcon
                     z:-100
                 }
                 id:followingicon
@@ -521,7 +521,7 @@ Rectangle {
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.FirstIcon
                     z:-100
                 }
                 id:followericon
@@ -581,7 +581,7 @@ Rectangle {
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.FirstIcon
                     z:-100
                 }
                 id:shareicon
@@ -635,7 +635,7 @@ Rectangle {
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.FirstIcon
                     z:-100
                 }
                 id:messageicon
@@ -689,7 +689,7 @@ Rectangle {
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.FirstIcon
                     z:-100
                 }
                 id:reporticon
@@ -778,7 +778,7 @@ Rectangle {
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.FirstIcon
                     z:-100
                 }
                 id:settingicon
@@ -832,7 +832,7 @@ Rectangle {
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green200
+                    color:GlobalColor.FirstIcon
                     z:-100
                 }
                 id:logouticon
@@ -922,14 +922,14 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             height:myjava.getStatusBarHeight()
-            color:"green"
+            color:GlobalColor.StatusBar
         }
 
         id:head
         width:parent.width;
         height: parent.height/16*2;
 
-        color:GlobalColor.Green400
+        color:GlobalColor.Main
         x:0
         y:0
 
@@ -939,7 +939,7 @@ Rectangle {
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 10
-            color: "#55000000"
+            color: GlobalColor.Main
         }
 
         Behavior on y{
@@ -1065,7 +1065,7 @@ fillMode: Image.PreserveAspectFit
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 10
-            color: "#55000000"
+            color: GlobalColor.Main
         }
 
         width:parent.width
@@ -1089,9 +1089,8 @@ fillMode: Image.PreserveAspectFit
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green400
+                    color:bottom.currentPage=="DShare"?GlobalColor.Main:GlobalColor.FirstIcon
                     anchors.margins: 5
-                    //bottom.currentPage=="DShare"?"qrc:/image/mainpage.png":"qrc:/image/mainpageblack.png"
                     z:-100
                 }
 
@@ -1155,7 +1154,7 @@ fillMode: Image.PreserveAspectFit
                 Rectangle{
                     anchors.fill: parent
                     anchors.margins: 5
-                    color:GlobalColor.Green400
+                    color:bottom.currentPage=="分享"?GlobalColor.Main:GlobalColor.FirstIcon
                     z:-100
                 }
                 anchors.centerIn: parent
@@ -1212,7 +1211,7 @@ fillMode: Image.PreserveAspectFit
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Green400
+                    color:bottom.currentPage=="记录"?GlobalColor.Main:GlobalColor.FirstIcon
                     anchors.margins: 5
                     z:-100
                 }

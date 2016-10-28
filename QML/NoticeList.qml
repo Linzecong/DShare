@@ -126,19 +126,19 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             height:myjava.getStatusBarHeight()
-            color:"green"
+            color:GlobalColor.StatusBar
         }
         id:head
         z:5
         width:parent.width
         height: parent.height/16*2
-        color: GlobalColor.Green400
+        color: GlobalColor.Main
         anchors.top: parent.top
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 10
-            color: "#55000000"
+            color: GlobalColor.Main
         }
         Label{
             id:back
@@ -251,7 +251,7 @@ Rectangle {
                         family: localFont.name
                         pointSize: 16
                     }
-                    text:"<strong><font color=\""+GlobalColor.Teal500+"\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\""+GlobalColor.Teal500+"\">你</font></strong>"
+                    text:"<strong><font color=\""+GlobalColor.Word+"\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\""+GlobalColor.Word+"\">你</font></strong>"
 
                 }
 
@@ -276,7 +276,7 @@ Rectangle {
 
                     anchors.right: parent.right
                     anchors.rightMargin: 10*dp
-                    color: GlobalColor.Teal600
+                    color: GlobalColor.Word
                     wrapMode: Text.WordWrap
                     font{
                         family: localFont.name

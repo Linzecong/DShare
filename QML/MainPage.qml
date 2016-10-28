@@ -80,11 +80,11 @@ Rectangle{
         anchors.fill: parent
         clip:true
 
-        spacing:20*dp
+        spacing:5*dp
 
         Rectangle{
             anchors.fill: parent
-            color:GlobalColor.Cyan50
+            color:GlobalColor.Background
             z:-100
         }
 
@@ -118,7 +118,7 @@ Rectangle{
         delegate: Item{
             id:postitem
             width:parent.width
-            height:headimage.height/5*5+headimage.height+message.height+photo.height+comments.height+10*dp+(Hasimage?10*dp:0)
+            height:headimage.height/5*6+headimage.height+message.height+photo.height+comments.height+10*dp+(Hasimage?10*dp:0)
             property int postID: ID//用于实现点赞功能
             property string publisherid: PublisherID//用于显示头像
             //每一个分享的框框
@@ -129,45 +129,52 @@ Rectangle{
                 id:delegaterect
                 property int hasimage: Hasimage
                 property string bigimg: BigPhoto
+                anchors.margins: 5*dp
 
-                    //头像
-                    Image{
-                        id:headimage
-                        visible: posttime.text==""?false:true
-                        fillMode: Image.PreserveAspectFit
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: GlobalColor.Main
+                }
+                //头像
+                Image{
+                    id:headimage
+                    visible: posttime.text==""?false:true
+                    fillMode: Image.PreserveAspectFit
 
-                        source:posttime.text==""?"":Headurl
-                        anchors.top:parent.top
-                        anchors.topMargin: 10*dp
-                        anchors.left: parent.left
-                        anchors.leftMargin: 8*dp
-                        height: 40*dp
+                    source:posttime.text==""?"":Headurl
+                    anchors.top:parent.top
+                    anchors.topMargin: 10*dp
+                    anchors.left: parent.left
+                    anchors.leftMargin: 8*dp
+                    height: 40*dp
 
-                        width: height
-                        Label{
-                            anchors.centerIn: parent
-                            visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                            text:(parent.status==Image.Loading)?"加载中":"无"
-                            color:"grey"
-                        }
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: {
-                                //                            mypost.item.getpost(publisherid,mainrect.username,nickname);//点击头像时显示用户分享列表
-                                //                            mypost.visible=true
-                                //                            mypost.x=0
+                    width: height
+                    Label{
+                        anchors.centerIn: parent
+                        visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                        text:(parent.status==Image.Loading)?"加载中":"无"
+                        color:"grey"
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            //                            mypost.item.getpost(publisherid,mainrect.username,nickname);//点击头像时显示用户分享列表
+                            //                            mypost.visible=true
+                            //                            mypost.x=0
 
-                                mainrect.parent.parent.parent.setmypost(publisherid,mainrect.username,nickname)
+                            mainrect.parent.parent.parent.setmypost(publisherid,mainrect.username,nickname)
 
-                            }
-                        }
-                        //用于网速慢，头像加载慢时先显示文字
-                        BusyIndicator{
-                            anchors.centerIn: parent
-                            visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                            running:(parent.status==Image.Loading)?true:false
                         }
                     }
+                    //用于网速慢，头像加载慢时先显示文字
+                    BusyIndicator{
+                        anchors.centerIn: parent
+                        visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                        running:(parent.status==Image.Loading)?true:false
+                    }
+                }
 
 
 
@@ -188,7 +195,7 @@ Rectangle{
 
 
                     text: Username
-                    color:GlobalColor.Teal500
+                    color:GlobalColor.Word
                     font{
                         family: localFont.name
                         //pixelSize: headimage.height/3
@@ -349,14 +356,13 @@ Rectangle{
                     Rectangle{
                         id:likebutton
                         visible: false
-                        color:GlobalColor.Green400
                         height:headimage.height/1.5
                         width: photo.width/5
                         layer.enabled: true
                         layer.effect: DropShadow {
                             transparentBorder: true
                             radius: 8
-                            color: "#02ae4a"
+                            color: GlobalColor.Main
                         }
 
                         Label{
@@ -369,6 +375,7 @@ Rectangle{
                             }
                         }
                         MouseArea{
+                            id:lbm
                             anchors.fill: parent
                             onClicked: {
                                 listview.likeindex=index;
@@ -377,13 +384,19 @@ Rectangle{
                                 commentbutton.visible=false
                             }
                         }
+                        color:lbm.pressed?GlobalColor.SecondButton:GlobalColor.Main
+                        Behavior on color{
+                            ColorAnimation{
+                                easing.type: Easing.Linear
+                                duration: 200
+                            }
+                        }
                     }
 
 
                     Rectangle{
                         id:commentbutton
                         visible: false
-                        color:GlobalColor.Green400
 
                         height:headimage.height/1.5
                         width: photo.width/5
@@ -391,7 +404,7 @@ Rectangle{
                         layer.effect: DropShadow {
                             transparentBorder: true
                             radius: 8
-                            color: "#02ae4a"
+                            color: GlobalColor.Main
                         }
                         Label{
                             text:"✉";
@@ -404,6 +417,7 @@ Rectangle{
                             }
                         }
                         MouseArea{
+                            id:cbm
                             anchors.fill: parent
                             onClicked: {
                                 listview.commentindex=index
@@ -415,19 +429,26 @@ Rectangle{
                                 commentbutton.visible=false
                             }
                         }
+                        color:cbm.pressed?GlobalColor.SecondButton:GlobalColor.Main
+                        Behavior on color{
+                            ColorAnimation{
+                                easing.type: Easing.Linear
+                                duration: 200
+                            }
+                        }
                     }
 
                     //显示功能按钮按键
                     Rectangle{
                         height:headimage.height/2.5
                         width: height*1.5
-                        color:GlobalColor.LightBlue400
+                        color:GlobalColor.SecondButton
 
                         layer.enabled: true
                         layer.effect: DropShadow {
                             transparentBorder: true
                             radius: 8
-                            color: "lightgreen"
+                            color: GlobalColor.SecondButton
                         }
                         anchors.verticalCenter: parent.verticalCenter
                         Label{

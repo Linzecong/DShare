@@ -154,7 +154,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             height:myjava.getStatusBarHeight()
-            color:"green"
+            color:GlobalColor.StatusBar
         }
 
         id:head;
@@ -162,13 +162,13 @@ Rectangle {
         width:parent.width;
         height: parent.height/16*2
 
-        color:GlobalColor.Green400
+        color:GlobalColor.Main
         anchors.top: parent.top
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 10
-            color: "#55000000"
+            color: GlobalColor.Main
         }
 
         Label{
@@ -247,7 +247,14 @@ Rectangle {
             cacheBuffer:10000
             property int likeindex:0
             property int commentindex:0
-            //            spacing:20;
+
+            spacing:5*dp
+
+            Rectangle{
+                anchors.fill: parent
+                color:GlobalColor.Background
+                z:-100
+            }
 
             Rectangle {
                 id: scrollbar
@@ -270,17 +277,16 @@ Rectangle {
                 property int postID: ID//用于实现点赞功能
                 property string publisherid: PublisherID//用于显示删除
                 Rectangle{
-                    Rectangle{
-                        anchors.top: parent.bottom
-                        color:"grey"
-                        width:mainrect.width
-                        anchors.left: parent.left
-                        anchors.leftMargin: -10
-                        height:1
+
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+                        radius: 8
+                        color: GlobalColor.Main
                     }
 
                     anchors.fill: parent
-                    anchors.margins: 10
+                    anchors.margins: 5*dp
                     id:delegaterect
                     property int hasimage: Hasimage
                     property string bigimg: BigPhoto
@@ -315,7 +321,7 @@ Rectangle {
                     Rectangle{
                         id:deletebutton
                         visible:(ID!=0&&myid==PublisherID)?true:false
-                        color:"red"
+                        color:"white"
                         height:headimage.height/2.5
                         width: height
                         radius: height/2
@@ -328,13 +334,14 @@ Rectangle {
                         Label{
                             text:"╳";
                             anchors.fill: parent
-                            anchors.margins: 10
+                            anchors.margins: 20
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
-                            color: "white";
+                            color: "red";
                             font{
                                 family: localFont.name
-                                pixelSize: parent.height
+                                pointSize: 13
+                                bold: true
                             }
                         }
 
@@ -369,7 +376,7 @@ Rectangle {
                         anchors.topMargin:2*dp
 
                         text: Username
-                        color:GlobalColor.Teal500
+                        color:GlobalColor.Word
                         font{
                             family: localFont.name
                             pointSize: 16
@@ -512,14 +519,13 @@ Rectangle {
                         Rectangle{
                             id:likebutton
                             visible: false
-                            color:GlobalColor.Green400
                             height:headimage.height/1.5
                             width: photo.width/5
                             layer.enabled: true
                             layer.effect: DropShadow {
                                 transparentBorder: true
                                 radius: 8
-                                color: "#02ae4a"
+                                color: GlobalColor.Main
                             }
                             Label{
                                 text:"❤";
@@ -531,6 +537,7 @@ Rectangle {
                                 }
                             }
                             MouseArea{
+                                id:lbm
                                 anchors.fill: parent
                                 onClicked: {
                                     listview.likeindex=index;
@@ -540,20 +547,26 @@ Rectangle {
                                     commentbutton.visible=false
                                 }
                             }
+                            color:cbm.pressed?GlobalColor.SecondButton:GlobalColor.Main
+                            Behavior on color{
+                                ColorAnimation{
+                                    easing.type: Easing.Linear
+                                    duration: 200
+                                }
+                            }
                         }
 
                         //收藏按钮，暂时无用
                         Rectangle{
                             id:commentbutton
                             visible: false
-                            color:GlobalColor.Green400
                             height:headimage.height/1.5
                             width: photo.width/5
                             layer.enabled: true
                             layer.effect: DropShadow {
                                 transparentBorder: true
                                 radius: 8
-                                color: "#02ae4a"
+                                color: GlobalColor.Main
                             }
                             Label{
                                 text:"✉";
@@ -566,6 +579,7 @@ Rectangle {
                                 }
                             }
                             MouseArea{
+                                id:cbm
                                 anchors.fill: parent
                                 onClicked: {
                                     listview.commentindex=index
@@ -576,16 +590,24 @@ Rectangle {
                                     commentbutton.visible=false
                                 }
                             }
+                            color:cbm.pressed?GlobalColor.SecondButton:GlobalColor.Main
+                            Behavior on color{
+                                ColorAnimation{
+                                    easing.type: Easing.Linear
+                                    duration: 200
+                                }
+                            }
                         }
                         Rectangle{
                             height:headimage.height/2.5
                             width: height*1.5
-                            color:GlobalColor.LightBlue400
+                            color:GlobalColor.SecondButton
 
+                            layer.enabled: true
                             layer.effect: DropShadow {
                                 transparentBorder: true
                                 radius: 8
-                                color: "lightgreen"
+                                color: GlobalColor.SecondButton
                             }
 
                             anchors.verticalCenter: parent.verticalCenter
