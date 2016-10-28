@@ -6,6 +6,7 @@ import QtQuick.Controls.Styles 1.4
 import PostsSystem 1.0
 import JavaMethod 1.0
 import QtGraphicalEffects 1.0
+import "qrc:/GlobalVariable.js" as GlobalColor
 
 Rectangle{
     id:mainrect
@@ -63,29 +64,6 @@ Rectangle{
 
 
 
-    //用户显示特定用户的分享列表
-
-//    Loader{
-//        id:mypost;
-//        height: myjava.getHeight()
-//        width: parent.width
-//        x:0
-//        y:-myjava.getHeight()/16*2;
-//        visible: false
-//        source:"qrc:/QML/PostsPage.qml"
-//        z:102
-//    }
-
-//    Loader{
-//        id:uniquepost;
-//        height: myjava.getHeight()
-//        width: parent.width
-//        x:0
-//        y:-myjava.getHeight()/16*2;
-//        visible: false
-//        source:"qrc:/QML/UniquePost.qml"
-//        z:102
-//    }
 
 
     //用于显示大图
@@ -94,136 +72,48 @@ Rectangle{
         source:"qrc:/Resources/msyh.ttf"
     }
 
-//    Rectangle{
-//        property int isbig:0
-//        id: bigphotorect
-//        height: parent.height*1.3
-//        width: parent.width
-//        x:0
-//        y:-parent.height/8
-//        z:22
-//        visible: false
 
-//        color: "black"
-
-//        Keys.enabled: true
-//        Keys.onBackPressed: {
-
-//            mainrect.forceActiveFocus();
-
-//            bigphoto.x=0
-//            bigphoto.y=0
-//            bigphoto.scale=1
-//            bigphotorect.isbig=0
-//            bigphotorect.visible=false
-//        }
-
-//        Flickable{
-//            id:flick
-//            height:parent.height
-//            width: parent.width
-//            contentHeight: bigphoto.height-1
-//            contentWidth: bigphoto.width-1
-//            Image {
-//                id: bigphoto
-//                fillMode: Image.PreserveAspectFit
-//                height: bigphotorect.height
-//                width: bigphotorect.width
-//                Timer{
-//                    id:doubletimer
-//                    interval: 300
-//                    repeat: false
-//                    onTriggered: {
-//                        mainrect.forceActiveFocus();
-
-//                        bigphoto.x=0
-//                        bigphoto.y=0
-//                        bigphoto.scale=1
-//                        bigphotorect.isbig=0
-//                        bigphotorect.visible=false
-//                    }
-//                }
-
-//                MouseArea{
-//                    anchors.fill: parent
-
-//                    onClicked: {
-//                        if(!doubletimer.running)
-//                            doubletimer.running=true
-//                        else{
-//                            doubletimer.running=false
-//                            if(!bigphotorect.isbig){
-//                                bigphoto.scale=1.5
-//                                bigphotorect.isbig=1
-//                            }
-//                            else{
-//                                bigphoto.scale=1
-//                                bigphotorect.isbig=0
-//                            }
-//                        }
-//                    }
-
-
-//                }
-//            }
-
-//        }
-//    }
-
-
-
-//    Rectangle{
-//        id: indicator
-//        height: parent.height*1.3
-//        width: parent.width
-//        x:0
-//        y:-parent.height/8
-
-//        visible: false
-//        color:"black"
-//        opacity: 0.6
-//        z:1001
-//        BusyIndicator{
-//            width:parent.width/7
-//            height:width
-//            anchors.centerIn: parent
-//            running: true
-//        }
-
-//    }
 
     //显示列表
     ListView{
         id:listview;
         anchors.fill: parent
         clip:true
-//        spacing:20;
+
+        spacing:20*dp
+
+        Rectangle{
+            anchors.fill: parent
+            color:GlobalColor.Cyan50
+            z:-100
+        }
+
         cacheBuffer:10000
         property int likeindex:0
         property int commentindex:0
         
 
 
-//        onMovementStarted: {
+        //        onMovementStarted: {
 
-//            mainrect.parent.parent.parent.hidebottom();
-//        }
-//        onMovementEnded: {
-//            mainrect.parent.parent.parent.showbottom();
-//        }
+        //            mainrect.parent.parent.parent.hidebottom();
+        //        }
+        //        onMovementEnded: {
+        //            mainrect.parent.parent.parent.showbottom();
+        //        }
 
         Rectangle {
-                  id: scrollbar
-                  anchors.right: listview.right
-                  anchors.rightMargin: 3
-                  y: listview.visibleArea.yPosition * listview.height
-                  width: 5
-                  height: listview.visibleArea.heightRatio * listview.height
-                  color: "grey"
-                  radius: 5
-                  z:2
-                  visible: listview.dragging||listview.flicking
-              }
+            id: scrollbar
+            anchors.right: listview.right
+            anchors.rightMargin: 3
+            y: listview.visibleArea.yPosition * listview.height
+            width: 5
+            height: listview.visibleArea.heightRatio * listview.height
+            color: "grey"
+            radius: 5
+            z:2
+            visible: listview.dragging||listview.flicking
+        }
 
         delegate: Item{
             id:postitem
@@ -235,65 +125,57 @@ Rectangle{
 
 
             Rectangle{
-                Rectangle{
-                    anchors.top: parent.bottom
-                    color:"grey"
-                    width:mainrect.width
-                    anchors.left: parent.left
-                    anchors.leftMargin: -10
-                    height:1
-                }
-
-
                 anchors.fill: parent
-                anchors.margins: 10
                 id:delegaterect
                 property int hasimage: Hasimage
                 property string bigimg: BigPhoto
 
+                    //头像
+                    Image{
+                        id:headimage
+                        visible: posttime.text==""?false:true
+                        fillMode: Image.PreserveAspectFit
 
+                        source:posttime.text==""?"":Headurl
+                        anchors.top:parent.top
+                        anchors.topMargin: 10*dp
+                        anchors.left: parent.left
+                        anchors.leftMargin: 8*dp
+                        height: 40*dp
 
-                //头像
-                Image{
-                    id:headimage
-                    visible: posttime.text==""?false:true
-                    anchors.top:parent.top
+                        width: height
+                        Label{
+                            anchors.centerIn: parent
+                            visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                            text:(parent.status==Image.Loading)?"加载中":"无"
+                            color:"grey"
+                        }
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                //                            mypost.item.getpost(publisherid,mainrect.username,nickname);//点击头像时显示用户分享列表
+                                //                            mypost.visible=true
+                                //                            mypost.x=0
 
-                    anchors.topMargin: 10*dp
+                                mainrect.parent.parent.parent.setmypost(publisherid,mainrect.username,nickname)
 
-                    anchors.left: parent.left
-
-                    anchors.leftMargin: 8*dp
-
-                    height: 40*dp
-
-                    width: height
-                    fillMode: Image.PreserveAspectFit
-                    source:posttime.text==""?"":Headurl
-                    Label{
-                        anchors.centerIn: parent
-                        visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                        text:(parent.status==Image.Loading)?"加载中":"无"
-                        color:"grey"
-                    }
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-//                            mypost.item.getpost(publisherid,mainrect.username,nickname);//点击头像时显示用户分享列表
-//                            mypost.visible=true
-//                            mypost.x=0
-
-                            mainrect.parent.parent.parent.setmypost(publisherid,mainrect.username,nickname)
-
+                            }
+                        }
+                        //用于网速慢，头像加载慢时先显示文字
+                        BusyIndicator{
+                            anchors.centerIn: parent
+                            visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                            running:(parent.status==Image.Loading)?true:false
                         }
                     }
-                    //用于网速慢，头像加载慢时先显示文字
-                    BusyIndicator{
-                        anchors.centerIn: parent
-                        visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                        running:(parent.status==Image.Loading)?true:false
-                    }
-                }
+
+
+
+
+
+
+
+
 
                 //用户名
                 Text{
@@ -306,7 +188,7 @@ Rectangle{
 
 
                     text: Username
-                    color:"green"
+                    color:GlobalColor.Teal500
                     font{
                         family: localFont.name
                         //pixelSize: headimage.height/3
@@ -400,7 +282,7 @@ Rectangle{
 
 
                     wrapMode: Text.Wrap;
-                    color: "#02ae4a"
+                    color:"grey"
                     font{
                         family: localFont.name
                         pointSize: 14
@@ -430,7 +312,7 @@ Rectangle{
                     text: CommentCount+" 条评论"
                     //width:parent.width-headimage.height/3*4
                     wrapMode: Text.Wrap;
-                    color: "#02ae4a"
+                    color: "grey"
                     font{
                         family: localFont.name
 
@@ -440,8 +322,8 @@ Rectangle{
                         anchors.fill: parent
                         onClicked: {
                             listview.commentindex=index
-//                            uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
-//                            uniquepost.visible=true
+                            //                            uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
+                            //                            uniquepost.visible=true
 
                             mainrect.parent.parent.parent.setuniquepost(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.username,nickname,1)
 
@@ -467,7 +349,7 @@ Rectangle{
                     Rectangle{
                         id:likebutton
                         visible: false
-                        color:"#02ae4a"
+                        color:GlobalColor.Green400
                         height:headimage.height/1.5
                         width: photo.width/5
                         layer.enabled: true
@@ -501,7 +383,7 @@ Rectangle{
                     Rectangle{
                         id:commentbutton
                         visible: false
-                        color:"#02ae4a"
+                        color:GlobalColor.Green400
 
                         height:headimage.height/1.5
                         width: photo.width/5
@@ -516,7 +398,7 @@ Rectangle{
                             anchors.centerIn: parent
                             color: "white";
                             font{
-                        family: localFont.name
+                                family: localFont.name
 
                                 pixelSize: parent.height/1.3
                             }
@@ -539,7 +421,7 @@ Rectangle{
                     Rectangle{
                         height:headimage.height/2.5
                         width: height*1.5
-                        color:"lightgreen"
+                        color:GlobalColor.LightBlue400
 
                         layer.enabled: true
                         layer.effect: DropShadow {
@@ -655,7 +537,7 @@ Rectangle{
                         var list=[]
                         list=likers2.split(",")
                         if(list.length==0)
-                        likenum=1
+                            likenum=1
                         else
                             likenum=list.length
                     }
@@ -692,7 +574,7 @@ Rectangle{
                                              "Message":"你没有收到任何来自好友的分享喔~~点击右上角添加好友~左上角设置头像和修改昵称喔~或者先试试记录功能~",
                                              "Photo":"",
                                              "Liker":"",
-                                             "LikerNum":"0",
+                                             "LikerNum":0,
                                              "ID":0,
                                              "PublisherID":"",
                                              "CommentCount":0

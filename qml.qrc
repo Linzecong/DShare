@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>image/conpassword.png</file>
         <file>image/delete.png</file>
         <file>image/mainpage.png</file>
         <file>image/nickname.png</file>
@@ -10,14 +9,10 @@
         <file>image/sharepage.png</file>
         <file>image/user.png</file>
         <file>image/side.png</file>
-        <file>image/search.png</file>
         <file>image/photo.png</file>
         <file>image/jia.png</file>
         <file>image/save.png</file>
         <file>image/icon.png</file>
-        <file>image/mainpageblack.png</file>
-        <file>image/recordpageblack.png</file>
-        <file>image/sharepageblack.png</file>
         <file>image/searchblack.png</file>
         <file>image/checkin.png</file>
         <file>image/clock.png</file>
@@ -37,5 +32,11 @@
         <file>QML/UsersPage.qml</file>
         <file>image/speech.png</file>
         <file>Resources/msyh.ttf</file>
+        <file>GlobalVariable.js</file>
+        <file>image/editmode.png</file>
+        <file>image/notice.png</file>
+        <file>image/report.png</file>
+        <file>image/setting.png</file>
+        <file>image/search.png</file>
     </qresource>
 </RCC>

@@ -11,6 +11,8 @@ import RecordSystem 1.0
 import DataSystem 1.0
 import SpeechSystem 1.0
 import QtQuick.Dialogs 1.2
+import "qrc:/GlobalVariable.js" as GlobalColor
+
 Rectangle {
     color:"white"
     anchors.fill: parent
@@ -27,24 +29,24 @@ Rectangle {
         id: localFont
         source:"qrc:/Resources/msyh.ttf"
     }
-//    Rectangle{
-//        id: indicator2
-//        height: parent.height*1.3
-//        width: parent.width
-//        x:0
-//        y:-parent.height/8
+    //    Rectangle{
+    //        id: indicator2
+    //        height: parent.height*1.3
+    //        width: parent.width
+    //        x:0
+    //        y:-parent.height/8
 
-//        visible: false
-//        color:"black"
-//        opacity: 0.6
-//        z:1001
-//        BusyIndicator{
-//            width:parent.width/7
-//            height:width
-//            anchors.centerIn: parent
-//            running: true
-//        }
-//    }
+    //        visible: false
+    //        color:"black"
+    //        opacity: 0.6
+    //        z:1001
+    //        BusyIndicator{
+    //            width:parent.width/7
+    //            height:width
+    //            anchors.centerIn: parent
+    //            running: true
+    //        }
+    //    }
 
     DataSystem{
         id:dbsystem;
@@ -58,7 +60,8 @@ Rectangle {
             }
 
             if(Statue=="checkinDBError"){
-                myjava.toastMsg("今天已经签到啦~！")
+                if(antimetimer.running==false)
+                    myjava.toastMsg("今天已经签到啦~！")
                 checkarea.visible=false
 
             }
@@ -282,7 +285,7 @@ Rectangle {
 
         Rectangle{
             id:inrect
-            color:"#02ae4a"
+            color:GlobalColor.Green300
             height: parent.height
             width:parent.width/3
             x:header.currentpage=="饮食"?0:(header.currentpage=="运动"?width:width*2)
@@ -291,7 +294,7 @@ Rectangle {
         Label{
             id:foodbutton
             text: "饮食"
-            color:header.currentpage==text?"white":"#02ae4a"
+            color:header.currentpage==text?"white":GlobalColor.Green300
             font{
                 family: localFont.name
                 pointSize: 20
@@ -310,7 +313,7 @@ Rectangle {
         Label{
             id:sportbutton
             text: "运动"
-            color:header.currentpage==text?"white":"#02ae4a"
+            color:header.currentpage==text?"white":GlobalColor.Green300
             font{
                 family: localFont.name
                 pointSize: 20
@@ -328,7 +331,7 @@ Rectangle {
         Label{
             id:searchbutton
             text: "查看"
-            color:header.currentpage==text?"white":"#02ae4a"
+            color:header.currentpage==text?"white":GlobalColor.Green300
             font{
                 family: localFont.name
                 pointSize: 20
@@ -354,39 +357,39 @@ Rectangle {
     //饮食记录页面
     ListView{
 
-        header:Rectangle{
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: parent.width/3*1.1
-            height:header.height*1.2
-            Rectangle{
-                width: parent.width/1.2
-                height:header.height/1.5
+        //        header:Rectangle{
+        //            anchors.horizontalCenter: parent.horizontalCenter
+        //            width: parent.width/3*1.1
+        //            height:header.height*1.2
+        //            Rectangle{
+        //                width: parent.width/1.2
+        //                height:header.height/1.5
 
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    transparentBorder: true
+        //                layer.enabled: true
+        //                layer.effect: DropShadow {
+        //                    transparentBorder: true
 
-                    radius: 8
-                    color: "#02ae4a"
-                }
+        //                    radius: 8
+        //                    color: "#02ae4a"
+        //                }
 
 
-            color:"#02ae4a"
+        //            color:GlobalColor.Green200
 
-            id:recommendbutton
-            anchors.centerIn: parent
+        //            id:recommendbutton
+        //            anchors.centerIn: parent
 
-            Text{
-                text:"今日推荐"
-                color:"white"
-                anchors.centerIn: parent
-                font.pointSize: 14
-            }
+        //            Text{
+        //                text:"今日推荐"
+        //                color:"white"
+        //                anchors.centerIn: parent
+        //                font.pointSize: 14
+        //            }
 
-            //radius: height/4
-            }
+        //            //radius: height/4
+        //            }
 
-        }
+        //        }
 
         id:foodview
         cacheBuffer:10000
@@ -395,11 +398,12 @@ Rectangle {
         width:parent.width
 
         anchors.top: header.bottom
+        anchors.topMargin: 2*dp
 
         clip:true
         property var currentdiet;
         property int currentfood;
-spacing:-1
+        spacing:-1
 
 
 
@@ -520,7 +524,7 @@ spacing:-1
 
                 Rectangle{
                     id:photobutton
-
+                    visible: false
                     anchors.horizontalCenter: title.horizontalCenter
 
                     anchors.top: title.bottom
@@ -528,8 +532,14 @@ spacing:-1
 
                     height: title.m_height*1.2
                     width: height
-z:10
+                    z:10
                     Image{
+                        Rectangle{
+                            anchors.fill: parent
+                            color:GlobalColor.Cyan400
+                            anchors.margins: 5
+                            z:-100
+                        }
                         fillMode: Image.PreserveAspectFit
                         anchors.fill: parent
                         source: "qrc:/image/photo.png"
@@ -545,7 +555,7 @@ z:10
 
                 Rectangle{
                     id:photoimage;
-
+                    visible: false
                     anchors.horizontalCenter: title.horizontalCenter
 
                     anchors.top: photobutton.bottom
@@ -631,8 +641,8 @@ z:10
 
                         Rectangle{
                             id:foodtext
-//                            border.color: "grey"
-//                            border.width: 1
+                            //                            border.color: "grey"
+                            //                            border.width: 1
 
                             layer.enabled: true
                             layer.effect: DropShadow {
@@ -654,7 +664,7 @@ z:10
                                 text:Food
                                 color:"grey"
                                 font{
-                        family: localFont.name
+                                    family: localFont.name
 
                                     pointSize: 14
                                 }
@@ -683,12 +693,18 @@ z:10
                             //anchors.top: foodtext.top
                             anchors.verticalCenter: foodtext.verticalCenter
 
-                            height: foodtext.height/1.4
-                            width: height*1.6
+                            height: addfoodbutton.height
+                            width: height
 
                             visible: Food=="点击选择食物"?false:true
 
                             Image{
+                                Rectangle{
+                                    anchors.fill: parent
+                                    color:GlobalColor.Cyan400
+                                    anchors.margins: 5
+                                    z:-100
+                                }
                                 id:deletetext
                                 fillMode: Image.PreserveAspectFit
 
@@ -701,9 +717,9 @@ z:10
                                 onClicked: {
                                     Food="点击选择食物"
 
-//                                    foodlist.model.remove(index)
-//                                    if(foodlist.model.count===0)
-//                                        foodlist.model.append({"Food":"点击选择食物"})
+                                    //                                    foodlist.model.remove(index)
+                                    //                                    if(foodlist.model.count===0)
+                                    //                                        foodlist.model.append({"Food":"点击选择食物"})
                                 }
                             }
 
@@ -798,9 +814,9 @@ z:10
                     Label{
                         visible:true
                         text: "请说话";
-                        color:"#02ae4a"
+                        color:GlobalColor.Green400
                         font{
-                        family: localFont.name
+                            family: localFont.name
                             pixelSize: parent.height/2.2
                         }
                         anchors.centerIn: parent;
@@ -810,9 +826,9 @@ z:10
 
                 Rectangle{
                     id:speechbutton
-//                    border.color: "grey"
-//                    border.width: 2
-//                    radius: width/4
+                    //                    border.color: "grey"
+                    //                    border.width: 2
+                    //                    radius: width/4
                     color:"white"
 
 
@@ -825,6 +841,12 @@ z:10
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     Image{
+                        Rectangle{
+                            anchors.fill: parent
+                            color:GlobalColor.Cyan400
+                            anchors.margins: 5
+                            z:-100
+                        }
                         fillMode: Image.PreserveAspectFit
                         anchors.fill: parent
                         source: "qrc:/image/speech.png"
@@ -886,6 +908,12 @@ z:10
                     height: title.m_height*1.2
                     width: height
                     Image{
+                        Rectangle{
+                            anchors.fill: parent
+                            color:GlobalColor.Cyan400
+                            anchors.margins: 5
+                            z:-100
+                        }
                         id:addtext
                         fillMode: Image.PreserveAspectFit
                         anchors.fill: parent
@@ -939,6 +967,12 @@ z:10
                     }
 
                     Image{
+                        Rectangle{
+                            anchors.fill: parent
+                            color:GlobalColor.Cyan400
+                            anchors.margins: 5
+                            z:-100
+                        }
                         fillMode: Image.PreserveAspectFit
                         anchors.fill: parent
                         source: "qrc:/image/save.png"
@@ -1068,6 +1102,12 @@ z:10
                     width: height
 
                     Image{
+                        Rectangle{
+                            anchors.fill: parent
+                            color:GlobalColor.Cyan400
+                            anchors.margins: 5
+                            z:-100
+                        }
                         id:sharetext
                         fillMode: Image.PreserveAspectFit
                         anchors.fill: parent
@@ -1097,7 +1137,7 @@ z:10
 
                             mainrect.parent.parent.currentPage="分享"
                             mainrect.parent.parent.x=-mainrect.width*1
-                            mainrect.parent.parent.children[1].item.settext("<font color=\"#45ada8\">"+ss+"</font>")
+                            mainrect.parent.parent.children[1].item.settext("<font color=\""+GlobalColor.Cyan400+"\">"+ss+"</font>")
 
                         }
                     }
@@ -1134,7 +1174,7 @@ z:10
                 color:"grey"
                 anchors.verticalCenter: parent.verticalCenter
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                 }
@@ -1161,9 +1201,9 @@ z:10
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
 
-//                    anchors.top: parent.top
-//                    anchors.left: parent.left
-//                    anchors.leftMargin: 50
+                    //                    anchors.top: parent.top
+                    //                    anchors.left: parent.left
+                    //                    anchors.leftMargin: 50
 
                     readOnly: true
                     placeholderText: "请输入项目"
@@ -1218,7 +1258,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                 }
@@ -1268,7 +1308,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                 }
@@ -1317,7 +1357,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                 }
@@ -1336,14 +1376,14 @@ z:10
             height: typerow.height
 
             spacing: begintimetext.width/5
-            property int lasttime:30
+            property int lasttime:0
             Text{
                 id:lasttimetext
                 text:"持续时间"
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                     bold: true
@@ -1393,7 +1433,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                 }
@@ -1408,7 +1448,7 @@ z:10
                     radius: 8
                     color: "#55000000"
                 }
-               // radius: height/4
+                // radius: height/4
                 color:"white"
                 height: parent.height
                 width:height*1.5
@@ -1442,7 +1482,7 @@ z:10
                 anchors.verticalCenter: parent.verticalCenter
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                 }
@@ -1454,143 +1494,165 @@ z:10
 
 
 
-            Rectangle{
-                id:changeeditmodebutton
+        Rectangle{
+            id:changeeditmodebutton
 
-                width: height
-                visible:antimetimer.running==false
-                anchors.top: lasttimerow.bottom
-                anchors.topMargin: 16*dp
-                height:lasttimerow.height*1.1
-                anchors.horizontalCenter: dosportdaysrect.horizontalCenter
+            width: height
+            visible:antimetimer.running==false
+            anchors.top: lasttimerow.bottom
+            anchors.topMargin: 16*dp
+            height:lasttimerow.height*1.1
+            anchors.horizontalCenter: dosportdaysrect.horizontalCenter
 
-                Image{
-                    fillMode: Image.PreserveAspectFit
+            Image{
+                Rectangle{
                     anchors.fill: parent
-                    source: "qrc:/image/recordpage.png"
+                    color:GlobalColor.Green200
+                    anchors.margins: 5
+                    z:-100
                 }
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        begintimerow.editmode==0?begintimerow.editmode=1:begintimerow.editmode=0
+                fillMode: Image.PreserveAspectFit
+                anchors.fill: parent
+                source: "qrc:/image/editmode.png"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    begintimerow.editmode==0?begintimerow.editmode=1:begintimerow.editmode=0
+
+                    if(begintimehourtext.text=="00"&&begintimemintext.text=="00"){
+                        var time= new Date()
+                        begintimehourtext.text=time.getHours().toString()
+                        begintimemintext.text=time.getMinutes().toString()
                     }
                 }
             }
+        }
 
 
-            Rectangle{
-                id:sportsavebutton
-                property string lastsaved:"123"
-                anchors.top: lasttimerow.bottom
-                anchors.topMargin: 16*dp
+        Rectangle{
+            id:sportsavebutton
+            property string lastsaved:"123"
+            anchors.top: lasttimerow.bottom
+            anchors.topMargin: 16*dp
 
-                height:lasttimerow.height*1.1
-                anchors.horizontalCenter: parent.horizontalCenter
+            height:lasttimerow.height*1.1
+            anchors.horizontalCenter: parent.horizontalCenter
 
-                width: height
+            width: height
 
-                Image{
-                    id:sportsavetext
-                    fillMode: Image.PreserveAspectFit
-
-
+            Image{
+                id:sportsavetext
+                fillMode: Image.PreserveAspectFit
+                Rectangle{
                     anchors.fill: parent
-                    source: "qrc:/image/save.png"
+                    color:GlobalColor.Green200
+                    anchors.margins: 5
+                    z:-100
                 }
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        if(sporttext.text=="")
-                            myjava.toastMsg("请输入项目");
-                        else{
-                            var tt=sporttext.text+"-"+begintimerow.begintime
-                            if(tt!=sportsavebutton.lastsaved){
-                                sportsavebutton.lastsaved=tt;
-                                recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
-                                sporttext.text=""
-                                lasttimemintext.text="0"
-                                lasttimehourtext.text="0"
-                                begintimehourtext.text="00"
-                                begintimemintext.text="00"
-                            }
-                            else
-                                myjava.toastMsg("保存成功")
-                        }
-                    }
-                }
+
+                anchors.fill: parent
+                source: "qrc:/image/save.png"
             }
-
-            Rectangle{
-                id:sportsharebutton
-                anchors.top: lasttimerow.bottom
-                anchors.topMargin: 16*dp
-                height:lasttimerow.height*1.1
-                anchors.horizontalCenter: timerrect.horizontalCenter
-                width: height
-
-                Timer{
-                    id:sharebuttontimer
-                    interval: 800
-                    repeat:true
-                    onTriggered: {
-                        if(sportsharebutton.scale==1.2)
-                            sportsharebutton.scale=1
-                        else
-                            sportsharebutton.scale=1.2
-                    }
-                    running: true
-                }
-
-
-                Behavior on scale{
-                    NumberAnimation{
-                        duration: 800
-                        easing.type: Easing.OutCubic
-                    }
-                }
-
-                Image{
-                    id:sportsharebuttontext
-                    fillMode: Image.PreserveAspectFit
-
-
-                    anchors.fill: parent
-                    source: "qrc:/image/share.png"
-                }
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        if(sporttext.text=="")
-                            myjava.toastMsg("请输入项目");
-                        else{
-                            var tt=sporttext.text+"-"+begintimerow.begintime
-                            if(tt!=sportsavebutton.lastsaved){
-                                sportsavebutton.lastsaved=tt;
-                                recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
-
-                            }
-                            else
-                                myjava.toastMsg("保存成功")
-
-
-                            // var str="<br><strong>运动：</strong>"+begintimerow.begintime+" <strong>"+sporttext.text+"</strong> 持续 "+lasttimerow.lasttime+"分钟";
-
-                            var str="<strong>运动：</strong>"+"<strong>"+sporttext.text+"</strong> "+lasttimerow.lasttime+"分钟";
-
-
-                            mainrect.parent.parent.currentPage="分享"
-                            mainrect.parent.parent.x=-mainrect.width*1
-                            mainrect.parent.parent.children[1].item.settext("<font color=\"#45ada8\">"+str+"</font>")
-
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    if(sporttext.text=="")
+                        myjava.toastMsg("请输入项目");
+                    else{
+                        var tt=sporttext.text+"-"+begintimerow.begintime
+                        if(tt!=sportsavebutton.lastsaved){
+                            sportsavebutton.lastsaved=tt;
+                            recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
                             sporttext.text=""
                             lasttimemintext.text="0"
                             lasttimehourtext.text="0"
                             begintimehourtext.text="00"
                             begintimemintext.text="00"
                         }
+                        else
+                            myjava.toastMsg("保存成功")
                     }
                 }
             }
+        }
+
+        Rectangle{
+            id:sportsharebutton
+            anchors.top: lasttimerow.bottom
+            anchors.topMargin: 16*dp
+            height:lasttimerow.height*1.1
+            anchors.horizontalCenter: timerrect.horizontalCenter
+            width: height
+
+            Timer{
+                id:sharebuttontimer
+                interval: 800
+                repeat:true
+                onTriggered: {
+                    if(sportsharebutton.scale==1.2)
+                        sportsharebutton.scale=1
+                    else
+                        sportsharebutton.scale=1.2
+                }
+                running: true
+            }
+
+
+            Behavior on scale{
+                NumberAnimation{
+                    duration: 800
+                    easing.type: Easing.OutCubic
+                }
+            }
+
+            Image{
+                id:sportsharebuttontext
+                fillMode: Image.PreserveAspectFit
+
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    anchors.margins: 5
+                    z:-100
+                }
+                anchors.fill: parent
+                source: "qrc:/image/share.png"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    if(sporttext.text=="")
+                        myjava.toastMsg("请输入项目");
+                    else{
+                        var tt=sporttext.text+"-"+begintimerow.begintime
+                        if(tt!=sportsavebutton.lastsaved){
+                            sportsavebutton.lastsaved=tt;
+                            recordsystem.uploadexercise(str_userid,sporttext.text,begintimerow.begintime,lasttimerow.lasttime);
+
+                        }
+                        else
+                            myjava.toastMsg("保存成功")
+
+
+                        // var str="<br><strong>运动：</strong>"+begintimerow.begintime+" <strong>"+sporttext.text+"</strong> 持续 "+lasttimerow.lasttime+"分钟";
+
+                        var str="<strong>运动：</strong>"+"<strong>"+sporttext.text+"</strong> "+lasttimerow.lasttime+"分钟";
+
+
+                        mainrect.parent.parent.currentPage="分享"
+                        mainrect.parent.parent.x=-mainrect.width*1
+                        mainrect.parent.parent.children[1].item.settext("<font color=\""+GlobalColor.Cyan400+"\">"+str+"</font>")
+
+                        sporttext.text=""
+                        lasttimemintext.text="0"
+                        lasttimehourtext.text="0"
+                        begintimehourtext.text="00"
+                        begintimemintext.text="00"
+                    }
+                }
+            }
+        }
 
 
 
@@ -1621,8 +1683,13 @@ z:10
                 id:checkimage
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: height*0.1
-
+                anchors.topMargin: 20*dp
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    anchors.margins: 5
+                    z:-100
+                }
                 fillMode: Image.PreserveAspectFit
 
                 height:parent.width/2.5
@@ -1656,11 +1723,11 @@ z:10
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: parent.height/5
                 anchors.horizontalCenter: parent.horizontalCenter
-                text:"<strong><font color=\"#02ae4a\">"+dosportdaysrect.checkinday.toString()+"天</font></strong>"
+                text:"<strong><font color=\"grey\">"+dosportdaysrect.checkinday.toString()+"天</font></strong>"
                 verticalAlignment: Text.AlignVCenter
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 20
                 }
@@ -1702,7 +1769,12 @@ z:10
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: height*0.1
-
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    anchors.margins: 5
+                    z:-100
+                }
                 fillMode: Image.PreserveAspectFit
 
                 height:parent.width/2
@@ -1744,7 +1816,7 @@ z:10
 
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
                     pointSize: 20
                 }
             }
@@ -1767,6 +1839,7 @@ z:10
                         sporttimer.mins=0
 
                         timertext.text="计时中"
+                        myjava.toastMsg("开始计时")
                         var time= new Date()
 
                         lasttimemintext.text="0"
@@ -1842,7 +1915,7 @@ z:10
                 anchors.centerIn: parent
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                 }
@@ -1961,7 +2034,7 @@ z:10
                 border.color: "grey"
                 border.width: 1
 
-                height:foodtabletitle.height*2+ header.height/3*7+breakfast.height+lunch.height+dinner.height+snack.height+dessert.height+others.height
+                height:foodtabletitle.height+breakfast.height+lunch.height+dinner.height+snack.height+dessert.height+others.height+80*dp
                 width: parent.width+2
 
                 x:parent.width/2-width/2
@@ -1980,7 +2053,7 @@ z:10
                     text:"饮食"
                     color:"grey"
                     anchors.top: parent.top
-                    anchors.topMargin: header.height/3
+                    anchors.topMargin: 10*dp
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     font{
@@ -1998,9 +2071,9 @@ z:10
                     color:"grey"
 
                     anchors.top: foodtabletitle.bottom
-                    anchors.topMargin: header.height/3
+                    anchors.topMargin: 10*dp
                     anchors.left: parent.left
-                    anchors.leftMargin: header.height/3
+                    anchors.leftMargin: 10*dp
 
                     font{
                         family: localFont.name
@@ -2015,9 +2088,9 @@ z:10
                     wrapMode: Text.Wrap
                     width: foodtablerect.width-header.height/3*2
                     anchors.top: breakfast.bottom
-                    anchors.topMargin: header.height/3
+                    anchors.topMargin: 10*dp
                     anchors.left: parent.left
-                    anchors.leftMargin: header.height/3
+                    anchors.leftMargin: 10*dp
                     font{
                         family: localFont.name
 
@@ -2031,9 +2104,9 @@ z:10
                     wrapMode: Text.Wrap
                     width: foodtablerect.width-header.height/3*2
                     anchors.top: lunch.bottom
-                    anchors.topMargin: header.height/3
+                    anchors.topMargin: 10*dp
                     anchors.left: parent.left
-                    anchors.leftMargin: header.height/3
+                    anchors.leftMargin: 10*dp
                     font{
                         family: localFont.name
 
@@ -2047,9 +2120,9 @@ z:10
                     wrapMode: Text.Wrap
                     width: foodtablerect.width-header.height/3*2
                     anchors.top: dinner.bottom
-                    anchors.topMargin: header.height/3
+                    anchors.topMargin: 10*dp
                     anchors.left: parent.left
-                    anchors.leftMargin: header.height/3
+                    anchors.leftMargin: 10*dp
                     font{
                         family: localFont.name
 
@@ -2063,9 +2136,9 @@ z:10
                     wrapMode: Text.Wrap
                     width: foodtablerect.width-header.height/3*2
                     anchors.top: snack.bottom
-                    anchors.topMargin: header.height/3
+                    anchors.topMargin: 10*dp
                     anchors.left: parent.left
-                    anchors.leftMargin: header.height/3
+                    anchors.leftMargin: 10*dp
                     font{
                         family: localFont.name
 
@@ -2079,9 +2152,9 @@ z:10
                     wrapMode: Text.Wrap
                     width: foodtablerect.width-header.height/3*2
                     anchors.top: dessert.bottom
-                    anchors.topMargin: header.height/3
+                    anchors.topMargin: 10*dp
                     anchors.left: parent.left
-                    anchors.leftMargin: header.height/3
+                    anchors.leftMargin: 10*dp
                     font{
                         family: localFont.name
 
@@ -2096,11 +2169,11 @@ z:10
                 id:sporttablerect
                 border.color: "grey"
                 border.width: 1
-                height:sporttableview.height+header.height/3*2+sporttabletitle.height
+                height:sporttableview.height+20*dp+sporttabletitle.height
                 width: parent.width+2
                 x:parent.width/2-width/2
                 anchors.top: foodtablerect.bottom
-                anchors.topMargin: header.height/3
+                anchors.topMargin: 16*dp
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 ListModel{
@@ -2116,7 +2189,7 @@ z:10
                     text:"运动"
                     color:"grey"
                     anchors.top: parent.top
-                    anchors.topMargin: header.height/3
+                    anchors.topMargin: 10*dp
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     font{
@@ -2128,27 +2201,28 @@ z:10
                 ListView{
                     id:sporttableview
                     anchors.top: sporttabletitle.bottom
-                    anchors.topMargin: header.height/3
+                    anchors.topMargin: 10*dp
                     anchors.left: parent.left
-                    anchors.leftMargin: header.height/3
-                    height: sporttabelmodel.count*(header.height/2.5*3+header.height/3*2+header.height/3*2+header.height/3)
+                    anchors.leftMargin: 10*dp
+                    height: contentHeight+1
                     width:parent.width-header.height/3*2
                     model: sporttabelmodel
-                    spacing: header.height/3*2
+                    spacing: 16*dp
 
                     boundsBehavior:Flickable.StopAtBounds
                     delegate: Item{
                         id:sporttabeldelegate
-                        height: sporttabeldelegatetype.height*3+header.height/3*2
+                        height: sporttabeldelegatetype.height*3+40*dp
                         width: parent.width
                         Text{
                             id:sporttabeldelegatetype
                             text:"项目类型："+Type
                             color:"grey"
                             anchors.top: sporttabeldelegate.top
+                            anchors.topMargin: 10*dp
                             anchors.left: parent.left
                             font{
-                        family: localFont.name
+                                family: localFont.name
 
                                 pointSize: 14
                             }
@@ -2158,10 +2232,10 @@ z:10
                             text:"开始时间："+BeginTime
                             color:"grey"
                             anchors.top: sporttabeldelegatetype.bottom
-                            anchors.topMargin: header.height/3
+                            anchors.topMargin: 10*dp
                             anchors.left: parent.left
                             font{
-                        family: localFont.name
+                                family: localFont.name
 
                                 pointSize: 14
                             }
@@ -2171,10 +2245,10 @@ z:10
                             text:"持续时间："+LastTime
                             color:"grey"
                             anchors.top: sporttabeldelegatebeigintime.bottom
-                            anchors.topMargin: header.height/3
+                            anchors.topMargin: 10*dp
                             anchors.left: parent.left
                             font{
-                        family: localFont.name
+                                family: localFont.name
 
                                 pointSize: 14
                             }
@@ -2205,22 +2279,37 @@ z:10
 
         Rectangle{
             id:searchbar
-            height: parent.height/12
-            width: parent.width
+            height: 35*dp
             anchors.top: parent.top
+            anchors.topMargin: 10*dp
+            anchors.left: parent.left
+            anchors.leftMargin: 10*dp
+            anchors.right: parent.right
+            anchors.rightMargin: 10*dp
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: 8
+                color: GlobalColor.Cyan400
+            }
+
             visible: (view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel||view.model===searchedsportmodel)?1:0
             TextField{
-                height:parent.height-6
-                width: parent.width-6
-                x:3
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.fill: parent
                 id:searchtext
                 placeholderText:"请输入要搜索的内容"
                 style: TextFieldStyle{
                     background: Rectangle{
-                        //radius: control.height/4
-                        border.width: 1;
-                        border.color: "grey"
+
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            transparentBorder: true
+
+                            radius: 8
+                            color: "#55000000"
+                        }
+
                         id:searchrect
                     }
                 }
@@ -2294,17 +2383,17 @@ z:10
                         radius: 8
                         color: "#55000000"
                     }
-                color:"#02ae4a"
-                anchors.centerIn: parent
-
-                Text{
-                    text:"返回"
-                    color:"white"
+                    color:GlobalColor.Green200
                     anchors.centerIn: parent
-                    font.pointSize: 16
-                }
 
-                //radius: height/4
+                    Text{
+                        text:"返回"
+                        color:"white"
+                        anchors.centerIn: parent
+                        font.pointSize: 16
+                    }
+
+                    //radius: height/4
                 }
                 MouseArea{
                     anchors.fill: parent
@@ -2321,6 +2410,8 @@ z:10
             id:view
             spacing: -1
             anchors.top: (view.model===foodsmodel||view.model===searchedmodel||view.model===sportsmodel||view.model===searchedsportmodel)?searchbar.bottom:parent.top
+            anchors.topMargin: 10*dp
+
             clip: true
             width: parent.width
             height:parent.height-searchbar.height
@@ -2351,7 +2442,7 @@ z:10
                         color: "grey"
                         text:value
                         font{
-                        family: localFont.name
+                            family: localFont.name
 
                             pointSize: 24
                         }

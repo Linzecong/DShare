@@ -10,6 +10,8 @@ import QtQuick.Dialogs 1.2
 import QtCharts 2.0
 import SpeechSystem 1.0
 import QtGraphicalEffects 1.0
+import "qrc:/GlobalVariable.js" as GlobalColor
+
 Rectangle { 
     MouseArea{
         anchors.bottom: parent.bottom
@@ -168,7 +170,7 @@ Rectangle {
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: "#02ae4a"
+            color: "#55000000"
         }
 
 
@@ -176,7 +178,7 @@ Rectangle {
             id:text
             visible:image.source==""?true:false
             text: "+";
-            color:"white"
+            color:GlobalColor.Green300
             font{
                         family: localFont.name
                 pixelSize: photobutton.height/3
@@ -258,7 +260,7 @@ Rectangle {
                 messageDialog.open()
             }
         }
-        color:cma.pressed?"#02ae4a":"white"
+        color:cma.pressed?"grey":"white"
         Behavior on color{
             ColorAnimation{
                 easing.type: Easing.Linear
@@ -452,7 +454,7 @@ Rectangle {
             }
         }
 
-        color:sma.pressed?"#33bf5b":"#02ae4a"
+        color:sma.pressed?GlobalColor.Green200:GlobalColor.Green400
         Behavior on color{
             ColorAnimation{
                 easing.type: Easing.Linear
@@ -484,7 +486,7 @@ Rectangle {
         Label{
             visible:true
             text: "请说话";
-            color:"#02ae4a"
+            color:GlobalColor.Green400
             font{
                         family: localFont.name
                 pixelSize: photobutton.height/4
@@ -513,7 +515,12 @@ Rectangle {
 
         radius: width/2
         Image{
-
+            Rectangle{
+                anchors.fill: parent
+                color:GlobalColor.Cyan400
+                anchors.margins: 10
+                z:-100
+            }
             fillMode: Image.PreserveAspectFit
             anchors.fill: parent
             anchors.margins: parent.width/7

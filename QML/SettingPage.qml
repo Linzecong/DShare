@@ -8,7 +8,7 @@ import JavaMethod 1.0
 import SendImageSystem 1.0
 import DataSystem  1.0
 import QtGraphicalEffects 1.0
-
+import "qrc:/GlobalVariable.js" as GlobalColor
 StackView{
     property string imagePath:"Qt"
     property string str_userid;
@@ -632,7 +632,7 @@ StackView{
             z:5
             width:parent.width;
             height: parent.height/16*2
-            color:"#02ae4a"
+            color:GlobalColor.Green400
             anchors.top: parent.top;
             layer.enabled: true
             layer.effect: DropShadow {
@@ -642,10 +642,11 @@ StackView{
             }
             Label{
                 id:backbutton
-                text:" ＜";
+                text:"＜";
                 height: parent.height
                 width:height
                 anchors.left: parent.left
+                anchors.leftMargin: 16*dp
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
 
@@ -780,7 +781,7 @@ StackView{
                 z:5
                 width:parent.width;
                 height: parent.height/16*2
-                color:"#02ae4a"
+                color:GlobalColor.Green400
                 anchors.top: parent.top;
 
                 layer.enabled: true
@@ -791,8 +792,9 @@ StackView{
                 }
 
                 Label{
-                    text:" ＜";
+                    text:"＜";
                     anchors.left: parent.left
+                    anchors.leftMargin: 16*dp
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     verticalAlignment: Text.AlignVCenter
@@ -1023,10 +1025,10 @@ StackView{
                 id:xieyitoprect;
                 width:parent.width;
                 height: parent.height/16*1.5;
-                color:"#02ae4a";
+                color:GlobalColor.Green400
                 anchors.top: parent.top;
                 Label{
-                    text:"  <";
+                    text:"<";
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     font{

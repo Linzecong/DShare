@@ -8,7 +8,7 @@ import ReportSystem 1.0
 import JavaMethod 1.0
 import QtGraphicalEffects 1.0
 import QtCharts 2.0
-
+import "qrc:/GlobalVariable.js" as GlobalColor
 Rectangle {
     id:mainwindow
     anchors.fill: parent
@@ -136,7 +136,7 @@ Rectangle {
 
             if(Statue==="als_TypeDONE"){
                 var num=als_Type_getCount().split("@")
-                if(foodtypechart.currentPage===1){
+                if(foodtypechart.currentPage===0){
                     pie1.color="#FF6103"
                     pie1.label="热性"
                     pie1.value=num[0]
@@ -153,7 +153,7 @@ Rectangle {
                     pie5.label="寒性"
                     pie5.value=num[4]
                 }
-                if(foodtypechart.currentPage===2){
+                if(foodtypechart.currentPage===1){
                     pie1.color="#E3A869"
                     pie1.label="谷薯类"
                     pie1.value=num[0]
@@ -170,7 +170,7 @@ Rectangle {
                     pie5.label="纯能类"
                     pie5.value=num[4]
                 }
-                if(foodtypechart.currentPage===3){
+                if(foodtypechart.currentPage===2){
                     pie1.color="#00C957"
                     pie1.label="果蔬制品"
                     pie1.value=num[0]
@@ -213,7 +213,7 @@ Rectangle {
         z:5
         width:parent.width;
         height: parent.height/16*2
-        color:"#02ae4a"
+        color:GlobalColor.Green400
         anchors.top: parent.top;
 
         layer.enabled: true
@@ -224,16 +224,17 @@ Rectangle {
         }
 
         Label{
-            text:" ＜";
+            text:"＜";
             id:backbutton
             height: parent.height
             width:height
             anchors.left: parent.left
+            anchors.leftMargin: 16*dp
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
             font{
-                        family: localFont.name
+                family: localFont.name
 
                 pixelSize: (head.height)/4
 
@@ -254,7 +255,7 @@ Rectangle {
             anchors.centerIn: parent
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
-                        family: localFont.name
+                family: localFont.name
                 //family: "微软雅黑
                 pointSize: 20
             }
@@ -270,22 +271,26 @@ Rectangle {
         anchors.top: head.bottom
 
         anchors.left: parent.left
-        anchors.leftMargin: 10*dp
         anchors.right: parent.right
-        anchors.rightMargin: 10*dp
         anchors.bottom:parent.bottom
 
-        contentHeight: foodcountchart.height+foodtimechart.height+foodtypechart.height+sporttimechart.height
+        contentHeight: foodcountchart.height+foodtimechart.height+foodtypechart.height+sporttimechart.height+100*dp
 
 
         ChartView {
             title: "总食用次数Top5"
             titleFont{
-                        family: localFont.name
+                family: localFont.name
                 //family: "微软雅黑"
                 pointSize: 16
             }
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.leftMargin: 10*dp
+            anchors.rightMargin: 10*dp
             anchors.topMargin: 20*dp
+
             property int currentPage: 0
             onCurrentPageChanged: {
                 switch(currentPage){
@@ -317,7 +322,6 @@ Rectangle {
             }
 
             height: mainwindow.height/2
-            width: parent.width
             id:foodcountchart
             animationOptions:ChartView.SeriesAnimations
 
@@ -349,10 +353,21 @@ Rectangle {
                 id:foodcountchartleft
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.margins: (head.height)/3
+
                 height: (head.height)/3
-                width: parent.width/7
-                color:"yellow"
+                width: height*2
+                anchors.margins:8*dp
+                Text{
+                    text:"←"
+                    color:GlobalColor.Cyan400
+                    anchors.fill: parent
+                    font{
+                        family: localFont.name
+                        pixelSize: parent.height
+                    }
+                }
+
+
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -368,10 +383,19 @@ Rectangle {
                 id:foodcountchartright
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: (head.height)/3
                 height: (head.height)/3
-                width: parent.width/7
-                color:"yellow"
+                width: height*2
+                anchors.margins:8*dp
+                Text{
+                    text:"→"
+                    color:GlobalColor.Cyan400
+                    anchors.fill: parent
+                    font{
+                        family: localFont.name
+                        pixelSize: parent.height
+                    }
+                    horizontalAlignment: Text.AlignRight
+                }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -389,15 +413,17 @@ Rectangle {
         ChartView {
             title: "最近10天食用次数前三"
             titleFont{
-                        family: localFont.name
+                family: localFont.name
                 //family: "微软雅黑"
                 pointSize: 16
             }
             anchors.top: foodcountchart.bottom
-            anchors.topMargin: 20*dp
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 10*dp
 
             height: mainwindow.height/2
-            width: parent.width
+
 
             animationOptions:ChartView.SeriesAnimations
             legend.visible:true
@@ -455,13 +481,13 @@ Rectangle {
                 }
 
                 switch(foodtypechart.currentPage){
-                case 1:
+                case 0:
                     foodtypechart.title=temp+"性状分布"
                     break;
-                case 2:
+                case 1:
                     foodtypechart.title=temp+"营养分布"
                     break;
-                case 3:
+                case 2:
                     foodtypechart.title=temp+"原料分布"
                     break;
                 default:
@@ -475,7 +501,7 @@ Rectangle {
             BarCategoryAxis {
                 id:foodtimechartbcax
                 labelsFont{
-                        family: localFont.name
+                    family: localFont.name
                     //family: "微软雅黑"
                     pixelSize: (head.height)/11
                     bold:true
@@ -511,10 +537,18 @@ Rectangle {
                 id:foodtimechartleft
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.margins: (head.height)/3
                 height: (head.height)/3
-                width: parent.width/7
-                color:"yellow"
+                width: height*2
+                anchors.margins:8*dp
+                Text{
+                    text:"←"
+                    color:GlobalColor.Cyan400
+                    anchors.fill: parent
+                    font{
+                        family: localFont.name
+                        pixelSize: parent.height
+                    }
+                }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -532,10 +566,19 @@ Rectangle {
                 id:foodtimechartright
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: (head.height)/3
                 height: (head.height)/3
-                width: parent.width/7
-                color:"yellow"
+                width: height*2
+                anchors.margins:8*dp
+                Text{
+                    text:"→"
+                    color:GlobalColor.Cyan400
+                    anchors.fill: parent
+                    font{
+                        family: localFont.name
+                        pixelSize: parent.height
+                    }
+                    horizontalAlignment: Text.AlignRight
+                }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -554,14 +597,14 @@ Rectangle {
 
             title: "最近10天性状分布"
             titleFont{
-                        family: localFont.name
+                family: localFont.name
                 //family: "微软雅黑"
                 pointSize: 16
             }
 
             legend.visible:true
             legend.font{
-                        family: localFont.name
+                family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/7
             }
@@ -570,10 +613,11 @@ Rectangle {
             antialiasing: true
 
             anchors.top: foodtimechart.bottom
-            anchors.topMargin: 20*dp
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 10*dp
 
             height: mainwindow.height/2
-            width: parent.width
             animationOptions:ChartView.SeriesAnimations
 
 
@@ -605,13 +649,13 @@ Rectangle {
                 }
 
                 switch(currentPage){
-                case 1:
+                case 0:
                     title=temp+"性状分布"
                     break;
-                case 2:
+                case 1:
                     title=temp+"营养分布"
                     break;
-                case 3:
+                case 2:
                     title=temp+"原料分布"
                     break;
                 default:
@@ -625,21 +669,29 @@ Rectangle {
                 id: pieSeries
 
 
-                PieSlice {id:pie1; color:"#FF6103"; label: "热性"; value: 1; labelVisible:true}
-                PieSlice {id:pie2; color:"#ED9121"; label: "温性"; value: 2; labelVisible:true}
-                PieSlice {id:pie3; color:"#F5DEB3"; label: "平性"; value: 3; labelVisible:true}
-                PieSlice {id:pie4; color:"#FFD700"; label: "凉性"; value: 4; labelVisible:true}
-                PieSlice {id:pie5; color:"#FFE384"; label: "寒性"; value: 5; labelVisible:true}
+                PieSlice {id:pie1; color:"#FF6103"; label: "热性"; value: 1; labelVisible:false}
+                PieSlice {id:pie2; color:"#ED9121"; label: "温性"; value: 2; labelVisible:false}
+                PieSlice {id:pie3; color:"#F5DEB3"; label: "平性"; value: 3; labelVisible:false}
+                PieSlice {id:pie4; color:"#FFD700"; label: "凉性"; value: 4; labelVisible:false}
+                PieSlice {id:pie5; color:"#FFE384"; label: "寒性"; value: 5; labelVisible:false}
             }
 
             Rectangle{
                 id:foodtypechartleft
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.margins: (head.height)/3
                 height: (head.height)/3
-                width: parent.width/7
-                color:"yellow"
+                width: height*2
+                anchors.margins:8*dp
+                Text{
+                    text:"←"
+                    color:GlobalColor.Cyan400
+                    anchors.fill: parent
+                    font{
+                        family: localFont.name
+                        pixelSize: parent.height
+                    }
+                }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -655,10 +707,19 @@ Rectangle {
                 id:foodtypechartright
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: (head.height)/3
                 height: (head.height)/3
-                width: parent.width/7
-                color:"yellow"
+                width: height*2
+                anchors.margins:8*dp
+                Text{
+                    text:"→"
+                    color:GlobalColor.Cyan400
+                    anchors.fill: parent
+                    font{
+                        family: localFont.name
+                        pixelSize: parent.height
+                    }
+                    horizontalAlignment: Text.AlignRight
+                }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -678,7 +739,7 @@ Rectangle {
 
             title: "最近10天运动时间"
             titleFont{
-                        family: localFont.name
+                family: localFont.name
                 //family: "微软雅黑"
                 pointSize: 16
             }
@@ -686,7 +747,7 @@ Rectangle {
             legend.alignment: Qt.AlignTop
             legend.visible:true
             legend.font{
-                        family: localFont.name
+                family: localFont.name
                 //family: "微软雅黑"
                 pixelSize: (head.height)/5
             }
@@ -695,10 +756,12 @@ Rectangle {
             antialiasing: true
 
             anchors.top: foodtypechart.bottom
-            anchors.topMargin: 20*dp
 
             height: mainwindow.height/2
-            width: parent.width
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 10*dp
+
             animationOptions:ChartView.SeriesAnimations
 
 
@@ -734,7 +797,7 @@ Rectangle {
             BarCategoryAxis {
                 id:sporttimechartbcax
                 labelsFont{
-                        family: localFont.name
+                    family: localFont.name
                     //family: "微软雅黑"
                     pixelSize: (head.height)/11
                     bold:true
@@ -760,10 +823,18 @@ Rectangle {
                 id:sporttimechartleft
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.margins: (head.height)/3
                 height: (head.height)/3
-                width: parent.width/7
-                color:"yellow"
+                width: height*2
+                anchors.margins:8*dp
+                Text{
+                    text:"←"
+                    color:GlobalColor.Cyan400
+                    anchors.fill: parent
+                    font{
+                        family: localFont.name
+                        pixelSize: parent.height
+                    }
+                }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -772,7 +843,7 @@ Rectangle {
                             sporttimechart.currentPage=5;
 
                         reportsystem.als_Time_Exe(sporttimechart.currentPage)
-                        }
+                    }
                 }
             }
 
@@ -780,10 +851,19 @@ Rectangle {
                 id:sporttimechartright
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: (head.height)/3
                 height: (head.height)/3
-                width: parent.width/7
-                color:"yellow"
+                width: height*2
+                anchors.margins:8*dp
+                Text{
+                    text:"→"
+                    color:GlobalColor.Cyan400
+                    anchors.fill: parent
+                    font{
+                        family: localFont.name
+                        pixelSize: parent.height
+                    }
+                    horizontalAlignment: Text.AlignRight
+                }
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
@@ -791,7 +871,7 @@ Rectangle {
                         if(sporttimechart.currentPage==6)
                             sporttimechart.currentPage=0;
                         reportsystem.als_Time_Exe(sporttimechart.currentPage)
-                        }
+                    }
                 }
             }
 

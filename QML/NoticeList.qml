@@ -7,7 +7,7 @@ import DataSystem 1.0
 import JavaMethod 1.0
 import PostsSystem 1.0
 import QtGraphicalEffects 1.0
-
+import "qrc:/GlobalVariable.js" as GlobalColor
 Rectangle {
     id:mainrect;
     anchors.fill: parent
@@ -72,30 +72,39 @@ Rectangle {
               myjava.toastMsg("暂无消息")
             }
 
+            if(Statue=="getnameSucceed"){
+
+                var Hasimage=postsystem.str.split("|||")[1]
+                var Headurl=postsystem.str.split("|||")[2]
+
+                var Posttime=postsystem.str.split("|||")[4]
+                var Message=postsystem.str.split("|||")[5]
+                var Photo=postsystem.str.split("|||")[6]
+                var Liker=postsystem.str.split("|||")[7]
+                var ID=parseInt(postsystem.str.split("|||")[8])
+
+                uniquepost.item.setData(Hasimage,Headurl,dbsystem.getName(),Posttime,Message,Photo,Liker,ID,userid,nickname,0)
+                uniquepost.visible=true
+            }
+
+
+
         }
     }
 
     PostsSystem{
         id:postsystem
+        property string str: ""
         onStatueChanged: {
 
 
             if(Statue=="getuniquepostSucceed"){
 
-                var str=new String(postsystem.getuniquepoststr())
+                var str22=postsystem.getuniquepoststr()
+                postsystem.str=str22
+                dbsystem.getNameByID(postsystem.str.split("|||")[3])
 
 
-                var Hasimage=str.split("|||")[1]
-                var Headurl=str.split("|||")[2]
-                var Username=str.split("|||")[3]
-                var Posttime=str.split("|||")[4]
-                var Message=str.split("|||")[5]
-                var Photo=str.split("|||")[6]
-                var Liker=str.split("|||")[7]
-                var ID=parseInt(str.split("|||")[8])
-
-                uniquepost.item.setData(Hasimage,Headurl,Username,Posttime,Message,Photo,Liker,ID,mainrect.userid,mainrect.nickname,0)
-                uniquepost.visible=true
             }
             if(Statue=="getuniquepostDBError"){
               myjava.toastMsg("该分享已删除！")
@@ -123,7 +132,7 @@ Rectangle {
         z:5
         width:parent.width
         height: parent.height/16*2
-        color: "#02ae4a"
+        color: GlobalColor.Green400
         anchors.top: parent.top
         layer.enabled: true
         layer.effect: DropShadow {
@@ -135,13 +144,14 @@ Rectangle {
             id:back
             height: parent.height
             width:height
-            text:" ＜"
+            text:"＜"
             color: "white"
             font{
                         family: localFont.name
                 pixelSize: (head.height)/4
             }
             anchors.left: parent.left
+            anchors.leftMargin: 16*dp
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
@@ -241,7 +251,7 @@ Rectangle {
                         family: localFont.name
                         pointSize: 16
                     }
-                    text:"<strong><font color=\"#02ae4a\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\"#02ae4a\">你</font></strong>"
+                    text:"<strong><font color=\""+GlobalColor.Teal500+"\">"+Sender+"</font></strong>"+" "+Type+" <strong><font color=\""+GlobalColor.Teal500+"\">你</font></strong>"
 
                 }
 
@@ -266,7 +276,7 @@ Rectangle {
 
                     anchors.right: parent.right
                     anchors.rightMargin: 10*dp
-                    color: "#02ae4a"
+                    color: GlobalColor.Teal600
                     wrapMode: Text.WordWrap
                     font{
                         family: localFont.name

@@ -6,6 +6,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 import DataSystem 1.0
 import QtGraphicalEffects 1.0
+import "qrc:/GlobalVariable.js" as GlobalColor
 Rectangle {
     id:mainrect;
     anchors.fill: parent
@@ -98,6 +99,8 @@ Rectangle {
 
 
     function setTitle(a){
+
+
         headname.text=a;
         forceActiveFocus();
         if(a==="搜索用户"){
@@ -149,7 +152,7 @@ Rectangle {
         z:5
         width:parent.width
         height: parent.height/16*2
-        color:"#02ae4a"
+        color:GlobalColor.Green400
         anchors.top: parent.top
         layer.enabled: true
         layer.effect: DropShadow {
@@ -161,13 +164,14 @@ Rectangle {
             id:back
             height: parent.height
             width:height
-            text:" ＜"
+            text:"＜"
             color: "white"
             font{
                         family: localFont.name
                 pixelSize: (head.height)/4
             }
             anchors.left: parent.left
+            anchors.leftMargin: 16*dp
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
@@ -221,7 +225,7 @@ Rectangle {
         layer.effect: DropShadow {
             transparentBorder: true
             radius: 8
-            color: "#55000000"
+            color: GlobalColor.Cyan400
         }
         TextField{
             anchors.fill: parent
@@ -246,6 +250,11 @@ Rectangle {
                 }
             }
             Image{
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Cyan400
+                    z:-100
+                }
                 id:searchicon
                 anchors.right: searchtext.right
                 anchors.rightMargin: 8*dp
@@ -351,7 +360,7 @@ Rectangle {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            mypost.item.getpost(username,userid,nickname);
+                            mypost.item.getpost(username,userid,mainrect.nickname);
                             mypost.visible=true
                             mypost.x=0
                         }
@@ -396,7 +405,7 @@ Rectangle {
 
                 Rectangle{
                     id:buttonrect
-                    color:iss?(yiguanzhu?"grey":"#02ae4a"):"white";
+                    color:iss?(yiguanzhu?"grey":GlobalColor.Green200):"white";
                     height: useridtext.height*1.5
                     width:height*2
 

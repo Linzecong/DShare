@@ -10,7 +10,7 @@ import SendImageSystem 1.0
 import ReportSystem 1.0
 import QtGraphicalEffects 1.0
 import QtQuick.Controls.Material 2.0
-
+import "qrc:/GlobalVariable.js" as GlobalColor
 
 Rectangle {
     id:mainwindow
@@ -340,8 +340,12 @@ Rectangle {
                 height:myjava.getStatusBarHeight()
                 color:"green"
             }
+
             id:sidepagetop
-            color:"#02ae4a"
+
+            //color:"#02ae4a"
+            color: GlobalColor.Green400
+
             width: sidepage.width
             height: sidepage.height/4
             anchors.top: sidepage.top
@@ -393,7 +397,7 @@ Rectangle {
                 anchors.topMargin: 5
                 color: "white"
                 text:"昵称:未获取"
-                wrapMode: Text.WordWrap
+                wrapMode: Text.NoWrap
                 width: parent.width-headimage2.width- parent.width/15- parent.width/10
                 font{
                         family: localFont.name
@@ -410,7 +414,7 @@ Rectangle {
                 anchors.bottom: headimage2.bottom
                 anchors.bottomMargin: 5
                 color: "white"
-                wrapMode: Text.WordWrap
+                wrapMode: Text.NoWrap
                 width: parent.width-headimage2.width- parent.width/15- parent.width/10
                 font{
                         family: localFont.name
@@ -444,6 +448,7 @@ Rectangle {
             //anchors.top: sidepagetop.bottom
             //anchors.topMargin: sidepagetop.height/10
             anchors.top: parent.top
+            anchors.topMargin: 10*dp
             anchors.right: parent.right
             height: sidepage.height/10
             width: sidepage.width
@@ -454,16 +459,21 @@ Rectangle {
                     duration: 200
                 }
             }
+
+
             Image {
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    z:-100
+                }
                 id:followingicon
                 anchors.left: parent.left
                 anchors.leftMargin: 10*dp
-
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/user.png"
                 width: height
                 height: parent.height/2
-
             }
 
             Label{
@@ -509,6 +519,11 @@ Rectangle {
                 }
             }
             Image {
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    z:-100
+                }
                 id:followericon
                 anchors.left: parent.left
                 anchors.leftMargin: 10*dp
@@ -564,6 +579,11 @@ Rectangle {
                 }
             }
             Image {
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    z:-100
+                }
                 id:shareicon
                 anchors.left: parent.left
                 anchors.leftMargin: 10*dp
@@ -613,11 +633,16 @@ Rectangle {
                 }
             }
             Image {
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    z:-100
+                }
                 id:messageicon
                 anchors.left: parent.left
                 anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/conpassword.png"
+                source: "qrc:/image/notice.png"
                 width: height
                 height: parent.height/2
             }
@@ -662,11 +687,16 @@ Rectangle {
                 }
             }
             Image {
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    z:-100
+                }
                 id:reporticon
                 anchors.left: parent.left
                 anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/conpassword.png"
+                source: "qrc:/image/report.png"
                 width: height
                 height: parent.height/2
             }
@@ -746,11 +776,16 @@ Rectangle {
                 }
             }
             Image {
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    z:-100
+                }
                 id:settingicon
                 anchors.left: parent.left
                 anchors.leftMargin: 10*dp
                 anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/save.png"
+                source: "qrc:/image/setting.png"
                 width: height
                 height: parent.height/2
             }
@@ -795,6 +830,11 @@ Rectangle {
                 }
             }
             Image {
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green200
+                    z:-100
+                }
                 id:logouticon
                 anchors.left: parent.left
                 anchors.leftMargin: 10*dp
@@ -889,7 +929,7 @@ Rectangle {
         width:parent.width;
         height: parent.height/16*2;
 
-        color:"#02ae4a"
+        color:GlobalColor.Green400
         x:0
         y:0
 
@@ -912,12 +952,14 @@ Rectangle {
 
         //侧边栏按钮
         Image{
+
+
             id:sidebarbutton
 //            height: parent.height/2.5
 //            width:height
 
-            height: 18*dp
-            width:18*dp
+            height: 24*dp
+            width:24*dp
 
 fillMode: Image.PreserveAspectFit
 
@@ -974,14 +1016,14 @@ fillMode: Image.PreserveAspectFit
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             fillMode: Image.PreserveAspectFit
 
-            height: 18*dp
-            width:18*dp
+            height: 24*dp
+            width:24*dp
 
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
                     friends.item.userid=str_userid
-                    friends.item.nickname=nickname
+                    friends.item.nickname=mainwindow.nickname
                     friends.item.setTitle("搜索用户")
                     friends.visible=true
                     friends.x=0
@@ -1038,13 +1080,26 @@ fillMode: Image.PreserveAspectFit
         Rectangle{
             id:mainbutton
             anchors.left: parent.left
-            height:width
-            width:parent.width/5
+
+
+            height:parent.height
+            width:parent.width/3
+
             color:"white";
             Image {
-                height: parent.height
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green400
+                    anchors.margins: 5
+                    //bottom.currentPage=="DShare"?"qrc:/image/mainpage.png":"qrc:/image/mainpageblack.png"
+                    z:-100
+                }
+
+                anchors.centerIn: parent
+                height:parent.height/1.5
                 width: height
-                source: bottom.currentPage=="DShare"?"qrc:/image/mainpage.png":"qrc:/image/mainpageblack.png"
+
+                source: "qrc:/image/mainpage.png"
                 fillMode: Image.PreserveAspectFit
 
 
@@ -1091,15 +1146,23 @@ fillMode: Image.PreserveAspectFit
         Rectangle{
             id:sendbutton
             anchors.horizontalCenter: parent.horizontalCenter
-            height:width
-            width:parent.width/5
+            height:parent.height
+
+            width:parent.width/3
 
             color:"white";
             Image {
-
-                height: parent.height
+                Rectangle{
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    color:GlobalColor.Green400
+                    z:-100
+                }
+                anchors.centerIn: parent
+                height:parent.height/1.5
                 width: height
-                source: bottom.currentPage=="分享"?"qrc:/image/sharepage.png":"qrc:/image/sharepageblack.png"
+
+                source: "qrc:/image/sharepage.png"
                 fillMode: Image.PreserveAspectFit
                 Timer{
                     interval: 800
@@ -1141,14 +1204,24 @@ fillMode: Image.PreserveAspectFit
         Rectangle{
             id:recordbutton
             anchors.right: parent.right
-            height:width
-            width:parent.width/5
+            height:parent.height
+
+            width:parent.width/3
+
             color:"white";
             Image {
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green400
+                    anchors.margins: 5
+                    z:-100
+                }
 
-                height: parent.height
+                anchors.centerIn: parent
+                height:parent.height/1.5
                 width: height
-                source: bottom.currentPage=="记录"?"qrc:/image/recordpage.png":"qrc:/image/recordpageblack.png"
+
+                source: "qrc:/image/recordpage.png"
                 fillMode: Image.PreserveAspectFit
                 Timer{
                     interval: 800

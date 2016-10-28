@@ -9,6 +9,8 @@ import JavaMethod 1.0
 import DataSystem 1.0
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
+import "qrc:/GlobalVariable.js" as GlobalColor
+
 StackView{
     JavaMethod{
         id:myjava
@@ -20,6 +22,7 @@ StackView{
     property string str_userid;//ID
     //防止其他页面点击
     MouseArea{
+
         anchors.fill: parent
     }
 
@@ -36,7 +39,7 @@ StackView{
     //启动等待界面
     Rectangle{
         id:openrect
-        color:"#02ae4a"
+        color:GlobalColor.Green400
         anchors.fill: parent
         z:100
         Behavior on opacity {
@@ -49,6 +52,11 @@ StackView{
             }
         }
         Image{
+            Rectangle{
+                anchors.fill: parent
+                color:GlobalColor.Green400
+                z:-100
+            }
             width:parent.width/2.5
             height:width
             opacity: parent.opacity
@@ -96,10 +104,15 @@ StackView{
             id:toprect;
             width:parent.width;
             height: parent.height/16*5.5;
-            color:"#02ae4a";
+            color:GlobalColor.Green400
             anchors.top: parent.top;
             Image{
                 //顶部应用图标
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green400
+                    z:-100
+                }
                 id:icon
                 width:parent.width/3
                 height:width
@@ -128,6 +141,12 @@ StackView{
             spacing: 40
             //用户图标
             Image{
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green400
+                    anchors.margins: 5
+                    z:-100
+                }
                 id:usericon;
                 height: parent.height
                 width: height
@@ -167,6 +186,12 @@ StackView{
             //width:parent.width/9*6;
             spacing: 40
             Image{
+                Rectangle{
+                    anchors.fill: parent
+                    color:GlobalColor.Green400
+                    anchors.margins: 5
+                    z:-100
+                }
                 id:passwordicon
                 height: parent.height
                 width: height
@@ -205,7 +230,7 @@ StackView{
             anchors.rightMargin: 40
             anchors.top: passrow.bottom
             anchors.topMargin: passrow.height
-            color:loginma.pressed?"1589e8":"#02ae4a"
+            color:loginma.pressed?GlobalColor.Green400:GlobalColor.Green200
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
@@ -261,7 +286,7 @@ StackView{
             anchors.leftMargin: 40
             anchors.top: passrow.bottom
             anchors.topMargin: passrow.height
-            color:registma.pressed?"02ae4a":"#1589e8";
+            color:registma.pressed?GlobalColor.LightBlue400:GlobalColor.LightBlue200;
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
@@ -310,7 +335,7 @@ StackView{
                     else
                         stack.str_userid=loginsystem.getusername();
 
-
+                   mainpage.source="";
 
                     mainpage.source="qrc:/QML/MainWindow.qml";//加载首页
                     mainpage.x=0;
@@ -362,7 +387,7 @@ StackView{
                 }
                 width:parent.width;
                 height: parent.height/16*2;
-                color:"#02ae4a";
+                color:GlobalColor.Green400
                 anchors.top: parent.top;
                 layer.enabled: true
                 layer.effect: DropShadow {
@@ -734,7 +759,7 @@ StackView{
                 anchors.top: agerow.bottom
                 anchors.topMargin: agerow.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                color:registma.pressed?"32dc96":"#1589e8";
+                color:registma.pressed?GlobalColor.LightBlue400:GlobalColor.LightBlue200
                 layer.enabled: true
                 layer.effect: DropShadow {
                     transparentBorder: true
@@ -812,7 +837,8 @@ StackView{
                         loginsystem.saveusernamepassword(registidtext.text,registpasstext.text);
                         stack.str_userid=registidtext.text
                         stack.pop();
-                        mainpage.source="qrc:/QML/MainWindow.qml";
+                        mainpage.source=""
+                        mainpage.source="qrc:/QML/MainWindow.qml"
                         mainpage.x=0;
                         myjava.toastMsg("注册成功！")
                     }
