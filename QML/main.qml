@@ -159,7 +159,7 @@ StackView{
                 width: mainrect.width/2
                 id:usertext
                 placeholderText:"请输入ID"
-                validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
+                validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,18}$/}
                 //Material.theme: Material.Dark
                 //Material.accent: Material.Purple
                 style: TextFieldStyle{
@@ -265,8 +265,8 @@ StackView{
                         return;
                     }
 
-                    if(passwordtext.text.length<8||passwordtext.text.length>16){
-                        myjava.toastMsg("密码至少有8~16个字符")
+                    if(passwordtext.text.length<8||passwordtext.text.length>20){
+                        myjava.toastMsg("密码至少有8~20个字符")
                         return;
                     }
                     if(passwordtext.text.indexOf("|")>=0||usertext.text.indexOf("|")>=0||passwordtext.text.indexOf("@")>=0||usertext.text.indexOf("@")>=0){
@@ -348,15 +348,15 @@ StackView{
                 }
 
 
+                openrect.opacity=0//取消显示等待页面
                 indicator.visible=false
             }
         }
         MessageDialog {
             id: messageDialog
             title: "提示"
-            text: "程序无法访问SDCard，部分功能（如图片查看）缺失！"
+            text: "程序无法访问储存器，部分功能（如图片查看）缺失！"
             standardButtons: StandardButton.Ok
-
         }
     }
 
@@ -456,7 +456,7 @@ StackView{
                     width: registtoprect.width/3*1.7
                     id:registidtext
                     placeholderText:"请输入ID"
-                    validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
+                    validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,18}$/}
                     style: TextFieldStyle{
                         textColor:"grey"
                         background: Rectangle{
@@ -804,8 +804,8 @@ StackView{
                             return;
                         }
 
-                        if(registpasstext.text.length<8||registpasstext.text.length>16){
-                            myjava.toastMsg("密码要由8~16位数字和字母组成")
+                        if(registpasstext.text.length<8||registpasstext.text.length>20){
+                            myjava.toastMsg("密码要由8~20位数字和字母组成")
                             return;
                         }
                         if(registpasstext.text!=registcompasstext.text){

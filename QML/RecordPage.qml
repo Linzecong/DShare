@@ -6,6 +6,7 @@ import QtQuick.Controls.Styles 1.3
 import QtQuick.Extras 1.4
 import QtGraphicalEffects 1.0
 import PostsSystem 1.0
+import SendImageSystem 1.0
 import JavaMethod 1.0
 import RecordSystem 1.0
 import DataSystem 1.0
@@ -29,24 +30,33 @@ Rectangle {
         id: localFont
         source:"qrc:/Resources/msyh.ttf"
     }
-    //    Rectangle{
-    //        id: indicator2
-    //        height: parent.height*1.3
-    //        width: parent.width
-    //        x:0
-    //        y:-parent.height/8
 
-    //        visible: false
-    //        color:"black"
-    //        opacity: 0.6
-    //        z:1001
-    //        BusyIndicator{
-    //            width:parent.width/7
-    //            height:width
-    //            anchors.centerIn: parent
-    //            running: true
-    //        }
-    //    }
+
+
+    SendImageSystem{
+        id:sendimgsystem
+        onStatueChanged:{
+            if(Statue=="Succeed"){
+                myjava.toastMsg("上传成功！");
+            }
+            if(Statue=="DBError"){
+                myjava.toastMsg("服务器出错");
+            }
+            if(Statue=="Error"){
+                myjava.toastMsg("照片有误！！");
+            }
+
+            if(Statue=="Wait"){
+                myjava.toastMsg("服务器繁忙，请重新发送！");
+
+            }
+
+            if(Statue=="Sending..."){
+                myjava.toastMsg("正在发送！请稍等！");
+            }
+        }
+    }
+
 
     DataSystem{
         id:dbsystem;
@@ -229,6 +239,7 @@ Rectangle {
                 foodtablerect.snackstr=recordsystem.getdietstr(3);
                 foodtablerect.dessertstr=recordsystem.getdietstr(4);
                 foodtablerect.othersstr=recordsystem.getdietstr(5);
+                flick.setPhoto()
                 recordsystem.getexercise(str_userid,timechoosertext.text);
             }
             if(Statue==="getdietsDBError"){
@@ -238,6 +249,7 @@ Rectangle {
                 foodtablerect.snackstr="暂无数据";
                 foodtablerect.dessertstr="暂无数据";
                 foodtablerect.othersstr="暂无数据";
+                flick.setPhoto()
                 recordsystem.getexercise(str_userid,timechoosertext.text);
             }
 
@@ -342,8 +354,10 @@ Rectangle {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
+
+                    if(header.currentpage!="查看")
+                    recordsystem.getdiet(str_userid,timechoosertext.text)
                     header.currentpage="查看"
-                    recordsystem.getdiet(str_userid,timechoosertext.text);
                 }
             }
         }
@@ -352,44 +366,41 @@ Rectangle {
 
 
 
-
-
     //饮食记录页面
     ListView{
 
-        //        header:Rectangle{
-        //            anchors.horizontalCenter: parent.horizontalCenter
-        //            width: parent.width/3*1.1
-        //            height:header.height*1.2
-        //            Rectangle{
-        //                width: parent.width/1.2
-        //                height:header.height/1.5
+        header:Rectangle{
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width/3*1.1
+            height:header.height*1.2
+            Rectangle{
+                width: parent.width/1.2
+                height:header.height/1.5
 
-        //                layer.enabled: true
-        //                layer.effect: DropShadow {
-        //                    transparentBorder: true
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
 
-        //                    radius: 8
-        //                    color: GlobalColor.SecondButton
-        //                }
+                    radius: 8
+                    color: GlobalColor.SecondButton
+                }
 
 
-        //            color:GlobalColor.SecondButton
+                color:GlobalColor.SecondButton
 
-        //            id:recommendbutton
-        //            anchors.centerIn: parent
+                id:recommendbutton
+                anchors.centerIn: parent
 
-        //            Text{
-        //                text:"今日推荐"
-        //                color:"white"
-        //                anchors.centerIn: parent
-        //                font.pointSize: 14
-        //            }
+                Text{
+                    text:"今日推荐"
+                    color:"white"
+                    anchors.centerIn: parent
+                    font.pointSize: 14
+                }
 
-        //            //radius: height/4
-        //            }
-
-        //        }
+                //radius: height/4
+            }
+        }
 
         id:foodview
         cacheBuffer:10000
@@ -524,7 +535,7 @@ Rectangle {
 
                 Rectangle{
                     id:photobutton
-                    visible: false
+                    //visible: false
                     anchors.horizontalCenter: title.horizontalCenter
 
                     anchors.top: title.bottom
@@ -555,7 +566,7 @@ Rectangle {
 
                 Rectangle{
                     id:photoimage;
-                    visible: false
+                    // visible: false
                     anchors.horizontalCenter: title.horizontalCenter
 
                     anchors.top: photobutton.bottom
@@ -571,12 +582,14 @@ Rectangle {
                         fillMode: Image.PreserveAspectFit
                         property string imagePath:"Qt"
                         anchors.fill: parent
+                        source: recordsystem.getphoto("diets_"+str_userid+"_"+index+"_"+Qt.formatDateTime(new Date(),"yyyy-MM-dd")+"_temp.jpg")
                     }
 
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-
+                            myjava.getImage();
+                            timer.start();
                         }
                     }
                     Timer{
@@ -590,10 +603,30 @@ Rectangle {
                                 image.source="file://"+temp;
                                 image.imagePath=temp;
                                 timer.stop()
+                                if(image.status!=Image.Error)
+                                    messageDialog2.open()
+                                else
+                                    myjava.toastMsg("照片读取失败！")
                             }
                         }
                     }
                 }
+
+                MessageDialog {
+                    id: messageDialog2
+                    title: "提示"
+                    text: "要上传这张图片吗？"
+                    detailedText:"上传后可随时查看这张图片。强烈建议上传！"
+                    standardButtons:  StandardButton.No|StandardButton.Yes
+                    onYes: {
+                        var imgname="diets_"+str_userid+"_"+index+"_"+Qt.formatDateTime(new Date(),"yyyy-MM-dd");
+                        sendimgsystem.sendImage(image.imagePath,imgname);
+                    }
+                    onNo: {
+
+                    }
+                }
+
 
 
 
@@ -938,11 +971,9 @@ Rectangle {
                 }
 
                 Rectangle{
-                    id:savebutton
-
+                    id:detailbutton
                     anchors.left:sharebutton.right
                     anchors.leftMargin: parent.width-parent.width/2-parent.width/4-parent.width/8-width/2
-
                     anchors.top: sharebutton.top
                     height: title.m_height*1.2
                     width: height
@@ -952,13 +983,14 @@ Rectangle {
                         interval: 800
                         repeat:true
                         onTriggered: {
-                            if(savebutton.scale==1.2)
-                                savebutton.scale=1
+                            if(detailbutton.scale==1.2)
+                                detailbutton.scale=1
                             else
-                                savebutton.scale=1.2
+                                detailbutton.scale=1.2
                         }
                         running: true
                     }
+
                     Behavior on scale{
                         NumberAnimation{
                             duration: 800
@@ -969,68 +1001,19 @@ Rectangle {
                     Image{
                         Rectangle{
                             anchors.fill: parent
-                            color:GlobalColor.SecondIcon
+                            color:GlobalColor.SecondButton
                             anchors.margins: 5
                             z:-100
                         }
                         fillMode: Image.PreserveAspectFit
                         anchors.fill: parent
-                        source: "qrc:/image/save.png"
+                        source: "qrc:/image/detail.png"
                     }
                     MouseArea{
                         anchors.fill: parent
-
                         onClicked: {
-                            animationtimer.running=false
-                            savebutton.scale=1
-                            myjava.toastMsg("保存成功！")
-                            var lstr="|||";
-                            for(var i=0;i<breakfastmodel.count;i++){
-                                if(breakfastmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+breakfastmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<lunchmodel.count;i++){
-                                if(lunchmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+lunchmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<dinnermodel.count;i++){
-                                if(dinnermodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+dinnermodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<snackmodel.count;i++){
-                                if(snackmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+snackmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<dessertmodel.count;i++){
-                                if(dessertmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+dessertmodel.get(i).Food+"{|}";
-                            }
-                            lstr=lstr+"|||";
-                            for(var i=0;i<othersmodel.count;i++){
-                                if(othersmodel.get(i).Food!=="点击选择食物")
-                                    lstr=lstr+othersmodel.get(i).Food+"{|}";
-                            }
-
-                            if(sharebutton.lastsaved!=lstr){
-                                sharebutton.lastsaved=lstr;
-                                recordsystem.savelocaldiet(lstr);
-
-                                var foodstr123="";
-                                for(var i=0;i<foodlist.model.count;i++){
-                                    if(foodlist.model.get(i).Food!=="点击选择食物")
-                                        foodstr123=foodstr123+foodlist.model.get(i).Food+"、";
-                                }
-                                if(savetimer.lastupload!==foodstr123){
-                                    savetimer.lastupload=foodstr123
-                                    recordsystem.uploaddiet(str_userid,foodstr123,index);
-                                }
-                            }
+                            mainrect.parent.parent.parent.showdetailpage()
                         }
-
                     }
 
                 }
@@ -1903,6 +1886,23 @@ Rectangle {
             contentWidth: parent.width
             clip: true
 
+            function setPhoto(){
+                breakfastphoto.source=""
+                lunchphoto.source=""
+                dinnerphoto.source=""
+                snackphoto.source=""
+                dessertphoto.source=""
+                othersphoto.source=""
+
+                breakfastphoto.source=recordsystem.getphoto("diets_"+str_userid+"_"+"0"+"_"+timechoosertext.text+"_temp.jpg")
+                lunchphoto.source=recordsystem.getphoto("diets_"+str_userid+"_"+"1"+"_"+timechoosertext.text+"_temp.jpg")
+                dinnerphoto.source=recordsystem.getphoto("diets_"+str_userid+"_"+"2"+"_"+timechoosertext.text+"_temp.jpg")
+                snackphoto.source=recordsystem.getphoto("diets_"+str_userid+"_"+"3"+"_"+timechoosertext.text+"_temp.jpg")
+                dessertphoto.source=recordsystem.getphoto("diets_"+str_userid+"_"+"4"+"_"+timechoosertext.text+"_temp.jpg")
+                othersphoto.source=recordsystem.getphoto("diets_"+str_userid+"_"+"5"+"_"+timechoosertext.text+"_temp.jpg")
+            }
+
+
             Rectangle{
                 id:timechooser
 
@@ -1931,10 +1931,7 @@ Rectangle {
                     }
 
                     Component.onCompleted: {
-
-
-                        timechoosertext.text=dbsystem.getdate();
-
+                        timechoosertext.text=dbsystem.getdate()
                     }
                 }
                 MouseArea{
@@ -1950,7 +1947,7 @@ Rectangle {
                                 myjava.toastMsg("请选择正确的日期")
                             else{
                                 timechoosertext.text=tumbler.year+"-"+tumbler.month+"-"+tumbler.day;
-                                recordsystem.getdiet(str_userid,timechoosertext.text);
+                                recordsystem.getdiet(str_userid,timechoosertext.text)
 
                                 tumbler.visible=false
                                 flick.interactive=true
@@ -1990,7 +1987,7 @@ Rectangle {
                         tumbler.day=tumblerDayColumn.model[tumblerDayColumn.currentIndex].toString();
                         if(yearint%4!=0){
                             if(tumbler.day==="29")
-                                tumbler.day="0"
+                                tumbler.day="00"
                             tumbler.days[1]=28
                         }
                         else
@@ -2001,12 +1998,12 @@ Rectangle {
                 TumblerColumn {
                     id: monthColumn
                     width:tumbler.width/3
-                    model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                    model: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
                     onCurrentIndexChanged: {
                         tumbler.month=model[currentIndex].toString();
                         tumbler.day=tumblerDayColumn.model[tumblerDayColumn.currentIndex].toString();
                         if(tumbler.days[currentIndex]<parseInt(tumbler.day))
-                            tumbler.day="0"
+                            tumbler.day="00"
 
 
                     }
@@ -2015,11 +2012,11 @@ Rectangle {
                 TumblerColumn {
                     id: tumblerDayColumn
                     width:tumbler.width/3
-                    model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
+                    model: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
                     onCurrentIndexChanged: {
                         tumbler.day=model[currentIndex].toString();
                         if(parseInt(tumbler.day)>tumbler.days[monthColumn.currentIndex])
-                            tumbler.day="0";
+                            tumbler.day="00";
                     }
                 }
 
@@ -2034,7 +2031,7 @@ Rectangle {
                 border.color: "grey"
                 border.width: 1
 
-                height:foodtabletitle.height+breakfast.height+lunch.height+dinner.height+snack.height+dessert.height+others.height+80*dp
+                height:foodtabletitle.height+breakfast.height+lunch.height+dinner.height+snack.height+dessert.height+others.height+90*dp+photolayout.height
                 width: parent.width+2
 
                 x:parent.width/2-width/2
@@ -2163,6 +2160,119 @@ Rectangle {
                     }
                 }
 
+                Row{
+                    id:photolayout
+                    anchors.top: others.bottom
+                    anchors.topMargin: 10*dp
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10*dp
+                    spacing: 3*dp
+
+                    Image{
+                        id:breakfastphoto
+                        height:foodtablerect.width/6.8
+                        width:height
+                        fillMode: Image.PreserveAspectFit
+                        //source: recordsystem.getphoto("diets_"+str_userid+"_"+"0"+"_"+timechoosertext.text+"_temp.jpg")
+                        visible: (status==Image.Error||status==Image.Null)?false:true
+                        cache:false
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                mainrect.parent.parent.parent.setbusy(true)
+                                mainrect.parent.parent.parent.showbigphoto(recordsystem.getphoto("diets_"+str_userid+"_"+"0"+"_"+timechoosertext.text+".jpg"))
+                                mainrect.parent.parent.parent.setbusy(false)
+                            }
+                        }
+                    }
+                    Image{
+                        id:lunchphoto
+                        height:foodtablerect.width/6.8
+                        width:height
+                        fillMode: Image.PreserveAspectFit
+                        //source: recordsystem.getphoto("diets_"+str_userid+"_"+"1"+"_"+timechoosertext.text+"_temp.jpg")
+                        visible: (status==Image.Error||status==Image.Null)?false:true
+                        cache:false
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                mainrect.parent.parent.parent.setbusy(true)
+                                mainrect.parent.parent.parent.showbigphoto(recordsystem.getphoto("diets_"+str_userid+"_"+"1"+"_"+timechoosertext.text+".jpg"))
+                                mainrect.parent.parent.parent.setbusy(false)
+                            }
+                        }
+                    }
+                    Image{
+                        id:dinnerphoto
+                        height:foodtablerect.width/6.8
+                        width:height
+                        fillMode: Image.PreserveAspectFit
+                        //source: recordsystem.getphoto("diets_"+str_userid+"_"+"2"+"_"+timechoosertext.text+"_temp.jpg")
+                        visible: (status==Image.Error||status==Image.Null)?false:true
+                        cache:false
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                mainrect.parent.parent.parent.setbusy(true)
+                                mainrect.parent.parent.parent.showbigphoto(recordsystem.getphoto("diets_"+str_userid+"_"+"2"+"_"+timechoosertext.text+".jpg"))
+                                mainrect.parent.parent.parent.setbusy(false)
+                            }
+                        }
+                    }
+                    Image{
+                        id:snackphoto
+                        height:foodtablerect.width/6.8
+                        width:height
+                        fillMode: Image.PreserveAspectFit
+                        //source: recordsystem.getphoto("diets_"+str_userid+"_"+"3"+"_"+timechoosertext.text+"_temp.jpg")
+                        visible: (status==Image.Error||status==Image.Null)?false:true
+                        cache:false
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                mainrect.parent.parent.parent.setbusy(true)
+                                mainrect.parent.parent.parent.showbigphoto(recordsystem.getphoto("diets_"+str_userid+"_"+"3"+"_"+timechoosertext.text+".jpg"))
+                                mainrect.parent.parent.parent.setbusy(false)
+                            }
+                        }
+                    }
+                    Image{
+                        id:dessertphoto
+                        height:foodtablerect.width/6.8
+                        width:height
+                        fillMode: Image.PreserveAspectFit
+                        //source: recordsystem.getphoto("diets_"+str_userid+"_"+"4"+"_"+timechoosertext.text+"_temp.jpg")
+                        visible: (status==Image.Error||status==Image.Null)?false:true
+                        cache:false
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                mainrect.parent.parent.parent.setbusy(true)
+                                mainrect.parent.parent.parent.showbigphoto(recordsystem.getphoto("diets_"+str_userid+"_"+"4"+"_"+timechoosertext.text+".jpg"))
+                                mainrect.parent.parent.parent.setbusy(false)
+                            }
+                        }
+                    }
+                    Image{
+                        id:othersphoto
+                        height:foodtablerect.width/6.8
+                        width:height
+                        fillMode: Image.PreserveAspectFit
+                        //source: recordsystem.getphoto("diets_"+str_userid+"_"+"5"+"_"+timechoosertext.text+"_temp.jpg")
+                        visible: (status==Image.Error||status==Image.Null)?false:true
+                        cache:false
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                mainrect.parent.parent.parent.setbusy(true)
+                                mainrect.parent.parent.parent.showbigphoto(recordsystem.getphoto("diets_"+str_userid+"_"+"5"+"_"+timechoosertext.text+".jpg"))
+                                mainrect.parent.parent.parent.setbusy(false)
+                            }
+                        }
+                    }
+                }
+
+
             }
 
 
@@ -2176,7 +2286,6 @@ Rectangle {
                 anchors.top: foodtablerect.bottom
                 anchors.topMargin: 16*dp
                 anchors.horizontalCenter: parent.horizontalCenter
-
                 ListModel{
                     id:sporttabelmodel
                     ListElement{

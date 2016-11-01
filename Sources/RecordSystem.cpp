@@ -2,7 +2,7 @@
 #include "Headers/JavaMethod.h"
 #include <QFile>
 #include <QTextStream>
-
+#include <QPixmap>
 RecordSystem::RecordSystem(QObject *parent) : QObject(parent){
     tcpSocket = new QTcpSocket(this);
     tcpSocket->connectToHost("119.29.15.43",6789);
@@ -255,6 +255,42 @@ void RecordSystem::savesportlist(QString longstr)
     if(LogFile.isOpen())
         LogTextStream<<longstr;
 #endif
+}
+
+QString RecordSystem::getphoto(QString a)
+{
+#ifdef ANDROID
+        JavaMethod java;
+        QDir *tempdir = new QDir;
+
+        QString path=java.getSDCardPath();
+        path=path+"/DShare/"+a+".dbnum";
+
+        if(tempdir->exists(path)){
+            return "file://"+path;
+        }
+        else{
+
+
+            QNetworkAccessManager *manager=new QNetworkAccessManager(this);
+            QEventLoop eventloop;
+            connect(manager, SIGNAL(finished(QNetworkReply*)),&eventloop, SLOT(quit()));
+            QNetworkReply *reply=manager->get(QNetworkRequest(QUrl("http://119.29.15.43/projectimage/"+a)));
+            eventloop.exec();
+
+            if(reply->error() == QNetworkReply::NoError)
+            {
+                QPixmap currentPicture;
+                currentPicture.loadFromData(reply->readAll());
+                currentPicture.save(path,"JPG");//保存图片
+                return "file://"+path;
+            }
+            else
+                return "";
+
+        }
+#endif
+        return "";
 }
 
 void RecordSystem::tcpReadMessage(){

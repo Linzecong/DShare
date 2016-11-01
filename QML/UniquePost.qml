@@ -6,6 +6,7 @@ import QtQuick.Dialogs 1.1
 import PostsSystem 1.0
 import JavaMethod 1.0
 import QtGraphicalEffects 1.0
+import DataSystem 1.0
 import "qrc:/GlobalVariable.js" as GlobalColor
 Rectangle{
     id:uniquepost
@@ -109,6 +110,7 @@ Rectangle{
                 fillMode: Image.PreserveAspectFit
                 height: bigphotorect.height
                 width: bigphotorect.width
+                cache: false
                 Timer{
                     id:doubletimer
                     interval: 300
@@ -142,7 +144,22 @@ Rectangle{
                             }
                         }
                     }
+                    onPressAndHold: {
+                        saveDialog.open()
+                    }
 
+
+                }
+            }
+            MessageDialog {
+                id: saveDialog
+                title: "提示"
+                text: "要保存这张图片吗？"
+                standardButtons:  StandardButton.No|StandardButton.Yes
+                onYes: {
+                    postssystem.savePhoto(bigphoto.source.replace("_temp",""))//防止重复图片
+                }
+                onNo: {
 
                 }
             }
@@ -240,6 +257,13 @@ Rectangle{
 
 
             }
+            if(Statue=="SaveSucceed"){
+                myjava.toastMsg("成功保存到"+myjava.getSDCardPath()+"/DSharePhoto/")
+            }
+
+            if(Statue=="SaveError"){
+                myjava.toastMsg("无储存卡访问权限！")
+            }
         }
 
     }
@@ -278,7 +302,7 @@ Rectangle{
             verticalAlignment: Text.AlignVCenter
             font{
                         family: localFont.name
-                
+
                 pixelSize: (head.height)/4
 
             }

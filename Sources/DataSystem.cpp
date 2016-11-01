@@ -1,6 +1,7 @@
 #include "Headers/DataSystem.h"
 #include "Headers/JavaMethod.h"
 #include<QPixmap>
+#include<QDateTime>
 
 DataSystem::DataSystem(QObject *parent) : QObject(parent){
 
@@ -64,8 +65,10 @@ QString DataSystem::getHead()
             QPixmap currentPicture;
             currentPicture.loadFromData(reply->readAll());
             currentPicture.save(path,"JPG");//保存图片
+            return "file://"+path;
         }
-        return "file://"+path;
+        else
+            return "";
     }
 
 #endif
@@ -76,8 +79,11 @@ QString DataSystem::getHead()
 void DataSystem::changeName(QString userid, QString newname){
     QString out="@changename@|||"+userid+"|||"+newname;
     tcpSocket->write(out.toUtf8());
+}
 
-
+void DataSystem::changePassword(QString userid, QString newpassword){
+    QString out="@changepassword@|||"+userid+"|||"+newpassword;
+    tcpSocket->write(out.toUtf8());
 }
 
 void DataSystem::addFollowing(QString userid, QString friendid){
@@ -248,6 +254,44 @@ void DataSystem::delusernamepassword(){
 #endif
 }
 
+void DataSystem::savePhoto(QString url)
+{
+#ifdef ANDROID
+    JavaMethod java;
+
+    QString FileName=url.replace("file://","");
+
+
+    QString SdcardPath=java.getSDCardPath();
+    QString nFileName=SdcardPath+"/DSharePhoto/";
+    QDir *tempdir = new QDir;
+    bool exist = tempdir->exists(nFileName);
+    if(!exist)
+        tempdir->mkdir(nFileName);
+
+    QFile file(FileName);
+    file.open(QIODevice::ReadOnly);
+
+
+    QString path=java.getSDCardPath();
+    path=path+"/DSharePhoto/"+FileName.replace(SdcardPath+"/DShare/","").replace(".dbnum","");
+    QFile LogFile;
+    LogFile.setFileName(path);
+    LogFile.open(QIODevice::WriteOnly);
+    if(LogFile.isOpen()){
+        LogFile.write(file.readAll());
+        m_Statue="SaveSucceed";
+        emit statueChanged(m_Statue);
+    }
+    else{
+        m_Statue="SaveError";
+        emit statueChanged(m_Statue);
+    }
+
+
+#endif
+}
+
 void DataSystem::tcpReadMessage(){
     QString message = QString::fromUtf8(tcpSocket->readAll());//获取服务器返回的信息
     if(message=="@getname@DBError@")
@@ -283,6 +327,11 @@ void DataSystem::tcpReadMessage(){
         m_Statue="changenameDBError";
     if(message=="@changename@Succeed@")
         m_Statue="changenameSucceed";
+
+    if(message=="@changepassword@DBError@")
+        m_Statue="changepasswordDBError";
+    if(message=="@changepassword@Succeed@")
+        m_Statue="changepasswordSucceed";
 
     if(message=="@addfollowing@DBError@")
         m_Statue="addfollowingDBError";

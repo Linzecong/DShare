@@ -62,6 +62,7 @@ public:
     Q_INVOKABLE void likepost(int postid,QString likerid);//点赞分享
 
     Q_INVOKABLE void deletepost(int postid);//删除分享
+    Q_INVOKABLE void savePhoto(QString url);//删除分享
 
     void tcpSendMessage();
     void tcpReadMessage();

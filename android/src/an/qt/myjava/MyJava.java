@@ -44,7 +44,7 @@ public class MyJava extends org.qtproject.qt5.android.bindings.QtActivity
                             Log.e("s",statusBarHeight1);
                             }
 
-                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                      getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
     private static String statusBarHeight1 = "-1";
@@ -106,6 +106,7 @@ public class MyJava extends org.qtproject.qt5.android.bindings.QtActivity
 
 public static String getStatusBarHeight(){
     return statusBarHeight1;
+
 }
 
 

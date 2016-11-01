@@ -93,8 +93,10 @@ if(i<PostList.length()){
             QPixmap currentPicture;
             currentPicture.loadFromData(reply->readAll());
             currentPicture.save(path,"JPG");//保存图片
+            return "file://"+path;
         }
-        return "file://"+path;
+        else
+            return "";
     }
 }
 #endif
@@ -158,8 +160,10 @@ QString PostsSystem::getpostphoto(int i){
                 QPixmap currentPicture;
                 currentPicture.loadFromData(reply->readAll());
                 currentPicture.save(path,"JPG");//保存图片
+                return "file://"+path;
             }
-            return "file://"+path;
+            else
+                return "";
         }
     }
     #endif
@@ -286,12 +290,52 @@ QString PostsSystem::getbigpostphoto(QString a){
                 QPixmap currentPicture;
                 currentPicture.loadFromData(reply->readAll());
                 currentPicture.save(path,"JPG");//保存图片
+                return "file://"+path;
             }
-            return "file://"+path;
+            else
+                return "";
         }
 #endif
         return "";
 
+}
+
+void PostsSystem::savePhoto(QString url)
+{
+#ifdef ANDROID
+    JavaMethod java;
+
+    QString FileName=url.replace("file://","");
+
+
+    QString SdcardPath=java.getSDCardPath();
+    QString nFileName=SdcardPath+"/DSharePhoto/";
+    QDir *tempdir = new QDir;
+    bool exist = tempdir->exists(nFileName);
+    if(!exist)
+        tempdir->mkdir(nFileName);
+
+    QFile file(FileName);
+    file.open(QIODevice::ReadOnly);
+
+
+    QString path=java.getSDCardPath();
+    path=path+"/DSharePhoto/"+FileName.replace(SdcardPath+"/DShare/","").replace(".dbnum","");
+    QFile LogFile;
+    LogFile.setFileName(path);
+    LogFile.open(QIODevice::WriteOnly);
+    if(LogFile.isOpen()){
+        LogFile.write(file.readAll());
+        m_Statue="SaveSucceed";
+        emit statueChanged(m_Statue);
+    }
+    else{
+        m_Statue="SaveError";
+        emit statueChanged(m_Statue);
+    }
+
+
+#endif
 }
 
 void PostsSystem::likepost(int postid, QString likerid){

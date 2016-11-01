@@ -3,13 +3,14 @@ import QtQuick.Controls 1.4
 //import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
-
+import QtQuick.Dialogs 1.2
 import JavaMethod 1.0
 import SendImageSystem 1.0
 import DataSystem  1.0
 import QtGraphicalEffects 1.0
 import "qrc:/GlobalVariable.js" as GlobalColor
 StackView{
+
     property string imagePath:"Qt"
     property string str_userid;
     property string nickname;
@@ -36,6 +37,34 @@ StackView{
         anchors.fill: parent
     }
 
+    DataSystem{
+        id:dbsystem;
+        onStatueChanged: {
+
+            if(Statue=="changenameSucceed"){
+                dbsystem.getNameByID(str_userid);
+                myjava.toastMsg("修改昵称成功！")
+            }
+            if(Statue=="changenameDBError"){
+                myjava.toastMsg("修改昵称失败！！！！！")
+            }
+            if(Statue=="getnameSucceed"){
+
+                nickname=dbsystem.getName();
+            }
+
+            if(Statue=="changepasswordSucceed"){
+                myjava.toastMsg("修改密码成功！")
+                checkDialog.open()
+            }
+
+            if(Statue=="changepasswordDBError"){
+                myjava.toastMsg("修改密码失败！！！！！")
+            }
+
+        }
+    }
+
     SendImageSystem{
         id:sendimgsystem1
         onStatueChanged:{
@@ -55,8 +84,21 @@ StackView{
 
             if(Statue=="Succeed"){
                 myjava.toastMsg("修改成功！");
+
             }
 
+        }
+    }
+
+    MessageDialog {
+        id: checkDialog
+        title: "提示"
+        text: "密码已更改，需要重新登录！"
+        standardButtons:StandardButton.Yes
+        onYes: {
+            dbsystem.delusernamepassword()
+            stack.parent.parent.parent.x=stack.parent.parent.parent.parent.width;
+            stack.parent.parent.parent.source="";
         }
     }
 
@@ -610,7 +652,7 @@ StackView{
     }
 
 
-    id:stack;
+    id:stack
     anchors.fill: parent
 
     initialItem: Rectangle{
@@ -652,7 +694,7 @@ StackView{
 
                 verticalAlignment: Text.AlignVCenter
                 font{
-                        family: localFont.name
+                    family: localFont.name
                     
                     pixelSize: (head.height)/4
                 }
@@ -674,7 +716,7 @@ StackView{
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                 font{
-                        family: localFont.name
+                    family: localFont.name
                     //family: "微软雅黑"
                     pointSize: 20
 
@@ -703,7 +745,7 @@ StackView{
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment: Text.AlignVCenter
                 font{
-                        family: localFont.name
+                    family: localFont.name
                     
                     pointSize: 16
 
@@ -718,36 +760,36 @@ StackView{
             }
         }
 
-        //        Rectangle{
-        //            id:help
-        //            anchors.top: changedata.bottom
-        //            anchors.topMargin: head.height/2
-        //            height: head.height
-        //            width: parent.width
-        //            color: "white"
-        //            border.width: 1;
-        //            border.color: "grey"
-        //            Label{
-        //                text: "使用帮助"
-        //                anchors.left: parent.left
-        //                anchors.leftMargin: 20
-        //                anchors.verticalCenter: parent.verticalCenter
-        //                verticalAlignment: Text.AlignVCenter
-        //                font{
-                        //family: localFont.name
-        //
-        //                    pixelSize: head.height/3
+        Rectangle{
+            id:help
+            anchors.top: changedata.bottom
+            anchors.topMargin: 20*dp
+            height: changedatatitle1.height+40*dp
+            width: parent.width
+            color: "white"
+            border.width: 1;
+            border.color: "grey"
+            Label{
+                text: "使用帮助"
+                anchors.left: parent.left
+                anchors.leftMargin: 10*dp
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
+                font{
+                    family: localFont.name
 
-        //                }
-        //                color:"grey"
-        //            }
-        //            MouseArea{
-        //                anchors.fill: parent
-        //                onClicked: {
-        //                    stack.push(helppage)
-        //                }
-        //            }
-        //        }
+                    pointSize: 16
+
+                }
+                color:"grey"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    stack.push(helppage)
+                }
+            }
+        }
 
 
 
@@ -933,22 +975,7 @@ StackView{
                     color:"grey"
 
 
-                    DataSystem{
-                        id:dbsystem;
-                        onStatueChanged: {
 
-                            if(Statue=="changenameSucceed"){
-                                dbsystem.getNameByID(str_userid);
-                                myjava.toastMsg("修改成功！")
-                            }
-
-                            if(Statue=="getnameSucceed"){
-
-                                nickname=dbsystem.getName();
-                            }
-
-                        }
-                    }
 
                 }
 
@@ -961,6 +988,7 @@ StackView{
                     visible: false
                     id:changenameedit
                     text:nickname
+                    placeholderText:"请输入昵称..."
                     style: TextFieldStyle{
                         textColor: "grey"
                         background: Rectangle{
@@ -1004,6 +1032,126 @@ StackView{
 
 
             }
+
+            Rectangle{
+                id:changepassword
+                anchors.top: changename.bottom
+                anchors.topMargin: 16*dp
+                height: changenametext.height+40*dp
+
+                width: parent.width
+                color: "white"
+                border.width: 1;
+                border.color: "grey"
+                Label{
+                    id:changepasswordtext
+                    text: "修改密码"
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10*dp
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font{
+                        family: localFont.name
+
+                        pointSize: 16
+
+                    }
+                    color:"grey"
+                }
+
+                TextField{
+                    height:changenametext.height*1.5
+                    width: parent.width/3.5
+                    anchors.left: changepasswordtext.right
+                    anchors.leftMargin: 16*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: false
+                    id:changepasswordedit
+                    placeholderText:"请输入密码..."
+                    echoMode:TextInput.Password
+                    validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
+                    style: TextFieldStyle{
+                        textColor: "grey"
+                        background: Rectangle{
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+                                radius: 8
+                                color: GlobalColor.Main
+                            }
+                        }
+                    }
+                    z:2
+                }
+
+                TextField{
+                    height:changenametext.height*1.5
+                    width: parent.width/3.5
+                    anchors.left: changepasswordedit.right
+                    anchors.leftMargin: 16*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: false
+                    id:changeconpasswordedit
+                    placeholderText:"请确认密码..."
+                    echoMode:TextInput.Password
+                    validator:RegExpValidator{regExp:/^[0-9a-zA-Z]{1,20}$/}
+                    style: TextFieldStyle{
+                        textColor: "grey"
+                        background: Rectangle{
+                            layer.enabled: true
+                            layer.effect: DropShadow {
+                                transparentBorder: true
+                                radius: 8
+                                color: GlobalColor.Main
+                            }
+                        }
+                    }
+                    z:2
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        if(changepasswordedit.visible==false){
+                            changepasswordedit.visible=true
+                            changeconpasswordedit.visible=true
+                            changepasswordtext.text="点我确认"
+                        }
+                        else{
+                            if(changepasswordedit.text==""){
+                                changepasswordedit.visible=false
+                                changeconpasswordedit.visible=false
+                                changepasswordtext.text="修改密码"
+                                return
+                            }
+
+                            if(changepasswordedit.text.length<8||changepasswordedit.text.length>20){
+                                myjava.toastMsg("密码要由8~20位数字和字母组成")
+                            }
+                            else{
+                                if(changepasswordedit.text==changeconpasswordedit.text){
+                                    dbsystem.changePassword(str_userid,changepasswordedit.text)
+                                    changepasswordedit.visible=false
+                                    changeconpasswordedit.visible=false
+                                    changepasswordtext.text="修改密码"
+                                    changepasswordedit.text=""
+                                    changeconpasswordedit.text=""
+                                }
+                                else{
+                                    myjava.toastMsg("两次密码不一致！")
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+
+
+            }
+
         }
     }
 
@@ -1022,20 +1170,38 @@ StackView{
 
             }
             Rectangle{
+                Rectangle{
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height:myjava.getStatusBarHeight()
+                    color:GlobalColor.StatusBar
+                }
+                z:5
                 id:xieyitoprect;
                 width:parent.width;
-                height: parent.height/16*1.5;
+                height: parent.height/16*2
+
                 color:GlobalColor.Main
                 anchors.top: parent.top;
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 10
+                    color: GlobalColor.Main
+                }
                 Label{
-                    text:"<";
+                    text:"＜";
                     anchors.left: parent.left
+                    anchors.leftMargin: 16*dp
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
+                    verticalAlignment: Text.AlignVCenter
                     font{
                         family: localFont.name
                         
-                        pixelSize: xieyitoprect.height/1.5
-                        bold:true;
+                        pixelSize:(head.height)/4
+
                     }
                     color: "white";
                     MouseArea{
@@ -1049,11 +1215,12 @@ StackView{
                 Label{
                     text:"使用帮助";
                     anchors.centerIn: parent
+                    anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     font{
                         family: localFont.name
                         
-                        pixelSize: xieyitoprect.height/3
-                        bold:true
+                        pointSize: 20
+
                     }
                     color: "white";
                 }
@@ -1063,12 +1230,10 @@ StackView{
                 text:"  暂无内容";
                 wrapMode: Text.Wrap;
                 anchors.top: xieyitoprect.bottom
-                anchors.topMargin: xieyitoprect.height*1.5
-                anchors.fill: parent
+                anchors.topMargin: 10*dp
                 font{
-                        family: localFont.name
-                    
-                    pixelSize: xieyitoprect.height/3
+                    family: localFont.name
+                    pointSize: 16
                 }
                 color: "grey";
             }

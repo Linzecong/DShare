@@ -57,8 +57,7 @@ public:
      Q_INVOKABLE QString getsportliststr(int i);//获取内容
      Q_INVOKABLE void savesportlist(QString longstr);
 
-
-
+     Q_INVOKABLE QString getphoto(QString a);//返回大图地址，先判断有没有缓存
 
 public:
      void tcpReadMessage();

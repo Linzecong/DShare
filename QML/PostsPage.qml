@@ -97,6 +97,7 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 height: bigphotorect.height
                 width: bigphotorect.width
+                 cache: false
                 Timer{
                     id:doubletimer
                     interval: 300
@@ -130,7 +131,22 @@ Rectangle {
                             }
                         }
                     }
+                    onPressAndHold: {
+                        saveDialog.open()
+                    }
 
+
+                }
+            }
+            MessageDialog {
+                id: saveDialog
+                title: "提示"
+                text: "要保存这张图片吗？"
+                standardButtons:  StandardButton.No|StandardButton.Yes
+                onYes: {
+                    postsystem.savePhoto(bigphoto.source)
+                }
+                onNo: {
 
                 }
             }
@@ -770,6 +786,13 @@ Rectangle {
                         myjava.toastMsg("删除失败")
 
 
+                    }
+                    if(Statue=="SaveSucceed"){
+                        myjava.toastMsg("成功保存到"+myjava.getSDCardPath()+"/DSharePhoto/")
+                    }
+
+                    if(Statue=="SaveError"){
+                        myjava.toastMsg("无储存卡访问权限！")
                     }
 
                 }

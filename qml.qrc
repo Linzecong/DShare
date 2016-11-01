@@ -38,5 +38,7 @@
         <file>image/report.png</file>
         <file>image/setting.png</file>
         <file>image/search.png</file>
+        <file>image/detail.png</file>
+        <file>QML/DetailPage.qml</file>
     </qresource>
 </RCC>

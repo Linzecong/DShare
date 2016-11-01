@@ -31,6 +31,7 @@ public:
     Q_INVOKABLE QString getHead();
 
     Q_INVOKABLE void changeName(QString userid,QString newname);//修改昵称
+    Q_INVOKABLE void changePassword(QString userid,QString newpassword);//修改昵称
     Q_INVOKABLE void addFollowing(QString userid,QString friendid);//添加关注
     Q_INVOKABLE void deleteFollowing(QString userid,QString friendid);//删除关注
 
@@ -75,6 +76,8 @@ public:
     Q_INVOKABLE void uploadExercise(QString a);//上传运动
 
     Q_INVOKABLE void delusernamepassword();//注销时删除内存卡中的用户
+
+    Q_INVOKABLE void savePhoto(QString url);//保存图片
 
 public:
     void tcpReadMessage();

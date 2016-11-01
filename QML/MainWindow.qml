@@ -64,6 +64,18 @@ Rectangle {
         indicator2.visible=a
     }
 
+    function showdetailpage(){
+        detailpage.visible=true
+    }
+
+    Loader{
+        id:detailpage
+        anchors.fill: parent
+        visible: false
+        source:"qrc:/QML/DetailPage.qml"
+        z:102
+    }
+
 
     Rectangle{
         id: indicator2
@@ -125,13 +137,13 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 height: bigphotorect.height
                 width: bigphotorect.width
+                cache: false
                 Timer{
                     id:doubletimer
                     interval: 300
                     repeat: false
                     onTriggered: {
                         mainrect.forceActiveFocus();
-
                         bigphoto.x=0
                         bigphoto.y=0
                         bigphoto.scale=1
@@ -158,7 +170,22 @@ Rectangle {
                             }
                         }
                     }
+                    onPressAndHold: {
+                        saveDialog.open()
+                    }
+                }
+            }
 
+
+            MessageDialog {
+                id: saveDialog
+                title: "提示"
+                text: "要保存这张图片吗？"
+                standardButtons:  StandardButton.No|StandardButton.Yes
+                onYes: {
+                    dbsystem.savePhoto(bigphoto.source)
+                }
+                onNo: {
 
                 }
             }
@@ -210,6 +237,14 @@ Rectangle {
             if(Statue=="getheadSucceed"){
 
                 headurl=dbsystem.getHead()
+            }
+
+            if(Statue=="SaveSucceed"){
+                myjava.toastMsg("成功保存到"+myjava.getSDCardPath()+"/DSharePhoto/")
+            }
+
+            if(Statue=="SaveError"){
+                myjava.toastMsg("无储存卡访问权限！")
             }
 
 

@@ -22,6 +22,31 @@ void SendImageSystem::sendImage(QString name,QString id){
     m_Statue="Connecting";
     emit statueChanged(m_Statue);
 
+    //用于record删除图片
+#ifdef ANDROID
+    QString filename=id+".jpg";
+    QString tempname=id+"_temp.jpg";
+
+        JavaMethod java;
+        QDir *tempdir = new QDir;
+
+        QString path=java.getSDCardPath();
+        path=path+"/DShare/"+filename+".dbnum";
+
+        if(tempdir->exists(path)){
+            QFile::remove(path);
+        }
+
+        path=java.getSDCardPath();
+        path=path+"/DShare/"+tempname+".dbnum";
+
+        if(tempdir->exists(path)){
+            QFile::remove(path);
+        }
+
+#endif
+
+
 }
 
 void SendImageSystem::sendHead(QString name,QString id){
