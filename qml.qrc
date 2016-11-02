@@ -40,5 +40,6 @@
         <file>image/search.png</file>
         <file>image/detail.png</file>
         <file>QML/DetailPage.qml</file>
+        <file>image/appicon.png</file>
     </qresource>
 </RCC>

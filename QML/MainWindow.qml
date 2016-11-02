@@ -64,8 +64,9 @@ Rectangle {
         indicator2.visible=a
     }
 
-    function showdetailpage(){
+    function showdetailpage(a){
         detailpage.visible=true
+        detailpage.item.getModel(a)
     }
 
     Loader{

@@ -1012,7 +1012,15 @@ Rectangle {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            mainrect.parent.parent.parent.showdetailpage()
+                            var str=""
+
+                            for(var i=0;i<foodlist.model.count;i++){
+                                if(foodlist.model.get(i).Food!=="点击选择食物")
+                                    str+=foodlist.model.get(i).Food+"、"
+                            }
+
+
+                            mainrect.parent.parent.parent.showdetailpage(str)
                         }
                     }
 

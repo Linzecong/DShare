@@ -79,6 +79,19 @@ public:
 
     Q_INVOKABLE void savePhoto(QString url);//保存图片
 
+    QString Reason;
+    QString RelationType;
+    Q_INVOKABLE void getFoodRelation(QString foods);//获取相生相克
+    Q_INVOKABLE QString getReason();
+    Q_INVOKABLE QString getRelationType();
+
+    QString FoodPhoto;
+    QString FoodDes;
+    Q_INVOKABLE void getFoodDetail(QString food);//获取食物详细数据
+    Q_INVOKABLE QString getFoodPhoto();
+    Q_INVOKABLE QString getFoodDes();
+
+
 public:
     void tcpReadMessage();
     void tcpSendMessage();

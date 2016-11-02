@@ -292,6 +292,42 @@ void DataSystem::savePhoto(QString url)
 #endif
 }
 
+void DataSystem::getFoodRelation(QString foods)
+{
+    Reason="";
+    RelationType="";
+    QString out="@getfoodrelation@"+foods;
+    tcpSocket->write(out.toUtf8());
+}
+
+QString DataSystem::getReason()
+{
+    return Reason;
+}
+
+QString DataSystem::getRelationType()
+{
+    return RelationType;
+}
+
+void DataSystem::getFoodDetail(QString food)
+{
+    FoodPhoto="";
+    FoodDes="";
+    QString out="@getfooddetail@"+food;
+    tcpSocket->write(out.toUtf8());
+}
+
+QString DataSystem::getFoodPhoto()
+{
+    return FoodPhoto;
+}
+
+QString DataSystem::getFoodDes()
+{
+    return FoodDes;
+}
+
 void DataSystem::tcpReadMessage(){
     QString message = QString::fromUtf8(tcpSocket->readAll());//获取服务器返回的信息
     if(message=="@getname@DBError@")
@@ -394,6 +430,35 @@ void DataSystem::tcpReadMessage(){
             SearchNameList.append(inf[i+1]);
         }
         m_Statue="searchuserSucceed";
+    }
+
+    if(message=="@getfoodrelation@DBError@")
+        m_Statue="getfoodrelationDBError";
+    if(message.indexOf("@getfoodrelation@Succeed@")>=0){
+        QStringList inf=message.split("@");
+
+        QStringList alllist=inf[3].split("{|}");
+
+        for(int i=0;i<alllist.length()-1;i++)
+        RelationType+=alllist[i].split("|||")[0]+"|||";
+
+        for(int i=0;i<alllist.length()-1;i++)
+        Reason+=alllist[i].split("|||")[1]+"|||";
+
+
+        m_Statue="getfoodrelationSucceed";
+    }
+
+    if(message=="@getfooddetail@DBError@")
+        m_Statue="getfooddetailDBError";
+    if(message.indexOf("@getfooddetail@Succeed@")>=0){
+        QStringList inf=message.split("@");
+
+
+        FoodPhoto=inf[3];
+        FoodDes=inf[4];
+
+        m_Statue="getfooddetailSucceed";
     }
 
     emit statueChanged(m_Statue);//传递消息
