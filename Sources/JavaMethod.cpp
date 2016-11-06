@@ -17,6 +17,14 @@ void JavaMethod::toastMsg(QString a){
 #endif
 }
 
+void JavaMethod::shareImage(QString url)
+{
+#ifdef ANDROID
+    QAndroidJniObject javatoast=QAndroidJniObject::fromString(url);
+    QAndroidJniObject::callStaticMethod<void>("an/qt/myjava/MyJava","shareImage","(Ljava/lang/String;)V",javatoast.object<jstring>());
+#endif
+}
+
 void JavaMethod::getImage(){
 #ifdef ANDROID
     QAndroidJniObject::callStaticMethod<void>("an/qt/myjava/MyJava","getImage","()V");

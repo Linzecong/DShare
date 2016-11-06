@@ -228,7 +228,7 @@ Rectangle {
                 anchors.fill: parent
                 color:"white"
 
-                border.color: "grey"
+                border.color: "lightgrey"
                 border.width: 1
 
                 MouseArea{

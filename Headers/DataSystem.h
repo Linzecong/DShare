@@ -66,6 +66,23 @@ public:
     Q_INVOKABLE QString getsearchUserID(int i);
     Q_INVOKABLE QString getsearchUserName(int i);
 
+
+    QStringList SearchFoodPhotoList;
+    QStringList SearchFoodNameList;
+    QStringList SearchFoodDesList;
+    Q_INVOKABLE void searchFood(QString str);
+    Q_INVOKABLE QString getsearchFoodPhoto(int i);
+    Q_INVOKABLE QString getsearchFoodName(int i);
+    Q_INVOKABLE QString getsearchFoodDes(int i);
+
+    QStringList MSGFoodPhotoList;
+    QStringList MSGFoodNameList;
+    QStringList MSGFoodDesList;
+    Q_INVOKABLE void getFoodMSG(QString str);//通过一连串食材，获得简要信息
+    Q_INVOKABLE QString getMSGFoodPhoto(int i);
+    Q_INVOKABLE QString getMSGFoodName(int i);
+    Q_INVOKABLE QString getMSGFoodDes(int i);
+
     int checkinday;
     Q_INVOKABLE void checkin(QString userid);//打卡
     Q_INVOKABLE void getcheckinday(QString userid);//获取连续打卡的天数
@@ -79,17 +96,26 @@ public:
 
     Q_INVOKABLE void savePhoto(QString url);//保存图片
 
-    QString Reason;
+    QString Reason;//按顺序
     QString RelationType;
     Q_INVOKABLE void getFoodRelation(QString foods);//获取相生相克
     Q_INVOKABLE QString getReason();
     Q_INVOKABLE QString getRelationType();
 
-    QString FoodPhoto;
+
     QString FoodDes;
     Q_INVOKABLE void getFoodDetail(QString food);//获取食物详细数据
-    Q_INVOKABLE QString getFoodPhoto();
     Q_INVOKABLE QString getFoodDes();
+
+    QString GoodReason;//包括名字和原因
+    Q_INVOKABLE void getGoodRelation(QString food);//获取相生相克
+    Q_INVOKABLE QString getGoodReason();
+
+    QString BadReason;//包括名字和原因
+    Q_INVOKABLE void getBadRelation(QString food);//获取相生相克
+    Q_INVOKABLE QString getBadReason();
+
+
 
 
 public:

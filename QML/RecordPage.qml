@@ -19,6 +19,9 @@ Rectangle {
     anchors.fill: parent
     property string str_userid
     property double dp:(myjava.getHeight()/16*2)/70
+
+    property string imgname
+    property string imagePath:"Qt"
     id:mainrect
 
     function getcheckinday(){
@@ -29,6 +32,50 @@ Rectangle {
     FontLoader {
         id: localFont
         source:"qrc:/Resources/msyh.ttf"
+    }
+
+    Image{
+        id:icon
+        source:"qrc:/image/appicon.png"
+        visible: false
+    }
+    Component.onCompleted: {
+        recordsystem.getlocaldiet();//读取本地信息
+
+    }
+
+    Canvas {
+        id: shareimage;
+        height: 500
+        width:500
+        z: 100
+        visible: false
+        property string mytext
+
+        contextType:"2d"
+
+        onPaint: {
+            context.lineWidth = 2;
+
+            context.font = " 30px sans-serif";
+
+
+            context.fillStyle="white"
+
+
+            context.drawImage(icon, 0, 0,500,500);
+
+
+            context.fillText(mytext,10,500-60);
+
+
+            context.fillText("来自DShare的分享",250,500-20);
+
+        }
+
+
+
+
     }
 
 
@@ -47,8 +94,7 @@ Rectangle {
             }
 
             if(Statue=="Wait"){
-                myjava.toastMsg("服务器繁忙，请重新发送！");
-
+                sendimgsystem.sendImage(imagePath,imgname);
             }
 
             if(Statue=="Sending..."){
@@ -60,6 +106,7 @@ Rectangle {
 
     DataSystem{
         id:dbsystem;
+        property string allfood: ""
         onStatueChanged: {
             if(Statue=="getcheckindaySucceed")
                 dosportdaysrect.checkinday=dbsystem.getcheckinday()
@@ -73,6 +120,43 @@ Rectangle {
                 if(antimetimer.running==false)
                     myjava.toastMsg("今天已经签到啦~！")
                 checkarea.visible=false
+
+            }
+
+
+            if(Statue=="getfoodrelationSucceed"){
+                var typelist=dbsystem.getRelationType().split("|||")
+                var reasonlist=dbsystem.getReason().split("|||")
+
+                var allfoodlist=allfood.split("、")
+
+                for(var q=0;q<foodview.currentmodel.count;q++)
+                foodview.currentmodel.get(q).Relation="-1"
+
+                var index=0
+                for(var i=0;i<allfoodlist.length-1;i++){
+
+                    for(var j=i+1;j<allfoodlist.length-1;j++){
+
+                        if(typelist[index]!=="NoRelation"){
+                            if(typelist[index]==="1"){
+                                for(var q2=0;q2<foodview.currentmodel.count;q2++){
+                                if(foodview.currentmodel.get(q2).Food===allfoodlist[i]||foodview.currentmodel.get(q2).Food===allfoodlist[j])
+                                    foodview.currentmodel.get(q2).Relation="1"
+                                }
+
+                            }
+                            else{
+                                for(var q3=0;q3<foodview.currentmodel.count;q3++){
+                                if(foodview.currentmodel.get(q3).Food===allfoodlist[i]||foodview.currentmodel.get(q3).Food===allfoodlist[j])
+                                    foodview.currentmodel.get(q3).Relation="0"
+                                }
+                            }
+                        }
+                        index++
+
+                    }
+                }
 
             }
 
@@ -148,85 +232,87 @@ Rectangle {
                 for(var i=0;i<maxj;i++){
 
                     if(recordsystem.getlocaldietstr(0,i)!=="")
-                        breakfastmodel.append({"Food":recordsystem.getlocaldietstr(0,i) })
+                        breakfastmodel.append({"Food":recordsystem.getlocaldietstr(0,i),"Relation":"-1" })
 
                     if(recordsystem.getlocaldietstr(1,i)!=="")
-                        lunchmodel.append({"Food":recordsystem.getlocaldietstr(1,i)})
+                        lunchmodel.append({"Food":recordsystem.getlocaldietstr(1,i),"Relation":"-1"})
 
                     if(recordsystem.getlocaldietstr(2,i)!=="")
-                        dinnermodel.append({"Food":recordsystem.getlocaldietstr(2,i)})
+                        dinnermodel.append({"Food":recordsystem.getlocaldietstr(2,i),"Relation":"-1"})
 
                     if(recordsystem.getlocaldietstr(3,i)!=="")
-                        snackmodel.append({"Food":recordsystem.getlocaldietstr(3,i)})
+                        snackmodel.append({"Food":recordsystem.getlocaldietstr(3,i),"Relation":"-1"})
 
                     if(recordsystem.getlocaldietstr(4,i)!=="")
-                        dessertmodel.append({"Food":recordsystem.getlocaldietstr(4,i)})
+                        dessertmodel.append({"Food":recordsystem.getlocaldietstr(4,i),"Relation":"-1"})
 
                     if(recordsystem.getlocaldietstr(5,i)!=="")
-                        othersmodel.append({"Food":recordsystem.getlocaldietstr(5,i)});
+                        othersmodel.append({"Food":recordsystem.getlocaldietstr(5,i),"Relation":"-1"});
 
                 }
 
+                setrelationtimer.running=true
+
                 if(breakfastmodel.count==0){
-                    breakfastmodel.append({"Food":"点击选择食物"})
-                    breakfastmodel.append({"Food":"点击选择食物"})
+                    breakfastmodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    breakfastmodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
 
                 if(breakfastmodel.count==1){
-                    breakfastmodel.append({"Food":"点击选择食物"})
+                    breakfastmodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
 
                 if(lunchmodel.count==0){
-                    lunchmodel.append({"Food":"点击选择食物"})
-                    lunchmodel.append({"Food":"点击选择食物"})
-                    lunchmodel.append({"Food":"点击选择食物"})
+                    lunchmodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    lunchmodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    lunchmodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
 
                 if(lunchmodel.count==1){
-                    lunchmodel.append({"Food":"点击选择食物"})
-                    lunchmodel.append({"Food":"点击选择食物"})
+                    lunchmodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    lunchmodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
 
                 if(lunchmodel.count==2){
-                    lunchmodel.append({"Food":"点击选择食物"})
+                    lunchmodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
 
                 if(dinnermodel.count==0){
-                    dinnermodel.append({"Food":"点击选择食物"})
-                    dinnermodel.append({"Food":"点击选择食物"})
-                    dinnermodel.append({"Food":"点击选择食物"})
+                    dinnermodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    dinnermodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    dinnermodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
                 if(dinnermodel.count==1){
-                    dinnermodel.append({"Food":"点击选择食物"})
-                    dinnermodel.append({"Food":"点击选择食物"})
+                    dinnermodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    dinnermodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
                 if(dinnermodel.count==2){
-                    dinnermodel.append({"Food":"点击选择食物"})
+                    dinnermodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
 
                 if(snackmodel.count==0){
-                    snackmodel.append({"Food":"点击选择食物"})
-                    snackmodel.append({"Food":"点击选择食物"})
+                    snackmodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    snackmodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
                 if(snackmodel.count==1)
-                    snackmodel.append({"Food":"点击选择食物"})
+                    snackmodel.append({"Food":"点击选择食物","Relation":"-1"})
 
 
 
                 if(dessertmodel.count==0){
-                    dessertmodel.append({"Food":"点击选择食物"})
-                    dessertmodel.append({"Food":"点击选择食物"})
+                    dessertmodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    dessertmodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
                 if(dessertmodel.count==1)
-                    dessertmodel.append({"Food":"点击选择食物"})
+                    dessertmodel.append({"Food":"点击选择食物","Relation":"-1"})
 
 
                 if(othersmodel.count==0){
-                    othersmodel.append({"Food":"点击选择食物"})
-                    othersmodel.append({"Food":"点击选择食物"})
+                    othersmodel.append({"Food":"点击选择食物","Relation":"-1"})
+                    othersmodel.append({"Food":"点击选择食物","Relation":"-1"})
                 }
                 if(othersmodel.count==1)
-                    othersmodel.append({"Food":"点击选择食物"})
+                    othersmodel.append({"Food":"点击选择食物","Relation":"-1"})
 
 
 
@@ -307,18 +393,25 @@ Rectangle {
             id:foodbutton
             text: "饮食"
             color:header.currentpage==text?"white":GlobalColor.SecondIcon
+            height: parent.height
+            width:parent.width/3
             font{
                 family: localFont.name
                 pointSize: 20
             }
             anchors.left: parent.left
-            anchors.leftMargin: parent.width/10
+
             anchors.verticalCenter: parent.verticalCenter
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
                     header.currentpage="饮食"
                 }
+
+
             }
         }
 
@@ -332,6 +425,11 @@ Rectangle {
             }
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
+            height: parent.height
+            width:parent.width/3
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
@@ -349,14 +447,18 @@ Rectangle {
                 pointSize: 20
             }
             anchors.right: parent.right
-            anchors.rightMargin: parent.width/10
+            height: parent.height
+            width:parent.width/3
             anchors.verticalCenter: parent.verticalCenter
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
 
                     if(header.currentpage!="查看")
-                    recordsystem.getdiet(str_userid,timechoosertext.text)
+                        recordsystem.getdiet(str_userid,timechoosertext.text)
                     header.currentpage="查看"
                 }
             }
@@ -403,20 +505,24 @@ Rectangle {
         }
 
         id:foodview
-        cacheBuffer:10000
         visible: header.currentpage=="饮食"?true:false
         height: parent.height-header.height
+
         width:parent.width
 
         anchors.top: header.bottom
         anchors.topMargin: 2*dp
 
         clip:true
+
         property var currentdiet;
         property int currentfood;
+
+        cacheBuffer: contentHeight+2
+
         spacing:-1
 
-
+        property ListModel currentmodel
 
         Rectangle {
             id: scrollbar
@@ -445,43 +551,85 @@ Rectangle {
         //各种细分的model
         ListModel{
             id:breakfastmodel
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
 
         }
         ListModel{
             id:lunchmodel
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
 
         }
         ListModel{
             id:dinnermodel
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
-            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
 
         }
         ListModel{
             id:snackmodel
-            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
 
         }
         ListModel{
             id:dessertmodel
-            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
 
         }
         ListModel{
             id:othersmodel
-            ListElement{Food:"点击选择食物"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
+            ListElement{Food:"点击选择食物";Relation:"-1"}
 
         }
 
-        Component.onCompleted: {
-            recordsystem.getlocaldiet();//读取本地信息
+        Timer{
+            id:setrelationtimer
+            interval: 4500
+            repeat: true
+            running:false
+            property int time: 0
+            onTriggered:{
+
+                time++
+
+                if(time==7)
+                    running=false
+                else{
+                    if(time==1)
+                    foodview.currentmodel=breakfastmodel
+                    if(time==2)
+                    foodview.currentmodel=lunchmodel
+                    if(time==3)
+                    foodview.currentmodel=dinnermodel
+                    if(time==4)
+                    foodview.currentmodel=snackmodel
+                    if(time==5)
+                    foodview.currentmodel=dessertmodel
+                    if(time==6)
+                    foodview.currentmodel=othersmodel
+
+                    var str=""
+
+                    for(var i=0;i<foodview.currentmodel.count;i++){
+                        if(foodview.currentmodel.get(i).Food!=="点击选择食物")
+                            str+=foodview.currentmodel.get(i).Food+"、"
+                    }
+
+                    dbsystem.allfood=str
+                    dbsystem.getFoodRelation(str)
+
+                }
+            }
         }
+
+
+
 
 
 
@@ -496,9 +644,13 @@ Rectangle {
 
             height: foodlist.height+addfoodbutton.height+20*dp+10*dp
 
+
+
             Rectangle{
 
-                border.color: "grey"
+
+
+                border.color: "lightgrey"
                 border.width: 1
 
 
@@ -512,6 +664,23 @@ Rectangle {
 
                 onFoodstrChanged: {
                     foodlist.model.setProperty(foodview.currentfood,"Food",foodstr);
+                    foodlist.model.setProperty(foodview.currentfood,"Relation","-1");
+
+                    if(foodstr!=""){
+                    foodview.currentmodel=foodlist.model
+
+                    var str=""
+
+                    for(var i=0;i<foodlist.model.count;i++){
+                        if(foodlist.model.get(i).Food!=="点击选择食物")
+                            str+=foodlist.model.get(i).Food+"、"
+                    }
+
+                    dbsystem.allfood=str
+                    dbsystem.getFoodRelation(str)
+
+                    }
+
                 }
 
                 Label{
@@ -580,7 +749,7 @@ Rectangle {
                     Image{
                         id:image
                         fillMode: Image.PreserveAspectFit
-                        property string imagePath:"Qt"
+
                         anchors.fill: parent
                         source: recordsystem.getphoto("diets_"+str_userid+"_"+index+"_"+Qt.formatDateTime(new Date(),"yyyy-MM-dd")+"_temp.jpg")
                     }
@@ -601,7 +770,7 @@ Rectangle {
                             if(temp!=="Qt"){
                                 timer.stop();
                                 image.source="file://"+temp;
-                                image.imagePath=temp;
+                                imagePath=temp;
                                 timer.stop()
                                 if(image.status!=Image.Error)
                                     messageDialog2.open()
@@ -619,8 +788,8 @@ Rectangle {
                     detailedText:"上传后可随时查看这张图片。强烈建议上传！"
                     standardButtons:  StandardButton.No|StandardButton.Yes
                     onYes: {
-                        var imgname="diets_"+str_userid+"_"+index+"_"+Qt.formatDateTime(new Date(),"yyyy-MM-dd");
-                        sendimgsystem.sendImage(image.imagePath,imgname);
+                        imgname="diets_"+str_userid+"_"+index+"_"+Qt.formatDateTime(new Date(),"yyyy-MM-dd");
+                        sendimgsystem.sendImage(imagePath,imgname);
                     }
                     onNo: {
 
@@ -657,8 +826,8 @@ Rectangle {
                 ListView{
                     id:foodlist
                     width: parent.width
-                    height:foodlist.model.count*(title.m_height*1.5+mainrect.height/36)
-
+                    //height:foodlist.model.count*(title.m_height*1.5+mainrect.height/36)
+                    height: contentHeight+15*dp
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     anchors.top: parent.top
@@ -674,8 +843,6 @@ Rectangle {
 
                         Rectangle{
                             id:foodtext
-                            //                            border.color: "grey"
-                            //                            border.width: 1
 
                             layer.enabled: true
                             layer.effect: DropShadow {
@@ -685,7 +852,6 @@ Rectangle {
                                 color: "#55000000"
                             }
 
-                            //radius: header.height/7
                             color:"white"
                             height: parent.height
                             width: parent.width/2
@@ -701,7 +867,11 @@ Rectangle {
 
                                     pointSize: 14
                                 }
+                                onTextChanged: {
+
+                                }
                             }
+
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
@@ -713,6 +883,46 @@ Rectangle {
                                     searpage.forceActiveFocus();
                                 }
                             }
+
+                            Image{
+                                Rectangle{
+                                    id:relationiconbackground
+                                    anchors.fill: parent
+                                    color:Relation=="1"?"lightgreen":"red"
+                                    anchors.margins: 5
+                                    z:-100
+                                }
+                                id:relationicon
+                                fillMode: Image.PreserveAspectFit
+                                anchors.right: parent.right
+                                anchors.rightMargin: 2*dp
+                                anchors.top: parent.top
+                                anchors.topMargin: 5*dp
+                                anchors.bottomMargin: 5*dp
+                                anchors.bottom: parent.bottom
+                                width: height
+                                source: Relation=="1"?"qrc:/image/good.png":"qrc:/image/bad.png"
+                                visible: Relation=="-1"?false:true
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        var str=""
+
+                                        for(var i=0;i<foodlist.model.count;i++){
+                                            if(foodlist.model.get(i).Food!=="点击选择食物")
+                                                str+=foodlist.model.get(i).Food+"、"
+                                        }
+                                        if(str=="")
+                                            myjava.toastMsg("请填写食材")
+                                        else
+                                        mainrect.parent.parent.parent.showdetailpage(str)
+                                    }
+                                }
+
+                            }
+
+
                         }
 
                         Rectangle{
@@ -748,11 +958,24 @@ Rectangle {
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
+savetimer.start()
                                     Food="点击选择食物"
+                                    Relation="-1"
+                                    if(foodlist.model.count>2)
+                                    foodlist.model.remove(index)
 
-                                    //                                    foodlist.model.remove(index)
-                                    //                                    if(foodlist.model.count===0)
-                                    //                                        foodlist.model.append({"Food":"点击选择食物"})
+
+                                    foodview.currentmodel=foodlist.model
+
+                                    var str=""
+
+                                    for(var i=0;i<foodlist.model.count;i++){
+                                        if(foodlist.model.get(i).Food!=="点击选择食物")
+                                            str+=foodlist.model.get(i).Food+"、"
+                                    }
+
+                                    dbsystem.allfood=str
+                                    dbsystem.getFoodRelation(str)
                                 }
                             }
 
@@ -767,6 +990,7 @@ Rectangle {
 
 
                         if(Statue==="splitdone"){
+                            savetimer.start()
                             mainrect.parent.parent.parent.setbusy(false)
 
                             var list=[]
@@ -776,7 +1000,7 @@ Rectangle {
 
 
                             for(var i=0;i<list.length-1;i++){
-                                foodlist.model.append({"Food":list[i]})
+                                foodlist.model.append({"Food":list[i],"Relation":"-1"})
 
 
 
@@ -791,7 +1015,7 @@ Rectangle {
                                 if(have==0){
                                     foodsmodel.insert(0,{"value":list[i]})
 
-                                    dbsystem.uploadFood(list[i])
+                                    //dbsystem.uploadFood(list[i])
                                 }
 
                             }
@@ -800,6 +1024,18 @@ Rectangle {
                             for(var i2=0;i2<foodsmodel.count;i2++)
                                 longstr=longstr+foodsmodel.get(i2).value+" "
                             recordsystem.savedietlist(longstr)
+
+                            foodview.currentmodel=foodlist.model
+
+                            var str=""
+
+                            for(var i=0;i<foodlist.model.count;i++){
+                                if(foodlist.model.get(i).Food!=="点击选择食物")
+                                    str+=foodlist.model.get(i).Food+"、"
+                            }
+
+                            dbsystem.allfood=str
+                            dbsystem.getFoodRelation(str)
 
                             return
 
@@ -955,13 +1191,14 @@ Rectangle {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
+                            savetimer.start()
                             var isfull=1;
                             for(var i=0;i<foodlist.model.count;i++){
                                 if(foodlist.model.get(i).Food==="点击选择食物")
                                     isfull=0;
                             }
                             if(isfull){
-                                foodlist.model.append({"Food":"点击选择食物" })
+                                foodlist.model.append({"Food":"点击选择食物","Relation":"-1"})
                             }
                             else
                                 myjava.toastMsg("请先填满之前的食物")
@@ -1020,6 +1257,9 @@ Rectangle {
                             }
 
 
+                            if(str=="")
+                                myjava.toastMsg("请填写食材")
+                            else
                             mainrect.parent.parent.parent.showdetailpage(str)
                         }
                     }
@@ -1076,6 +1316,7 @@ Rectangle {
                             if(lastupload!==foodstr123){
                                 lastupload=foodstr123
                                 recordsystem.uploaddiet(str_userid,foodstr123,index);
+
                             }
                         }
                     }
@@ -1127,13 +1368,80 @@ Rectangle {
 
 
                             mainrect.parent.parent.currentPage="分享"
-                            mainrect.parent.parent.x=-mainrect.width*1
+                            mainrect.parent.parent.x=-mainrect.width
                             mainrect.parent.parent.children[1].item.settext("<font color=\""+GlobalColor.ShareMSG+"\">"+ss+"</font>")
 
                         }
+
+                        onPressed: {
+                            var str=title.text+"："
+                            var foodstr123=""
+                            for(var i=0;i<foodlist.model.count;i++){
+                                if(foodlist.model.get(i).Food!=="点击选择食物")
+                                    if(i==foodlist.model.count-1)
+                                        foodstr123=foodstr123+foodlist.model.get(i).Food;
+                                    else
+                                        foodstr123=foodstr123+foodlist.model.get(i).Food+"、"
+                            }
+                            var ss=""
+                            if(foodstr123=="")
+                                ss=str+"什么都没吃……";
+                            else
+                                ss=str+foodstr123;
+
+
+                            shareimage.mytext=ss
+                            shareimage.requestPaint()
+
+                            var path=myjava.getSDCardPath();
+
+                            path=path+"/DShare/shareimage.png";
+
+                            shareimage.save(path)
+
+
+                        }//秘制bug
+
+
+                        onPressAndHold: {
+                            var str=title.text+"："
+                            var foodstr123=""
+                            for(var i=0;i<foodlist.model.count;i++){
+                                if(foodlist.model.get(i).Food!=="点击选择食物")
+                                    if(i==foodlist.model.count-1)
+                                        foodstr123=foodstr123+foodlist.model.get(i).Food;
+                                    else
+                                        foodstr123=foodstr123+foodlist.model.get(i).Food+"、"
+                            }
+                            var ss=""
+                            if(foodstr123=="")
+                                ss=str+"什么都没吃……";
+                            else
+                                ss=str+foodstr123;
+
+
+                            shareimage.mytext=ss
+                            shareimage.requestPaint()
+
+                            var path=myjava.getSDCardPath();
+
+                            path=path+"/DShare/shareimage.png";
+
+                            shareimage.save(path)
+
+
+
+
+                            myjava.shareImage(path)
+                        }
+
+
+
                     }
 
                 }
+
+
 
 
 
@@ -1631,7 +1939,7 @@ Rectangle {
 
 
                         mainrect.parent.parent.currentPage="分享"
-                        mainrect.parent.parent.x=-mainrect.width*1
+                        mainrect.parent.parent.x=-mainrect.width
                         mainrect.parent.parent.children[1].item.settext("<font color=\""+GlobalColor.ShareMSG+"\">"+str+"</font>")
 
                         sporttext.text=""
@@ -2036,7 +2344,7 @@ Rectangle {
 
             Rectangle{
                 id:foodtablerect
-                border.color: "grey"
+                border.color: "lightgrey"
                 border.width: 1
 
                 height:foodtabletitle.height+breakfast.height+lunch.height+dinner.height+snack.height+dessert.height+others.height+90*dp+photolayout.height
@@ -2286,7 +2594,7 @@ Rectangle {
 
             Rectangle{
                 id:sporttablerect
-                border.color: "grey"
+                border.color: "lightgrey"
                 border.width: 1
                 height:sporttableview.height+20*dp+sporttabletitle.height
                 width: parent.width+2
@@ -2545,7 +2853,7 @@ Rectangle {
                 Rectangle{
                     anchors.fill: parent
                     color:"white"
-                    border.color: "grey"
+                    border.color: "lightgrey"
                     border.width: 1
                     Text{
                         id:name;

@@ -144,25 +144,12 @@ Rectangle{
                             }
                         }
                     }
-                    onPressAndHold: {
-                        saveDialog.open()
-                    }
+
 
 
                 }
             }
-            MessageDialog {
-                id: saveDialog
-                title: "提示"
-                text: "要保存这张图片吗？"
-                standardButtons:  StandardButton.No|StandardButton.Yes
-                onYes: {
-                    postssystem.savePhoto(bigphoto.source.replace("_temp",""))//防止重复图片
-                }
-                onNo: {
 
-                }
-            }
 
         }
     }
@@ -302,7 +289,6 @@ Rectangle{
             verticalAlignment: Text.AlignVCenter
             font{
                         family: localFont.name
-
                 pixelSize: (head.height)/4
 
             }

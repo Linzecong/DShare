@@ -200,7 +200,6 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             font{
                 family: localFont.name
-
                 pixelSize: (head.height)/4
 
             }
@@ -260,7 +259,7 @@ Rectangle {
             id:listview;
             anchors.fill: parent
             clip:true
-            cacheBuffer:10000
+            cacheBuffer:contentHeight+2
             property int likeindex:0
             property int commentindex:0
 
@@ -430,7 +429,7 @@ Rectangle {
                         font{
                             family: localFont.name
                             //family: "微软雅黑"
-                            pointSize: 14
+                            pointSize: 16
                         }
                     }
                     Image{
@@ -630,13 +629,12 @@ Rectangle {
                             Label{
                                 anchors.centerIn: parent
                                 id:morebutton
-                                text:"←"
+                                text:"···"
                                 color:"white"
                                 verticalAlignment: Text.AlignVCenter
                                 font{
                                     family: localFont.name
-                                    bold: true
-                                    pixelSize: parent.height
+                                    pixelSize: parent.height/1.5
                                 }
                             }
 

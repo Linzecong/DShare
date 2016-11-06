@@ -66,6 +66,10 @@ Rectangle{
 
 
 
+
+
+
+
     //用于显示大图
     FontLoader {
         id: localFont
@@ -88,7 +92,7 @@ Rectangle{
             z:-100
         }
 
-        cacheBuffer:10000
+        cacheBuffer:contentHeight+2
         property int likeindex:0
         property int commentindex:0
         
@@ -240,7 +244,7 @@ Rectangle{
                     font{
                         family: localFont.name
                         //family: "微软雅黑"
-                        pointSize: 14
+                        pointSize: 16
                     }
                 }
 
@@ -454,13 +458,12 @@ Rectangle{
                         Label{
                             anchors.centerIn: parent
                             id:morebutton
-                            text:"←"
+                            text:"···"
                             color:"white"
                             verticalAlignment: Text.AlignVCenter
                             font{
                                 family: localFont.name
-                                bold: true
-                                pixelSize: parent.height
+                                pixelSize: parent.height/1.5
                             }
                         }
                         MouseArea{

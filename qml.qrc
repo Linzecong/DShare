@@ -31,7 +31,6 @@
         <file>QML/UniquePost.qml</file>
         <file>QML/UsersPage.qml</file>
         <file>image/speech.png</file>
-        <file>Resources/msyh.ttf</file>
         <file>GlobalVariable.js</file>
         <file>image/editmode.png</file>
         <file>image/notice.png</file>
@@ -41,5 +40,14 @@
         <file>image/detail.png</file>
         <file>QML/DetailPage.qml</file>
         <file>image/appicon.png</file>
+        <file>QML/FoodSearch.qml</file>
+        <file>QML/FoodDetail.qml</file>
+        <file>image/bad.png</file>
+        <file>image/good.png</file>
+        <file>image/foodsearch.png</file>
+        <file>image/news.png</file>
+        <file>image/back.png</file>
+        <file>Resources/msyh.ttf</file>
+        <file>QML/NewsContent.qml</file>
     </qresource>
 </RCC>

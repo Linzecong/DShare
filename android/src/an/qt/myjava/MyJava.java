@@ -109,7 +109,18 @@ public static String getStatusBarHeight(){
 
 }
 
+    private static void shareImage(String s){
 
+        //Uri uri = Uri.parse(s);
+
+        File file = new File(s);
+        Intent intent = new Intent();
+        intent.setAction(android.content.Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(file),"image/*");
+        m_instance.startActivity(intent);
+
+
+    }
 
 
     public static String getSdcardPath(){

@@ -20,7 +20,7 @@ Rectangle {
     function getalldiet(userid,mnickname){
         str_userid=userid
         nickname=mnickname
-        myjava.toastMsg("获取中...请耐心等待...")
+        myjava.toastMsg("获取中...")
         reportsystem.getalldiet(userid)
 
 
@@ -51,7 +51,7 @@ Rectangle {
 
             if(Statue==="getallexercisesSucceed"){
 
-                myjava.toastMsg("获取运动数据成功~！")
+               // myjava.toastMsg("获取运动数据成功~！")
                 reportsystem.als_Time_Exe(sporttimechart.currentPage)
             }
 
@@ -69,7 +69,8 @@ Rectangle {
                 foodcountchartbarset.values=[num0,num1,num2,num3,num4]
 
                 foodcountchartbcax.categories=als_Top5_getName().split("@")
-                foodcountchartyAxis.max=num0*1.1
+
+                foodcountchartyAxis.max=parseInt(num0+parseInt(num0/10))
 
 
 
@@ -95,7 +96,7 @@ Rectangle {
                 sporttimechartbcax.categories=als_Time_Exe_getName().split("@")
 
 
-                sporttimechartyAxis.max=maxnum*1.1
+                sporttimechartyAxis.max=parseInt(maxnum+parseInt(maxnum/10))
 
 
             }
@@ -125,7 +126,10 @@ Rectangle {
                     foodtimechartthr.append(i,a=parseInt(als_Time_getCount().split("|||")[2].split("@")[i]))
                     max=max<a?a:max
                 }
-                foodtimechartyAxis.max=max*1.2
+                if(max<=4)
+                    max=6
+
+                foodtimechartyAxis.max=parseInt(max+parseInt(max/5))
 
                 foodtimechartbcax.categories=als_Time_getName().split("@")
 
@@ -235,7 +239,6 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             font{
                 family: localFont.name
-
                 pixelSize: (head.height)/4
 
             }
@@ -326,6 +329,9 @@ Rectangle {
             animationOptions:ChartView.SeriesAnimations
 
             BarSeries {
+                labelsVisible: true
+                labelsPosition: BarSeries.LabelsInsideEnd
+
                 id: mySeries
                 useOpenGL:true
                 axisX: BarCategoryAxis {
@@ -509,8 +515,8 @@ Rectangle {
             }
             ValueAxis {
                 id: foodtimechartyAxis
-                labelFormat: "%d"
-                min: -0.1
+                labelFormat: "%i"
+                min: 0
                 max: 10
             }
 
@@ -519,18 +525,34 @@ Rectangle {
                 id:foodtimechartfir
                 axisX:foodtimechartbcax
                 axisY: foodtimechartyAxis
+                width: 4
+                pointLabelsVisible:true
+                pointLabelsFormat :"@yPoint"
+                pointsVisible :true
+                color:GlobalColor.Main
+                capStyle:Qt.RoundCap
+                pointLabelsFont{
+                    family: localFont.name
+                    pointSize: 12
+                }
             }
             SplineSeries {
                 name: ""
                 id:foodtimechartsec
                 axisX:foodtimechartbcax
                 axisY: foodtimechartyAxis
+                width: 4
+                color:"#ED9121"
+
             }
             SplineSeries {
                 name: ""
                 id:foodtimechartthr
                 axisX:foodtimechartbcax
                 axisY: foodtimechartyAxis
+                width: 4
+                color: "lightGreen"
+
             }
 
             Rectangle{
@@ -669,11 +691,11 @@ Rectangle {
                 id: pieSeries
 
 
-                PieSlice {id:pie1; color:"#FF6103"; label: "热性"; value: 1; labelVisible:false}
-                PieSlice {id:pie2; color:"#ED9121"; label: "温性"; value: 2; labelVisible:false}
-                PieSlice {id:pie3; color:"#F5DEB3"; label: "平性"; value: 3; labelVisible:false}
-                PieSlice {id:pie4; color:"#FFD700"; label: "凉性"; value: 4; labelVisible:false}
-                PieSlice {id:pie5; color:"#FFE384"; label: "寒性"; value: 5; labelVisible:false}
+                PieSlice {id:pie1; color:"#FF6103"; label: "热性"; value: 1; labelVisible:value>0}
+                PieSlice {id:pie2; color:"#ED9121"; label: "温性"; value: 0; labelVisible:value>0}
+                PieSlice {id:pie3; color:"#F5DEB3"; label: "平性"; value: 0; labelVisible:value>0}
+                PieSlice {id:pie4; color:"#FFD700"; label: "凉性"; value: 0; labelVisible:value>0}
+                PieSlice {id:pie5; color:"#FFE384"; label: "寒性"; value: 0; labelVisible:value>0}
             }
 
             Rectangle{
@@ -807,7 +829,7 @@ Rectangle {
             ValueAxis {
                 id: sporttimechartyAxis
                 labelFormat: "%d"
-                min: -0.1
+                min: 0
                 max: 10
             }
 
@@ -816,6 +838,18 @@ Rectangle {
                 id:sporttimechartline
                 axisX:sporttimechartbcax
                 axisY: sporttimechartyAxis
+                width: 4
+
+                pointLabelsVisible:true
+                pointLabelsFormat :"@yPoint"
+                pointsVisible :true
+                color: GlobalColor.Main
+                capStyle:Qt.RoundCap
+
+                pointLabelsFont{
+                    family: localFont.name
+                    pointSize: 12
+                }
             }
 
 

@@ -406,9 +406,7 @@ StackView{
                     anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
                     font{
                         family: localFont.name
-                        
                         pixelSize: registtoprect.height/4
-                        bold:true;
                     }
                     color: "white";
                     MouseArea{

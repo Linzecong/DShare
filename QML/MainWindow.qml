@@ -69,11 +69,39 @@ Rectangle {
         detailpage.item.getModel(a)
     }
 
+    function showfooddetail(a,b){
+        fooddetail.item.init(a,b)
+        fooddetail.visible=true
+    }
+
+    function shownewscontent(id,a,b,title,time){
+        newscontent.item.getNews(id,a,b,title,time)
+        newscontent.visible=true
+    }
+
+
+
     Loader{
         id:detailpage
         anchors.fill: parent
         visible: false
         source:"qrc:/QML/DetailPage.qml"
+        z:102
+    }
+
+    Loader{
+        id:fooddetail
+        anchors.fill: parent
+        visible: false
+        source:"qrc:/QML/FoodDetail.qml"
+        z:102
+    }
+
+    Loader{
+        id:newscontent
+        anchors.fill: parent
+        visible: false
+        source:"qrc:/QML/NewsContent.qml"
         z:102
     }
 
@@ -162,7 +190,9 @@ Rectangle {
                         else{
                             doubletimer.running=false
                             if(!bigphotorect.isbig){
+
                                 bigphoto.scale=1.5
+
                                 bigphotorect.isbig=1
                             }
                             else{
@@ -185,8 +215,11 @@ Rectangle {
                 standardButtons:  StandardButton.No|StandardButton.Yes
                 onYes: {
                     dbsystem.savePhoto(bigphoto.source)
+
+
                 }
                 onNo: {
+
 
                 }
             }
@@ -259,7 +292,7 @@ Rectangle {
     Keys.onBackPressed: {
         if(headname.text!="DShare"){
             bottom.currentPage="DShare"
-            mainrect.x=0;
+            mainrect.x=-mainwindow.width*2
         }
         else{
             quit++;
@@ -338,7 +371,7 @@ Rectangle {
         height: parent.height
         width:parent.width/10*6.9
         color:"white"
-        border.color: "grey"
+        border.color: "lightgrey"
         border.width: 1
         x:-width;
         z:10
@@ -505,7 +538,7 @@ Rectangle {
                 }
                 id:followingicon
                 anchors.left: parent.left
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/user.png"
                 width: height
@@ -514,7 +547,7 @@ Rectangle {
 
             Label{
                 anchors.left: followingicon.right
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的关注"
                 font{
@@ -562,7 +595,7 @@ Rectangle {
                 }
                 id:followericon
                 anchors.left: parent.left
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/nickname.png"
                 width: height
@@ -572,7 +605,7 @@ Rectangle {
 
             Label{
                 anchors.left: followericon.right
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的粉丝"
                 font{
@@ -622,7 +655,7 @@ Rectangle {
                 }
                 id:shareicon
                 anchors.left: parent.left
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/photo.png"
                 width: height
@@ -631,7 +664,7 @@ Rectangle {
 
             Label{
                 anchors.left: shareicon.right
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的分享"
                 font{
@@ -676,7 +709,7 @@ Rectangle {
                 }
                 id:messageicon
                 anchors.left: parent.left
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/notice.png"
                 width: height
@@ -685,7 +718,7 @@ Rectangle {
 
             Label{
                 anchors.left: messageicon.right
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的消息"
                 font{
@@ -730,7 +763,7 @@ Rectangle {
                 }
                 id:reporticon
                 anchors.left: parent.left
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/report.png"
                 width: height
@@ -739,7 +772,7 @@ Rectangle {
 
             Label{
                 anchors.left: reporticon.right
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 text:"我的报告"
                 font{
@@ -819,7 +852,7 @@ Rectangle {
                 }
                 id:settingicon
                 anchors.left: parent.left
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/setting.png"
                 width: height
@@ -828,7 +861,7 @@ Rectangle {
             Label{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: settingicon.right
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 text:"设置"
                 font{
                         family: localFont.name
@@ -873,7 +906,7 @@ Rectangle {
                 }
                 id:logouticon
                 anchors.left: parent.left
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/image/password.png"
                 width: height
@@ -882,7 +915,7 @@ Rectangle {
             Label{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: logouticon.right
-                anchors.leftMargin: 10*dp
+                anchors.leftMargin: 12*dp
                 text:"注销"
                 font{
                         family: localFont.name
@@ -1064,6 +1097,8 @@ fillMode: Image.PreserveAspectFit
                     friends.visible=true
                     friends.x=0
                 }
+
+
             }
         }
 
@@ -1114,18 +1149,113 @@ fillMode: Image.PreserveAspectFit
 
 
         Rectangle{
-            id:mainbutton
+            id:newsbutton
             anchors.left: parent.left
+            height:parent.height
+            width:parent.width/5
+            color:"white";
+            Image {
+                Rectangle{
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    color:bottom.currentPage=="资讯"?GlobalColor.Main:"lightgrey"
+                    z:-100
+                }
+                anchors.centerIn: parent
+                height:parent.height/1.5
+                width: height
 
+                source: "qrc:/image/news.png"
+                fillMode: Image.PreserveAspectFit
+                scale:bottom.currentPage=="资讯"?1.5:1
+//                Timer{
+//                    interval: 600
+//                    repeat:true
+//                    triggeredOnStart :true
+//                    onTriggered: {
+//                        if(parent.scale==1.6)
+//                            parent.scale=1.2
+//                        else
+//                            parent.scale=1.6
+//                    }
+//                    running: bottom.currentPage=="资讯"
+//                    onRunningChanged: {
+//                        if(running==false)
+//                            parent.scale=1
+//                    }
+//                }
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 300
+                        easing.type: Easing.Linear
+                    }
+                }
+            }
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    bottom.currentPage="资讯"
+                    mainrect.x=0
+                    newspage.item.setid(str_userid,nickname)
+                }
+            }
+
+        }
+
+        Rectangle{
+            id:sendbutton
+            anchors.left: newsbutton.right
+            height:parent.height
+            width:parent.width/5
+            color:"white";
+            Image {
+                Rectangle{
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    color:bottom.currentPage=="分享"?GlobalColor.Main:"lightgrey"
+                    z:-100
+                }
+                anchors.centerIn: parent
+                height:parent.height/1.5
+                width: height
+
+                source: "qrc:/image/sharepage.png"
+                fillMode: Image.PreserveAspectFit
+                scale:bottom.currentPage=="分享"?1.5:1
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 300
+                        easing.type: Easing.Linear
+                    }
+                }
+            }
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    bottom.currentPage="分享"
+                    mainrect.x=-mainwindow.width
+
+                }
+            }
+
+        }
+
+
+        Rectangle{
+            id:mainbutton
+
+            anchors.left: sendbutton.right
 
             height:parent.height
-            width:parent.width/3
+            width:parent.width/5
 
             color:"white";
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:bottom.currentPage=="DShare"?GlobalColor.Main:GlobalColor.FirstIcon
+                    color:bottom.currentPage=="DShare"?GlobalColor.Main:"lightgrey"
                     anchors.margins: 5
                     z:-100
                 }
@@ -1138,25 +1268,10 @@ fillMode: Image.PreserveAspectFit
                 fillMode: Image.PreserveAspectFit
 
 
-                Timer{
-                    interval: 800
-                    repeat:true
-                    triggeredOnStart :true
-                    onTriggered: {
-                        if(parent.scale==1.4)
-                            parent.scale=1.2
-                        else
-                            parent.scale=1.4
-                    }
-                    running: bottom.currentPage=="DShare"
-                    onRunningChanged: {
-                        if(running==false)
-                            parent.scale=1
-                    }
-                }
+                scale:bottom.currentPage=="DShare"?1.5:1
                 Behavior on scale{
                     NumberAnimation{
-                        duration: 800
+                        duration: 300
                         easing.type: Easing.Linear
                     }
                 }
@@ -1166,117 +1281,41 @@ fillMode: Image.PreserveAspectFit
                 id:mainpagebutton
                 anchors.fill: parent
                 onClicked: {
-                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-                        messageDialog.open()
+//                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+//                        messageDialog.open()
 
                     bottom.currentPage="DShare"
-                    mainrect.x=0;
+                    mainrect.x=-mainwindow.width*2
 
 
                 }
             }
-        }
-
-
-        Rectangle{
-            id:sendbutton
-            anchors.horizontalCenter: parent.horizontalCenter
-            height:parent.height
-
-            width:parent.width/3
-
-            color:"white";
-            Image {
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 5
-                    color:bottom.currentPage=="分享"?GlobalColor.Main:GlobalColor.FirstIcon
-                    z:-100
-                }
-                anchors.centerIn: parent
-                height:parent.height/1.5
-                width: height
-
-                source: "qrc:/image/sharepage.png"
-                fillMode: Image.PreserveAspectFit
-                Timer{
-                    interval: 800
-                    repeat:true
-                    triggeredOnStart :true
-                    onTriggered: {
-                        if(parent.scale==1.4)
-                            parent.scale=1.2
-                        else
-                            parent.scale=1.4
-                    }
-                    running: bottom.currentPage=="分享"
-                    onRunningChanged: {
-                        if(running==false)
-                            parent.scale=1
-                    }
-                }
-                Behavior on scale{
-                    NumberAnimation{
-                        duration: 800
-                        easing.type: Easing.Linear
-                    }
-                }
-            }
-
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    bottom.currentPage="分享"
-                    mainrect.x=-mainwindow.width*1
-
-                }
-            }
-
         }
 
 
 
         Rectangle{
             id:recordbutton
-            anchors.right: parent.right
+            anchors.left: mainbutton.right
             height:parent.height
-
-            width:parent.width/3
-
+            width:parent.width/5
             color:"white";
             Image {
                 Rectangle{
                     anchors.fill: parent
-                    color:bottom.currentPage=="记录"?GlobalColor.Main:GlobalColor.FirstIcon
+                    color:bottom.currentPage=="记录"?GlobalColor.Main:"lightgrey"
                     anchors.margins: 5
                     z:-100
                 }
-
                 anchors.centerIn: parent
                 height:parent.height/1.5
                 width: height
-
                 source: "qrc:/image/recordpage.png"
                 fillMode: Image.PreserveAspectFit
-                Timer{
-                    interval: 800
-                    repeat:true
-                    triggeredOnStart :true
-                    onTriggered: {
-                        if(parent.scale==1.4)
-                            parent.scale=1.2
-                        else
-                            parent.scale=1.4
-                    }
-                    running: bottom.currentPage=="记录"
-                    onRunningChanged: {
-                        if(running==false)
-                            parent.scale=1
-                    }
-                }
+                scale:bottom.currentPage=="记录"?1.5:1
                 Behavior on scale{
                     NumberAnimation{
-                        duration: 800
+                        duration: 300
                         easing.type: Easing.Linear
                     }
                 }
@@ -1285,11 +1324,49 @@ fillMode: Image.PreserveAspectFit
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-                        messageDialog.open()
-
+//                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+//                        messageDialog.open()
                     bottom.currentPage="记录"
-                    mainrect.x=-mainwindow.width*2
+                    mainrect.x=-mainwindow.width*3
+                }
+            }
+        }
+
+        Rectangle{
+            id:foodsearchbutton
+            anchors.right: parent.right
+            height:parent.height
+            width:parent.width/5
+            color:"white";
+            Image {
+                Rectangle{
+                    anchors.fill: parent
+                    color:bottom.currentPage=="食材搜索"?GlobalColor.Main:"lightgrey"
+                    anchors.margins: 5
+                    z:-100
+                }
+                anchors.centerIn: parent
+                height:parent.height/1.5
+                width: height
+                source: "qrc:/image/foodsearch.png"
+                fillMode: Image.PreserveAspectFit
+                scale:bottom.currentPage=="食材搜索"?1.5:1
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 300
+                        easing.type: Easing.Linear
+                    }
+                }
+
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+//                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+//                        messageDialog.open()
+                    bottom.currentPage="食材搜索"
+                    mainrect.x=-mainwindow.width*4
+                    foodsearch.item.init()
                 }
             }
         }
@@ -1324,31 +1401,53 @@ fillMode: Image.PreserveAspectFit
         height:parent.height-head.height-bottom.height
 
         width:parent.width*5
+        x:-mainwindow.width*2
         z:6
         property alias currentPage:bottom.currentPage
 
 
         Loader{
-            id:mainpage
+            id:newspage
             anchors.left: parent.left
+            height:parent.height
+            width:mainwindow.width
+            source: "qrc:/QML/NewsPage.qml";
+        }
+
+        Loader{
+            id:sendpage
+            anchors.left: newspage.right
+            height:parent.height
+            width:mainwindow.width
+            source: "qrc:/QML/SendPage.qml";
+        }
+
+
+
+        Loader{
+            id:mainpage
+            anchors.left: sendpage.right
             height:parent.height
             width:mainwindow.width
             source: "qrc:/QML/MainPage.qml";
         }
         Loader{
-            id:sendpage
-            anchors.left: mainpage.right
-            height:parent.height
-            width:mainwindow.width
-            source: "qrc:/QML/SendPage.qml";
-        }
-        Loader{
             id:recordpage
-            anchors.left: sendpage.right
+            anchors.left: mainpage.right
             height:parent.height
             width:mainwindow.width
             source: "qrc:/QML/RecordPage.qml";
         }
+
+        Loader{
+            id:foodsearch
+            anchors.left: recordpage.right
+            height:parent.height
+            width:mainwindow.width
+            source: "qrc:/QML/FoodSearch.qml";
+        }
+
+
 
         Behavior on x{
             NumberAnimation{

@@ -167,7 +167,7 @@ Rectangle {
             text:"＜"
             color: "white"
             font{
-                        family: localFont.name
+                family: localFont.name
                 pixelSize: (head.height)/4
             }
             anchors.left: parent.left
@@ -209,6 +209,17 @@ Rectangle {
 
     }
 
+    Flickable{
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.top: head.bottom
+        anchors.bottom: parent.bottom
+
+
+        flickableDirection: Flickable.VerticalFlick
+
+        contentHeight: searchbar.height+view.contentHeight+20*dp
+        clip: true
 
     Rectangle{
         id:searchbar
@@ -218,7 +229,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: 10*dp
 
-        anchors.top: head.bottom
+        anchors.top: parent.top
         anchors.topMargin: 10*dp
 
         layer.enabled: true
@@ -278,7 +289,6 @@ Rectangle {
 
 
 
-
     ListModel{
         id:model1
         ListElement{
@@ -304,15 +314,42 @@ Rectangle {
 
     ListView{
         id:view
-        cacheBuffer:10000
+
         spacing: -1
-        anchors.top: searchbar.visible?searchbar.bottom:head.bottom
+        anchors.top: searchbar.visible?searchbar.bottom:parent.top
         anchors.topMargin: searchbar.visible?10*dp:0
 
         clip: true
         width: parent.width
-        height:parent.height-head.height-(searchbar.visible?searchbar.height+20*dp:0)
+        //height:parent.height-head.height-(searchbar.visible?searchbar.height+20*dp:0)
+        height: contentHeight+2
+
         model: model1
+
+        header:Rectangle{
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width/3*1.1
+            height: model1.count==0?head.height:0
+            visible: model1.count==0?true:false
+            Rectangle{
+                width: parent.width/1.2
+                height:head.height/2
+                color:"white"
+
+                anchors.top: parent.top
+                anchors.topMargin: 8*dp
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text{
+                    text:"暂无结果"
+                    color:"grey"
+                    anchors.centerIn: parent
+                    font.pointSize: 16
+                }
+
+            }
+        }
+
         Rectangle {
                   id: scrollbar
                   anchors.right: view.right
@@ -334,7 +371,7 @@ Rectangle {
             Rectangle{
                 anchors.fill: parent
                 color:"white"
-                border.color: "grey"
+                border.color: "lightgrey"
                 border.width: 1
 
                 Image{
@@ -371,7 +408,7 @@ Rectangle {
                     anchors.left: headimage.right
                     anchors.leftMargin: 10*dp
                     anchors.top: headimage.top
-                    anchors.topMargin: 8*dp
+                    anchors.topMargin: 6*dp
                     color: "grey"
                     text:"昵称:"+nickname
                     wrapMode: Text.WordWrap
@@ -390,7 +427,7 @@ Rectangle {
                     anchors.leftMargin: 10*dp
 
                     anchors.bottom: headimage.bottom
-                    anchors.bottomMargin: 8*dp
+                    anchors.bottomMargin: 6*dp
 
                     color: "grey"
                     wrapMode: Text.WordWrap
@@ -487,7 +524,7 @@ Rectangle {
 
     }
 
-
+}
 
 
 }

@@ -217,7 +217,9 @@ StackView{
                 var ctx = getContext("2d");
 
                 ctx.clearRect(0, 0, width, height);
+
                 ctx.drawImage(source, dx+px, dy+py, dw*r, dh*r);
+
                 var xStart = frameX - 130;
                 var yStart = frameY - 130;
                 ctx.save();
@@ -695,7 +697,6 @@ StackView{
                 verticalAlignment: Text.AlignVCenter
                 font{
                     family: localFont.name
-                    
                     pixelSize: (head.height)/4
                 }
                 color: "white";
@@ -736,7 +737,7 @@ StackView{
 
             color: "white"
             border.width: 1;
-            border.color: "grey"
+            border.color: "lightgrey"
             Label{
                 id:changedatatitle1
                 text: "修改资料"
@@ -768,7 +769,7 @@ StackView{
             width: parent.width
             color: "white"
             border.width: 1;
-            border.color: "grey"
+            border.color: "lightgrey"
             Label{
                 text: "使用帮助"
                 anchors.left: parent.left
@@ -842,7 +843,6 @@ StackView{
                     verticalAlignment: Text.AlignVCenter
                     font{
                         family: localFont.name
-                        
                         pixelSize: (head.height)/4
                     }
                     color: "white";
@@ -879,7 +879,7 @@ StackView{
                 width: parent.width
                 color: "white"
                 border.width: 1;
-                border.color: "grey"
+                border.color: "lightgrey"
                 Label{
                     id:changeheadtitle
                     text: "修改头像"
@@ -957,7 +957,7 @@ StackView{
                 width: parent.width
                 color: "white"
                 border.width: 1;
-                border.color: "grey"
+                border.color: "lightgrey"
                 Label{
                     id:changenametext
                     text: "修改昵称"
@@ -1042,7 +1042,7 @@ StackView{
                 width: parent.width
                 color: "white"
                 border.width: 1;
-                border.color: "grey"
+                border.color: "lightgrey"
                 Label{
                     id:changepasswordtext
                     text: "修改密码"
@@ -1199,7 +1199,6 @@ StackView{
                     verticalAlignment: Text.AlignVCenter
                     font{
                         family: localFont.name
-                        
                         pixelSize:(head.height)/4
 
                     }

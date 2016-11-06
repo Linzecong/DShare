@@ -214,6 +214,72 @@ QString DataSystem::getsearchUserName(int i){
         return SearchNameList[i];
 }
 
+void DataSystem::searchFood(QString str)
+{
+    SearchFoodDesList.clear();
+    SearchFoodNameList.clear();
+    SearchFoodPhotoList.clear();
+    QString out="@searchfood@|||"+str;
+    tcpSocket->write(out.toUtf8());
+}
+
+QString DataSystem::getsearchFoodPhoto(int i)
+{
+    if(i>=SearchFoodPhotoList.length()||i<0)
+        return "";
+    else
+        return SearchFoodPhotoList[i];
+}
+
+QString DataSystem::getsearchFoodName(int i)
+{
+    if(i>=SearchFoodNameList.length()||i<0)
+        return "";
+    else
+        return SearchFoodNameList[i];
+}
+
+QString DataSystem::getsearchFoodDes(int i)
+{
+    if(i>=SearchFoodDesList.length()||i<0)
+        return "";
+    else
+        return SearchFoodDesList[i];
+}
+
+void DataSystem::getFoodMSG(QString str)
+{
+    MSGFoodPhotoList.clear();
+    MSGFoodNameList.clear();
+    MSGFoodDesList.clear();
+    QString out="@getfoodmsg@"+str;
+    tcpSocket->write(out.toUtf8());
+}
+
+QString DataSystem::getMSGFoodPhoto(int i)
+{
+    if(i>=MSGFoodPhotoList.length()||i<0)
+        return "";
+    else
+        return MSGFoodPhotoList[i];
+}
+
+QString DataSystem::getMSGFoodName(int i)
+{
+    if(i>=MSGFoodNameList.length()||i<0)
+        return "";
+    else
+        return MSGFoodNameList[i];
+}
+
+QString DataSystem::getMSGFoodDes(int i)
+{
+    if(i>=MSGFoodDesList.length()||i<0)
+        return "";
+    else
+        return MSGFoodDesList[i];
+}
+
 void DataSystem::checkin(QString userid){
     QString out="@checkin@"+userid;
     tcpSocket->write(out.toUtf8());
@@ -312,20 +378,38 @@ QString DataSystem::getRelationType()
 
 void DataSystem::getFoodDetail(QString food)
 {
-    FoodPhoto="";
     FoodDes="";
     QString out="@getfooddetail@"+food;
     tcpSocket->write(out.toUtf8());
 }
 
-QString DataSystem::getFoodPhoto()
-{
-    return FoodPhoto;
-}
-
 QString DataSystem::getFoodDes()
 {
     return FoodDes;
+}
+
+void DataSystem::getGoodRelation(QString food)
+{
+    GoodReason="";
+    QString out="@getgoodrelation@"+food;
+    tcpSocket->write(out.toUtf8());
+}
+
+QString DataSystem::getGoodReason()
+{
+    return GoodReason;
+}
+
+void DataSystem::getBadRelation(QString food)
+{
+    BadReason="";
+    QString out="@getbadrelation@"+food;
+    tcpSocket->write(out.toUtf8());
+}
+
+QString DataSystem::getBadReason()
+{
+    return BadReason;
 }
 
 void DataSystem::tcpReadMessage(){
@@ -432,6 +516,31 @@ void DataSystem::tcpReadMessage(){
         m_Statue="searchuserSucceed";
     }
 
+    if(message=="@searchfood@DBError@")
+        m_Statue="searchfoodDBError";
+    if(message.indexOf("@searchfood@Succeed@")>=0){
+        QStringList inf=message.split("@");
+        for(int i=3;i<inf.length()-1;i=i+3){
+            SearchFoodPhotoList.append(inf[i]);
+            SearchFoodNameList.append(inf[i+1]);
+            SearchFoodDesList.append(inf[i+2]);
+        }
+        m_Statue="searchfoodSucceed";
+    }
+
+    if(message=="@getfoodmsg@DBError@")
+        m_Statue="getfoodmsgDBError";
+    if(message.indexOf("@getfoodmsg@Succeed@")>=0){
+        QStringList inf=message.split("@");
+        for(int i=3;i<inf.length()-1;i=i+3){
+            MSGFoodPhotoList.append(inf[i]);
+            MSGFoodNameList.append(inf[i+1]);
+            MSGFoodDesList.append(inf[i+2]);
+        }
+        m_Statue="getfoodmsgSucceed";
+    }
+
+
     if(message=="@getfoodrelation@DBError@")
         m_Statue="getfoodrelationDBError";
     if(message.indexOf("@getfoodrelation@Succeed@")>=0){
@@ -453,12 +562,25 @@ void DataSystem::tcpReadMessage(){
         m_Statue="getfooddetailDBError";
     if(message.indexOf("@getfooddetail@Succeed@")>=0){
         QStringList inf=message.split("@");
-
-
-        FoodPhoto=inf[3];
-        FoodDes=inf[4];
-
+        FoodDes=inf[3];
         m_Statue="getfooddetailSucceed";
+    }
+
+
+    if(message=="@getgoodrelation@DBError@")
+        m_Statue="getgoodrelationDBError";
+    if(message.indexOf("@getgoodrelation@Succeed@")>=0){
+        QStringList inf=message.split("@");
+        GoodReason=inf[3];
+        m_Statue="getgoodrelationSucceed";
+    }
+
+    if(message=="@getbadrelation@DBError@")
+        m_Statue="getbadrelationDBError";
+    if(message.indexOf("@getbadrelation@Succeed@")>=0){
+        QStringList inf=message.split("@");
+        BadReason=inf[3];
+        m_Statue="getbadrelationSucceed";
     }
 
     emit statueChanged(m_Statue);//传递消息

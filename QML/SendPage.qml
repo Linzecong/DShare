@@ -394,8 +394,8 @@ Rectangle {
                     mainpage.parent.parent.parent.setbusy(false)
                     myjava.toastMsg("发送成功！");
                     mainpage.parent.parent.currentPage="DShare"
-                    mainpage.parent.parent.x=0;
-                    mainpage.parent.parent.children[0].item.refreshpost(str_userid);
+                    mainpage.parent.parent.x=-mainpage.width*2
+                    mainpage.parent.parent.children[2].item.refreshpost(str_userid);
                     messageedit.text="";
                     hiddentext=""
                     note.text="请输入文本"
