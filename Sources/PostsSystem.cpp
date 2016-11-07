@@ -27,7 +27,7 @@ void PostsSystem::getposts(QString user){
     PostList.clear();
     Username=user;
     QString out="@getfriendsposts@"+Username;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 
 }
 
@@ -35,12 +35,12 @@ void PostsSystem::getuserposts(QString user){
     PostList.clear();
     Username=user;
     QString out="@getuserposts@"+Username;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void PostsSystem::getmoreposts(int i){
     QString out="@getmorefriendsposts@"+QString::number(i);
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 
 }
 
@@ -48,7 +48,7 @@ void PostsSystem::getuniquepost(int postid)
 {
     uniquepoststr="";
     QString out="@getuniquepost@|||"+QString::number(postid);
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString PostsSystem::getuniquepoststr()
@@ -206,7 +206,7 @@ void PostsSystem::getcomments(int postid)
     CommentList.clear();
     PostID=postid;
     QString out="@getcomments@"+QString::number(PostID);
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString PostsSystem::getcommentatorname(int i)
@@ -247,19 +247,19 @@ int PostsSystem::getcommentid(int i)
 void PostsSystem::sendComment(int postid, QString commentatorid, QString becommentatorid, QString msg)
 {
     QString out="@sendcomment@|||"+QString::number(postid)+"|||"+commentatorid+"|||"+becommentatorid+"|||"+msg;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void PostsSystem::deleteComment(int commentid)
 {
     QString out="@deletecomment@|||"+QString::number(commentid);
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void PostsSystem::sendPost(QString username, QString msg, bool hasimage,QString imgpath=""){
 
     QString out="@sendpost@|||"+username+"|||"+msg+"|||"+QString::number(hasimage)+"|||"+imgpath;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString PostsSystem::getbigpostphoto(QString a){
@@ -340,12 +340,12 @@ void PostsSystem::savePhoto(QString url)
 
 void PostsSystem::likepost(int postid, QString likerid){
     QString out="@likepost@|||"+QString::number(postid)+"|||"+likerid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void PostsSystem::deletepost(int postid){
 QString out="@deletepost@|||"+QString::number(postid);
-tcpSocket->write(out.toUtf8());
+m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void PostsSystem::setStatue(QString s){

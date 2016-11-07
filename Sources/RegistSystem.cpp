@@ -32,6 +32,8 @@ QString RegistSystem::Statue(){
 
 void RegistSystem::tcpReadMessage(){
     QString message =  QString::fromUtf8(tcpSocket->readAll());
+
+    m_Statue="";
     if(message=="@zhuce@DBError@")
         m_Statue="DBError";
 

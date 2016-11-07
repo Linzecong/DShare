@@ -337,10 +337,8 @@ StackView{
                     else
                         stack.str_userid=loginsystem.getusername();
 
-                   mainpage.source="";
 
                     mainpage.source="qrc:/QML/MainWindow.qml";//加载首页
-                    mainpage.x=0;
                     myjava.toastMsg("登录成功")
                 }
                 if(Statue=="SDCardError"){
@@ -348,7 +346,6 @@ StackView{
                 }
 
 
-                openrect.opacity=0//取消显示等待页面
                 indicator.visible=false
             }
         }
@@ -829,6 +826,11 @@ StackView{
                             return;
                         }
 
+                        if(agetext.text.length<1||agetext.text.length>2){
+                            myjava.toastMsg("请输入正确的年龄")
+                            return;
+                        }
+
                         registsystem.regist(registidtext.text,registpasstext.text,registnametext.text,sextext.currentText,agetext.text);
                     }
                 }
@@ -836,23 +838,23 @@ StackView{
 
             //注册后自动登录
             LoginSystem{
-                id:loginsystem;
+                id:loginsystem2
                 onStatueChanged:{
                     if(Statue=="Succeed"){
-                        loginsystem.saveusernamepassword(registidtext.text,registpasstext.text);
+                        loginsystem2.saveusernamepassword(registidtext.text,registpasstext.text);
                         stack.str_userid=registidtext.text
-                        stack.pop();
-                        mainpage.source=""
                         mainpage.source="qrc:/QML/MainWindow.qml"
-                        mainpage.x=0;
-                        myjava.toastMsg("注册成功！")
+                        myjava.toastMsg("注册成功")
+                        stack.pop();
+                        indicator.visible=false
+                        return
                     }
+
                     if(Statue=="SDCardError"){
                         messageDialog1.open()
                     }
 
 
-                    indicator.visible=false
                 }
 
             }
@@ -876,7 +878,7 @@ StackView{
 
                     if(Statue=="Succeed"){
                         indicator.visible=true
-                        loginsystem.login(registidtext.text,registpasstext.text);
+                        loginsystem2.login(registidtext.text,registpasstext.text);
                     }
                 }
             }
@@ -945,8 +947,10 @@ StackView{
     Loader{
         id:mainpage;
         height:parent.height
+        visible: false
         width: parent.width
-        x:parent.width
+        //x:parent.width
+        x:0
         z:10
         Behavior on x{
             NumberAnimation{
@@ -955,11 +959,12 @@ StackView{
             }
         }
         onLoaded: {
-            item.setusername(stack.str_userid);
+            visible=true
             item.forceActiveFocus();//用于返回键
             passwordtext.text=""//注销用
             usertext.text=""
-            openrect.opacity=0;
+            openrect.opacity=0.0;
+            item.setusername(stack.str_userid);
         }
     }
 

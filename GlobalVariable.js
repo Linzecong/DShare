@@ -72,3 +72,5 @@ var ShareMSG="#26a69a"//分享信息颜色
 function setMain(a){
     Main=a;
 }
+
+

@@ -30,14 +30,14 @@ void ReportSystem::getalldiet(QString name)
 {
     Diets.clear();
     QString out="@getalldiets@"+name;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void ReportSystem::getallexercise(QString name)
 {
     Exercises.clear();
     QString out="@getallexercises@"+name;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void ReportSystem::als_Top5(int type)
@@ -740,7 +740,7 @@ void ReportSystem::tcpReadMessage(){
     if(message=="@getalldiets@FirstSucceed@")
     {
         QString out="@getuniquediets@";
-        tcpSocket->write(out.toUtf8());
+        m_Statue="";tcpSocket->write(out.toUtf8());
         return;
     }
 
@@ -759,7 +759,7 @@ void ReportSystem::tcpReadMessage(){
         Diets.append(temp);
 
         QString out="@getuniquediets@";
-        tcpSocket->write(out.toUtf8());
+        m_Statue="";tcpSocket->write(out.toUtf8());
         return;
     }
 
@@ -779,7 +779,7 @@ void ReportSystem::tcpReadMessage(){
     if(message=="@getallexercises@FirstSucceed@")
     {
         QString out="@getuniqueexercises@";
-        tcpSocket->write(out.toUtf8());
+        m_Statue="";tcpSocket->write(out.toUtf8());
         return;
     }
 
@@ -795,7 +795,7 @@ void ReportSystem::tcpReadMessage(){
         Exercises.append(temp);
 
         QString out="@getuniqueexercises@";
-        tcpSocket->write(out.toUtf8());
+        m_Statue="";tcpSocket->write(out.toUtf8());
         return;
     }
 

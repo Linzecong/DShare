@@ -22,6 +22,21 @@ Rectangle{
 
     property int getcount: 0
 
+    function setcount(type,count,newsid){
+         if(type==="点赞"){
+             for(var i=0;i<newsmodel.count;i++)
+                 if(newsid===newsmodel.get(i).NewsID)
+                     newsmodel.get(i).LikeCount=count
+         }
+
+         if(type==="评论"){
+             for(var i2=0;i2<newsmodel.count;i2++)
+                 if(newsid===newsmodel.get(i2).NewsID)
+                     newsmodel.get(i2).CommentCount=count
+         }
+
+    }
+
     JavaMethod{
         id:myjava
     }
@@ -110,7 +125,7 @@ Rectangle{
                 }
 
 
-                property var newsID: NewsID
+                property string newsID: NewsID
 
                 Image{
                     id:coverimage
@@ -174,29 +189,28 @@ Rectangle{
 
 
                 //文字信息
-//                Label{
-//                    id:commentcountlabel
+                Label{
+                    id:commentcountlabel
 
-//                    anchors.right: parent.right
-//                    anchors.rightMargin: 10*dp
-//                    visible: false
-//                    anchors.bottom: coverimage.bottom
-//                    text:"✉ "+CommentCount
-//                    wrapMode: Text.Wrap;
-//                    color:"lightgrey"
-//                    font{
-//                        family: localFont.name
-//                        //family: "微软雅黑"
-//                        pointSize:10
-//                    }
-//                    verticalAlignment: Text.AlignBottom
-//                }
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10*dp
+                    anchors.bottom: coverimage.bottom
+                    text:"✉ "+CommentCount
+                    wrapMode: Text.Wrap;
+                    color:"lightgrey"
+                    font{
+                        family: localFont.name
+                        //family: "微软雅黑"
+                        pointSize:10
+                    }
+                    verticalAlignment: Text.AlignBottom
+                }
 
 
                 Label{
                     id:likecountlabel
 
-                    anchors.right: parent.right
+                    anchors.right: commentcountlabel.left
                     anchors.rightMargin: 10*dp
 
                     anchors.bottom: coverimage.bottom

@@ -26,7 +26,7 @@ QString RecordSystem::Statue(){
 void RecordSystem::getdiet(QString name, QString time){
     Diets.clear();
     QString out="@getdiets@"+name+"@"+time;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString RecordSystem::getdietstr(int i){
@@ -38,7 +38,7 @@ QString RecordSystem::getdietstr(int i){
 void RecordSystem::getexercise(QString name, QString time){
     Exercises.clear();
     QString out="@getexercises@"+name+"@"+time;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString RecordSystem::getexercisetype(int i){
@@ -62,12 +62,12 @@ QString RecordSystem::getexerciselasttime(int i){
 
 void RecordSystem::uploaddiet(QString name, QString diet, int type){
     QString out="@uploaddiet@"+name+"@"+diet+"@"+QString::number(type);
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void RecordSystem::uploadexercise(QString name, QString exercisetype, QString begintime, int lasttime){
     QString out="@uploadexercise@"+name+"@"+exercisetype+"@"+begintime+"@"+QString::number(lasttime);
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 
 }
 

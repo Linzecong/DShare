@@ -79,6 +79,10 @@ Rectangle {
         newscontent.visible=true
     }
 
+    function setnewscount(type,count,newsid){
+        newspage.item.setcount(type,count,newsid)
+    }
+
 
 
     Loader{
@@ -102,7 +106,7 @@ Rectangle {
         anchors.fill: parent
         visible: false
         source:"qrc:/QML/NewsContent.qml"
-        z:102
+        z:108
     }
 
 
@@ -943,8 +947,9 @@ Rectangle {
                 standardButtons:  StandardButton.No|StandardButton.Yes
                 onYes: {
                     dbsystem.delusernamepassword()
-                    mainwindow.parent.x=mainwindow.parent.parent.width;
                     mainwindow.parent.source="";
+                   // mainwindow.parent.x=mainwindow.parent.parent.width
+                   // mainwindow.parent.visible=false
                 }
                 onNo: {
 

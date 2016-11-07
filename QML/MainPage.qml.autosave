@@ -605,6 +605,7 @@ Rectangle{
                                          }
                                          );
                         mainrect.parent.parent.x=0
+                        mainrect.parent.parent.currentPage="资讯"
                     }
                 }
 

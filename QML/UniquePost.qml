@@ -50,9 +50,10 @@ Rectangle{
         nickname=mnickname
 
         needset=need//用于是否重置评论数
-        postssystem.getcomments(mid);
 
+        postssystem.getcomments(mid);
     }
+
     MouseArea{
         anchors.fill: parent
     }
@@ -60,6 +61,7 @@ Rectangle{
         id: localFont
         source:"qrc:/Resources/msyh.ttf"
     }
+
     Keys.enabled: true
     Keys.onBackPressed: {
         commenttext.hiddentext=""

@@ -47,7 +47,7 @@
         <file>image/foodsearch.png</file>
         <file>image/news.png</file>
         <file>image/back.png</file>
-        <file>Resources/msyh.ttf</file>
         <file>QML/NewsContent.qml</file>
+        <file>Resources/msyh.ttf</file>
     </qresource>
 </RCC>

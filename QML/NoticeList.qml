@@ -92,6 +92,7 @@ Rectangle {
         }
     }
 
+
     PostsSystem{
         id:postsystem
         property string str: ""
@@ -234,8 +235,14 @@ Rectangle {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        if(postid!=0)
-                        postsystem.getuniquepost(delegate.postid)
+                        if(delegate.postid!=0){
+                            if(Type=="在资讯中评论了"){
+                                 mainrect.parent.parent.shownewscontent(delegate.postid,userid,nickname,"获取中","获取中")
+                                 mainrect.parent.visible=false
+                            }
+                            else
+                            postsystem.getuniquepost(delegate.postid)
+                        }
                     }
                 }
 

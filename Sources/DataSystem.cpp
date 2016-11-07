@@ -24,7 +24,7 @@ QString DataSystem::Statue(){
 
 void DataSystem::getNameByID(QString userid){
     QString out="@getname@|||"+userid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 
 }
 
@@ -35,7 +35,7 @@ QString DataSystem::getName(){
 void DataSystem::getHeadByID(QString userid)
 {
     QString out="@gethead@|||"+userid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString DataSystem::getHead()
@@ -78,24 +78,24 @@ QString DataSystem::getHead()
 
 void DataSystem::changeName(QString userid, QString newname){
     QString out="@changename@|||"+userid+"|||"+newname;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void DataSystem::changePassword(QString userid, QString newpassword){
     QString out="@changepassword@|||"+userid+"|||"+newpassword;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void DataSystem::addFollowing(QString userid, QString friendid){
     QString out="@addfollowing@|||"+userid+"|||"+friendid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 
 
 }
 
 void DataSystem::deleteFollowing(QString userid, QString friendid){
     QString out="@deletefollowing@|||"+userid+"|||"+friendid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 
 }
 
@@ -103,7 +103,7 @@ void DataSystem::getFollowings(QString userid){
     FollowingIDList.clear();
     FollowingNameList.clear();
     QString out="@getfollowings@|||"+userid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 
 }
 QString DataSystem::getFollowingID(int i){
@@ -123,7 +123,7 @@ void DataSystem::getFollowers(QString userid){
     FollowerIDList.clear();
     FollowerNameList.clear();
     QString out="@getfollowers@|||"+userid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 
 }
 
@@ -149,7 +149,7 @@ void DataSystem::getNotices(QString userid)
     NoticePostList.clear();
     NoticeIsReadList.clear();
     QString out="@getnotices@|||"+userid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString DataSystem::getNoticeSender(int i)
@@ -196,7 +196,7 @@ void DataSystem::searchUser(QString str){
     SearchIDList.clear();
     SearchNameList.clear();
     QString out="@searchuser@|||"+str;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 
 }
 
@@ -220,7 +220,7 @@ void DataSystem::searchFood(QString str)
     SearchFoodNameList.clear();
     SearchFoodPhotoList.clear();
     QString out="@searchfood@|||"+str;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString DataSystem::getsearchFoodPhoto(int i)
@@ -253,7 +253,7 @@ void DataSystem::getFoodMSG(QString str)
     MSGFoodNameList.clear();
     MSGFoodDesList.clear();
     QString out="@getfoodmsg@"+str;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString DataSystem::getMSGFoodPhoto(int i)
@@ -282,12 +282,12 @@ QString DataSystem::getMSGFoodDes(int i)
 
 void DataSystem::checkin(QString userid){
     QString out="@checkin@"+userid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void DataSystem::getcheckinday(QString userid){
     QString out="@getcheckinday@"+userid;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 int DataSystem::getcheckinday(){
@@ -300,13 +300,13 @@ QString DataSystem::getdate(){
 
 void DataSystem::uploadFood(QString a){
     QString out="@uploadfood@"+a;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void DataSystem::uploadExercise(QString a)
 {
     QString out="@uploadExercise@"+a;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 void DataSystem::delusernamepassword(){
@@ -363,7 +363,7 @@ void DataSystem::getFoodRelation(QString foods)
     Reason="";
     RelationType="";
     QString out="@getfoodrelation@"+foods;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString DataSystem::getReason()
@@ -380,7 +380,7 @@ void DataSystem::getFoodDetail(QString food)
 {
     FoodDes="";
     QString out="@getfooddetail@"+food;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString DataSystem::getFoodDes()
@@ -392,7 +392,7 @@ void DataSystem::getGoodRelation(QString food)
 {
     GoodReason="";
     QString out="@getgoodrelation@"+food;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString DataSystem::getGoodReason()
@@ -404,7 +404,7 @@ void DataSystem::getBadRelation(QString food)
 {
     BadReason="";
     QString out="@getbadrelation@"+food;
-    tcpSocket->write(out.toUtf8());
+    m_Statue="";tcpSocket->write(out.toUtf8());
 }
 
 QString DataSystem::getBadReason()
