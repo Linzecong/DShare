@@ -989,6 +989,7 @@ StackView{
                     id:changenameedit
                     text:nickname
                     placeholderText:"请输入昵称..."
+                    validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
                     style: TextFieldStyle{
                         textColor: "grey"
                         background: Rectangle{

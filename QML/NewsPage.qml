@@ -179,7 +179,7 @@ Rectangle{
 
                     anchors.bottom: coverimage.bottom
                     text: Posttime
-                    color:"lightgrey"
+                    color:"grey"
                     font{
                         family: localFont.name
                         pointSize:10
@@ -194,16 +194,18 @@ Rectangle{
 
                     anchors.right: parent.right
                     anchors.rightMargin: 10*dp
+
                     anchors.bottom: coverimage.bottom
+
                     text:"✉ "+CommentCount
-                    wrapMode: Text.Wrap;
-                    color:"lightgrey"
+                    verticalAlignment: Text.AlignBottom
+                    color:"grey"
                     font{
                         family: localFont.name
                         //family: "微软雅黑"
                         pointSize:10
                     }
-                    verticalAlignment: Text.AlignBottom
+
                 }
 
 
@@ -217,7 +219,7 @@ Rectangle{
 
                     text:"♡ "+LikeCount
                     verticalAlignment: Text.AlignBottom
-                    color:"lightgrey"
+                    color:"grey"
                     font{
                         family: localFont.name
                         pointSize:10

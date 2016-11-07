@@ -625,7 +625,7 @@ Rectangle{
             property string hiddentext:""
 
             property int firstnull:1
-
+validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
             anchors.right: sendbutton.left
             anchors.left: parent.left
 

@@ -58,6 +58,9 @@ public:
      Q_INVOKABLE void deleteComment(int commentid);//删除分享
 
 
+
+
+
 public:
      void tcpReadMessage();
      void tcpSendMessage();

@@ -17,6 +17,8 @@ Rectangle {
     property string nickname;
     property double dp:(myjava.getHeight()/16*2)/70
 
+    property int searchmode:0
+
     MouseArea{
         anchors.fill: parent
 
@@ -46,10 +48,24 @@ Rectangle {
 
             if(Statue.indexOf("searchfoodSucceed")>=0){
                 while(dbsystem.getsearchFoodPhoto(modelindex)!==""){
-                    searchmodel.append({"FoodPhoto": dbsystem.getsearchFoodPhoto(modelindex), "FoodName":dbsystem.getsearchFoodName(modelindex),"FoodDes":dbsystem.getsearchFoodDes(modelindex)+"..."})
+                    searchmodel.append({"FoodPhoto": dbsystem.getsearchFoodPhoto(modelindex), "FoodName":dbsystem.getsearchFoodName(modelindex),"FoodDes":dbsystem.getsearchFoodDes(modelindex).replace("\n","").replace("\t","")+"..."})
                     modelindex++;
                 }
                 modelindex=0;
+            }
+
+            if(Statue.indexOf("searchfuncDBError")>=0){
+                myjava.toastMsg("无结果")
+            }
+
+            if(Statue===("searchfuncSucceed")){
+                mainrect.parent.parent.parent.showdetailpage(dbsystem.getsearchFunc())
+                myjava.toastMsg("搜索成功")
+            }
+
+            if(Statue===("searchfuncSucceedFull")){
+                mainrect.parent.parent.parent.showdetailpage(dbsystem.getsearchFunc())
+                myjava.toastMsg("结果太多，只显示部分结果，请缩短搜索范围")
             }
 
         }
@@ -80,7 +96,14 @@ Flickable{
         anchors.leftMargin: 10*dp
 
         anchors.top: parent.top
-        anchors.topMargin: 10*dp
+        anchors.topMargin: searchmode==1?180*dp:10*dp
+
+        Behavior on anchors.topMargin{
+            NumberAnimation{
+                duration: 800
+                easing.type: Easing.OutCubic
+            }
+        }
 
         layer.enabled: true
         layer.effect: DropShadow {
@@ -90,9 +113,10 @@ Flickable{
         }
         TextField{
             anchors.fill: parent
+            validator:RegExpValidator{regExp:/[^%@<>\/\\ \|]{1,18}/}
 
             id:searchtext
-            placeholderText:"请输入要搜索的食材"
+            placeholderText:searchmode==1?"请输入要搜索的功效":"请输入要搜索的食材"
             font{
                 family: localFont.name
                 pointSize: 16
@@ -105,10 +129,19 @@ Flickable{
                   }
 
             onTextChanged: {
+
+                if(searchmode!=1){
+
                 if(searchtext.text.length>1){
                 searchmodel.clear();
                 dbsystem.searchFood(searchtext.text);
                 }
+
+                if(searchtext.text==="")
+                    searchmodel.clear();
+
+                }
+
             }
             Image{
                 Rectangle{
@@ -126,10 +159,38 @@ Flickable{
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
+                        if(searchmode==1){
+                            if(searchtext.text.length>1){
+                              dbsystem.searchFunc(searchtext.text);
+
+                            }
+                            else
+                                myjava.toastMsg("搜索内容太短")
+                        }
+                        else{
                         if(searchtext.text!=""){
                           searchmodel.clear();
                           dbsystem.searchFood(searchtext.text);
                         }
+                        }
+                    }
+                }
+                Timer{
+                    id:animationtimer
+                    interval: 800
+                    repeat:true
+                    running: searchmode==1
+                    onTriggered: {
+                        if(searchicon.scale==1.3)
+                            searchicon.scale=1
+                        else
+                            searchicon.scale=1.3
+                    }
+                }
+                Behavior on scale{
+                    NumberAnimation{
+                        duration: 800
+                        easing.type: Easing.OutCubic
                     }
                 }
             }
@@ -163,6 +224,8 @@ Flickable{
             width: parent.width/3*1.1
             height: searchmodel.count==0?dp*70:0
             visible: searchmodel.count==0?true:false
+
+
             Rectangle{
                 width: parent.width/1.2
                 height:dp*70/2
@@ -172,11 +235,27 @@ Flickable{
                 anchors.topMargin: 8*dp
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    radius: 8
+                    color: searchmode==1?GlobalColor.SecondButton:"green"
+                }
+
                 Text{
-                    text:"暂无结果"
-                    color:"grey"
+                    text:searchmode==1?"切换到普通模式":"切换到高级模式"
+                    color:searchmode==1?GlobalColor.SecondButton:"green"
                     anchors.centerIn: parent
-                    font.pointSize: 16
+                    font.pointSize: 13
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        searchmode==1?searchmode=0:searchmode=1
+                        searchicon.scale=1
+                        searchtext.text=""
+                    }
                 }
 
             }
@@ -221,7 +300,7 @@ Flickable{
                     anchors.left: foodphoto.right
                     anchors.leftMargin: 10*dp
                     anchors.top: foodphoto.top
-                    anchors.topMargin: 8*dp
+                    anchors.topMargin: 4*dp
                     color: "grey"
                     text:FoodName
                     wrapMode: Text.Wrap
@@ -240,7 +319,8 @@ Flickable{
                     anchors.leftMargin: 10*dp
 
                     anchors.bottom: foodphoto.bottom
-                    anchors.bottomMargin: 8*dp
+                    anchors.bottomMargin: 4*dp
+                    verticalAlignment: Text.AlignBottom
 
                     color: "grey"
                     wrapMode: Text.Wrap
@@ -270,3 +350,5 @@ Flickable{
 }
 
 }
+
+

@@ -116,7 +116,9 @@ public:
     Q_INVOKABLE QString getBadReason();
 
 
-
+    QString FoodsFunc;
+    Q_INVOKABLE void searchFunc(QString str);
+    Q_INVOKABLE QString getsearchFunc();
 
 public:
     void tcpReadMessage();

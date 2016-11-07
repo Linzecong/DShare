@@ -38,7 +38,7 @@ property int modelindex: 0
 
             if(Statue=="getfoodmsgSucceed"){
                 while(dbsystem.getMSGFoodPhoto(modelindex)!==""){
-                    foodmodel.append({"PhotoSource": dbsystem.getMSGFoodPhoto(modelindex), "FoodName":dbsystem.getMSGFoodName(modelindex),"FoodDes":dbsystem.getMSGFoodDes(modelindex)+"..."})
+                    foodmodel.append({"PhotoSource": dbsystem.getMSGFoodPhoto(modelindex), "FoodName":dbsystem.getMSGFoodName(modelindex),"FoodDes":dbsystem.getMSGFoodDes(modelindex).replace("\n","").replace("\t","")+"..."})
                     modelindex++;
                 }
                 modelindex=0;
@@ -413,7 +413,7 @@ property int modelindex: 0
                     anchors.leftMargin: 10*dp
 
                     anchors.top: foodimage.top
-                    anchors.topMargin: 8*dp
+                    anchors.topMargin: 4*dp
 
                     width: parent.width-foodimage.width-24*dp
                     wrapMode: Text.Wrap
@@ -433,10 +433,12 @@ property int modelindex: 0
                     anchors.leftMargin: 10*dp
 
                     anchors.bottom: foodimage.bottom
-                    anchors.bottomMargin: 8*dp
+                    anchors.bottomMargin: 4*dp
                     width: parent.width-foodimage.width-24*dp
 
                     wrapMode: Text.Wrap
+
+                    verticalAlignment: Text.AlignBottom
 
                     color:"grey"
                     font{

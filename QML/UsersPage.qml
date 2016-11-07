@@ -240,7 +240,7 @@ Rectangle {
         }
         TextField{
             anchors.fill: parent
-
+validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
             id:searchtext
             placeholderText:"请输入要搜索的id或昵称"
             font{

@@ -1496,6 +1496,7 @@ savetimer.start()
                 anchors.verticalCenter: parent.verticalCenter
                 TextField{
                     id:sporttext
+                    validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
                     anchors.centerIn: parent
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
@@ -2725,6 +2726,7 @@ savetimer.start()
                 anchors.fill: parent
                 id:searchtext
                 placeholderText:"请输入要搜索的内容"
+                validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
                 style: TextFieldStyle{
                     textColor:"grey"
                     background: Rectangle{

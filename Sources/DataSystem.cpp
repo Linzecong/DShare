@@ -412,8 +412,22 @@ QString DataSystem::getBadReason()
     return BadReason;
 }
 
+void DataSystem::searchFunc(QString str)
+{
+    FoodsFunc="";
+    QString out="@searchfunc@|||"+str;
+    m_Statue="";
+    tcpSocket->write(out.toUtf8());
+}
+
+QString DataSystem::getsearchFunc()
+{
+return FoodsFunc;
+}
+
 void DataSystem::tcpReadMessage(){
     QString message = QString::fromUtf8(tcpSocket->readAll());//获取服务器返回的信息
+    m_Statue="";
     if(message=="@getname@DBError@")
         m_Statue="getnameDBError";
     if(message.indexOf("@getname@Succeed@")>=0){
@@ -527,6 +541,20 @@ void DataSystem::tcpReadMessage(){
         }
         m_Statue="searchfoodSucceed";
     }
+
+    if(message=="@searchfunc@DBError@")
+        m_Statue="searchfuncDBError";
+    if(message.indexOf("@searchfunc@Succeed@")>=0){
+        QStringList inf=message.split("@");
+
+        FoodsFunc=inf[3];
+        if(inf[0]=="full")
+            m_Statue="searchfuncSucceedFull";
+         else
+        m_Statue="searchfuncSucceed";
+    }
+
+
 
     if(message=="@getfoodmsg@DBError@")
         m_Statue="getfoodmsgDBError";
