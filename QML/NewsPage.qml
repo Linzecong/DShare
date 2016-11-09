@@ -41,16 +41,16 @@ Rectangle{
         id:myjava
     }
 
-    Component.onCompleted: {
-        newssystem.getNews(getcount++)
-    }
-
     property string username
     property string nickname
 
     function setid(a,b){
         username=a
         nickname=b
+
+        if(getcount==0){
+            newssystem.getNews(getcount++)
+        }
     }
 
 
@@ -88,7 +88,8 @@ Rectangle{
 
         Rectangle{
             anchors.fill: parent
-            color:GlobalColor.Background
+            //color:GlobalColor.Background
+            color:"white"
             z:-100
         }
 
@@ -105,6 +106,29 @@ Rectangle{
             radius: 5
             z:2
             visible: listview.dragging||listview.flicking
+        }
+
+
+        header:Rectangle{
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width/3*1.1
+            height: getcount==0?dp*70:0
+            visible: getcount==0?true:false
+            Rectangle{
+                width: parent.width/1.2
+                height:head.height/2
+                color:"white"
+
+                anchors.top: parent.top
+                anchors.topMargin: 8*dp
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text{
+                    text:"加载中"
+                    color:"grey"
+                    anchors.centerIn: parent
+                    font.pointSize: 16
+                }
+            }
         }
 
         delegate: Item{
@@ -138,12 +162,6 @@ Rectangle{
                     anchors.bottomMargin: 8*dp
                     width: height*1.3
 
-                    Label{
-                        anchors.centerIn: parent
-                        visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                        text:(parent.status==Image.Loading)?"加载中":"无"
-                        color:"grey"
-                    }
 
                     //用于网速慢，头像加载慢时先显示文字
                     BusyIndicator{
@@ -283,6 +301,3 @@ Rectangle{
 
     }
 }
-
-
-

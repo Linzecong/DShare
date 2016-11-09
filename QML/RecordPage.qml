@@ -131,7 +131,7 @@ Rectangle {
                 var allfoodlist=allfood.split("、")
 
                 for(var q=0;q<foodview.currentmodel.count;q++)
-                foodview.currentmodel.get(q).Relation="-1"
+                    foodview.currentmodel.get(q).Relation="-1"
 
                 var index=0
                 for(var i=0;i<allfoodlist.length-1;i++){
@@ -141,15 +141,15 @@ Rectangle {
                         if(typelist[index]!=="NoRelation"){
                             if(typelist[index]==="1"){
                                 for(var q2=0;q2<foodview.currentmodel.count;q2++){
-                                if(foodview.currentmodel.get(q2).Food===allfoodlist[i]||foodview.currentmodel.get(q2).Food===allfoodlist[j])
-                                    foodview.currentmodel.get(q2).Relation="1"
+                                    if(foodview.currentmodel.get(q2).Food===allfoodlist[i]||foodview.currentmodel.get(q2).Food===allfoodlist[j])
+                                        foodview.currentmodel.get(q2).Relation="1"
                                 }
 
                             }
                             else{
                                 for(var q3=0;q3<foodview.currentmodel.count;q3++){
-                                if(foodview.currentmodel.get(q3).Food===allfoodlist[i]||foodview.currentmodel.get(q3).Food===allfoodlist[j])
-                                    foodview.currentmodel.get(q3).Relation="0"
+                                    if(foodview.currentmodel.get(q3).Food===allfoodlist[i]||foodview.currentmodel.get(q3).Food===allfoodlist[j])
+                                        foodview.currentmodel.get(q3).Relation="0"
                                 }
                             }
                         }
@@ -222,6 +222,7 @@ Rectangle {
 
             if(Statue===("getlocaldietSucceed")){
                 var maxj=20;
+
                 breakfastmodel.clear();
                 lunchmodel.clear();
                 dinnermodel.clear();
@@ -602,17 +603,17 @@ Rectangle {
                     running=false
                 else{
                     if(time==1)
-                    foodview.currentmodel=breakfastmodel
+                        foodview.currentmodel=breakfastmodel
                     if(time==2)
-                    foodview.currentmodel=lunchmodel
+                        foodview.currentmodel=lunchmodel
                     if(time==3)
-                    foodview.currentmodel=dinnermodel
+                        foodview.currentmodel=dinnermodel
                     if(time==4)
-                    foodview.currentmodel=snackmodel
+                        foodview.currentmodel=snackmodel
                     if(time==5)
-                    foodview.currentmodel=dessertmodel
+                        foodview.currentmodel=dessertmodel
                     if(time==6)
-                    foodview.currentmodel=othersmodel
+                        foodview.currentmodel=othersmodel
 
                     var str=""
 
@@ -667,17 +668,17 @@ Rectangle {
                     foodlist.model.setProperty(foodview.currentfood,"Relation","-1");
 
                     if(foodstr!=""){
-                    foodview.currentmodel=foodlist.model
+                        foodview.currentmodel=foodlist.model
 
-                    var str=""
+                        var str=""
 
-                    for(var i=0;i<foodlist.model.count;i++){
-                        if(foodlist.model.get(i).Food!=="点击选择食物")
-                            str+=foodlist.model.get(i).Food+"、"
-                    }
+                        for(var i=0;i<foodlist.model.count;i++){
+                            if(foodlist.model.get(i).Food!=="点击选择食物")
+                                str+=foodlist.model.get(i).Food+"、"
+                        }
 
-                    dbsystem.allfood=str
-                    dbsystem.getFoodRelation(str)
+                        dbsystem.allfood=str
+                        dbsystem.getFoodRelation(str)
 
                     }
 
@@ -835,6 +836,25 @@ Rectangle {
 
                     spacing: 8*dp
 
+                    add: Transition{
+                        NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 300 }
+                    }
+
+                    displaced: Transition {
+                        NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+                    }
+
+                    populate: Transition {
+                        NumberAnimation { properties: "x,y"; duration: 800 }
+                    }
+
+                    remove: Transition {
+                        ParallelAnimation {
+                            NumberAnimation { property: "opacity"; to: 0; duration: 500 }
+                            NumberAnimation { properties: "x"; to: -200; duration: 500 }
+                        }
+                    }
+
                     delegate:Item{
                         id:food
                         height:title.m_height*1.5
@@ -916,7 +936,7 @@ Rectangle {
                                         if(str=="")
                                             myjava.toastMsg("请填写食材")
                                         else
-                                        mainrect.parent.parent.parent.showdetailpage(str)
+                                            mainrect.parent.parent.parent.showdetailpage(str)
                                     }
                                 }
 
@@ -958,11 +978,11 @@ Rectangle {
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
-savetimer.start()
+                                    savetimer.start()
                                     Food="点击选择食物"
                                     Relation="-1"
                                     if(foodlist.model.count>2)
-                                    foodlist.model.remove(index)
+                                        foodlist.model.remove(index)
 
 
                                     foodview.currentmodel=foodlist.model
@@ -1174,6 +1194,14 @@ savetimer.start()
 
                     anchors.top: foodlist.bottom
 
+                    Behavior on y{
+                        NumberAnimation{
+                            duration: 300
+                            easing.type: Easing.Linear
+                        }
+                    }
+
+
                     height: title.m_height*1.2
                     width: height
                     Image{
@@ -1260,7 +1288,7 @@ savetimer.start()
                             if(str=="")
                                 myjava.toastMsg("请填写食材")
                             else
-                            mainrect.parent.parent.parent.showdetailpage(str)
+                                mainrect.parent.parent.parent.showdetailpage(str)
                         }
                     }
 
@@ -1496,7 +1524,7 @@ savetimer.start()
                 anchors.verticalCenter: parent.verticalCenter
                 TextField{
                     id:sporttext
-                    validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
+                    validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,7}/}
                     anchors.centerIn: parent
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
@@ -2128,7 +2156,7 @@ savetimer.start()
                     if(!sporttimer.running){
                         sharebuttontimer.running=false
                         antimetimer.running=true
-
+                        begintimerow.editmode=0
                         dbsystem.checkin(str_userid)
                         antimer.running=false
                         checkimage.scale=1
@@ -2137,6 +2165,7 @@ savetimer.start()
                         sportsharebutton.visible=false
 
                         sporttimer.mins=0
+
 
                         timertext.text="计时中"
                         myjava.toastMsg("开始计时")
@@ -2636,6 +2665,7 @@ savetimer.start()
                     model: sporttabelmodel
                     spacing: 16*dp
 
+
                     boundsBehavior:Flickable.StopAtBounds
                     delegate: Item{
                         id:sporttabeldelegate
@@ -2726,7 +2756,7 @@ savetimer.start()
                 anchors.fill: parent
                 id:searchtext
                 placeholderText:"请输入要搜索的内容"
-                validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
+                validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,7}/}
                 style: TextFieldStyle{
                     textColor:"grey"
                     background: Rectangle{

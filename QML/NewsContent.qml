@@ -55,9 +55,18 @@ Rectangle{
             }
 
         newssystem.getContent(id);
+        fdan.start()
 
     }
-
+    NumberAnimation {
+        target: flick
+        id:fdan
+        property: "opacity";
+        from: 0;
+        to: 1.0;
+        duration: 200
+        easing.type :Easing.Linear
+    }
 
     MouseArea{
         anchors.fill: parent
@@ -243,6 +252,7 @@ Rectangle{
 
 
     Flickable{
+        id:flick
         anchors.top: head.bottom
         anchors.left: head.left
         anchors.right: head.right
@@ -457,6 +467,16 @@ Rectangle{
             anchors.topMargin: 10*dp
             anchors.left: delegaterect.left
 
+            displaced: Transition {
+                NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+            }
+
+            populate: Transition {
+                NumberAnimation { properties: "x,y"; duration: 800 }
+            }
+
+
+
             height: contentHeight+commentbar.height
 
             clip:true
@@ -569,7 +589,7 @@ Rectangle{
             property string hiddentext:""
 
             property int firstnull:1
-validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
+validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,500}/}
             anchors.right: sendbutton.left
             anchors.left: parent.left
 
@@ -651,8 +671,6 @@ validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
 
 
                     newssystem.sendComment(newsid,userid,bcid,commenttext.writtentext)
-
-
 
                 }
             }

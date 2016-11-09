@@ -85,10 +85,19 @@ Rectangle{
         clip:true
 
         spacing:5*dp
+        add: Transition{
+            NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 200 }
+        }
+
+        displaced: Transition {
+            NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+        }
+
 
         Rectangle{
             anchors.fill: parent
-            color:GlobalColor.Background
+            //color:GlobalColor.Background
+            color:"white"
             z:-100
         }
 
@@ -606,6 +615,8 @@ Rectangle{
                                          );
                         mainrect.parent.parent.x=0
                         mainrect.parent.parent.currentPage="资讯"
+
+
                     }
                 }
 

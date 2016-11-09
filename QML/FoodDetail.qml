@@ -26,8 +26,20 @@ Rectangle {
         foodimage.source=b
         dbsystem.getFoodDetail(a)
         forceActiveFocus()
+        fdan.start()
 
     }
+
+    NumberAnimation {
+        target: flick
+        id:fdan
+        property: "opacity";
+        from: 0;
+        to: 1.0;
+        duration: 200
+        easing.type :Easing.Linear
+    }
+
 
     DataSystem{
         id:dbsystem
@@ -62,9 +74,6 @@ Rectangle {
 
         }
     }
-
-
-
 
     FontLoader {
         id: localFont
@@ -128,6 +137,8 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     mainrect.parent.visible=false
+                    mainrect.parent.parent.forceActiveFocus();
+
                 }
             }
         }
@@ -164,6 +175,7 @@ Rectangle {
 
 
     Flickable{
+        id:flick
         anchors.top: head.bottom
 
         height: parent.height-head.height
@@ -173,86 +185,15 @@ Rectangle {
         flickableDirection:Flickable.VerticalFlick
 
 
-        Rectangle{
-            id:fooddetail
-            anchors.top: parent.top
-            anchors.topMargin: 10*dp
-            anchors.left: parent.left
-            anchors.leftMargin: 10*dp
-            anchors.right: parent.right
-            anchors.rightMargin: 10*dp
-
-            height: (foodimage.height+foodname.height+20*dp)>(fooddes.height+10*dp)?(foodimage.height+foodname.height+20*dp):(fooddes.height+15*dp)
-
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                radius: 8
-                color: GlobalColor.Main
-            }
-
-            Image{
-                id:foodimage
-                fillMode: Image.PreserveAspectFit
-                anchors.top:parent.top
-                anchors.topMargin: 10*dp
-                anchors.left: parent.left
-                anchors.leftMargin: 8*dp
-                height: 60*dp
-                width:height
-                Label{
-                    anchors.centerIn: parent
-                    visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                    text:(parent.status==Image.Loading)?"加载中":"无"
-                    color:"grey"
-                }
-            }
-
-            Text{
-                id:foodname
-                anchors.top: foodimage.bottom
-                anchors.topMargin: 10*dp
-                horizontalAlignment: Text.AlignHCenter
-                width: 60*dp+16*dp
-                anchors.left: parent.left
-                wrapMode: Text.Wrap
-                color:"grey"
-                font{
-                    family: localFont.name
-                    pointSize: 16
-                    bold: true
-                }
-                verticalAlignment: Text.AlignVCenter
-            }
-
-
-
-            Text{
-                id:fooddes
-
-                anchors.top: foodimage.top
-                anchors.left: foodname.right
-                anchors.leftMargin: 8*dp
-                anchors.right: parent.right
-                anchors.rightMargin: 8*dp
-                wrapMode: Text.Wrap
-                textFormat:Text.RichText
-                color:"grey"
-                font{
-                    pointSize: 14
-                    family: localFont.name
-                }
-
-
-            }
-        }
-
-
-
         ListView{
             id:goodrelationview
-            anchors.top: fooddetail.bottom
+
+
+            anchors.top: parent.top
             anchors.topMargin: 10*dp
+
+
+
             width: parent.width
             height:goodrelationmodel.count>0?contentHeight+2:0
             model: goodrelationmodel
@@ -330,8 +271,11 @@ Rectangle {
             anchors.top: goodrelationview.bottom
             width: parent.width
             height:badrelationmodel.count>0?contentHeight+2:0
+
             model: badrelationmodel
             visible: badrelationmodel.count>0?true:false
+
+
             header:Rectangle{
                 height:head.height/2.5
                 width:parent.width
@@ -396,7 +340,79 @@ Rectangle {
         }
 
 
+        Rectangle{
+            id:fooddetail
+            anchors.top: badrelationview.bottom
+            anchors.topMargin: 10*dp
 
+            anchors.left: parent.left
+            anchors.leftMargin: 10*dp
+            anchors.right: parent.right
+            anchors.rightMargin: 10*dp
+
+
+            height: (foodimage.height+foodname.height+20*dp)>(fooddes.height+10*dp)?(foodimage.height+foodname.height+20*dp):(fooddes.height+15*dp)
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: 8
+                color: GlobalColor.Main
+            }
+
+            Image{
+                id:foodimage
+                fillMode: Image.PreserveAspectFit
+                anchors.top:parent.top
+                anchors.topMargin: 10*dp
+                anchors.left: parent.left
+                anchors.leftMargin: 8*dp
+                height: 60*dp
+                width:height
+                Label{
+                    anchors.centerIn: parent
+                    visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                    text:(parent.status==Image.Loading)?"加载中":"无"
+                    color:"grey"
+                }
+            }
+
+            Text{
+                id:foodname
+                anchors.top: foodimage.bottom
+                anchors.topMargin: 10*dp
+                horizontalAlignment: Text.AlignHCenter
+                width: 60*dp+16*dp
+                anchors.left: parent.left
+                wrapMode: Text.Wrap
+                color:"grey"
+                font{
+                    family: localFont.name
+                    pointSize: 16
+                    bold: true
+                }
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Text{
+                id:fooddes
+
+                anchors.top: foodimage.top
+                anchors.left: foodname.right
+                anchors.leftMargin: 8*dp
+                anchors.right: parent.right
+                anchors.rightMargin: 8*dp
+                wrapMode: Text.Wrap
+                textFormat:Text.RichText
+                color:"grey"
+                font{
+                    pointSize: 14
+                    family: localFont.name
+                }
+
+
+            }
+        }
 
 
 

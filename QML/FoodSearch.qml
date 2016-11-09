@@ -24,12 +24,7 @@ Rectangle {
 
     }
 
-//    Keys.enabled: true
-//    Keys.onBackPressed: {
-//        mainrect.parent.visible=false
-//        searchtext.text=""
-//        mainrect.parent.parent.forceActiveFocus();
-//    }
+
 
 
     JavaMethod{
@@ -74,280 +69,288 @@ Rectangle {
 
 
     function init(){
-       searchtext.text=""
-       searchmodel.clear();
+        searchtext.text=""
+        searchmodel.clear()
+        searchmode=0
     }
 
 
 
-Flickable{
-    anchors.fill: parent
-    flickableDirection: Flickable.VerticalFlick
+    Flickable{
+        anchors.fill: parent
+        flickableDirection: Flickable.VerticalFlick
 
-    contentHeight: searchbar.height+view.contentHeight+20*dp
-    clip: true
+        contentHeight: searchbar.height+view.contentHeight+20*dp
+        clip: true
 
-    Rectangle{
-        id:searchbar
-        height: (dp*70)/2
-        anchors.right: parent.right
-        anchors.rightMargin: 10*dp
-        anchors.left: parent.left
-        anchors.leftMargin: 10*dp
+        Rectangle{
+            id:searchbar
+            height: (dp*70)/2
+            anchors.right: parent.right
+            anchors.rightMargin: 10*dp
+            anchors.left: parent.left
+            anchors.leftMargin: 10*dp
 
-        anchors.top: parent.top
-        anchors.topMargin: searchmode==1?180*dp:10*dp
+            anchors.top: parent.top
+            anchors.topMargin: searchmode==1?180*dp:10*dp
 
-        Behavior on anchors.topMargin{
-            NumberAnimation{
-                duration: 800
-                easing.type: Easing.OutCubic
+            Behavior on anchors.topMargin{
+                NumberAnimation{
+                    duration: 800
+                    easing.type: Easing.OutCubic
+                }
+            }
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: 8
+                color: GlobalColor.Main
+            }
+            TextField{
+                anchors.fill: parent
+                validator:RegExpValidator{regExp:/[^%@<>\/\\ \|]{1,18}/}
+
+                id:searchtext
+                placeholderText:searchmode==1?"请输入要搜索的功效":"请输入要搜索的食材"
+                font{
+                    family: localFont.name
+                    pointSize: 16
+                }
+
+                style: TextFieldStyle {
+                    textColor: "grey"
+                    background: Rectangle {
+                    }
+                }
+
+                onTextChanged: {
+
+                    if(searchmode!=1){
+                        if(searchtext.text.length>1){
+                            searchmodel.clear();
+                            dbsystem.searchFood(searchtext.text);
+                        }
+
+                        if(searchtext.text==="")
+                            searchmodel.clear();
+
+                    }
+
+                }
+                Image{
+                    Rectangle{
+                        anchors.fill: parent
+                        color:GlobalColor.Main
+                        z:-100
+                    }
+                    id:searchicon
+                    anchors.right: searchtext.right
+                    anchors.rightMargin: 8*dp
+                    anchors.verticalCenter: searchtext.verticalCenter
+                    source: "qrc:/image/searchblack.png"
+                    height: searchbar.height/1.5
+                    width:height
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            if(searchmode==1){
+                                if(searchtext.text.length>1){
+                                    dbsystem.searchFunc(searchtext.text);
+
+                                }
+                                else
+                                    myjava.toastMsg("搜索内容太短")
+                            }
+                            else{
+                                if(searchtext.text!=""){
+
+                                    if(searchtext.text.length>1){
+                                        searchmodel.clear();
+                                        dbsystem.searchFood(searchtext.text);
+
+                                    }
+                                    else
+                                        myjava.toastMsg("搜索内容太短")
+                                }
+                            }
+                        }
+                    }
+                    Timer{
+                        id:animationtimer
+                        interval: 800
+                        repeat:true
+                        running: searchmode==1
+                        onTriggered: {
+                            if(searchicon.scale==1.3)
+                                searchicon.scale=1
+                            else
+                                searchicon.scale=1.3
+                        }
+                    }
+                    Behavior on scale{
+                        NumberAnimation{
+                            duration: 800
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+                }
+
             }
         }
 
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            radius: 8
-            color: GlobalColor.Main
+
+        ListModel{
+            id:searchmodel
+
+
         }
-        TextField{
-            anchors.fill: parent
-            validator:RegExpValidator{regExp:/[^%@<>\/\\ \|]{1,18}/}
 
-            id:searchtext
-            placeholderText:searchmode==1?"请输入要搜索的功效":"请输入要搜索的食材"
-            font{
-                family: localFont.name
-                pointSize: 16
+        ListView{
+            id:view
+            spacing: -1
+            anchors.top: searchbar.bottom
+            anchors.topMargin: 10*dp
+
+            clip: true
+            width: parent.width
+            // height:parent.height-(searchbar.visible?searchbar.height+20*dp:0)
+            height: contentHeight+2
+
+            model: searchmodel
+            add: Transition{
+                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 300 }
             }
 
-            style: TextFieldStyle {
-                      textColor: "grey"
-                      background: Rectangle {
-                      }
-                  }
+            header:Rectangle{
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width/3*1.1
+                height: searchmodel.count==0?dp*70:0
+                visible: searchmodel.count==0?true:false
 
-            onTextChanged: {
 
-                if(searchmode!=1){
+                Rectangle{
+                    width: parent.width/1.2
+                    height:dp*70/2
+                    color:"white"
 
-                if(searchtext.text.length>1){
-                searchmodel.clear();
-                dbsystem.searchFood(searchtext.text);
+                    anchors.top: parent.top
+                    anchors.topMargin: 8*dp
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+                        radius: 8
+                        color: searchmode==1?GlobalColor.SecondButton:"green"
+                    }
+
+                    Text{
+                        text:searchmode==1?"切换到普通模式":"切换到高级模式"
+                        color:searchmode==1?GlobalColor.SecondButton:"green"
+                        anchors.centerIn: parent
+                        font.pointSize: 13
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            searchmode==1?searchmode=0:searchmode=1
+                            searchicon.scale=1
+                            searchtext.text=""
+                        }
+                    }
+
                 }
-
-                if(searchtext.text==="")
-                    searchmodel.clear();
-
-                }
-
             }
-            Image{
+
+            delegate: Item{
+                id:delegate
+                width:mainrect.width
+                height:foodphoto.height+20*dp
+
                 Rectangle{
                     anchors.fill: parent
-                    color:GlobalColor.Main
-                    z:-100
-                }
-                id:searchicon
-                anchors.right: searchtext.right
-                anchors.rightMargin: 8*dp
-                anchors.verticalCenter: searchtext.verticalCenter
-                source: "qrc:/image/searchblack.png"
-                height: searchbar.height/1.5
-                width:height
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        if(searchmode==1){
-                            if(searchtext.text.length>1){
-                              dbsystem.searchFunc(searchtext.text);
+                    color:"white"
+                    border.color: "lightgrey"
+                    border.width: 1
 
-                            }
-                            else
-                                myjava.toastMsg("搜索内容太短")
-                        }
-                        else{
-                        if(searchtext.text!=""){
-                          searchmodel.clear();
-                          dbsystem.searchFood(searchtext.text);
-                        }
+                    Image{
+                        id:foodphoto
+                        height:60*dp
+                        width:height
+
+                        source: FoodPhoto
+                        anchors.top: parent.top
+                        anchors.topMargin: 10*dp
+
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10*dp
+
+                        fillMode: Image.PreserveAspectFit
+
+                        Label{
+                            anchors.centerIn: parent
+                            visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
+                            text:(parent.status==Image.Loading)?"加载中":"无"
+                            color:"grey"
                         }
                     }
-                }
-                Timer{
-                    id:animationtimer
-                    interval: 800
-                    repeat:true
-                    running: searchmode==1
-                    onTriggered: {
-                        if(searchicon.scale==1.3)
-                            searchicon.scale=1
-                        else
-                            searchicon.scale=1.3
+
+
+                    Text{
+                        id:foodname;
+                        anchors.left: foodphoto.right
+                        anchors.leftMargin: 10*dp
+                        anchors.top: foodphoto.top
+                        anchors.topMargin: 4*dp
+                        color: "grey"
+                        text:FoodName
+                        wrapMode: Text.Wrap
+                        width: parent.width-foodphoto.width-24*dp
+                        font{
+                            family: localFont.name
+
+                            pointSize: 16
+                        }
+
                     }
-                }
-                Behavior on scale{
-                    NumberAnimation{
-                        duration: 800
-                        easing.type: Easing.OutCubic
+
+                    Text{
+                        id:fooddes;
+                        anchors.left: foodphoto.right
+                        anchors.leftMargin: 10*dp
+
+                        anchors.bottom: foodphoto.bottom
+                        anchors.bottomMargin: 4*dp
+                        verticalAlignment: Text.AlignBottom
+
+                        color: "grey"
+                        wrapMode: Text.Wrap
+                        width: parent.width-foodphoto.width-24*dp
+                        font{
+                            family: localFont.name
+
+                            pointSize: 12
+                        }
+                        text:FoodDes
                     }
+
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            mainrect.parent.parent.parent.showfooddetail(FoodName,FoodPhoto)
+                        }
+                    }
+
                 }
             }
 
         }
-    }
-
-
-    ListModel{
-        id:searchmodel
 
 
     }
-
-    ListView{
-        id:view
-        cacheBuffer:contentHeight+2
-        spacing: -1
-        anchors.top: searchbar.bottom
-        anchors.topMargin: 10*dp
-
-        clip: true
-        width: parent.width
-       // height:parent.height-(searchbar.visible?searchbar.height+20*dp:0)
-        height: contentHeight+2
-
-        model: searchmodel
-
-        header:Rectangle{
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: parent.width/3*1.1
-            height: searchmodel.count==0?dp*70:0
-            visible: searchmodel.count==0?true:false
-
-
-            Rectangle{
-                width: parent.width/1.2
-                height:dp*70/2
-                color:"white"
-
-                anchors.top: parent.top
-                anchors.topMargin: 8*dp
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    transparentBorder: true
-                    radius: 8
-                    color: searchmode==1?GlobalColor.SecondButton:"green"
-                }
-
-                Text{
-                    text:searchmode==1?"切换到普通模式":"切换到高级模式"
-                    color:searchmode==1?GlobalColor.SecondButton:"green"
-                    anchors.centerIn: parent
-                    font.pointSize: 13
-                }
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        searchmode==1?searchmode=0:searchmode=1
-                        searchicon.scale=1
-                        searchtext.text=""
-                    }
-                }
-
-            }
-        }
-
-        delegate: Item{
-            id:delegate
-            width:mainrect.width
-            height:foodphoto.height+20*dp
-
-            Rectangle{
-                anchors.fill: parent
-                color:"white"
-                border.color: "lightgrey"
-                border.width: 1
-
-                Image{
-                    id:foodphoto
-                    height:60*dp
-                    width:height
-
-                    source: FoodPhoto
-                    anchors.top: parent.top
-                    anchors.topMargin: 10*dp
-
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10*dp
-
-                    fillMode: Image.PreserveAspectFit
-
-                    Label{
-                        anchors.centerIn: parent
-                        visible: (parent.status==Image.Error||parent.status==Image.Null||parent.status==Image.Loading)?true:false
-                        text:(parent.status==Image.Loading)?"加载中":"无"
-                        color:"grey"
-                    }
-                }
-
-
-                Text{
-                    id:foodname;
-                    anchors.left: foodphoto.right
-                    anchors.leftMargin: 10*dp
-                    anchors.top: foodphoto.top
-                    anchors.topMargin: 4*dp
-                    color: "grey"
-                    text:FoodName
-                    wrapMode: Text.Wrap
-                    width: parent.width-foodphoto.width-24*dp
-                    font{
-                        family: localFont.name
-
-                        pointSize: 16
-                    }
-
-                }
-
-                Text{
-                    id:fooddes;
-                    anchors.left: foodphoto.right
-                    anchors.leftMargin: 10*dp
-
-                    anchors.bottom: foodphoto.bottom
-                    anchors.bottomMargin: 4*dp
-                    verticalAlignment: Text.AlignBottom
-
-                    color: "grey"
-                    wrapMode: Text.Wrap
-                    width: parent.width-foodphoto.width-24*dp
-                    font{
-                        family: localFont.name
-
-                        pointSize: 12
-                    }
-                    text:FoodDes
-                }
-
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                     mainrect.parent.parent.parent.showfooddetail(FoodName,FoodPhoto)
-                    }
-                }
-
-            }
-        }
-
-    }
-
-
-}
 
 }
 

@@ -24,6 +24,16 @@ StackView{
         headurl=hurl
 
         forceActiveFocus();
+        fdan.start()
+    }
+    NumberAnimation {
+        target: mainrect
+        id:fdan
+        property: "opacity";
+        from: 0;
+        to: 1.0;
+        duration: 200
+        easing.type :Easing.Linear
     }
     FontLoader {
         id: localFont

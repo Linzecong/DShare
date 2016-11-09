@@ -64,7 +64,7 @@ Rectangle {
     }
 
     function settext(b){
-        note.text="请输入你的感想~"
+        note.text="请输入你的感想~（长按分享按钮可生成图片，分享到其他应用）"
         hiddentext=b
     }
     function setimg(b){
@@ -433,7 +433,7 @@ Rectangle {
                     return
                 }
 
-                if(messagetext.indexOf("|||")>=0||messagetext.indexOf("{|}")>=0){
+                if(messagetext.indexOf("|||")>=0||messagetext.indexOf("{|}")>=0||messagetext.indexOf("@")>=0||messagetext.indexOf("<")>=0||messagetext.indexOf(">")>=0){
                     myjava.toastMsg("内容包含非法字符！");
                     return
                 }

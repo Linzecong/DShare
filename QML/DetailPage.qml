@@ -192,7 +192,7 @@ property int modelindex: 0
 
         height: parent.height-head.height
         width: parent.width
-        contentHeight: foodview.height+goodrelationview.height+badrelationview.height+20*dp
+        contentHeight: foodview.height+goodrelationview.height+badrelationview.height+40*dp
         clip: true
         flickableDirection:Flickable.VerticalFlick
 
@@ -205,6 +205,10 @@ property int modelindex: 0
             width: parent.width
             height:goodrelationmodel.count>0?contentHeight+2:0
             model: goodrelationmodel
+            add: Transition{
+                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 300 }
+            }
+
 
             visible: goodrelationmodel.count>0?true:false
             header:Rectangle{
@@ -281,6 +285,11 @@ property int modelindex: 0
             height:badrelationmodel.count>0?contentHeight+2:0
             model: badrelationmodel
             visible: badrelationmodel.count>0?true:false
+            add: Transition{
+                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 300 }
+            }
+
+
             header:Rectangle{
                 height:head.height/2.5
                 width:parent.width
@@ -358,28 +367,11 @@ property int modelindex: 0
             height:foodmodel.count>0?contentHeight+2:0
 
             visible: foodmodel.count>0?true:false
+            add: Transition{
+                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 300 }
+            }
 
             property int getindex
-
-//            header:Rectangle{
-//                height:head.height/2.5
-//                width:parent.width
-//                Image{
-//                    Rectangle{
-//                        anchors.fill: parent
-//                        color:"lightgreen"
-//                        anchors.margins: 5
-//                        z:-100
-//                    }
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    anchors.leftMargin: 8*dp
-//                    anchors.left: parent.left
-//                    height:parent.height
-//                    width:height
-//                    source:"qrc:/image/save.png"
-//                    fillMode: Image.PreserveAspectFit
-//                }
-//            }
 
             delegate: Item{
                 id:delegate

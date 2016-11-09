@@ -52,6 +52,17 @@ Rectangle{
         needset=need//用于是否重置评论数
 
         postssystem.getcomments(mid);
+        fdan.start()
+    }
+
+    NumberAnimation {
+        target: flick3
+        id:fdan
+        property: "opacity";
+        from: 0;
+        to: 1.0;
+        duration: 200
+        easing.type :Easing.Linear
     }
 
     MouseArea{
@@ -336,6 +347,7 @@ Rectangle{
         contentHeight: delegaterect.height+commentview.height+commentbar.height
         clip: true
 
+        id:flick3
 
 
         Rectangle{
@@ -520,6 +532,20 @@ Rectangle{
             clip:true
             spacing:-1
 
+            displaced: Transition {
+                NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+            }
+
+            populate: Transition {
+                NumberAnimation { properties: "x,y"; duration: 800 }
+            }
+            remove: Transition {
+                      ParallelAnimation {
+                          NumberAnimation { property: "opacity"; to: 0; duration: 500 }
+                          NumberAnimation { properties: "x"; to: -200; duration: 500 }
+                      }
+            }
+
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
@@ -625,7 +651,7 @@ Rectangle{
             property string hiddentext:""
 
             property int firstnull:1
-validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
+validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,500}/}
             anchors.right: sendbutton.left
             anchors.left: parent.left
 

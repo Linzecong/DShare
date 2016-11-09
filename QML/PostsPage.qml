@@ -263,11 +263,29 @@ Rectangle {
             property int likeindex:0
             property int commentindex:0
 
+            add: Transition{
+                NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 200 }
+            }
+
+            displaced: Transition {
+                NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
+            }
+
+            populate: Transition {
+                NumberAnimation { properties: "x,y"; duration: 800 }
+            }
+            remove: Transition {
+                      ParallelAnimation {
+                          NumberAnimation { property: "opacity"; to: 0; duration: 500 }
+                          NumberAnimation { properties: "x"; to: -2000; duration: 500 }
+                      }
+            }
             spacing:5*dp
 
             Rectangle{
                 anchors.fill: parent
-                color:GlobalColor.Background
+                //color:GlobalColor.Background
+                color:"white"
                 z:-100
             }
 

@@ -205,6 +205,10 @@ Rectangle {
         width: parent.width
         height:parent.height-head.height
         model: noticemodel
+        add: Transition{
+            NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 300 }
+            NumberAnimation { property: "scale"; from: 0; to: 1.0; duration: 300 }
+        }
 
         Rectangle {
                   id: scrollbar

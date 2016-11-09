@@ -25,6 +25,18 @@ Rectangle {
 
 
         forceActiveFocus()//用于响应返回键
+
+        fdan.start()
+    }
+
+    NumberAnimation {
+        target: view
+        id:fdan
+        property: "opacity";
+        from: 0;
+        to: 1.0;
+        duration: 200
+        easing.type :Easing.Linear
     }
 
     FontLoader {

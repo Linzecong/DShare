@@ -36,14 +36,14 @@ Rectangle {
     }
 
     function setmypost(publisherid0,username0,nickname0){
-        mypostpage.item.getpost(publisherid0,username0,nickname0);//点击头像时显示用户分享列表
         mypostpage.visible=true
+        mypostpage.item.getpost(publisherid0,username0,nickname0);//点击头像时显示用户分享列表
         mypostpage.x=0
     }
 
     function setuniquepost(Hasimage0,Headurl0,Username0,Posttime0,Message0,Photo0,Liker0,ID0,username0,nickname0,a1){
-        uniquepost.item.setData(Hasimage0,Headurl0,Username0,Posttime0,Message0,Photo0,Liker0,ID0,username0,nickname0,a1)
         uniquepost.visible=true
+        uniquepost.item.setData(Hasimage0,Headurl0,Username0,Posttime0,Message0,Photo0,Liker0,ID0,username0,nickname0,a1)
     }
 
     function setcommentcount(count){
@@ -66,17 +66,19 @@ Rectangle {
 
     function showdetailpage(a){
         detailpage.visible=true
+
         detailpage.item.getModel(a)
     }
 
     function showfooddetail(a,b){
-        fooddetail.item.init(a,b)
         fooddetail.visible=true
+        fooddetail.item.init(a,b)
     }
 
     function shownewscontent(id,a,b,title,time){
-        newscontent.item.getNews(id,a,b,title,time)
         newscontent.visible=true
+        newscontent.item.getNews(id,a,b,title,time)
+
     }
 
     function setnewscount(type,count,newsid){
@@ -1150,6 +1152,12 @@ fillMode: Image.PreserveAspectFit
         height: 45*dp
 
         property string currentPage:"DShare"
+
+        onCurrentPageChanged: {
+            if(currentPage=="资讯")
+                newspage.item.setid(str_userid,nickname)
+        }
+
         z:7
 
 

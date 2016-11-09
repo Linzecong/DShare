@@ -127,9 +127,18 @@ Rectangle {
             iss=1;
 
         }
+        fdan.start()
 
     }
-
+    NumberAnimation {
+        target: flick
+        id:fdan
+        property: "opacity";
+        from: 0;
+        to: 1.0;
+        duration: 200
+        easing.type :Easing.Linear
+    }
     Loader{
         id:mypost;
         anchors.fill: parent
@@ -210,6 +219,7 @@ Rectangle {
     }
 
     Flickable{
+        id:flick
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.top: head.bottom
@@ -325,6 +335,9 @@ validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,18}/}
         height: contentHeight+2
 
         model: model1
+        add: Transition{
+            NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 200 }
+        }
 
         header:Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
