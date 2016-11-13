@@ -85,7 +85,10 @@ Rectangle {
         newspage.item.setcount(type,count,newsid)
     }
 
-
+    function showrecommendpage(){
+        recommendpage.item.init(str_userid)
+        recommendpage.visible=true
+    }
 
     Loader{
         id:detailpage
@@ -108,6 +111,14 @@ Rectangle {
         anchors.fill: parent
         visible: false
         source:"qrc:/QML/NewsContent.qml"
+        z:108
+    }
+
+    Loader{
+        id:recommendpage
+        anchors.fill: parent
+        visible: false
+        source:"qrc:/QML/RecommendPage.qml"
         z:108
     }
 

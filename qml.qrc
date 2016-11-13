@@ -49,5 +49,6 @@
         <file>image/back.png</file>
         <file>QML/NewsContent.qml</file>
         <file>Resources/msyh.ttf</file>
+        <file>QML/RecommendPage.qml</file>
     </qresource>
 </RCC>

@@ -501,7 +501,12 @@ Rectangle {
                     font.pointSize: 14
                 }
 
-                //radius: height/4
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        mainrect.parent.parent.parent.showrecommendpage()
+                    }
+                }
             }
         }
 
@@ -546,7 +551,7 @@ Rectangle {
             ListElement{Title:"晚餐"}
             ListElement{Title:"零食"}
             ListElement{Title:"点心"}
-            ListElement{Title:"其他"}
+            ListElement{Title:"水果"}
         }
 
         //各种细分的model
@@ -2491,7 +2496,7 @@ Rectangle {
                 }
                 Text{
                     id:others
-                    text:"其他："+foodtablerect.othersstr
+                    text:"水果："+foodtablerect.othersstr
                     color:"grey"
                     wrapMode: Text.Wrap
                     width: foodtablerect.width-header.height/3*2

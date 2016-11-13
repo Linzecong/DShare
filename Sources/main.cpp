@@ -14,6 +14,7 @@
 #include"Headers/ReportSystem.h"
 #include"Headers/SpeechSystem.h"
 #include"Headers/NewsSystem.h"
+#include"Headers/RecommendSystem.h"
 #include <QFontDatabase>
 
 int main(int argc, char *argv[]){
@@ -32,7 +33,7 @@ int main(int argc, char *argv[]){
     qmlRegisterType<ReportSystem>("ReportSystem",1,0,"ReportSystem");
     qmlRegisterType<SpeechSystem>("SpeechSystem",1,0,"SpeechSystem");
     qmlRegisterType<NewsSystem>("NewsSystem",1,0,"NewsSystem");
-
+    qmlRegisterType<RecommendSystem>("RecommendSystem",1,0,"RecommendSystem");
     QQuickView viewer;
 
 

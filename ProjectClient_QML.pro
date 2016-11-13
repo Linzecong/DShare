@@ -23,7 +23,8 @@ SOURCES += \
     Sources/ReportSystem.cpp \
     Sources/SendImageSystem.cpp \
     Sources/SpeechSystem.cpp \
-    Sources/NewsSystem.cpp
+    Sources/NewsSystem.cpp \
+    Sources/RecommendSystem.cpp
 
 RESOURCES += \
     qml.qrc
@@ -43,7 +44,8 @@ HEADERS += \
     Framework/User.h \
     Headers/ReportData.h \
     Headers/SpeechSystem.h \
-    Headers/NewsSystem.h
+    Headers/NewsSystem.h \
+    Headers/RecommendSystem.h
 
 HEADERS += \
     Headers/DataSystem.h \
