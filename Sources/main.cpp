@@ -4,6 +4,8 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QObject>
+
+
 #include"Headers/LoginSystem.h"
 #include"Headers/RegistSystem.h"
 #include"Headers/PostsSystem.h"
@@ -15,12 +17,12 @@
 #include"Headers/SpeechSystem.h"
 #include"Headers/NewsSystem.h"
 #include"Headers/RecommendSystem.h"
+#include"Headers/ReportData.h"
 #include <QFontDatabase>
+
 
 int main(int argc, char *argv[]){
     QApplication app(argc, argv);
-
-
 
     //将C++注册到QML中
     qmlRegisterType<LoginSystem>("LoginSystem",1,0,"LoginSystem");
@@ -37,13 +39,10 @@ int main(int argc, char *argv[]){
     QQuickView viewer;
 
 
-
     QObject::connect(viewer.engine(), SIGNAL(quit()), &app, SLOT(quit()));
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
     viewer.setSource(QUrl("qrc:/QML/main.qml"));
     viewer.show();
-
-
 
 
     return app.exec();

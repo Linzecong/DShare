@@ -15,6 +15,7 @@ struct Diet{
     QStringList Others;
 };
 
+
 class ReportSystem : public QObject
 {
     Q_OBJECT
@@ -29,7 +30,10 @@ public:
      void setStatue(QString s);
      QString Statue();
 
-
+     QMap<QString,int> XZMap;
+     QMap<QString,int> YYMap;
+     QMap<QString,int> YLMap;
+     void initMap();
 
      QList<Diet> Diets;//6餐内容
      Q_INVOKABLE void getalldiet(QString name);//获取特定时间的饮食数据
@@ -55,10 +59,6 @@ public:
      void getTop3FoodCount(int days, int* fnum, int* snum, int* tnum, QString fir, QString sec, QString thr);
 
 
-     QMap<QString,int> XZMap;
-     QMap<QString,int> YYMap;
-     QMap<QString,int> YLMap;
-     void initMap();
      QString Als_Type_Count;
      Q_INVOKABLE void als_Type(int type,int days);//分析性状吃得最多的前五个食材
      Q_INVOKABLE QString als_Type_getCount();

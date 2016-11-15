@@ -23,6 +23,11 @@ Rectangle {
         goodrelationmodel.clear()
         headname.text=a
         foodname.text=a
+
+        xzlabel.text=dbsystem.getXZ(a)
+        yylabel.text=dbsystem.getYY(a)
+        yllabel.text=dbsystem.getYL(a)
+
         foodimage.source=b
         dbsystem.getFoodDetail(a)
         forceActiveFocus()
@@ -386,6 +391,57 @@ Rectangle {
                 anchors.left: parent.left
                 wrapMode: Text.Wrap
                 color:"grey"
+                font{
+                    family: localFont.name
+                    pointSize: 16
+                    bold: true
+                }
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Text{
+                id:xzlabel
+                anchors.top: foodname.bottom
+                anchors.topMargin: 10*dp
+                horizontalAlignment: Text.AlignHCenter
+                width: 60*dp+16*dp
+                anchors.left: parent.left
+                wrapMode: Text.Wrap
+                color:GlobalColor.SecondButton
+                font{
+                    family: localFont.name
+                    pointSize: 16
+                    bold: true
+                }
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Text{
+                id:yylabel
+                anchors.top: xzlabel.bottom
+                anchors.topMargin: 10*dp
+                horizontalAlignment: Text.AlignHCenter
+                width: 60*dp+16*dp
+                anchors.left: parent.left
+                wrapMode: Text.Wrap
+                color:GlobalColor.Word
+                font{
+                    family: localFont.name
+                    pointSize: 16
+                    bold: true
+                }
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Text{
+                id:yllabel
+                anchors.top: yylabel.bottom
+                anchors.topMargin: 10*dp
+                horizontalAlignment: Text.AlignHCenter
+                width: 60*dp+16*dp
+                anchors.left: parent.left
+                wrapMode: Text.Wrap
+                color:GlobalColor.StatusBar
                 font{
                     family: localFont.name
                     pointSize: 16

@@ -1,9 +1,10 @@
 #include "Headers/ReportSystem.h"
-
+#include "Headers/DataSystem.h"
 #include <QFile>
 #include <QTextStream>
 #include <QPair>
-#include "Headers/ReportData.h"
+
+
 
 ReportSystem::ReportSystem(QObject *parent) : QObject(parent){
     tcpSocket = new QTcpSocket(this);

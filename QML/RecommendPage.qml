@@ -25,6 +25,7 @@ Rectangle {
     }
 
     function init(id){
+        forceActiveFocus()
         str_userid=id
         recommendsystem.recommendXG(str_userid)
     }

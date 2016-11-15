@@ -18,8 +18,6 @@ public:
     void setStatue(QString s);
     QString Statue();
 
-
-
     Q_INVOKABLE void inclick();
     Q_INVOKABLE void outclick(QString lan);
     QString TypeLabel;

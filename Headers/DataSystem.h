@@ -8,6 +8,7 @@
 #include<QTimer>
 #include<QStringList>
 
+
 class DataSystem : public QObject{
     Q_OBJECT
     Q_PROPERTY(QString Statue READ Statue WRITE setStatue NOTIFY statueChanged)//用于与qml传递信息
@@ -21,6 +22,14 @@ public:
     QString m_Statue;
     void setStatue(QString s);
     QString Statue();
+
+    QMap<QString,int> XZMap;
+    QMap<QString,int> YYMap;
+    QMap<QString,int> YLMap;
+    Q_INVOKABLE QString getXZ(QString food);
+    Q_INVOKABLE QString getYY(QString food);
+    Q_INVOKABLE QString getYL(QString food);
+    void initMap();
 
     QString Name;
     Q_INVOKABLE void getNameByID(QString userid);//获取用户昵称
@@ -129,5 +138,4 @@ signals:
 
 public slots:
 };
-
 #endif // DATASYSTEM_H

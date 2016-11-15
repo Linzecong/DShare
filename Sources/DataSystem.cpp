@@ -3,6 +3,8 @@
 #include<QPixmap>
 #include<QDateTime>
 
+
+
 DataSystem::DataSystem(QObject *parent) : QObject(parent){
 
     //初始化时直接连接到服务器
@@ -10,8 +12,9 @@ DataSystem::DataSystem(QObject *parent) : QObject(parent){
     connect(tcpSocket,&QTcpSocket::readyRead,this,&DataSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&DataSystem::tcpSendMessage);
     tcpSocket->connectToHost("119.29.15.43",8889);
-
+    initMap();
 }
+
 
 void DataSystem::setStatue(QString s){
     m_Statue=s;
@@ -20,6 +23,60 @@ void DataSystem::setStatue(QString s){
 
 QString DataSystem::Statue(){
     return m_Statue;
+}
+
+QString DataSystem::getXZ(QString food)
+{
+    if(XZMap.contains(food)){
+        if(XZMap[food]==1)
+            return "热性";
+        if(XZMap[food]==2)
+            return "温性";
+        if(XZMap[food]==3)
+            return "平性";
+        if(XZMap[food]==4)
+            return "凉性";
+        if(XZMap[food]==5)
+            return "寒性";
+    }
+    else
+        return "性状未知";
+}
+
+QString DataSystem::getYY(QString food)
+{
+    if(YYMap.contains(food)){
+        if(YYMap[food]==1)
+            return "谷薯类";
+        if(YYMap[food]==2)
+            return "蔬果类";
+        if(YYMap[food]==3)
+            return "动物类";
+        if(YYMap[food]==4)
+            return "豆制类";
+        if(YYMap[food]==5)
+            return "纯能类";
+    }
+    else
+        return "营养未知";
+}
+
+QString DataSystem::getYL(QString food)
+{
+    if(YLMap.contains(food)){
+        if(YLMap[food]==1)
+            return "果蔬制品";
+        if(YLMap[food]==2)
+            return "肉禽制品";
+        if(YLMap[food]==3)
+            return "水产制品";
+        if(YLMap[food]==4)
+            return "乳制品";
+        if(YLMap[food]==5)
+            return "粮食制品";
+    }
+    else
+        return "原料未知";
 }
 
 void DataSystem::getNameByID(QString userid){
