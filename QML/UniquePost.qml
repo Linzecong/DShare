@@ -301,7 +301,7 @@ Rectangle{
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             verticalAlignment: Text.AlignVCenter
             font{
-                        family: localFont.name
+                family: localFont.name
                 pixelSize: (head.height)/4
 
             }
@@ -329,7 +329,7 @@ Rectangle{
             anchors.centerIn: parent
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
             font{
-                        family: localFont.name
+                family: localFont.name
                 //family: "微软雅黑"
                 pointSize: 20
             }
@@ -407,7 +407,7 @@ Rectangle{
                 text: username
                 color:GlobalColor.Word
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                 }
@@ -427,7 +427,7 @@ Rectangle{
                 text: posttime
                 color:"grey"
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 12
                 }
@@ -449,7 +449,7 @@ Rectangle{
                 wrapMode: Text.Wrap;
                 textFormat:Text.RichText
                 font{
-                        family: localFont.name
+                    family: localFont.name
                     //family: "微软雅黑"
                     pointSize: 14
                 }
@@ -493,7 +493,7 @@ Rectangle{
                 wrapMode: Text.Wrap;
                 color: GlobalColor.Word
                 font{
-                        family: localFont.name
+                    family: localFont.name
                     pointSize: 14
                 }
 
@@ -540,10 +540,10 @@ Rectangle{
                 NumberAnimation { properties: "x,y"; duration: 800 }
             }
             remove: Transition {
-                      ParallelAnimation {
-                          NumberAnimation { property: "opacity"; to: 0; duration: 500 }
-                          NumberAnimation { properties: "x"; to: -200; duration: 500 }
-                      }
+                ParallelAnimation {
+                    NumberAnimation { property: "opacity"; to: 0; duration: 500 }
+                    NumberAnimation { properties: "x"; to: -200; duration: 500 }
+                }
             }
 
             layer.enabled: true
@@ -576,7 +576,7 @@ Rectangle{
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.Wrap
                         font{
-                        family: localFont.name
+                            family: localFont.name
                             pointSize: 14
                         }
                     }
@@ -651,11 +651,15 @@ Rectangle{
             property string hiddentext:""
 
             property int firstnull:1
-validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,500}/}
+            validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,500}/}
             anchors.right: sendbutton.left
             anchors.left: parent.left
 
+
             anchors.verticalCenter: parent.verticalCenter
+
+
+            height: parent.height*1.3
 
 
             placeholderText:"评论..."
@@ -665,15 +669,6 @@ validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,500}/}
             }
             style: TextFieldStyle{
                 textColor:"grey"
-                background: Rectangle{
-//                    layer.enabled: true
-//                    layer.effect: DropShadow {
-//                        transparentBorder: true
-//                        radius: 6
-//                        color: GlobalColor.Green400
-//                    }
-                    id:searchrect
-                }
             }
 
             onTextChanged: {

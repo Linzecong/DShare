@@ -64,7 +64,7 @@ Rectangle {
     }
 
     function settext(b){
-        note.text="请输入你的感想~（长按分享按钮可生成图片，分享到其他应用）"
+        note.text="请输入你的感想~"
         hiddentext=b
     }
     function setimg(b){

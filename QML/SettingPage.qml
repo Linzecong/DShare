@@ -1237,10 +1237,15 @@ StackView{
 
             }
             Label{
-                text:"  暂无内容";
-                wrapMode: Text.Wrap;
+                text:"谢谢大家的支持，目前软件处于测试阶段，没有大规模宣传，如果有发现的问题或者好的建议可以在置顶的资讯下评论，我会尽快回复大家，谢谢大家支持！<br><br><strong>使用帮助与技巧</strong><br><br>1.右上角添加好友，大家可以关注我linzecong<br><br>2.饮食记录页面，每餐的标题下可以添加图片<br><br>3.饮食记录页面，长按分享按钮可生成图片，分享到其他应用，图片为测试图片，后期会美化<br><br>4.运动记录页面带有打卡功能<br><br>5.搜索页面可以点击高级模式，进入功效搜索模式";
+                wrapMode: Text.WordWrap
                 anchors.top: xieyitoprect.bottom
                 anchors.topMargin: 10*dp
+                anchors.left: parent.left
+                anchors.leftMargin: 10*dp
+
+                anchors.right: parent.right
+                anchors.rightMargin: 10*dp
                 font{
                     family: localFont.name
                     pointSize: 16

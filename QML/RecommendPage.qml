@@ -226,7 +226,7 @@ Rectangle {
                 }
             }
 
-            spacing:2*dp
+            spacing:3*dp
 
             Rectangle{
                 anchors.fill: parent
@@ -253,7 +253,7 @@ Rectangle {
                 id:postitem
                 width:parent.width
 
-                height:title.height+yyrecommend.height+xgrecommend.height+hyrecommend.height+34*dp
+                height:title.height+yyrecommend.height+xgrecommend.height+hyrecommend.height+40*dp
 
                 Rectangle{
 
@@ -274,7 +274,7 @@ Rectangle {
 
 
                         anchors.top: parent.top
-                        anchors.topMargin:6*dp
+                        anchors.topMargin:7*dp
 
                         anchors.horizontalCenter: parent.horizontalCenter
 
@@ -294,7 +294,7 @@ Rectangle {
                         anchors.right: parent.right
                         anchors.rightMargin: 10*dp
                         anchors.top: title.bottom
-                        anchors.topMargin: 5*dp
+                        anchors.topMargin: 7*dp
                         textFormat:Text.RichText
                         wrapMode: Text.Wrap
 
@@ -315,7 +315,7 @@ Rectangle {
                         anchors.rightMargin: 10*dp
 
                         anchors.top: yyrecommend.bottom
-                        anchors.topMargin: 5*dp
+                        anchors.topMargin: 7*dp
                         text: "根据习惯推荐："+XGFood
                         textFormat:Text.RichText
                         wrapMode: Text.Wrap
@@ -335,7 +335,7 @@ Rectangle {
                         anchors.rightMargin: 10*dp
 
                         anchors.top: xgrecommend.bottom
-                        anchors.topMargin: 5*dp
+                        anchors.topMargin: 7*dp
                         text: "根据好友推荐："+HYFood
                         textFormat:Text.RichText
                         wrapMode: Text.Wrap

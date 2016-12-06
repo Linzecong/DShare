@@ -595,6 +595,7 @@ validator:RegExpValidator{regExp:/[^%@<>\/\\ \|{}]{1,500}/}
 
             anchors.verticalCenter: parent.verticalCenter
 
+            height: parent.height*1.3
 
             placeholderText:"评论..."
             font{
