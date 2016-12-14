@@ -19,6 +19,8 @@ class RecordSystem : public QObject
 public:
     explicit RecordSystem(QObject *parent = 0);
     ~RecordSystem();
+    QTimer ConnectTimer;
+    void reconnect();
 public:
      QTcpSocket *tcpSocket;
      QString Username;

@@ -10,13 +10,18 @@ RecommendSystem::RecommendSystem(QObject *parent) : QObject(parent){
     tcpSocket->connectToHost("119.29.15.43",24567);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&RecommendSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&RecommendSystem::tcpSendMessage);
+    connect(&ConnectTimer,&QTimer::timeout,this,&RecommendSystem::reconnect);
 
 }
 
 RecommendSystem::~RecommendSystem(){
 
 }
-
+void RecommendSystem::reconnect()
+{
+    if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
+        tcpSocket->connectToHost("119.29.15.43",24567);
+}
 void RecommendSystem::setStatue(QString s){
     m_Statue=s;
     emit statueChanged(m_Statue);
@@ -93,6 +98,7 @@ void RecommendSystem::tcpReadMessage(){
 }
 
 void RecommendSystem::tcpSendMessage(){
+    ConnectTimer.start(1000);
     m_Statue="Connected";
     emit statueChanged(m_Statue);
 }

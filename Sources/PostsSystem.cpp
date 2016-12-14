@@ -17,10 +17,16 @@ PostsSystem::PostsSystem(QObject *parent) : QObject(parent){
     emit statueChanged(m_Statue);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&PostsSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&PostsSystem::tcpSendMessage);
+    connect(&ConnectTimer,&QTimer::timeout,this,&PostsSystem::reconnect);
 }
 
 PostsSystem::~PostsSystem(){
 
+}
+void PostsSystem::reconnect()
+{
+    if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
+        tcpSocket->connectToHost("119.29.15.43",8520);
 }
 
 void PostsSystem::getposts(QString user){
@@ -464,6 +470,7 @@ void PostsSystem::tcpReadMessage(){
 
 void PostsSystem::tcpSendMessage()
 {
+    ConnectTimer.start(1000);
     m_Statue="Connected";
     emit statueChanged(m_Statue);
 }

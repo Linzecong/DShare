@@ -14,6 +14,8 @@ class PostsSystem:public QObject{
 public:
     explicit PostsSystem(QObject *parent = 0);
     ~PostsSystem();
+    QTimer ConnectTimer;
+    void reconnect();
 public:
     QString Username;
     QString Photoname;

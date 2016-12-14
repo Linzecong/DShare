@@ -23,6 +23,8 @@ class ReportSystem : public QObject
 public:
     explicit ReportSystem(QObject *parent = 0);
     ~ReportSystem();
+    QTimer ConnectTimer;
+    void reconnect();
 public:
      QTcpSocket *tcpSocket;
 

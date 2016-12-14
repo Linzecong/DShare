@@ -27,6 +27,9 @@ public:
 
      Q_INVOKABLE void regist(QString id, QString pass, QString name, QString sex, QString age);//注册
 
+
+
+
 public:
      void tcpReadMessage();
      void tcpSendMessage();

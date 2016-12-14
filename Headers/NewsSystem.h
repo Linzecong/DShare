@@ -22,6 +22,9 @@ class NewsSystem : public QObject
 public:
     explicit NewsSystem(QObject *parent = 0);
     ~NewsSystem();
+    QTimer ConnectTimer;
+    void reconnect();
+
 public:
      QTcpSocket *tcpSocket;
 

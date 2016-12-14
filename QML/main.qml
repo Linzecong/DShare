@@ -12,6 +12,7 @@ import QtGraphicalEffects 1.0
 import "qrc:/GlobalVariable.js" as GlobalColor
 
 StackView{
+    property string isdiff: "NO"
     JavaMethod{
         id:myjava
     }
@@ -31,8 +32,17 @@ StackView{
         if(str!=="NO")
             loginsystem.login(str,loginsystem.getpassword());
         else{
-            openrect.visible=false//取消显示等待页面
-            indicator.visible=false
+
+            if(loginsystem.getisfirst()==="YES"){
+                usertext.text="dshareyouke"
+                passwordtext.text="dshareyouke"
+                loginsystem.login("dshareyouke","dshareyouke");
+            }
+            else{
+
+                openrect.visible=false//取消显示等待页面
+                indicator.visible=false
+            }
         }
     }
 
@@ -269,7 +279,7 @@ StackView{
                         myjava.toastMsg("密码至少有8~20个字符")
                         return;
                     }
-                    if(passwordtext.text.indexOf("|")>=0||usertext.text.indexOf("|")>=0||passwordtext.text.indexOf("@")>=0||usertext.text.indexOf("@")>=0){
+                    if(passwordtext.text.indexOf("|")>=0||usertext.text.indexOf("|")>=0||passwordtext.text.indexOf("@")>=0||usertext.text.indexOf("@")>=0||passwordtext.text.indexOf("dshareyouke")>=0){
                         myjava.toastMsg("非法字符")
                         return;
                     }
@@ -337,9 +347,24 @@ StackView{
                     else
                         stack.str_userid=loginsystem.getusername();
 
+                    if(loginsystem.getlocalversion()!=="1.0"){
+                        isdiff="YES"
+                        loginsystem.savelocalversion()
+
+
+                    }
+
+                    if(stack.str_userid!="dshareyouke"){
+                    loginsystem.saveisfirst()
+                        isdiff="NO"
+                    }
 
                     mainpage.source="qrc:/QML/MainWindow.qml";//加载首页
                     myjava.toastMsg("登录成功")
+
+                    if(loginsystem.getnetversion()!==loginsystem.getlocalversion()){
+                        myjava.toastMsg("检测到新版本，请尽快到应用市场更新！")
+                    }
                 }
                 if(Statue=="SDCardError"){
                     messageDialog.open()
@@ -842,10 +867,28 @@ StackView{
                 id:loginsystem2
                 onStatueChanged:{
                     if(Statue=="Succeed"){
+
                         loginsystem2.saveusernamepassword(registidtext.text,registpasstext.text);
                         stack.str_userid=registidtext.text
+                        if(loginsystem2.getlocalversion()!=="1.0"){
+                            isdiff="YES"
+                            loginsystem2.savelocalversion()
+                        }
+
+
+
+                        if(loginsystem2.getnetversion()!==loginsystem2.getlocalversion()){
+                            myjava.toastMsg("检测到新版本，请尽快到应用市场更新！")
+                        }
+
+                        if(stack.str_userid!="dshareyouke"){
+                            loginsystem2.saveisfirst()
+                            isdiff="NO"
+                        }
+
                         mainpage.source="qrc:/QML/MainWindow.qml"
                         myjava.toastMsg("注册成功")
+
                         stack.pop();
                         indicator.visible=false
                         return
@@ -952,7 +995,7 @@ StackView{
         width: parent.width
         //x:parent.width
         x:0
-        z:10
+        z:12
         Behavior on x{
             NumberAnimation{
                 easing.type: Easing.InCubic
@@ -960,15 +1003,38 @@ StackView{
             }
         }
         onLoaded: {
-            visible=true
-            item.forceActiveFocus();//用于返回键
-            passwordtext.text=""//注销用
-            usertext.text=""
-            openrect.opacity=0.0;
-            item.setusername(stack.str_userid);
+            if(isdiff=="YES"){
+                tipspage.visible=true
+                openrect.opacity=0.0
+            }
+            else{
+                visible=true
+                item.forceActiveFocus();//用于返回键
+                passwordtext.text=""//注销用
+                usertext.text=""
+                openrect.opacity=0.0
+                item.setusername(stack.str_userid);
+            }
         }
     }
 
+    Loader{
+        id:tipspage
+        anchors.fill: parent
+        z:11
+        visible: false
+        source: "qrc:/QML/TipsPage.qml"
+        onSourceChanged: {
+            if(source!="qrc:/QML/TipsPage.qml"){
+                visible=false
+                mainpage.visible=true
+                mainpage.item.forceActiveFocus();//用于返回键
+                passwordtext.text=""//注销用
+                usertext.text=""
+                mainpage.item.setusername(stack.str_userid);
+            }
+        }
+    }
 }
 
 

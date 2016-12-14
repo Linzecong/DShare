@@ -1,4 +1,5 @@
 #include "Headers/RegistSystem.h"
+#include "Headers/JavaMethod.h"
 
 RegistSystem::RegistSystem(QObject *parent) : QObject(parent){
     tcpSocket = new QTcpSocket(this);
@@ -16,6 +17,9 @@ void RegistSystem::regist(QString id, QString pass,QString name,QString sex,QStr
     m_Statue="Connecting";
     emit statueChanged(m_Statue);
 }
+
+
+
 RegistSystem::~RegistSystem(){
 
 }

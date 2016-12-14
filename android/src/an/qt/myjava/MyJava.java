@@ -57,7 +57,7 @@ public class MyJava extends org.qtproject.qt5.android.bindings.QtActivity
             switch (msg.what) {
             case 1:
                 String toastText = String.format("%s",(String)msg.obj);
-                Toast toast = Toast.makeText(m_instance, toastText, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(m_instance, toastText, Toast.LENGTH_SHORT);
                 toast.show();
                 break;
             };

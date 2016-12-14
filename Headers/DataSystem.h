@@ -14,10 +14,12 @@ class DataSystem : public QObject{
     Q_PROPERTY(QString Statue READ Statue WRITE setStatue NOTIFY statueChanged)//用于与qml传递信息
 public:
     explicit DataSystem(QObject *parent = 0);
+    QTimer ConnectTimer;
+    void reconnect();
 
 public:
     QTcpSocket *tcpSocket;
-    QTimer ConnectTimer;
+
 
     QString m_Statue;
     void setStatue(QString s);

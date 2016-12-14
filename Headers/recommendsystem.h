@@ -16,6 +16,8 @@ class RecommendSystem : public QObject
 public:
     explicit RecommendSystem(QObject *parent = 0);
     ~RecommendSystem();
+    QTimer ConnectTimer;
+    void reconnect();
 public:
      QTcpSocket *tcpSocket;
 

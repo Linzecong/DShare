@@ -50,5 +50,7 @@
         <file>QML/NewsContent.qml</file>
         <file>Resources/msyh.ttf</file>
         <file>QML/RecommendPage.qml</file>
+        <file>QML/TipsPage.qml</file>
+        <file>image/yindao1.jpg</file>
     </qresource>
 </RCC>

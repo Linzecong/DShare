@@ -11,11 +11,18 @@ ReportSystem::ReportSystem(QObject *parent) : QObject(parent){
     tcpSocket->connectToHost("119.29.15.43",12345);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&ReportSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&ReportSystem::tcpSendMessage);
+    connect(&ConnectTimer,&QTimer::timeout,this,&ReportSystem::reconnect);
     initMap();
 }
 
 ReportSystem::~ReportSystem(){
 
+}
+
+void ReportSystem::reconnect()
+{
+    if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
+        tcpSocket->connectToHost("119.29.15.43",12345);
 }
 
 void ReportSystem::setStatue(QString s){
@@ -809,6 +816,7 @@ void ReportSystem::tcpReadMessage(){
 }
 
 void ReportSystem::tcpSendMessage(){
+    ConnectTimer.start(1000);
     m_Statue="Connected";
     emit statueChanged(m_Statue);
 }

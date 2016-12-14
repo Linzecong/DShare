@@ -33,6 +33,10 @@ Rectangle {
         sendpage.item.str_userid=a//初始化发送页面的id
         recordpage.item.str_userid=a//初始化记录页面的id
         recordpage.item.getcheckinday()
+
+        if(a==="dshareyouke")
+            youkechecklog.open()
+
     }
 
     function setmypost(publisherid0,username0,nickname0){
@@ -88,6 +92,22 @@ Rectangle {
     function showrecommendpage(){
         recommendpage.item.init(str_userid)
         recommendpage.visible=true
+    }
+
+
+    MessageDialog {
+        id: youkechecklog
+        title: "游客提示"
+        text: "目前以游客身份登录，仅提供部分功能，请尽快注册！<br><br><strong>现在注册？</strong>"
+        standardButtons:  StandardButton.No|StandardButton.Yes
+        detailedText:"游客只能使用查看资讯和搜索食材功能。"
+        onYes: {
+            dbsystem.delusernamepassword()
+            mainwindow.parent.source="";
+        }
+        onNo: {
+
+        }
     }
 
     Loader{
@@ -307,7 +327,14 @@ Rectangle {
     property int quit: 0
     Keys.enabled: true
     Keys.onBackPressed: {
-        if(headname.text!="DShare"){
+
+        if(backarea.visible==true){
+            sidepage.x=-sidepage.width
+            backarea.visible=false
+            return
+        }
+
+        if(headname.text!="DShare"&&str_userid!="dshareyouke"){
             bottom.currentPage="DShare"
             mainrect.x=-mainwindow.width*2
         }
@@ -468,8 +495,14 @@ Rectangle {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        settingpage.visible=true
-                        settingpage.item.setdata(str_userid,nickname,headurl)
+                        if(str_userid!="dshareyouke"){
+
+                            settingpage.visible=true
+                            settingpage.item.setdata(str_userid,nickname,headurl)
+                        }
+                        else{
+                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                        }
                     }
                 }
             }
@@ -486,7 +519,7 @@ Rectangle {
                 wrapMode: Text.NoWrap
                 width: parent.width-headimage2.width- parent.width/15- parent.width/10
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
                 }
@@ -503,16 +536,9 @@ Rectangle {
                 wrapMode: Text.NoWrap
                 width: parent.width-headimage2.width- parent.width/15- parent.width/10
                 font{
-                        family: localFont.name
+                    family: localFont.name
 
                     pointSize: 16
-                }
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        settingpage.visible=true
-                        settingpage.item.setdata(str_userid,nickname,headurl)
-                    }
                 }
             }
         }
@@ -529,446 +555,477 @@ Rectangle {
             flickableDirection :Flickable.VerticalFlick
             pressDelay: 100
 
-        Rectangle{
-            id:followingbutton
-            //anchors.top: sidepagetop.bottom
-            //anchors.topMargin: sidepagetop.height/10
-            anchors.top: parent.top
-            anchors.topMargin: 10*dp
-            anchors.right: parent.right
-            height: sidepage.height/10
-            width: sidepage.width
-            color:ma1.pressed?"#aaaaaa":"white"
-            Behavior on color{
-                ColorAnimation {
-                    easing.type: Easing.Linear
-                    duration: 200
+            Rectangle{
+                id:followingbutton
+                //anchors.top: sidepagetop.bottom
+                //anchors.topMargin: sidepagetop.height/10
+                anchors.top: parent.top
+                anchors.topMargin: 10*dp
+                anchors.right: parent.right
+                height: sidepage.height/10
+                width: sidepage.width
+                color:ma1.pressed?"#aaaaaa":"white"
+                Behavior on color{
+                    ColorAnimation {
+                        easing.type: Easing.Linear
+                        duration: 200
+                    }
                 }
-            }
 
 
-            Image {
-                Rectangle{
-                    anchors.fill: parent
-                    color:GlobalColor.FirstIcon
-                    z:-100
+                Image {
+                    Rectangle{
+                        anchors.fill: parent
+                        color:GlobalColor.FirstIcon
+                        z:-100
+                    }
+                    id:followingicon
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/image/user.png"
+                    width: height
+                    height: parent.height/2
                 }
-                id:followingicon
-                anchors.left: parent.left
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/user.png"
-                width: height
-                height: parent.height/2
-            }
 
-            Label{
-                anchors.left: followingicon.right
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                text:"我的关注"
-                font{
+                Label{
+                    anchors.left: followingicon.right
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    text:"我的关注"
+                    font{
                         family: localFont.name
 
-                    pointSize: 16
+                        pointSize: 16
+                    }
+                    color: Material.color(Material.BlueGrey)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
                 }
-                color: Material.color(Material.BlueGrey)
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-            }
 
-            MouseArea{
-                id:ma1
-                anchors.fill: parent
-                onClicked: {
-                    friends.item.userid=str_userid
-                    friends.item.nickname=nickname
-                    friends.item.setTitle("我的关注")
-                    friends.visible=true
-                    friends.x=0
-                }
-            }
-        }
-
-
-        Rectangle{
-            id:followerbutton
-            anchors.top: followingbutton.bottom
-            anchors.right: parent.right
-            height: sidepage.height/10
-            width: sidepage.width
-            color:ma2.pressed?"#aaaaaa":"white"
-            Behavior on color{
-                ColorAnimation {
-                    easing.type: Easing.Linear
-                    duration: 200
-                }
-            }
-            Image {
-                Rectangle{
+                MouseArea{
+                    id:ma1
                     anchors.fill: parent
-                    color:GlobalColor.FirstIcon
-                    z:-100
+                    onClicked: {
+                        if(str_userid!="dshareyouke"){
+
+                            friends.item.userid=str_userid
+                            friends.item.nickname=nickname
+                            friends.item.setTitle("我的关注")
+                            friends.visible=true
+                            friends.x=0
+                        }
+                        else{
+                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                        }
+                    }
                 }
-                id:followericon
-                anchors.left: parent.left
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/nickname.png"
-                width: height
-                height: parent.height/2
             }
 
 
-            Label{
-                anchors.left: followericon.right
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                text:"我的粉丝"
-                font{
+            Rectangle{
+                id:followerbutton
+                anchors.top: followingbutton.bottom
+                anchors.right: parent.right
+                height: sidepage.height/10
+                width: sidepage.width
+                color:ma2.pressed?"#aaaaaa":"white"
+                Behavior on color{
+                    ColorAnimation {
+                        easing.type: Easing.Linear
+                        duration: 200
+                    }
+                }
+                Image {
+                    Rectangle{
+                        anchors.fill: parent
+                        color:GlobalColor.FirstIcon
+                        z:-100
+                    }
+                    id:followericon
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/image/nickname.png"
+                    width: height
+                    height: parent.height/2
+                }
+
+
+                Label{
+                    anchors.left: followericon.right
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    text:"我的粉丝"
+                    font{
                         family: localFont.name
 
-                    pointSize: 16
+                        pointSize: 16
+                    }
+                    color: Material.color(Material.BlueGrey)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
                 }
-                color: Material.color(Material.BlueGrey)
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-            }
 
 
-            MouseArea{
-                id:ma2
-                anchors.fill: parent
-                onClicked: {
-                    friends.item.userid=str_userid
-                    friends.item.nickname=nickname
-                    friends.item.setTitle("我的粉丝")
-                    friends.visible=true
-                    friends.x=0
-                }
-            }
-
-        }
-
-
-        Rectangle{
-            id:sharebutton
-            anchors.top: followerbutton.bottom
-            anchors.right: parent.right
-            height: sidepage.height/10
-            width: sidepage.width
-            color:ma3.pressed?"#aaaaaa":"white"
-            Behavior on color{
-                ColorAnimation {
-                    easing.type: Easing.Linear
-                    duration: 200
-                }
-            }
-            Image {
-                Rectangle{
+                MouseArea{
+                    id:ma2
                     anchors.fill: parent
-                    color:GlobalColor.FirstIcon
-                    z:-100
+                    onClicked: {
+                        if(str_userid=="dshareyouke"){
+                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            return;
+                        }
+
+                        friends.item.userid=str_userid
+                        friends.item.nickname=nickname
+                        friends.item.setTitle("我的粉丝")
+                        friends.visible=true
+                        friends.x=0
+                    }
                 }
-                id:shareicon
-                anchors.left: parent.left
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/photo.png"
-                width: height
-                height: parent.height/2
+
             }
 
-            Label{
-                anchors.left: shareicon.right
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                text:"我的分享"
-                font{
+
+            Rectangle{
+                id:sharebutton
+                anchors.top: followerbutton.bottom
+                anchors.right: parent.right
+                height: sidepage.height/10
+                width: sidepage.width
+                color:ma3.pressed?"#aaaaaa":"white"
+                Behavior on color{
+                    ColorAnimation {
+                        easing.type: Easing.Linear
+                        duration: 200
+                    }
+                }
+                Image {
+                    Rectangle{
+                        anchors.fill: parent
+                        color:GlobalColor.FirstIcon
+                        z:-100
+                    }
+                    id:shareicon
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/image/photo.png"
+                    width: height
+                    height: parent.height/2
+                }
+
+                Label{
+                    anchors.left: shareicon.right
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    text:"我的分享"
+                    font{
                         family: localFont.name
 
-                    pointSize: 16
+                        pointSize: 16
+                    }
+                    color: Material.color(Material.BlueGrey)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
                 }
-                color: Material.color(Material.BlueGrey)
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-            }
 
-            MouseArea{
-                id:ma3
-                anchors.fill: parent
-                onClicked: {
-                    mypost.item.getpost(str_userid,str_userid,nickname);
-                    mypost.visible=true
-                    mypost.x=0
-                }
-            }
-        }
-
-        Rectangle{
-            id:messagebutton
-            anchors.top: sharebutton.bottom
-            anchors.right: parent.right
-            height: sidepage.height/10
-            width: sidepage.width
-            color:ma4.pressed?"#aaaaaa":"white"
-            Behavior on color{
-                ColorAnimation {
-                    easing.type: Easing.Linear
-                    duration: 200
-                }
-            }
-            Image {
-                Rectangle{
+                MouseArea{
+                    id:ma3
                     anchors.fill: parent
-                    color:GlobalColor.FirstIcon
-                    z:-100
+                    onClicked: {
+                        if(str_userid=="dshareyouke"){
+                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            return;
+                        }
+
+                        mypost.item.getpost(str_userid,str_userid,nickname);
+                        mypost.visible=true
+                        mypost.x=0
+                    }
                 }
-                id:messageicon
-                anchors.left: parent.left
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/notice.png"
-                width: height
-                height: parent.height/2
             }
 
-            Label{
-                anchors.left: messageicon.right
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                text:"我的消息"
-                font{
+            Rectangle{
+                id:messagebutton
+                anchors.top: sharebutton.bottom
+                anchors.right: parent.right
+                height: sidepage.height/10
+                width: sidepage.width
+                color:ma4.pressed?"#aaaaaa":"white"
+                Behavior on color{
+                    ColorAnimation {
+                        easing.type: Easing.Linear
+                        duration: 200
+                    }
+                }
+                Image {
+                    Rectangle{
+                        anchors.fill: parent
+                        color:GlobalColor.FirstIcon
+                        z:-100
+                    }
+                    id:messageicon
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/image/notice.png"
+                    width: height
+                    height: parent.height/2
+                }
+
+                Label{
+                    anchors.left: messageicon.right
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    text:"我的消息"
+                    font{
                         family: localFont.name
 
-                    pointSize: 16
+                        pointSize: 16
+                    }
+                    color: Material.color(Material.BlueGrey)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
                 }
-                color: Material.color(Material.BlueGrey)
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-            }
 
-            MouseArea{
-                id:ma4
-                anchors.fill: parent
-                onClicked: {
-                    noticelist.item.getNotice(str_userid,nickname)
-                    noticelist.visible=true
-                }
-            }
-        }
-
-
-        Rectangle{
-            id:reportbutton
-            anchors.top: messagebutton.bottom
-            anchors.right: parent.right
-            height: sidepage.height/10
-            width: sidepage.width
-            color:ma7.pressed?"#aaaaaa":"white"
-            Behavior on color{
-                ColorAnimation {
-                    easing.type: Easing.Linear
-                    duration: 200
-                }
-            }
-            Image {
-                Rectangle{
+                MouseArea{
+                    id:ma4
                     anchors.fill: parent
-                    color:GlobalColor.FirstIcon
-                    z:-100
+                    onClicked: {
+                        if(str_userid=="dshareyouke"){
+                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            return;
+                        }
+
+                        noticelist.item.getNotice(str_userid,nickname)
+                        noticelist.visible=true
+                    }
                 }
-                id:reporticon
-                anchors.left: parent.left
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/report.png"
-                width: height
-                height: parent.height/2
             }
 
-            Label{
-                anchors.left: reporticon.right
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                text:"我的报告"
-                font{
+
+            Rectangle{
+                id:reportbutton
+                anchors.top: messagebutton.bottom
+                anchors.right: parent.right
+                height: sidepage.height/10
+                width: sidepage.width
+                color:ma7.pressed?"#aaaaaa":"white"
+                Behavior on color{
+                    ColorAnimation {
+                        easing.type: Easing.Linear
+                        duration: 200
+                    }
+                }
+                Image {
+                    Rectangle{
+                        anchors.fill: parent
+                        color:GlobalColor.FirstIcon
+                        z:-100
+                    }
+                    id:reporticon
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/image/report.png"
+                    width: height
+                    height: parent.height/2
+                }
+
+                Label{
+                    anchors.left: reporticon.right
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    text:"我的报告"
+                    font{
                         family: localFont.name
 
-                    pointSize: 16
+                        pointSize: 16
+                    }
+                    color: Material.color(Material.BlueGrey)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
                 }
-                color: Material.color(Material.BlueGrey)
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-            }
 
-            MouseArea{
-                id:ma7
-                anchors.fill: parent
-                property int isget: 1
-                onClicked: {
-                    reportpage.item.getalldiet(str_userid,nickname)
-                    reportpage.item.forceActiveFocus()
-                    reportpage.visible=true
-                }
-            }
-
-
-
-        }
-
-
-        GestureArea{
-            anchors.top: reportbutton.bottom
-            anchors.bottom: linecenter.top
-            width:parent.width
-
-            onSwipe: {
-                switch (direction) {
-                case "left":
-                    sidepage.x=-sidepage.width
-                    backarea.visible=false
-                    break
-
-                }
-            }
-        }
-
-
-        Rectangle{
-            id:linecenter
-            width: parent.width
-            height:1
-            color: Material.color(Material.BlueGrey)
-            anchors.bottom: settingbutton.top
-            anchors.bottomMargin: 3
-            anchors.right: parent.right
-        }
-
-
-
-
-        Rectangle{
-            id:settingbutton
-            anchors.bottom: logoutbutton.top
-            anchors.right: parent.right
-            height: sidepage.height/10
-            width: sidepage.width
-            color:ma5.pressed?"#aaaaaa":"white"
-            Behavior on color{
-                ColorAnimation {
-                    easing.type: Easing.Linear
-                    duration: 200
-                }
-            }
-            Image {
-                Rectangle{
+                MouseArea{
+                    id:ma7
                     anchors.fill: parent
-                    color:GlobalColor.FirstIcon
-                    z:-100
+                    property int isget: 1
+                    onClicked: {
+                        if(str_userid=="dshareyouke"){
+                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            return;
+                        }
+
+                        reportpage.item.getalldiet(str_userid,nickname)
+                        reportpage.item.forceActiveFocus()
+                        reportpage.visible=true
+                    }
                 }
-                id:settingicon
-                anchors.left: parent.left
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/setting.png"
-                width: height
-                height: parent.height/2
+
+
+
             }
-            Label{
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: settingicon.right
-                anchors.leftMargin: 12*dp
-                text:"设置"
-                font{
+
+
+            GestureArea{
+                anchors.top: reportbutton.bottom
+                anchors.bottom: linecenter.top
+                width:parent.width
+
+                onSwipe: {
+                    switch (direction) {
+                    case "left":
+                        sidepage.x=-sidepage.width
+                        backarea.visible=false
+                        break
+
+                    }
+                }
+            }
+
+
+            Rectangle{
+                id:linecenter
+                width: parent.width
+                height:1
+                color: Material.color(Material.BlueGrey)
+                anchors.bottom: settingbutton.top
+                anchors.bottomMargin: 3
+                anchors.right: parent.right
+            }
+
+
+
+
+            Rectangle{
+                id:settingbutton
+                anchors.bottom: logoutbutton.top
+                anchors.right: parent.right
+                height: sidepage.height/10
+                width: sidepage.width
+                color:ma5.pressed?"#aaaaaa":"white"
+                Behavior on color{
+                    ColorAnimation {
+                        easing.type: Easing.Linear
+                        duration: 200
+                    }
+                }
+                Image {
+                    Rectangle{
+                        anchors.fill: parent
+                        color:GlobalColor.FirstIcon
+                        z:-100
+                    }
+                    id:settingicon
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/image/setting.png"
+                    width: height
+                    height: parent.height/2
+                }
+                Label{
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: settingicon.right
+                    anchors.leftMargin: 12*dp
+                    text:"设置"
+                    font{
                         family: localFont.name
 
-                    pointSize: 16
+                        pointSize: 16
+                    }
+                    color: Material.color(Material.BlueGrey)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
                 }
-                color: Material.color(Material.BlueGrey)
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-            }
-            MouseArea{
-                id:ma5
-                anchors.fill: parent
-                onClicked: {
-                    settingpage.visible=true
-                    settingpage.item.setdata(str_userid,nickname,headurl)
-                }
-            }
-        }
-
-
-        Rectangle{
-            id:logoutbutton
-            //anchors.bottom: sidepage.bottom
-
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            height: sidepage.height/10
-            width: sidepage.width
-            color:ma6.pressed?"red":"white"
-            Behavior on color{
-                ColorAnimation {
-                    easing.type: Easing.Linear
-                    duration: 200
-                }
-            }
-            Image {
-                Rectangle{
+                MouseArea{
+                    id:ma5
                     anchors.fill: parent
-                    color:GlobalColor.FirstIcon
-                    z:-100
+                    onClicked: {
+                        if(str_userid=="dshareyouke"){
+                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            return;
+                        }
+
+                        settingpage.visible=true
+                        settingpage.item.setdata(str_userid,nickname,headurl)
+                    }
                 }
-                id:logouticon
-                anchors.left: parent.left
-                anchors.leftMargin: 12*dp
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/image/password.png"
-                width: height
-                height: parent.height/2
             }
-            Label{
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: logouticon.right
-                anchors.leftMargin: 12*dp
-                text:"注销"
-                font{
+
+
+            Rectangle{
+                id:logoutbutton
+                //anchors.bottom: sidepage.bottom
+
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                height: sidepage.height/10
+                width: sidepage.width
+                color:ma6.pressed?"red":"white"
+                Behavior on color{
+                    ColorAnimation {
+                        easing.type: Easing.Linear
+                        duration: 200
+                    }
+                }
+                Image {
+                    Rectangle{
+                        anchors.fill: parent
+                        color:GlobalColor.FirstIcon
+                        z:-100
+                    }
+                    id:logouticon
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12*dp
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/image/password.png"
+                    width: height
+                    height: parent.height/2
+                }
+                Label{
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: logouticon.right
+                    anchors.leftMargin: 12*dp
+                    text:"注销"
+                    font{
                         family: localFont.name
 
-                    pointSize: 16
+                        pointSize: 16
+                    }
+                    color: Material.color(Material.BlueGrey)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
                 }
-                color: Material.color(Material.BlueGrey)
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
+
+
+                MouseArea{
+                    id:ma6
+                    anchors.fill: parent
+                    onClicked: {
+                        checkDialog.open()
+                    }
+                }
+
+                MessageDialog {
+                    id: checkDialog
+                    title: "提示"
+                    text: "确定要注销吗？"
+                    standardButtons:  StandardButton.No|StandardButton.Yes
+                    onYes: {
+                        dbsystem.delusernamepassword()
+                        mainwindow.parent.source="";
+                        // mainwindow.parent.x=mainwindow.parent.parent.width
+                        // mainwindow.parent.visible=false
+                    }
+                    onNo: {
+
+                    }
+                }
             }
-
-
-            MouseArea{
-                id:ma6
-                anchors.fill: parent
-                onClicked: {
-                    checkDialog.open()
-                }
-            }
-
-            MessageDialog {
-                id: checkDialog
-                title: "提示"
-                text: "确定要注销吗？"
-                standardButtons:  StandardButton.No|StandardButton.Yes
-                onYes: {
-                    dbsystem.delusernamepassword()
-                    mainwindow.parent.source="";
-                   // mainwindow.parent.x=mainwindow.parent.parent.width
-                   // mainwindow.parent.visible=false
-                }
-                onNo: {
-
-                }
-            }
-        }
 
 
         }
@@ -1042,13 +1099,13 @@ Rectangle {
 
 
             id:sidebarbutton
-//            height: parent.height/2.5
-//            width:height
+            //            height: parent.height/2.5
+            //            width:height
 
             height: 24*dp
             width:24*dp
 
-fillMode: Image.PreserveAspectFit
+            fillMode: Image.PreserveAspectFit
 
             source: "qrc:/image/side.png"
             anchors.left: parent.left
@@ -1077,7 +1134,7 @@ fillMode: Image.PreserveAspectFit
             anchors.verticalCenterOffset:myjava.getStatusBarHeight()/2
 
             font{
-                        family: localFont.name
+                family: localFont.name
 
                 pointSize: 20
             }
@@ -1109,6 +1166,10 @@ fillMode: Image.PreserveAspectFit
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
+                    if(str_userid=="dshareyouke"){
+                        myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                        return;
+                    }
                     friends.item.userid=str_userid
                     friends.item.nickname=mainwindow.nickname
                     friends.item.setTitle("搜索用户")
@@ -1122,15 +1183,15 @@ fillMode: Image.PreserveAspectFit
 
     }
 
-//    Rectangle{
-//        id:borderline
-//        width: parent.width
-//        anchors.top: mainrect.bottom
-//        anchors.left: bottom.left
-//        height: 2
-//        color:"grey"
-//        z:6
-//    }
+    //    Rectangle{
+    //        id:borderline
+    //        width: parent.width
+    //        anchors.top: mainrect.bottom
+    //        anchors.left: bottom.left
+    //        height: 2
+    //        color:"grey"
+    //        z:6
+    //    }
 
 
     function hidebottom(){
@@ -1159,7 +1220,7 @@ fillMode: Image.PreserveAspectFit
 
         width:parent.width
 
-       // height: parent.height/16*1.5
+        // height: parent.height/16*1.5
         height: 45*dp
 
         property string currentPage:"DShare"
@@ -1192,22 +1253,22 @@ fillMode: Image.PreserveAspectFit
                 source: "qrc:/image/news.png"
                 fillMode: Image.PreserveAspectFit
                 scale:bottom.currentPage=="资讯"?1.5:1
-//                Timer{
-//                    interval: 600
-//                    repeat:true
-//                    triggeredOnStart :true
-//                    onTriggered: {
-//                        if(parent.scale==1.6)
-//                            parent.scale=1.2
-//                        else
-//                            parent.scale=1.6
-//                    }
-//                    running: bottom.currentPage=="资讯"
-//                    onRunningChanged: {
-//                        if(running==false)
-//                            parent.scale=1
-//                    }
-//                }
+                //                Timer{
+                //                    interval: 600
+                //                    repeat:true
+                //                    triggeredOnStart :true
+                //                    onTriggered: {
+                //                        if(parent.scale==1.6)
+                //                            parent.scale=1.2
+                //                        else
+                //                            parent.scale=1.6
+                //                    }
+                //                    running: bottom.currentPage=="资讯"
+                //                    onRunningChanged: {
+                //                        if(running==false)
+                //                            parent.scale=1
+                //                    }
+                //                }
                 Behavior on scale{
                     NumberAnimation{
                         duration: 300
@@ -1258,8 +1319,14 @@ fillMode: Image.PreserveAspectFit
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    bottom.currentPage="分享"
-                    mainrect.x=-mainwindow.width
+
+                    if(str_userid!="dshareyouke"){
+                        bottom.currentPage="分享"
+                        mainrect.x=-mainwindow.width
+                    }
+                    else{
+                        myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                    }
 
                 }
             }
@@ -1305,12 +1372,16 @@ fillMode: Image.PreserveAspectFit
                 id:mainpagebutton
                 anchors.fill: parent
                 onClicked: {
-//                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-//                        messageDialog.open()
+                    //                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+                    //                        messageDialog.open()
 
-                    bottom.currentPage="DShare"
-                    mainrect.x=-mainwindow.width*2
-
+                    if(str_userid!="dshareyouke"){
+                        bottom.currentPage="DShare"
+                        mainrect.x=-mainwindow.width*2
+                    }
+                    else{
+                        myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                    }
 
                 }
             }
@@ -1348,10 +1419,18 @@ fillMode: Image.PreserveAspectFit
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-//                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-//                        messageDialog.open()
-                    bottom.currentPage="记录"
-                    mainrect.x=-mainwindow.width*3
+                    //                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+                    //                        messageDialog.open()
+
+                    if(str_userid!="dshareyouke"){
+                        bottom.currentPage="记录"
+                        mainrect.x=-mainwindow.width*3
+
+                    }
+
+                    else{
+                        myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                    }
                 }
             }
         }
@@ -1386,8 +1465,8 @@ fillMode: Image.PreserveAspectFit
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-//                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
-//                        messageDialog.open()
+                    //                    if(sendpage.item.messagetext!==""||sendpage.item.hiddentext!=="")
+                    //                        messageDialog.open()
                     bottom.currentPage="食材搜索"
                     mainrect.x=-mainwindow.width*4
                     foodsearch.item.init()

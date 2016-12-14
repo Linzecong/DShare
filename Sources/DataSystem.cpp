@@ -11,8 +11,17 @@ DataSystem::DataSystem(QObject *parent) : QObject(parent){
     tcpSocket = new QTcpSocket(this);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&DataSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&DataSystem::tcpSendMessage);
+
+    connect(&ConnectTimer,&QTimer::timeout,this,&DataSystem::reconnect);
     tcpSocket->connectToHost("119.29.15.43",8889);
+
     initMap();
+}
+
+void DataSystem::reconnect()
+{
+    if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
+        tcpSocket->connectToHost("119.29.15.43",8889);
 }
 
 
@@ -368,12 +377,12 @@ void DataSystem::uploadExercise(QString a)
 
 void DataSystem::delusernamepassword(){
 #ifdef ANDROID
-        JavaMethod java;
-        QString path=java.getSDCardPath();
-        path=path+"/DShare/db.dbnum";
-        QFile filename;
-        filename.setFileName(path);
-        filename.remove();//删除
+    JavaMethod java;
+    QString path=java.getSDCardPath();
+    path=path+"/DShare/db.dbnum";
+    QFile filename;
+    filename.setFileName(path);
+    filename.remove();//删除
 #endif
 }
 
@@ -479,7 +488,7 @@ void DataSystem::searchFunc(QString str)
 
 QString DataSystem::getsearchFunc()
 {
-return FoodsFunc;
+    return FoodsFunc;
 }
 
 void DataSystem::tcpReadMessage(){
@@ -540,7 +549,8 @@ void DataSystem::tcpReadMessage(){
         QStringList inf=message.split("@");
         for(int i=3;i<inf.length()-1;i=i+2){
             FollowingIDList.append(inf[i]);
-        FollowingNameList.append(inf[i+1]);}
+            FollowingNameList.append(inf[i+1]);
+        }
         m_Statue="getfollowingsSucceed";
     }
 
@@ -551,7 +561,7 @@ void DataSystem::tcpReadMessage(){
         QStringList inf=message.split("@");
         for(int i=3;i<inf.length()-1;i=i+2){
             FollowerIDList.append(inf[i]);
-        FollowerNameList.append(inf[i+1]);
+            FollowerNameList.append(inf[i+1]);
         }
         m_Statue="getfollowersSucceed";
     }
@@ -581,8 +591,10 @@ void DataSystem::tcpReadMessage(){
     if(message.indexOf("@searchuser@Succeed@")>=0){
         QStringList inf=message.split("@");
         for(int i=3;i<inf.length()-1;i=i+2){
+            if(inf[i]!="dshareyouke"){
             SearchIDList.append(inf[i]);
             SearchNameList.append(inf[i+1]);
+            }
         }
         m_Statue="searchuserSucceed";
     }
@@ -607,8 +619,8 @@ void DataSystem::tcpReadMessage(){
         FoodsFunc=inf[3];
         if(inf[0]=="full")
             m_Statue="searchfuncSucceedFull";
-         else
-        m_Statue="searchfuncSucceed";
+        else
+            m_Statue="searchfuncSucceed";
     }
 
 
@@ -634,10 +646,10 @@ void DataSystem::tcpReadMessage(){
         QStringList alllist=inf[3].split("{|}");
 
         for(int i=0;i<alllist.length()-1;i++)
-        RelationType+=alllist[i].split("|||")[0]+"|||";
+            RelationType+=alllist[i].split("|||")[0]+"|||";
 
         for(int i=0;i<alllist.length()-1;i++)
-        Reason+=alllist[i].split("|||")[1]+"|||";
+            Reason+=alllist[i].split("|||")[1]+"|||";
 
 
         m_Statue="getfoodrelationSucceed";
@@ -672,6 +684,7 @@ void DataSystem::tcpReadMessage(){
 }
 
 void DataSystem::tcpSendMessage(){
+    ConnectTimer.start(1000);
     m_Statue="InitOK";
     emit statueChanged(m_Statue);
 }

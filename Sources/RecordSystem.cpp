@@ -8,10 +8,17 @@ RecordSystem::RecordSystem(QObject *parent) : QObject(parent){
     tcpSocket->connectToHost("119.29.15.43",6789);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&RecordSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&RecordSystem::tcpSendMessage);
+    connect(&ConnectTimer,&QTimer::timeout,this,&RecordSystem::reconnect);
 }
 
 RecordSystem::~RecordSystem(){
 
+}
+
+void RecordSystem::reconnect()
+{
+    if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
+        tcpSocket->connectToHost("119.29.15.43",6789);
 }
 
 void RecordSystem::setStatue(QString s){

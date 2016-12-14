@@ -16,12 +16,18 @@ NewsSystem::NewsSystem(QObject *parent) : QObject(parent){
     emit statueChanged(m_Statue);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&NewsSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&NewsSystem::tcpSendMessage);
+    connect(&ConnectTimer,&QTimer::timeout,this,&NewsSystem::reconnect);
 }
 
 NewsSystem::~NewsSystem(){
 
 }
 
+void NewsSystem::reconnect()
+{
+    if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
+        tcpSocket->connectToHost("119.29.15.43",4567);
+}
 
 void NewsSystem::setStatue(QString s){
     m_Statue=s;
@@ -230,6 +236,7 @@ void NewsSystem::tcpReadMessage(){
 
 void NewsSystem::tcpSendMessage()
 {
+    ConnectTimer.start(1000);
     m_Statue="Connected";
     emit statueChanged(m_Statue);
 }

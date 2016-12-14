@@ -367,6 +367,7 @@ Rectangle{
             }
 
             Rectangle{
+                visible: userid!="dshareyouke"
                 id:likebutton
                 anchors.top: contentlabel.bottom
                 anchors.topMargin: 16*dp
@@ -412,6 +413,7 @@ Rectangle{
             }
 
             Rectangle{
+                visible: userid!="dshareyouke"
                 id:dislikebutton
                 anchors.top: contentlabel.bottom
                 anchors.topMargin: 16*dp
@@ -506,6 +508,7 @@ Rectangle{
                         anchors.leftMargin: 4*dp
                         anchors.right: parent.right
                         anchors.rightMargin: 4*dp
+                        lineHeight: 1.2
 
 
                         text: " <font color=\""+GlobalColor.Word+"\">"+CommentatorName+(BeCommentatorName===""?"：</font>":(" 回复 "+BeCommentatorName+"：</font>"))+"<font color=\"grey\">"+Message+"</font>"
@@ -564,6 +567,7 @@ Rectangle{
     }
 
     Rectangle{
+        visible: userid!="dshareyouke"
         id:commentbar
         height: (head.height)/2
 
