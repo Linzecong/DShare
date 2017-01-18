@@ -114,18 +114,22 @@ Rectangle{
 
                 var data=str.split("@")
 
-                contentlabel.text=data[3]
-                sourcelabel.text=data[4]
-                likenum=data[5]
-                dislikenum=data[6]
+                if(data.length<10){
+                    newssystem.getContent(newsid.toString())
+                }
+                else{
+                sourcelabel.text=data[3]
 
-                titlelabel.text=data[7]
-                posttimelabel.text=data[8]
+                likenum=data[4]
+                dislikenum=data[5]
 
+                titlelabel.text=data[6]
+                posttimelabel.text=data[7]
 
+                contentlabel.text=data[8]
 
                 newssystem.getcomments(newsid.toString())
-
+                }
 
             }
 
@@ -147,7 +151,7 @@ Rectangle{
             }
 
             if(Statue=="getcommentsDBError"){
-                myjava.toastMsg("获取评论系统出错！请联系开发者")
+                myjava.toastMsg("获取评论出错！请重试...")
             }
 
             if(Statue=="deletecommentSucceed"){
@@ -361,7 +365,7 @@ Rectangle{
                 wrapMode: Text.Wrap;
                 font{
                     family: localFont.name
-                    pointSize: 14
+                    pointSize: 18
                 }
 
             }

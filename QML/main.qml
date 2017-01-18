@@ -347,7 +347,7 @@ StackView{
                     else
                         stack.str_userid=loginsystem.getusername();
 
-                    if(loginsystem.getlocalversion()!=="1.0"){
+                    if(loginsystem.getlocalversion()!=="1.2"){
                         isdiff="YES"
                         loginsystem.savelocalversion()
 
@@ -870,7 +870,7 @@ StackView{
 
                         loginsystem2.saveusernamepassword(registidtext.text,registpasstext.text);
                         stack.str_userid=registidtext.text
-                        if(loginsystem2.getlocalversion()!=="1.0"){
+                        if(loginsystem2.getlocalversion()!=="1.2"){
                             isdiff="YES"
                             loginsystem2.savelocalversion()
                         }

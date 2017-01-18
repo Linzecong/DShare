@@ -409,6 +409,24 @@ Rectangle {
         z:102
     }
 
+    //游客注销提示框
+    MessageDialog {
+        id: youkecheckDialog
+        title: "提示"
+        text: "目前以游客身份登录，仅提供部分功能，请尽快注册！现在注册吗？"
+        standardButtons:  StandardButton.No|StandardButton.Yes
+        onYes: {
+            dbsystem.delusernamepassword()
+            mainwindow.parent.source="";
+            // mainwindow.parent.x=mainwindow.parent.parent.width
+            // mainwindow.parent.visible=false
+        }
+        onNo: {
+
+        }
+    }
+
+
     //侧边栏
     Rectangle{
         id:sidepage;
@@ -501,7 +519,7 @@ Rectangle {
                             settingpage.item.setdata(str_userid,nickname,headurl)
                         }
                         else{
-                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            youkecheckDialog.open()
                         }
                     }
                 }
@@ -616,7 +634,7 @@ Rectangle {
                             friends.x=0
                         }
                         else{
-                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            youkecheckDialog.open()
                         }
                     }
                 }
@@ -673,7 +691,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         if(str_userid=="dshareyouke"){
-                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            youkecheckDialog.open()
                             return;
                         }
 
@@ -736,7 +754,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         if(str_userid=="dshareyouke"){
-                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            youkecheckDialog.open()
                             return;
                         }
 
@@ -795,7 +813,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         if(str_userid=="dshareyouke"){
-                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            youkecheckDialog.open()
                             return;
                         }
 
@@ -855,7 +873,7 @@ Rectangle {
                     property int isget: 1
                     onClicked: {
                         if(str_userid=="dshareyouke"){
-                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            youkecheckDialog.open()
                             return;
                         }
 
@@ -946,7 +964,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         if(str_userid=="dshareyouke"){
-                            myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                            youkecheckDialog.open()
                             return;
                         }
 
@@ -1167,7 +1185,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     if(str_userid=="dshareyouke"){
-                        myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                        youkecheckDialog.open()
                         return;
                     }
                     friends.item.userid=str_userid
@@ -1325,7 +1343,7 @@ Rectangle {
                         mainrect.x=-mainwindow.width
                     }
                     else{
-                        myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                        youkecheckDialog.open()
                     }
 
                 }
@@ -1380,7 +1398,7 @@ Rectangle {
                         mainrect.x=-mainwindow.width*2
                     }
                     else{
-                        myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                        youkecheckDialog.open()
                     }
 
                 }
@@ -1429,7 +1447,7 @@ Rectangle {
                     }
 
                     else{
-                        myjava.toastMsg("目前以游客身份登录，仅提供部分功能，请尽快注册！（ 侧边栏注销后注册）")
+                        youkecheckDialog.open()
                     }
                 }
             }
