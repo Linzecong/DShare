@@ -347,17 +347,18 @@ StackView{
                     else
                         stack.str_userid=loginsystem.getusername();
 
-                    if(loginsystem.getlocalversion()!=="1.2"){
+                    if(stack.str_userid!="dshareyouke"){
+                    loginsystem.saveisfirst()
+                        isdiff="NO"
+                    }
+
+                    if(loginsystem.getlocalversion()!=="1.3"){
                         isdiff="YES"
                         loginsystem.savelocalversion()
 
 
                     }
 
-                    if(stack.str_userid!="dshareyouke"){
-                    loginsystem.saveisfirst()
-                        isdiff="NO"
-                    }
 
                     mainpage.source="qrc:/QML/MainWindow.qml";//加载首页
                     myjava.toastMsg("登录成功")
@@ -870,7 +871,13 @@ StackView{
 
                         loginsystem2.saveusernamepassword(registidtext.text,registpasstext.text);
                         stack.str_userid=registidtext.text
-                        if(loginsystem2.getlocalversion()!=="1.2"){
+
+                        if(stack.str_userid!="dshareyouke"){
+                            loginsystem2.saveisfirst()
+                            isdiff="NO"
+                        }
+
+                        if(loginsystem2.getlocalversion()!=="1.3"){
                             isdiff="YES"
                             loginsystem2.savelocalversion()
                         }
@@ -881,10 +888,7 @@ StackView{
                             myjava.toastMsg("检测到新版本，请尽快到应用市场更新！")
                         }
 
-                        if(stack.str_userid!="dshareyouke"){
-                            loginsystem2.saveisfirst()
-                            isdiff="NO"
-                        }
+
 
                         mainpage.source="qrc:/QML/MainWindow.qml"
                         myjava.toastMsg("注册成功")

@@ -572,12 +572,12 @@ Rectangle{
                         anchors.rightMargin: 4*dp
 
 
-                        text: " <font color=\""+GlobalColor.Word+"\">"+CommentatorName+(BeCommentatorName===""?"：</font>":(" 回复 "+BeCommentatorName+"：</font>"))+"<font color=\"grey\">"+Message+"</font>"
+                        text: " <font color=\""+GlobalColor.Word+"\">"+CommentatorName+(BeCommentatorName===""?"：</font>":(" 回复 "+BeCommentatorName+"：</font>"))+"<font color=\"black\">"+Message+"</font>"
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.Wrap
                         font{
                             family: localFont.name
-                            pointSize: 14
+                            pointSize: 16
                         }
                     }
 

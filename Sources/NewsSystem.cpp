@@ -11,7 +11,7 @@
 NewsSystem::NewsSystem(QObject *parent) : QObject(parent){
     //自动连接
     tcpSocket = new QTcpSocket(this);
-    tcpSocket->connectToHost("119.29.15.43",4567);
+    tcpSocket->connectToHost("139.199.197.177",4567);
     m_Statue="Connecting";
     emit statueChanged(m_Statue);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&NewsSystem::tcpReadMessage);
@@ -26,7 +26,7 @@ NewsSystem::~NewsSystem(){
 void NewsSystem::reconnect()
 {
     if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
-        tcpSocket->connectToHost("119.29.15.43",4567);
+        tcpSocket->connectToHost("139.199.197.177",4567);
 }
 
 void NewsSystem::setStatue(QString s){

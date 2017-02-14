@@ -4,7 +4,7 @@
 void LoginSystem::login(QString name, QString pass){
     Username=name;
     Password=pass;
-    tcpSocket->connectToHost("119.29.15.43",6666);
+    tcpSocket->connectToHost("139.199.197.177",6666);
     m_Statue="Connecting";
 
 }
@@ -126,7 +126,7 @@ void LoginSystem::savelocalversion()
     LogFile.setFileName(path);
     LogFile.open(QIODevice::WriteOnly);
     if(LogFile.isOpen())
-        LogTextStream<<"1.2"<<endl;
+        LogTextStream<<"1.3"<<endl;
     else{
         m_Statue="SDCardError";
         emit statueChanged(m_Statue);

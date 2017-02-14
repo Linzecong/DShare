@@ -13,7 +13,7 @@ void RegistSystem::regist(QString id, QString pass,QString name,QString sex,QStr
     Name=name;
     Sex=sex;
     Age=age;
-    tcpSocket->connectToHost("119.29.15.43",5555);
+    tcpSocket->connectToHost("139.199.197.177",5555);
     m_Statue="Connecting";
     emit statueChanged(m_Statue);
 }

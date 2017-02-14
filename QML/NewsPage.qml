@@ -130,24 +130,28 @@ Rectangle{
                 }
             }
         }
+        spacing:-1
 
         delegate: Item{
             id:newsitem
-            width:parent.width
-            height:80*dp
+            width:parent.width+5
+            height:68*dp
+
 
             Rectangle{
                 anchors.fill: parent
                 id:delegaterect
-                anchors.margins: 5*dp
+         //       anchors.margins: 2*dp
 
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    transparentBorder: true
-                    radius: 8
-                    color: GlobalColor.Main
-                }
+//                layer.enabled: true
+//                layer.effect: DropShadow {
+//                    transparentBorder: true
+//                    radius: 8
+//                    color: GlobalColor.Main
+//                }
 
+                border.width: 1
+                border.color: "grey"
 
                 property string newsID: NewsID
 
@@ -160,6 +164,7 @@ Rectangle{
                     anchors.leftMargin: 8*dp
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 8*dp
+
                     width: height*1.3
 
 
@@ -175,10 +180,10 @@ Rectangle{
                 Text{
                     id:titlelabel
                     anchors.left: coverimage.right
-                    anchors.leftMargin: 10*dp
+                    anchors.leftMargin: 8*dp
                     anchors.top: coverimage.top
                     anchors.right: parent.right
-                    anchors.rightMargin: 10*dp
+                    anchors.rightMargin: 8*dp
                     wrapMode: Text.Wrap
                     text: Title
                     color:"black"
@@ -193,14 +198,14 @@ Rectangle{
                 Text{
                     id:posttimelabel
                     anchors.left: coverimage.right
-                    anchors.leftMargin: 10*dp
+                    anchors.leftMargin: 8*dp
 
                     anchors.bottom: coverimage.bottom
                     text: Posttime
                     color:"grey"
                     font{
                         family: localFont.name
-                        pointSize:10
+                        pointSize:12
                     }
                     verticalAlignment: Text.AlignBottom
                 }
@@ -211,9 +216,10 @@ Rectangle{
                     id:commentcountlabel
 
                     anchors.right: parent.right
-                    anchors.rightMargin: 10*dp
+                    anchors.rightMargin: 8*dp
 
                     anchors.bottom: coverimage.bottom
+                    anchors.bottomMargin: -3
 
                     text:"✉ "+CommentCount
                     verticalAlignment: Text.AlignBottom
@@ -221,7 +227,7 @@ Rectangle{
                     font{
                         family: localFont.name
                         //family: "微软雅黑"
-                        pointSize:10
+                        pointSize:12
                     }
 
                 }
@@ -231,7 +237,7 @@ Rectangle{
                     id:likecountlabel
 
                     anchors.right: commentcountlabel.left
-                    anchors.rightMargin: 10*dp
+                    anchors.rightMargin: 8*dp
 
                     anchors.bottom: coverimage.bottom
 
@@ -240,7 +246,7 @@ Rectangle{
                     color:"grey"
                     font{
                         family: localFont.name
-                        pointSize:10
+                        pointSize:12
                     }
                 }
 

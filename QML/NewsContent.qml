@@ -40,6 +40,7 @@ Rectangle{
         titlelabel.text=""
         posttimelabel.text=""
         contentlabel.text=""
+
         sourcelabel.text=""
 
         newsid=id
@@ -126,7 +127,11 @@ Rectangle{
                 titlelabel.text=data[6]
                 posttimelabel.text=data[7]
 
-                contentlabel.text=data[8]
+
+                var ddd=String(data[8])
+
+                contentlabel.text=ddd;
+
 
                 newssystem.getcomments(newsid.toString())
                 }
@@ -268,6 +273,9 @@ Rectangle{
         Rectangle{
             id:delegaterect
 
+            smooth: false
+            antialiasing: false
+
 
             anchors.top: parent.top
             anchors.left: parent.left
@@ -291,11 +299,11 @@ Rectangle{
                 id:titlelabel
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.leftMargin: 16*dp
-                anchors.rightMargin: 16*dp
+                anchors.leftMargin: 12*dp
+                anchors.rightMargin: 12*dp
 
                 anchors.top: parent.top
-                anchors.topMargin:16*dp
+                anchors.topMargin:12*dp
                 text: "获取中"
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.Wrap
@@ -312,9 +320,9 @@ Rectangle{
             Text{
                 id:posttimelabel
                 anchors.left: parent.left
-                anchors.leftMargin: 16*dp
+                anchors.leftMargin: 12*dp
                 anchors.top: titlelabel.bottom
-                anchors.topMargin: 16*dp
+                anchors.topMargin: 12*dp
                 width: parent.width/3
                 verticalAlignment:Text.AlignBottom
                 text: "获取中"
@@ -345,7 +353,7 @@ Rectangle{
             Rectangle{
                 id:line
                 anchors.top: sourcelabel.bottom
-                anchors.topMargin: 4*dp
+                anchors.topMargin: 8*dp
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: parent.width/1.1
                 height:2
@@ -357,24 +365,25 @@ Rectangle{
                 anchors.top: line.bottom
                 anchors.topMargin: 12*dp
                 anchors.left: parent.left
-                anchors.leftMargin: 12*dp
+                anchors.leftMargin: 8*dp
                 anchors.right: parent.right
-                anchors.rightMargin: 12*dp
-                lineHeight: 1.5
+                anchors.rightMargin: 8*dp
+                lineHeight: 1.4
                 text: "加载中"
                 wrapMode: Text.Wrap;
                 font{
                     family: localFont.name
-                    pointSize: 18
+                    pointSize: 16
                 }
-
             }
+
+
 
             Rectangle{
                 visible: userid!="dshareyouke"
                 id:likebutton
                 anchors.top: contentlabel.bottom
-                anchors.topMargin: 16*dp
+                anchors.topMargin: 12*dp
                 anchors.left: parent.left
                 anchors.leftMargin: 32*dp
                 anchors.right: parent.horizontalCenter
@@ -515,12 +524,12 @@ Rectangle{
                         lineHeight: 1.2
 
 
-                        text: " <font color=\""+GlobalColor.Word+"\">"+CommentatorName+(BeCommentatorName===""?"：</font>":(" 回复 "+BeCommentatorName+"：</font>"))+"<font color=\"grey\">"+Message+"</font>"
+                        text: " <font color=\""+GlobalColor.Word+"\">"+CommentatorName+(BeCommentatorName===""?"：</font>":(" 回复 "+BeCommentatorName+"：</font>"))+"<font color=\"black\">"+Message+"</font>"
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.Wrap
                         font{
                         family: localFont.name
-                            pointSize: 14
+                            pointSize: 16
                         }
                     }
 
