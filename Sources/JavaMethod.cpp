@@ -47,6 +47,7 @@ QString JavaMethod::getSDCardPath(){
 
 int JavaMethod::getWidth(){
 
+
     return QGuiApplication::screens().first()->availableSize().width();
 
 }

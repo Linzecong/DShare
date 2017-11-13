@@ -4,9 +4,47 @@
 #define POSTSSYSTEM_H
 
 #include <QObject>
-#include "Framework/Post.h"
 #include <QtNetwork/QtNetwork>
 #include<QTimer>
+
+class Comment{
+public:
+    int ID;
+    QString Message;
+
+    QString CommentatorName;
+    QString BeCommentatorName;
+
+    QString CommentatorID;
+
+    Comment(){}
+    ~Comment(){}
+};
+
+class Post{
+public:
+    int ID;
+    QString Publisher;
+    QString PostTime;
+    QString PublisherID;
+
+    QString Message;
+    QString ImageURL;
+    QString HeadURL;
+
+    QList<Comment> Comments;
+
+    QList<double> Likers;
+    QString LikersString;
+
+    bool HasImage;
+    int CommentCount;
+
+public:
+    Post(){}
+    ~Post(){}
+
+};
 
 class PostsSystem:public QObject{
     Q_OBJECT

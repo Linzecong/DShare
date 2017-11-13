@@ -5,7 +5,7 @@
 #include <QPixmap>
 RecordSystem::RecordSystem(QObject *parent) : QObject(parent){
     tcpSocket = new QTcpSocket(this);
-    tcpSocket->connectToHost("123.207.249.175",6789);
+    tcpSocket->connectToHost("139.199.197.177",6789);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&RecordSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&RecordSystem::tcpSendMessage);
     connect(&ConnectTimer,&QTimer::timeout,this,&RecordSystem::reconnect);
@@ -18,7 +18,7 @@ RecordSystem::~RecordSystem(){
 void RecordSystem::reconnect()
 {
     if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
-        tcpSocket->connectToHost("123.207.249.175",6789);
+        tcpSocket->connectToHost("139.199.197.177",6789);
 }
 
 void RecordSystem::setStatue(QString s){

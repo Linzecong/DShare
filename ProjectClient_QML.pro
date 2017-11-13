@@ -36,12 +36,6 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    Framework/Core.h \
-    Framework/News.h \
-    Framework/Post.h \
-    Framework/Record.h \
-    Framework/System.h \
-    Framework/User.h \
     Headers/ReportData.h \
     Headers/SpeechSystem.h \
     Headers/NewsSystem.h \

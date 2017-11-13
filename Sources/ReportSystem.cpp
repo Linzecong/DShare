@@ -4,11 +4,9 @@
 #include <QTextStream>
 #include <QPair>
 
-
-
 ReportSystem::ReportSystem(QObject *parent) : QObject(parent){
     tcpSocket = new QTcpSocket(this);
-    tcpSocket->connectToHost("123.207.249.175",12345);
+    tcpSocket->connectToHost("139.199.197.177",12345);
     connect(tcpSocket,&QTcpSocket::readyRead,this,&ReportSystem::tcpReadMessage);
     connect(tcpSocket,&QTcpSocket::connected,this,&ReportSystem::tcpSendMessage);
     connect(&ConnectTimer,&QTimer::timeout,this,&ReportSystem::reconnect);
@@ -22,7 +20,7 @@ ReportSystem::~ReportSystem(){
 void ReportSystem::reconnect()
 {
     if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
-        tcpSocket->connectToHost("123.207.249.175",12345);
+        tcpSocket->connectToHost("139.199.197.177",12345);
 }
 
 void ReportSystem::setStatue(QString s){
@@ -732,13 +730,6 @@ QString ReportSystem::als_Time_Exe_getName()
     return Als_Time_Name_Exe;
 }
 
-
-
-
-
-
-
-
 void ReportSystem::tcpReadMessage(){
     QString message =QString::fromUtf8(tcpSocket->readAll());
 
@@ -775,12 +766,6 @@ void ReportSystem::tcpReadMessage(){
         m_Statue="getalldietsSucceed";
 
 
-
-
-
-
-
-
     if(message=="@getallexercises@DBError@")
         m_Statue="getallexercisesDBError";
 
@@ -790,7 +775,6 @@ void ReportSystem::tcpReadMessage(){
         m_Statue="";tcpSocket->write(out.toUtf8());
         return;
     }
-
 
     if(message.indexOf("@getuniqueexercises@Succeed@")>=0){
         QStringList inf=message.split("|||");

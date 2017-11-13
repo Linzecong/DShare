@@ -25,7 +25,7 @@ StackView{
         Text {
             anchors.centerIn: parent
 
-            text:"欢迎使用DShare1.3<br>更新内容：<br><br>1.优化了资讯界面<br><br>2.优化了阅读体验<br><br>3.优化了服务器<br><br>4.修复了资讯显示不完全的问题<br><br>5.修复了漏洞若干"
+            text:"欢迎使用DShare1.4<br>更新内容：<br><br>1.优化了性能<br><br>2.更新了服务器<br><br>3.重构了代码<br><br>5.修复了漏洞若干"
             horizontalAlignment: Text.AlignLeft
             color:"white"
 

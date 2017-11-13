@@ -373,7 +373,6 @@ void SpeechSystem::getSplitSpeechResult(QNetworkReply *reply)
     else
     m_Statue="splitdone";
 
-
     emit statueChanged(m_Statue);
 }
 

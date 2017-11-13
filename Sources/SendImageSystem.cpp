@@ -4,6 +4,7 @@
 #include <QImage>
 #include<QDir>
 #include<QDateTime>
+
 SendImageSystem::SendImageSystem(QObject *parent) : QObject(parent){
     loadSize=4*1024;
     totalBytes=0;
@@ -27,25 +28,24 @@ void SendImageSystem::sendImage(QString name,QString id){
     QString filename=id+".jpg";
     QString tempname=id+"_temp.jpg";
 
-        JavaMethod java;
-        QDir *tempdir = new QDir;
+    JavaMethod java;
+    QDir *tempdir = new QDir;
 
-        QString path=java.getSDCardPath();
-        path=path+"/DShare/"+filename+".dbnum";
+    QString path=java.getSDCardPath();
+    path=path+"/DShare/"+filename+".dbnum";
 
-        if(tempdir->exists(path)){
-            QFile::remove(path);
-        }
+    if(tempdir->exists(path)){
+        QFile::remove(path);
+    }
 
-        path=java.getSDCardPath();
-        path=path+"/DShare/"+tempname+".dbnum";
+    path=java.getSDCardPath();
+    path=path+"/DShare/"+tempname+".dbnum";
 
-        if(tempdir->exists(path)){
-            QFile::remove(path);
-        }
+    if(tempdir->exists(path)){
+        QFile::remove(path);
+    }
 
 #endif
-
 
 }
 

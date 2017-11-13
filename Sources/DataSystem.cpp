@@ -3,8 +3,6 @@
 #include<QPixmap>
 #include<QDateTime>
 
-
-
 DataSystem::DataSystem(QObject *parent) : QObject(parent){
 
     //初始化时直接连接到服务器
@@ -23,7 +21,6 @@ void DataSystem::reconnect()
     if(tcpSocket->state()==QAbstractSocket::UnconnectedState)
         tcpSocket->connectToHost("119.29.15.43",8889);
 }
-
 
 void DataSystem::setStatue(QString s){
     m_Statue=s;

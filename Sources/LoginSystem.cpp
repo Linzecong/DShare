@@ -126,7 +126,7 @@ void LoginSystem::savelocalversion()
     LogFile.setFileName(path);
     LogFile.open(QIODevice::WriteOnly);
     if(LogFile.isOpen())
-        LogTextStream<<"1.3"<<endl;
+        LogTextStream<<"1.4"<<endl;
     else{
         m_Statue="SDCardError";
         emit statueChanged(m_Statue);

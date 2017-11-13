@@ -345,8 +345,6 @@ Rectangle {
             }
         }
 
-
-
         SendImageSystem{
             id:sendimgsystem
             property string imgname;

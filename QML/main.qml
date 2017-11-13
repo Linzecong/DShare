@@ -352,7 +352,7 @@ StackView{
                         isdiff="NO"
                     }
 
-                    if(loginsystem.getlocalversion()!=="1.3"){
+                    if(loginsystem.getlocalversion()!=="1.4"){
                         isdiff="YES"
                         loginsystem.savelocalversion()
 
@@ -877,18 +877,14 @@ StackView{
                             isdiff="NO"
                         }
 
-                        if(loginsystem2.getlocalversion()!=="1.3"){
+                        if(loginsystem2.getlocalversion()!=="1.4"){
                             isdiff="YES"
                             loginsystem2.savelocalversion()
                         }
 
-
-
                         if(loginsystem2.getnetversion()!==loginsystem2.getlocalversion()){
                             myjava.toastMsg("检测到新版本，请尽快到应用市场更新！")
                         }
-
-
 
                         mainpage.source="qrc:/QML/MainWindow.qml"
                         myjava.toastMsg("注册成功")

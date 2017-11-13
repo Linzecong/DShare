@@ -20,7 +20,6 @@ public:
 public:
     QTcpSocket *tcpSocket;
 
-
     QString m_Statue;
     void setStatue(QString s);
     QString Statue();
